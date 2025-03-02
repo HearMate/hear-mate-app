@@ -21,6 +21,15 @@ class AudiogramChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> frequencyLabels = [
+      '1k',
+      '2k',
+      '4k',
+      '8k',
+      '500',
+      '250',
+      '125',
+    ];
     return LineChart(
       LineChartData(
         gridData: FlGridData(
@@ -66,8 +75,7 @@ class AudiogramChart extends StatelessWidget {
               interval: 20,
               reservedSize: 30,
               getTitlesWidget: (value, meta) {
-                // Convert negative values back to positive for display - TODO: Change that
-                int displayValue = value.abs().toInt();
+                int displayValue = value.toInt();
                 return Text(
                   displayValue.toString(),
                   style: const TextStyle(fontSize: 10),
@@ -88,12 +96,10 @@ class AudiogramChart extends StatelessWidget {
           show: true,
           border: Border.all(color: Colors.grey.shade300),
         ),
-        // TODO: This will need a change
         minX: -0.5,
         maxX: 6.5,
-        minY:
-            -120, // We use negative values and display absolute values on axis
-        maxY: 0, // 0 dB is the "best" hearing at the top
+        minY: -20,
+        maxY: 120,
         lineBarsData: [
           // Left ear line (blue)
           LineChartBarData(

@@ -8,11 +8,9 @@ part 'hearing_test_state.dart';
 
 const int MIN_DB_LEVEL = -10;
 
-// TODO: Add acknowleding user, that he can release the button now.
-
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
-  final List<int> testFrequencies = [1000, 500, 250, 125, 2000, 4000, 8000];
+  final List<int> testFrequencies = [1000, 2000, 4000, 8000, 500, 250, 125];
 
   HearingTestBloc({
     required HearingTestSoundsPlayerRepository
@@ -27,16 +25,24 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestEndTestEarly>(_onEndTestEarly);
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
-    on<HearingTestReset>(_onReset);
-
-    // add(HearingTestStartTest());
   }
 
   void _onStartTest(
     HearingTestStartTest event,
     Emitter<HearingTestState> emit,
   ) async {
-    emit(state.copyWith(isTestCanceled: false));
+    emit(
+      state.copyWith(
+        isTestCanceled: false,
+        isButtonPressed: false,
+        wasSoundHeard: false,
+        currentFrequencyIndex: 0,
+        currentDBLevel: 20,
+        dbLevelToHearCountMap: const {},
+        results: [],
+      ),
+    );
+
     add(HearingTestPlayingSound());
   }
 
@@ -99,6 +105,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         ),
       ),
     );
+
     add(HearingTestPlayingSound());
   }
 
@@ -157,18 +164,5 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     Emitter<HearingTestState> emit,
   ) {
     print(state.results);
-  }
-
-  void _onReset(HearingTestReset event, Emitter<HearingTestState> emit) {
-    emit(
-      state.copyWith(
-        isButtonPressed: false,
-        wasSoundHeard: false,
-        currentFrequencyIndex: 0,
-        currentDBLevel: 20,
-        dbLevelToHearCountMap: const {},
-        results: const [],
-      ),
-    );
   }
 }

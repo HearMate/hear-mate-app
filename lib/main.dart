@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             '/hearing_test/welcome':
                 (context) => const HearingTestWelcomePage(),
             '/hearing_test/start': (context) => const HearingTestPage(),
-            '/hearing_test/result': (context) => const HearingTestResultPage(),
+            '/hearing_test/result': (context) => HearingTestResultPage(),
           },
           onUnknownRoute: (settings) {
             return MaterialPageRoute(
