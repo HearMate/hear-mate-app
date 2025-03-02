@@ -117,7 +117,6 @@ class HearingTestPage extends StatelessWidget {
                       '/hearing_test/result',
                       (route) => false,
                     );
-                    context.read<HearingTestBloc>().add(HearingTestReset());
                   },
                   child: const Text(
                     'End Test Early',

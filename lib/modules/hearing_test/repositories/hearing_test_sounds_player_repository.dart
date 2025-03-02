@@ -5,7 +5,7 @@ class HearingTestSoundsPlayerRepository {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
-  final List<int> frequencies = [125, 250, 500, 1000, 2000, 4000, 8000];
+  final List<int> frequencies = [1000, 2000, 4000, 8000, 500, 250, 125];
 
   // Duration for each tone
   final Duration soundDuration = Duration(seconds: 2);
