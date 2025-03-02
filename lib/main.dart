@@ -40,7 +40,8 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           routes: {
-            '/hearing_test': (context) => const HearingTestWelcomePage(),
+            '/hearing_test/welcome':
+                (context) => const HearingTestWelcomePage(),
             '/hearing_test/start': (context) => const HearingTestPage(),
             '/hearing_test/result': (context) => const HearingTestResultPage(),
           },

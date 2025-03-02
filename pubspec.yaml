@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^9.1.0
   fl_chart: ^0.70.2
   just_audio: ^0.9.46
+  audioplayers: ^6.2.0
 
 dev_dependencies:
   flutter_test:
@@ -60,13 +61,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/tone_125Hz.wav
-    - assets/tone_250Hz.wav
-    - assets/tone_500Hz.wav
-    - assets/tone_1000Hz.wav
-    - assets/tone_2000Hz.wav
-    - assets/tone_4000Hz.wav
-    - assets/tone_8000Hz.wav
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

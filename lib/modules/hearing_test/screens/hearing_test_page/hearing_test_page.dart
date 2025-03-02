@@ -8,9 +8,16 @@ class HearingTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<HearingTestBloc>().add(HearingTestStartTest());
+
     return Scaffold(
       appBar: HMAppBar(enableBackButton: true),
-      body: BlocBuilder<HearingTestBloc, HearingTestState>(
+      body: BlocConsumer<HearingTestBloc, HearingTestState>(
+        listener: (context, state) {
+          if (state is HearingTestCompleted) {
+            Navigator.pushNamed(context, 'hearing_test/result');
+          }
+        },
         builder: (context, state) {
           return Column(
             children: [
@@ -20,6 +27,24 @@ class HearingTestPage extends StatelessWidget {
                   'Press and hold the button when you can hear the sound. Release when you can no longer hear it.',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 24,
+                  child:
+                      state.wasSoundHeard
+                          ? const Text(
+                            'Release the button now.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                          : const SizedBox(),
                 ),
               ),
               const Spacer(),
@@ -92,6 +117,7 @@ class HearingTestPage extends StatelessWidget {
                       '/hearing_test/result',
                       (route) => false,
                     );
+                    context.read<HearingTestBloc>().add(HearingTestReset());
                   },
                   child: const Text(
                     'End Test Early',

@@ -9,9 +9,14 @@ class HearingTestButtonPressed extends HearingTestEvent {}
 
 class HearingTestButtonReleased extends HearingTestEvent {}
 
+class HearingTestPlayingSound extends HearingTestEvent {}
+
+class HearingTestNextFrequency extends HearingTestEvent {}
+
 class HearingTestEndTestEarly extends HearingTestEvent {}
 
-class HearingTestCompleted extends HearingTestEvent {
-  final List<Map<String, dynamic>> testResults;
-  HearingTestCompleted(this.testResults);
-}
+class HearingTestChangeEar extends HearingTestEvent {}
+
+class HearingTestCompleted extends HearingTestEvent {}
+
+class HearingTestReset extends HearingTestEvent {}
