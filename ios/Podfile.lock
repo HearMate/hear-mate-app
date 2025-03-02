@@ -1,6 +1,8 @@
 PODS:
   - audio_session (0.0.1):
     - Flutter
+  - audioplayers_darwin (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - just_audio (0.0.1):
     - Flutter
@@ -11,6 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - Flutter (from `Flutter`)
   - just_audio (from `.symlinks/plugins/just_audio/darwin`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -18,6 +21,8 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/ios"
   Flutter:
     :path: Flutter
   just_audio:
@@ -27,6 +32,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audio_session: 9bb7f6c970f21241b19f5a3658097ae459681ba0
+  audioplayers_darwin: ccf9c770ee768abb07e26d90af093f7bab1c12ab
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   just_audio: 4e391f57b79cad2b0674030a00453ca5ce817eed
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564

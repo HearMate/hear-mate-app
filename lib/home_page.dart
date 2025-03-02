@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/hearing_test');
+                Navigator.pushNamed(context, '/hearing_test/welcome');
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
