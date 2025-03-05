@@ -31,11 +31,11 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
 
 SPEC CHECKSUMS:
-  audio_session: eaca2512cf2b39212d724f35d11f46180ad3a33e
-  audioplayers_darwin: 761f2948df701d05b5db603220c384fb55720012
+  audio_session: 728ae3823d914f809c485d390274861a24b0904e
+  audioplayers_darwin: dcad41de4fbd0099cb3749f7ab3b0cb8f70b810c
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  just_audio: 4e391f57b79cad2b0674030a00453ca5ce817eed
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  just_audio: a42c63806f16995daf5b219ae1d679deb76e6a79
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
 
 PODFILE CHECKSUM: 7eb978b976557c8c1cd717d8185ec483fd090a82
 
