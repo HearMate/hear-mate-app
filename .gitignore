@@ -180,3 +180,4 @@ pyrightconfig.json
 
 .dart_tool/
 .idea/
+.flutter-plugins*
