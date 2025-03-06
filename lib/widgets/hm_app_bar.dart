@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
-  HMAppBar({super.key, required this.enableBackButton});
+  const HMAppBar({super.key, required this.enableBackButton});
 
-  bool enableBackButton;
+  final bool enableBackButton;
 
   @override
   Widget build(BuildContext context) {
