@@ -5,6 +5,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final bool enableBackButton;
 
+
   @override
   Widget build(BuildContext context) {
     return AppBar(

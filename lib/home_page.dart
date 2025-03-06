@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
