@@ -30,164 +30,188 @@ class AudiogramChart extends StatelessWidget {
       '250',
       '125',
     ];
-    return LineChart(
-      LineChartData(
-        gridData: FlGridData(
-          show: true,
-          drawVerticalLine: true,
-          drawHorizontalLine: true,
-          horizontalInterval: 20,
-        ),
-        titlesData: FlTitlesData(
-          bottomTitles: AxisTitles(
-            axisNameWidget: const Padding(
-              padding: EdgeInsets.only(top: 1.0),
-              child: Text('Frequency (Hz)', style: TextStyle(fontSize: 12)),
+    return Stack(
+      children: [
+        LineChart(
+          LineChartData(
+            gridData: FlGridData(
+              show: true,
+              drawVerticalLine: true,
+              drawHorizontalLine: true,
+              horizontalInterval: 20,
             ),
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 1,
-              getTitlesWidget: (value, meta) {
-                int index = value.round();
+            titlesData: FlTitlesData(
+              bottomTitles: AxisTitles(
+                axisNameWidget: const Padding(
+                  padding: EdgeInsets.only(top: 1.0),
+                  child: Text('Frequency (Hz)', style: TextStyle(fontSize: 12)),
+                ),
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: 1,
+                  getTitlesWidget: (value, meta) {
+                    int index = value.round();
 
-                // Hide labels if value isn't explicitly mapped to a frequency label
-                if (index < 0 || index >= frequencyLabels.length) {
-                  return const SizedBox.shrink();
-                }
+                    // Hide labels if value isn't explicitly mapped to a frequency label
+                    if (index < 0 || index >= frequencyLabels.length) {
+                      return const SizedBox.shrink();
+                    }
 
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    frequencyLabels[index],
-                    style: const TextStyle(fontSize: 10),
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        frequencyLabels[index],
+                        style: const TextStyle(fontSize: 10),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              leftTitles: AxisTitles(
+                axisNameWidget: const Padding(
+                  padding: EdgeInsets.only(bottom: 3.0),
+                  child: Text('dB HL', style: TextStyle(fontSize: 12)),
+                ),
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: 20,
+                  reservedSize: 30,
+                  getTitlesWidget: (value, meta) {
+                    int displayValue = value.toInt();
+                    return Text(
+                      displayValue.toString(),
+                      style: const TextStyle(fontSize: 10),
+                    );
+                  },
+                ),
+              ),
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              topTitles: AxisTitles(
+                axisNameWidget: const Padding(
+                  padding: EdgeInsets.only(bottom: 20.0),
+                  child: Text('Frequency (Hz)', style: TextStyle(fontSize: 12)),
+                ),
+                sideTitles: SideTitles(showTitles: false),
+              ),
+            ),
+            borderData: FlBorderData(
+              show: true,
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            minX: -0.5,
+            maxX: 6.5,
+            minY: -20,
+            maxY: 120,
+            lineBarsData: [
+              // Left ear line (blue)
+              LineChartBarData(
+                spots: leftEarSpots,
+                isCurved: false,
+                color: Colors.blue,
+                barWidth: 2,
+                isStrokeCapRound: true,
+                dotData: FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, barData, index) {
+                    return FlDotCirclePainter(
+                      radius: 6,
+                      color: Colors.blue,
+                      strokeWidth: 1,
+                      strokeColor: Colors.blue,
+                    );
+                  },
+                ),
+                belowBarData: BarAreaData(show: false),
+              ),
+              // Right ear line (red)
+              LineChartBarData(
+                spots: rightEarSpots,
+                isCurved: false,
+                color: Colors.red,
+                barWidth: 2,
+                isStrokeCapRound: true,
+                dotData: FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, barData, index) {
+                    return FlDotCirclePainter(
+                      radius: 6,
+                      color: Colors.red,
+                      strokeWidth: 1,
+                      strokeColor: Colors.red,
+                    );
+                  },
+                ),
+                belowBarData: BarAreaData(show: false),
+              ),
+            ],
+            // Reference lines for hearing loss severity - do we need that? TODO: check
+            extraLinesData: ExtraLinesData(
+              horizontalLines: [
+                HorizontalLine(
+                  y: 25,
+                  color: Colors.orange.withOpacity(0.5),
+                  strokeWidth: 1,
+                  dashArray: [5, 5],
+                  label: HorizontalLineLabel(
+                    show: true,
+                    alignment: Alignment.topRight,
+                    padding: const EdgeInsets.only(right: 5, bottom: 5),
+                    style: const TextStyle(fontSize: 9, color: Colors.orange),
+                    labelResolver: (line) => 'Mild loss',
                   ),
-                );
-              },
-            ),
-          ),
-          leftTitles: AxisTitles(
-            axisNameWidget: const Padding(
-              padding: EdgeInsets.only(bottom: 3.0),
-              child: Text('dB HL', style: TextStyle(fontSize: 12)),
-            ),
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 20,
-              reservedSize: 30,
-              getTitlesWidget: (value, meta) {
-                int displayValue = value.toInt();
-                return Text(
-                  displayValue.toString(),
-                  style: const TextStyle(fontSize: 10),
-                );
-              },
-            ),
-          ),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(
-            axisNameWidget: const Padding(
-              padding: EdgeInsets.only(bottom: 20.0),
-              child: Text('Frequency (Hz)', style: TextStyle(fontSize: 12)),
-            ),
-            sideTitles: SideTitles(showTitles: false),
-          ),
-        ),
-        borderData: FlBorderData(
-          show: true,
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        minX: -0.5,
-        maxX: 6.5,
-        minY: -20,
-        maxY: 120,
-        lineBarsData: [
-          // Left ear line (blue)
-          LineChartBarData(
-            spots: leftEarSpots,
-            isCurved: false,
-            color: Colors.blue,
-            barWidth: 2,
-            isStrokeCapRound: true,
-            dotData: FlDotData(
-              show: true,
-              getDotPainter: (spot, percent, barData, index) {
-                return FlDotCirclePainter(
-                  radius: 6,
-                  color: Colors.blue,
+                ),
+                HorizontalLine(
+                  y: 40,
+                  color: Colors.deepOrange.withOpacity(0.5),
                   strokeWidth: 1,
-                  strokeColor: Colors.blue,
-                );
-              },
-            ),
-            belowBarData: BarAreaData(show: false),
-          ),
-          // Right ear line (red)
-          LineChartBarData(
-            spots: rightEarSpots,
-            isCurved: false,
-            color: Colors.red,
-            barWidth: 2,
-            isStrokeCapRound: true,
-            dotData: FlDotData(
-              show: true,
-              getDotPainter: (spot, percent, barData, index) {
-                return FlDotCirclePainter(
-                  radius: 6,
-                  color: Colors.red,
+                  dashArray: [5, 5],
+                  label: HorizontalLineLabel(
+                    show: true,
+                    alignment: Alignment.topRight,
+                    padding: const EdgeInsets.only(right: 5, bottom: 5),
+                    style: const TextStyle(
+                      fontSize: 9,
+                      color: Colors.deepOrange,
+                    ),
+                    labelResolver: (line) => 'Moderate loss',
+                  ),
+                ),
+                HorizontalLine(
+                  y: 70,
+                  color: Colors.red.withOpacity(0.5),
                   strokeWidth: 1,
-                  strokeColor: Colors.red,
-                );
-              },
+                  dashArray: [5, 5],
+                  label: HorizontalLineLabel(
+                    show: true,
+                    alignment: Alignment.topRight,
+                    padding: const EdgeInsets.only(right: 5, bottom: 5),
+                    style: const TextStyle(fontSize: 9, color: Colors.red),
+                    labelResolver: (line) => 'Severe loss',
+                  ),
+                ),
+              ],
             ),
-            belowBarData: BarAreaData(show: false),
+            clipData: FlClipData.all(),
           ),
-        ],
-        // Reference lines for hearing loss severity - do we need that? TODO: check
-        extraLinesData: ExtraLinesData(
-          horizontalLines: [
-            HorizontalLine(
-              y: -25,
-              color: Colors.orange.withOpacity(0.5),
-              strokeWidth: 1,
-              dashArray: [5, 5],
-              label: HorizontalLineLabel(
-                show: true,
-                alignment: Alignment.topRight,
-                padding: const EdgeInsets.only(right: 5, bottom: 5),
-                style: const TextStyle(fontSize: 9, color: Colors.orange),
-                labelResolver: (line) => 'Mild loss',
-              ),
-            ),
-            HorizontalLine(
-              y: -40,
-              color: Colors.deepOrange.withOpacity(0.5),
-              strokeWidth: 1,
-              dashArray: [5, 5],
-              label: HorizontalLineLabel(
-                show: true,
-                alignment: Alignment.topRight,
-                padding: const EdgeInsets.only(right: 5, bottom: 5),
-                style: const TextStyle(fontSize: 9, color: Colors.deepOrange),
-                labelResolver: (line) => 'Moderate loss',
-              ),
-            ),
-            HorizontalLine(
-              y: -70,
-              color: Colors.red.withOpacity(0.5),
-              strokeWidth: 1,
-              dashArray: [5, 5],
-              label: HorizontalLineLabel(
-                show: true,
-                alignment: Alignment.topRight,
-                padding: const EdgeInsets.only(right: 5, bottom: 5),
-                style: const TextStyle(fontSize: 9, color: Colors.red),
-                labelResolver: (line) => 'Severe loss',
-              ),
-            ),
-          ],
         ),
-        clipData: FlClipData.all(),
-      ),
+        Positioned(
+          top: 25,
+          right: 5,
+          child: Row(
+            children: [
+              Container(width: 12, height: 12, color: Colors.blue),
+              const SizedBox(width: 4),
+              const Text('Left Ear', style: TextStyle(fontSize: 12)),
+              const SizedBox(width: 20),
+              Container(width: 12, height: 12, color: Colors.red),
+              const SizedBox(width: 4),
+              const Text('Right Ear', style: TextStyle(fontSize: 12)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
