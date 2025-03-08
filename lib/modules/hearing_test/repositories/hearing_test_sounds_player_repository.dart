@@ -34,7 +34,7 @@ class HearingTestSoundsPlayerRepository {
                 ? _soundAssets[frequency]!['left']!
                 : _soundAssets[frequency]!['right']!;
 
-        double volume = _decibelsToVolume(decibels);
+        double volume = _decibelsToVolume(decibels, frequency: frequency);
 
         await _audioPlayer.setSource(AssetSource(assetPath));
         await _audioPlayer.setVolume(volume);
@@ -55,23 +55,40 @@ class HearingTestSoundsPlayerRepository {
     await _audioPlayer.stop();
   }
 
-  // This needs some work, to be honest I don't know how to do it properly. Right now, using exponential function I see the difference, with logarithmic it was too small..
-  double _decibelsToVolume(double decibels) {
-    // Clamp decibels between -10 and 120 dB
-    decibels = decibels.clamp(-10.0, 120.0);
+  double _decibelsToVolume(double dBHL, {int frequency = 0}) {
+    dBHL = dBHL.clamp(-10.0, 120.0);
+    
+    double dBSPL = _HLToSPL(dBHL, frequency); // Convert HL to SPL
+    double referencePressure = 20.0e-6; // Reference pressure in Pa (it actually does not matter - it cancels out in the normalization step)
+    double soundPressure = referencePressure * pow(10.0, dBSPL / 20.0).toDouble(); // Convert SPL to sound pressure
+    double normalizedSoundPressure = _normalizeSoundPressure(soundPressure, referencePressure);
 
-    // Exponential scaling factor for more pronounced differences
-    double volume;
+    // the volume is in linear scale from 0 to 1 therefore we use normalized sound pressure 
+    return normalizedSoundPressure;
+  }
 
-    // For negative decibels, scale it exponentially
-    if (decibels < 0) {
-      volume = 0.1 * (pow(10.0, decibels / 20));
-    } else {
-      // For positive decibels, apply a higher scaling factor for noticeable change
-      volume = 0.05 * (pow(10.0, decibels / 20));
-    }
+  double _normalizeSoundPressure(double soundPressure, double referencePressure) {
+    // this needs to be also limit the actual app messurement
+    // this needs to be checked with the dummy head
+    double maxDeviceOutputVolume = 60; 
+    
+    double maxDBSPL= _HLToSPL(maxDeviceOutputVolume, 125);
+    double normalizedSoundPressure = soundPressure / ( referencePressure * pow(10.0, maxDBSPL / 20.0));
+    return normalizedSoundPressure;
+  }
 
-    // Clamp the final volume value between 0.0 and 1.0
-    return volume.clamp(0.0, 1.0);
+  double _HLToSPL(double dBHL, int frequency) {
+    Map<int, double> referenceSPL = {
+      125: 45.0,
+      250: 25.0,
+      500: 13.5,
+      1000: 7.5,
+      2000: 9.0,
+      4000: 12.0,
+      8000: 15.5,
+    };
+    double reference = referenceSPL[frequency] ?? 7.5; // Default to 1000 Hz reference
+    double dBSPL = dBHL + reference;
+    return dBSPL;
   }
 }
