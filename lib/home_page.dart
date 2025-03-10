@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -7,54 +7,89 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(enableBackButton: false),
-      body: Center(
-        child: Column(
+      appBar: null,
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          Positioned(
+        top: 0,
+        left: 15,
+        child: SvgPicture.asset(
+          'assets/images/top_left.svg',
+          height: 220,
+        ),
+          ),
+          Positioned(
+        bottom: 0,
+        right: 15,
+        child: SvgPicture.asset(
+          'assets/images/bottom_right.svg',
+          height: 200,
+        ),
+          ),
+          Center(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text(
-                'Welcome to HearMate!',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Please select a module to continue:',
-              style: TextStyle(fontSize: 18, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/hearing_test/welcome');
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 15,
+            Expanded(
+          flex: 60,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SvgPicture.asset(
+              'assets/images/logo.svg',
+              height: 215,
                 ),
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blueAccent,
-              ),
-              child: const Text(
-                'Audio Test Module',
-                style: TextStyle(fontSize: 18),
-              ),
+              ],
             ),
-            const SizedBox(height: 15),
-            // Placeholder for future modules
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'More Modules Coming Soon...',
-                style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
+            ],
+          ),
+            ),
+            Expanded(
+          flex: 40,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40),
+              ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/hearing_test/welcome');
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 15,
+              ),
+              foregroundColor: Colors.white,
+              backgroundColor: Color(0xFFFF3131),
+            ),
+            child: const Text(
+              'Start Module',
+              style: TextStyle(fontSize: 16),
+            ),
+              ),
+              const SizedBox(height: 10),
+              // Placeholder for future modules
+              const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'More Modules Coming Soon...',
+              style: TextStyle(fontSize: 14, color: Colors.white),
+            ),
+              ),
+            ],
+          ),
             ),
           ],
         ),
+          ),
+        ],
       ),
     );
   }
