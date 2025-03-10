@@ -57,36 +57,22 @@ class HearingTestSoundsPlayerRepository {
 
   double _decibelsToVolume(double dBHL, {int frequency = 0}) {
     dBHL = dBHL.clamp(-10.0, 120.0);
-    
-    double dBSPL = _HLToSPL(dBHL, frequency); // Convert HL to SPL
-    
-    // here we should perform correction for specific headphone characteristic
-    // a simmilar proces to dB HL to dB SPL correction for each frequency
 
-    // Reference pressure in Pa (it actually does not matter - it cancels out in the normalization step)
-    double referencePressure = 20.0e-6; 
-    double soundPressure = referencePressure * pow(10.0, dBSPL / 20.0).toDouble(); // Convert SPL to sound pressure
-    double normalizedSoundPressure = _normalizeSoundPressure(soundPressure, referencePressure);
+    double dBSPL = _HLToSPL(dBHL, frequency);
+
+    // here we should perform correction for specific headphone characteristic
+    // a similar process to dB HL to dB SPL correction for each frequency
+
+    double soundPressure = _SPLToSoundPressure(dBSPL);
+    double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);
 
     // the volume is in linear scale from 0 to 1 therefore we use normalized sound pressure
     return normalizedSoundPressure;
   }
 
-  double _normalizeSoundPressure(double soundPressure, double referencePressure) {
-    // this needs to be also limit the actual app messurement if it turens out output device does not go to 120 dbhl
-    // this needs to be checked with the dummy head
-    double maxDeviceOutputVolume = 60; 
-    
-    double maxDBSPL= _HLToSPL(maxDeviceOutputVolume, 125);
-    double normalizedSoundPressure = soundPressure / ( referencePressure * pow(10.0, maxDBSPL / 20.0));
-    // Clamp because it seems like dB SPL can go below 0 (???) 
-    normalizedSoundPressure = normalizedSoundPressure.clamp(0.0, 1.0); 
-    return normalizedSoundPressure;
-  }
-
   double _HLToSPL(double dBHL, int frequency) {
-    //needs to be checked against iso 226:2003 standard / consulted with Dominica
-    Map<int, double> referenceSPL = {
+    //needs to be checked against iso 226:2003 standard / consulted with Dominika
+    const Map<int, double> referenceSPL = {
       125: 45.0,
       250: 25.0,
       500: 13.5,
@@ -95,8 +81,31 @@ class HearingTestSoundsPlayerRepository {
       4000: 12.0,
       8000: 15.5,
     };
-    double reference = referenceSPL[frequency] ?? 7.5; // Default to 1000 Hz reference
+    double reference =
+        referenceSPL[frequency] ?? 7.5; // Default to 1000 Hz reference
     double dBSPL = dBHL + reference;
     return dBSPL;
+  }
+
+  double _SPLToSoundPressure(double dBSPL) {
+    // Reference pressure in Pa
+    const double referencePressure = 20.0e-6;
+    double soundPressure =
+        referencePressure *
+        pow(10.0, dBSPL / 20.0).toDouble(); // Convert SPL to sound pressure
+    return soundPressure;
+  }
+
+  double _normalizeSoundPressure(double soundPressure) {
+    // this needs to be also limit the actual app messurement if it turns out output device does not reach 120 dbhl
+    // this needs to be checked with the dummy head
+    double maxDeviceOutputVolume = 60;
+
+    double maxDBSPL = _HLToSPL(maxDeviceOutputVolume, 125);
+    double normalizedSoundPressure =
+        soundPressure / _SPLToSoundPressure(maxDBSPL);
+    // Clamp because it seems like dB SPL can go below 0 (???)
+    normalizedSoundPressure = normalizedSoundPressure.clamp(0.0, 1.0);
+    return normalizedSoundPressure;
   }
 }
