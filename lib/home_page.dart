@@ -44,6 +44,27 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 18),
               ),
             ),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/hearing_calibration/calibration',
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 15,
+                ),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blueAccent,
+              ),
+              child: const Text(
+                'Calibration Module',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
             const SizedBox(height: 15),
             // Placeholder for future modules
             Padding(

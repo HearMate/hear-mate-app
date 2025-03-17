@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:bloc/bloc.dart';
+import 'package:hear_mate_app/modules/hearing_calibration/blocs/hearing_calibration/hearing_calibration_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/repositories/sounds_player_repository.dart';
+import 'package:hear_mate_app/modules/hearing_calibration/screens/hearing_calibration/hearing_calibration.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
@@ -21,10 +23,9 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider(
           create: (context) {
-            final hearingTestSoundsPlayerRepository =
-                HearingTestSoundsPlayerRepository();
-            hearingTestSoundsPlayerRepository.initialize();
-            return hearingTestSoundsPlayerRepository;
+            final _soundsPlayerRepository = SoundsPlayerRepository();
+            _soundsPlayerRepository.initialize();
+            return _soundsPlayerRepository;
           },
         ),
       ],
@@ -33,8 +34,14 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create:
                 (context) => HearingTestBloc(
-                  hearingTestSoundsPlayerRepository:
-                      context.read<HearingTestSoundsPlayerRepository>(),
+                  SoundsPlayerRepository:
+                      context.read<SoundsPlayerRepository>(),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => HearingCalibrationBloc(
+                  soundRepository: context.read<SoundsPlayerRepository>(),
                 ),
           ),
         ],
@@ -44,6 +51,8 @@ class MyApp extends StatelessWidget {
                 (context) => const HearingTestWelcomePage(),
             '/hearing_test/start': (context) => const HearingTestPage(),
             '/hearing_test/result': (context) => HearingTestResultPage(),
+            '/hearing_calibration/calibration':
+                (context) => HearingCalibrationPage(),
           },
           onUnknownRoute: (settings) {
             return MaterialPageRoute(
