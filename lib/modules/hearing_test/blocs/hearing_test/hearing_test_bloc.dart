@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/repositories/sounds_player_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'hearing_test_event.dart';
@@ -9,14 +9,12 @@ part 'hearing_test_state.dart';
 const int MIN_DB_LEVEL = -10;
 
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
-  final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
+  final SoundsPlayerRepository _soundsPlayerRepository;
   final List<int> testFrequencies = [1000, 2000, 4000, 8000, 500, 250, 125];
 
-  HearingTestBloc({
-    required HearingTestSoundsPlayerRepository
-    hearingTestSoundsPlayerRepository,
-  }) : _soundsPlayerRepository = hearingTestSoundsPlayerRepository,
-       super(HearingTestState()) {
+  HearingTestBloc({required SoundsPlayerRepository SoundsPlayerRepository})
+    : _soundsPlayerRepository = SoundsPlayerRepository,
+      super(HearingTestState()) {
     on<HearingTestStartTest>(_onStartTest);
     on<HearingTestButtonPressed>(_onButtonPressed);
     on<HearingTestButtonReleased>(_onButtonReleased);
@@ -39,7 +37,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         currentFrequencyIndex: 0,
         currentDBLevel: 20,
         dbLevelToHearCountMap: const {},
-        results: [],
+        results: [15, 10, 5, -10, -10, -5, -5, -10, 0, 25, 35, 0, 25, 35],
       ),
     );
 
