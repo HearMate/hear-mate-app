@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:bloc/bloc.dart';
+import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_collection_page/echo_parse_collection_page.dart';
+import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_upload_page/echo_parse_upload_page.dart';
+import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page/echo_parse_welcome_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
                   hearingTestSoundsPlayerRepository:
                       context.read<HearingTestSoundsPlayerRepository>(),
                 ),
-          ),
+          ),  
         ],
         child: MaterialApp(
           routes: {
@@ -44,6 +47,9 @@ class MyApp extends StatelessWidget {
                 (context) => const HearingTestWelcomePage(),
             '/hearing_test/start': (context) => const HearingTestPage(),
             '/hearing_test/result': (context) => HearingTestResultPage(),
+            '/echo_parse/welcome': (context) => EchoParseWelcomeScreen(),
+            '/echo_parse/upload': (context) => EchoParseUploadScreen(),
+            '/echo_parse/collection': (context) => EchoParseCollectScreen(),
           },
           onUnknownRoute: (settings) {
             return MaterialPageRoute(

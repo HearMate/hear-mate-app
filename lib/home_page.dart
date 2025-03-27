@@ -6,6 +6,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttonWidth = MediaQuery.of(context).size.width * 0.3;
+
     return Scaffold(
       appBar: HMAppBar(enableBackButton: false),
       body: Center(
@@ -27,28 +29,50 @@ class HomePage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/hearing_test/welcome');
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 15,
+
+            // Audio Test Module button
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/hearing_test/welcome');
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
                 ),
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blueAccent,
-              ),
-              child: const Text(
-                'Audio Test Module',
-                style: TextStyle(fontSize: 18),
+                child: const Text(
+                  'Audio Test Module',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             ),
+
             const SizedBox(height: 15),
+
+            // Echo Parse button
+            SizedBox(
+              width: buttonWidth,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/echo_parse/welcome');
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
+                ),
+                child: const Text('Echo Parse', style: TextStyle(fontSize: 18)),
+              ),
+            ),
+
+            const SizedBox(height: 15),
+
             // Placeholder for future modules
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
                 'More Modules Coming Soon...',
                 style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
