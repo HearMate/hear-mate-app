@@ -38,6 +38,7 @@ dependencies:
   fl_chart: ^0.70.2
   just_audio: ^0.9.46
   audioplayers: ^6.2.0
+  flutter_svg: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +56,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  fonts:
+      - family: Aoboshi One
+        fonts:
+          - asset: assets/fonts/AoboshiOne.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -62,6 +67,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
