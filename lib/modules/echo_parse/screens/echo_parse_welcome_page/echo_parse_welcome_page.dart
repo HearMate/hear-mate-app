@@ -33,24 +33,24 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                     child: Stack(
                       children: [
                         Positioned(
-                          top: 70,
+                          top: 30,
                           left: 0,
                           child: SvgPicture.asset(
                             'assets/images/top_wave_yellow.svg',
-                            height: 300,
+                            height: 400,
                             fit: BoxFit.contain,
                           ),
                         ),
                         Positioned(
                           top: 20,
-                          left: 100,
+                          left: 220,
                           child: Column(
                             children: [
                               Image.asset(
                                 'assets/images/EchoParse_logo.png',
-                                height: 48,
+                                height: 70,
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: 30),
                               SizedBox(
                                 width: 300,
                                 child: Row(
@@ -65,7 +65,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                                     ),
                                     Image.asset(
                                       'assets/images/hearmate_logo.png',
-                                      height: 50,
+                                      height: 75,
                                     ),
                                   ],
                                 ),
@@ -74,11 +74,11 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          top: 320,
+                          bottom: 0,
                           left: 0,
                           child: SvgPicture.asset(
                             'assets/images/chart_visual.svg',
-                            height: 210,
+                            height: 330,
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -87,7 +87,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                           top: 0,
                           child: SvgPicture.asset(
                             'assets/images/top_right_waves.svg',
-                            height: 220,
+                            height: 300,
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -96,46 +96,46 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                           bottom: 0,
                           child: Image.asset(
                             'assets/images/sammy_and_table.png',
-                            height: 350,
+                            height: 450,
                             fit: BoxFit.contain,
                           ),
                         ),
                         // Updated text block
                         Positioned(
-                          bottom: 200,
-                          left: screenSize.width / 2 - 150,
+                          bottom: 330,
+                          left: 450,
                           child: const Text(
                             "Your audiogram\nnow in CSV.",
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontFamily: "Aoboshi One",
-                              fontSize: 18,
+                              fontSize: 24,
                               color: Colors.black,
                             ),
                           ),
                         ),
                         // SVG positioned independently
                         Positioned(
-                          bottom: 170,
-                          left: 160,
+                          bottom: 230,
+                          left: 270,
                           child: SvgPicture.asset(
                             'assets/images/welcome_page_arrow.svg',
-                            height: 70,
+                            height: 130,
                             fit: BoxFit.contain,
                           ),
                         ),
                         Positioned(
-                          bottom: 100,
-                          left: 70,
+                          bottom: 150,
+                          left: 140,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(55),
                               ),
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 40,
-                                vertical: 15,
+                                horizontal: 50,
+                                vertical: 20,
                               ),
                               shadowColor: Colors.black,
                               elevation: 10,
@@ -148,7 +148,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontFamily: "Aoboshi One",
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 24,
                               ),
                             ),
                           ),
