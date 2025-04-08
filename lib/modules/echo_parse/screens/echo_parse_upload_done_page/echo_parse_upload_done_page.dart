@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class EchoParseCollectScreen extends StatelessWidget {
-  const EchoParseCollectScreen({super.key});
+class EchoParseUploadDoneScreen extends StatelessWidget {
+  const EchoParseUploadDoneScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class EchoParseCollectScreen extends StatelessWidget {
                     child: Stack(
                         children: [
                         Positioned(
-                          top: -50,
+                          top: 30,
                           left: 0,
                           child: SvgPicture.asset(
                           'assets/images/top_wave_yellow.svg',
@@ -43,46 +43,19 @@ class EchoParseCollectScreen extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          right: 0,
-                          top: 100,
+                          right: 20,
+                          top: 0,
                           child: SvgPicture.asset(
-                          'assets/images/audio-waves-blue-right.svg',
-                          height: 250,
+                          'assets/images/top_right_waves.svg',
+                          height: 300,
                           fit: BoxFit.contain,
                           ),
                         ),
                         Positioned(
                           top: 20,
-                          right: 300,
+                          right: 230,
                           child: Text(
-                            "Thank you for using",
-                            style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontFamily: screenFontFamily,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 90,
-                          right: 300,
-                          child: Text(
-                            "EchoParse!",
-                            style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontFamily: screenFontFamily,
-                            ),
-                          ),
-                        ),
-
-                        Positioned(
-                          top: 220,
-                          left: 350,
-                          child: Text(
-                            "Choose your way.",
+                            "Data loaded successfully.",
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -91,31 +64,67 @@ class EchoParseCollectScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        
+                        // SVG positioned independently
                         Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Image.asset(
-                            'assets/images/sammy-and-table-collect.png',
-                            height: 450,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          child: SvgPicture.asset(
-                            'assets/images/audio-chart-collect.svg',
+                          top: 80,
+                          left: (screenSize.width - 920) / 2,
+                          child: Container(
+                            width: 920,
                             height: 400,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF21A0AA),
+                              border: Border.all(color: Colors.black, width: 2),
+                              borderRadius: BorderRadius.circular(55),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 170,
+                          top: 135,
+                          child: Image.asset(
+                            'assets/images/audiogram_upload_picture.png',
+                            height: 300,
                             fit: BoxFit.contain,
                           ),
                         ),
-
-                        
                         Positioned(
-                          bottom: 250,
-                          left: 120,
+                          right: 210,
+                          top: 140,
+                          child: Image.asset(
+                            'assets/images/audiogram-img.png',
+                            height: 270,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Positioned(
+                          top: 110,
+                          left: 190,
+                          child: const Text(
+                            "Audiogram loaded.",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontFamily: "Aoboshi One",
+                              fontSize: 36,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 165,
+                          left: 190,
+                          child: const Text(
+                            "Image has been processed to CSV.",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontFamily: "Aoboshi One",
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 330,
+                          left: 220,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
@@ -130,65 +139,42 @@ class EchoParseCollectScreen extends StatelessWidget {
                               elevation: 10,
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, "/echo_parse/upload");
+                              Navigator.pushNamed(context, "/echo_parse/collection");
                             },
                             child: Center(child:
                               Text(
-                              "Parse new doc.",
+                              "Download.",
                               style: TextStyle(
                                 fontFamily: "Aoboshi One",
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 28,
                               ),
                             ),
                             ) 
                           ),
                         ),
-
                         Positioned(
-                          bottom: 160,
-                          left: 120,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(55),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 50,
-                                vertical: 25,
-                              ),
-                              shadowColor: Colors.black,
-                              elevation: 10,
-                            ),
-                            onPressed: () {
-                              Navigator.pushNamed(context, "/");
-                            },
-                            child: Center(child:
-                              Text(
-                              "Go back to modules.",
-                              style: TextStyle(
-                                fontFamily: "Aoboshi One",
-                                color: Colors.white,
-                                fontSize: 24,
-                              ),
-                            ),
-                            ) 
-                          ),
-                        ),
-
-                        
-
-                        Positioned(
-                          bottom: 250,
-                          left: 430,
+                          bottom: 330,
+                          left: 490,
                           child: SvgPicture.asset(
-                            'assets/images/arrow-collect.svg',
-                            height: 170,
+                            'assets/images/arrow-load-audio-done.svg',
+                            height: 130,
                             fit: BoxFit.contain,
                           ),
                         ),
-
+                        Positioned(
+                          bottom: 140,
+                          left: (screenSize.width - 200) / 2, // Center horizontally
+                          child: const Text(
+                          "Saved files.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: "Aoboshi One",
+                            fontSize: 30,
+                            color: Colors.black,
+                          ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

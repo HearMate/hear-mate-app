@@ -95,7 +95,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontFamily: "Aoboshi One",
-                              fontSize: 30,
+                              fontSize: 36,
                               color: Colors.white,
                             ),
                           ),
@@ -130,7 +130,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                               elevation: 10,
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, "/echo_parse/collection");
+                              Navigator.pushNamed(context, "/echo_parse/upload_done");
                             },
                             child: Center(child:
                               Text(
@@ -138,7 +138,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontFamily: "Aoboshi One",
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 28,
                               ),
                             ),
                             ) 
