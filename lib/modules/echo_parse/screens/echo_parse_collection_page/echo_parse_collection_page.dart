@@ -4,10 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class EchoParseCollectScreen extends StatelessWidget {
   const EchoParseCollectScreen({super.key});
 
+  
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final screenFontFamily = "Aoboshi One";
+
+    
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -189,6 +193,7 @@ class EchoParseCollectScreen extends StatelessWidget {
                           ),
                         ),
 
+                        
                       ],
                     ),
                   ),
