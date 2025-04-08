@@ -4,10 +4,94 @@ import 'package:flutter_svg/flutter_svg.dart';
 class EchoParseUploadScreen extends StatelessWidget {
   const EchoParseUploadScreen({super.key});
 
+  Widget buildFileGrid(BuildContext context, List<Map<String, String>> files) {
+    final screenSize = MediaQuery.of(context).size;
+    final containerWidth = screenSize.width - 100; // Padding on both sides
+    final screenFontFamily = "Aoboshi One";
+    
+    // Calculate how many rows we need
+    final rowCount = (files.length / 8).ceil();
+    // Limit to 3 rows maximum
+    final limitedRowCount = rowCount > 3 ? 3 : rowCount;
+    // Calculate how many files to show (max 15)
+    final filesToShow = files.length > 15 ? 15 : files.length;
+    
+    return SizedBox(
+      width: containerWidth,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(limitedRowCount, (rowIndex) {
+          // Calculate starting and ending indices for this row
+          final startIndex = rowIndex * 8;
+          final endIndex = (startIndex + 8) > filesToShow ? filesToShow : (startIndex + 8);
+          
+          // Get files for this row
+          final rowFiles = files.sublist(startIndex, endIndex);
+          
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ...rowFiles.asMap().entries.map((entry) {
+                  final file = entry.value;
+                  // Add a SizedBox for spacing after each item except the last one
+                  return Row(
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Image
+                          Image.asset(
+                            file['path']!,
+                            height: 100,
+                            fit: BoxFit.contain,
+                          ),
+                          // Text overlaid on the image
+                          Positioned(
+                            bottom: 10, // Position from bottom of the stack
+                            child: Text(
+                              file['name']!,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontFamily: screenFontFamily,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Add gap after each item except the last one
+                      entry.key < rowFiles.length - 1 
+                          ? SizedBox(width: 30) // Adjust this value to control the gap size
+                          : SizedBox.shrink(),
+                    ],
+                  );
+                }),
+              ],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final screenFontFamily = "Aoboshi One";
+
+    // Example file list - in a real app this would come from our data source
+    final sampleFiles = [
+      {'name': 'File 1', 'path': 'assets/images/saved-file-mock.png'},
+      {'name': 'File 2', 'path': 'assets/images/saved-file-mock.png'},
+      {'name': 'File 3', 'path': 'assets/images/saved-file-mock.png'},
+      {'name': 'File 4', 'path': 'assets/images/saved-file-mock.png'},
+      {'name': 'File 5', 'path': 'assets/images/saved-file-mock.png'},
+      {'name': 'File 6', 'path': 'assets/images/saved-file-mock.png'},
+      {'name': 'File 7', 'path': 'assets/images/saved-file-mock.png'},
+    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -165,6 +249,12 @@ class EchoParseUploadScreen extends StatelessWidget {
                             color: Colors.black,
                           ),
                           ),
+                        ),
+
+                        Positioned(
+                          bottom: 20,
+                          left: 50, // Add padding from left
+                          child: buildFileGrid(context, sampleFiles),
                         ),
                       ],
                     ),
