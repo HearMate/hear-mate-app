@@ -39,6 +39,7 @@ dependencies:
   just_audio: ^0.9.46
   audioplayers: ^6.2.0
   flutter_svg: ^2.0.7
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/lotties/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
