@@ -1,166 +1,91 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hear_mate_app/data/constants.dart';
+import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:lottie/lottie.dart';
 
 class EchoParseWelcomeScreen extends StatelessWidget {
   const EchoParseWelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Container(
-              width: double.infinity,
-              height: screenSize.height - 56, // Ensure it fills the screen height including the top nav bar
-              color: Colors.white,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: screenSize.height - 56,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 30,
-                          left: 0,
-                          child: SvgPicture.asset(
-                            'assets/images/top_wave_yellow.svg',
-                            height: 400,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Positioned(
-                          top: 20,
-                          left: 220,
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'assets/images/EchoParse_logo.png',
-                                height: 70,
-                              ),
-                              const SizedBox(height: 30),
-                              SizedBox(
-                                width: 300,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const Text(
-                                      'by ',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    Image.asset(
-                                      'assets/images/hearmate_logo.png',
-                                      height: 75,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          child: SvgPicture.asset(
-                            'assets/images/chart_visual.svg',
-                            height: 330,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Positioned(
-                          right: 20,
-                          top: 0,
-                          child: SvgPicture.asset(
-                            'assets/images/top_right_waves.svg',
-                            height: 300,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Image.asset(
-                            'assets/images/sammy_and_table.png',
-                            height: 450,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        // Updated text block
-                        Positioned(
-                          bottom: 330,
-                          left: 450,
-                          child: const Text(
-                            "Your audiogram\nnow in CSV.",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontFamily: "Aoboshi One",
-                              fontSize: 24,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        // SVG positioned independently
-                        Positioned(
-                          bottom: 230,
-                          left: 270,
-                          child: SvgPicture.asset(
-                            'assets/images/welcome_page_arrow.svg',
-                            height: 130,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 150,
-                          left: 140,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(55),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 50,
-                                vertical: 20,
-                              ),
-                              shadowColor: Colors.black,
-                              elevation: 10,
-                            ),
-                            onPressed: () {
-                              Navigator.pushNamed(context, "/echo_parse/upload");
-                            },
-                            child: const Text(
-                              "Let's go.",
-                              style: TextStyle(
-                                fontFamily: "Aoboshi One",
-                                color: Colors.white,
-                                fontSize: 24,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+      appBar: HMAppBar(title: "EchoParse"),
+      body: Center(
+        child: SingleChildScrollView(
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40.0),
+                  child: Lottie.asset(
+                    "assets/lotties/echoparse_welcome.json",
+                    height: MediaQuery.of(context).size.width > 500 ? 150 : 100,
                   ),
-                ],
-              ),
+                ),
+                Text(
+                  "EchoParse",
+                  style: KConstants.headerStyle.copyWith(
+                  fontSize: MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
+                ),
+                ),
+                SizedBox(
+                  width:
+                      MediaQuery.of(context).size.width > 500
+                          ? 500
+                          : MediaQuery.of(context).size.width * 0.9,
+                  child: Column(
+                    children: [
+                      Text(
+                        "Your audiogram now in CSV!",
+                        style: TextStyle(
+                          color: Colors.teal,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "Convert your audiogram photos and files into easy to use, modern CSV documents.",
+                          style: KConstants.paragraphStyle,
+                          textAlign: TextAlign.justify,
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width > 500 ? 0 : 50,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(40.0),
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Color(0xFFF94F46),
+                            minimumSize: Size(252, 48)
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/echo_parse/upload');
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Let's go!",
+                              style: KConstants.bigButtonStyle.copyWith(
+                                color: Colors.white
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
