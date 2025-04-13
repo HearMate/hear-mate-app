@@ -1,269 +1,140 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:hear_mate_app/data/constants.dart';
+import 'package:hear_mate_app/data/notifiers.dart';
+import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:lottie/lottie.dart';
 
-class EchoParseUploadScreen extends StatelessWidget {
+class EchoParseUploadScreen extends StatefulWidget {
   const EchoParseUploadScreen({super.key});
 
-  Widget buildFileGrid(BuildContext context, List<Map<String, String>> files) {
-    final screenSize = MediaQuery.of(context).size;
-    final containerWidth = screenSize.width - 100; // Padding on both sides
-    final screenFontFamily = "Aoboshi One";
-    
-    // Calculate how many rows we need
-    final rowCount = (files.length / 8).ceil();
-    // Limit to 3 rows maximum
-    final limitedRowCount = rowCount > 3 ? 3 : rowCount;
-    // Calculate how many files to show (max 15)
-    final filesToShow = files.length > 15 ? 15 : files.length;
-    
-    return SizedBox(
-      width: containerWidth,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(limitedRowCount, (rowIndex) {
-          // Calculate starting and ending indices for this row
-          final startIndex = rowIndex * 8;
-          final endIndex = (startIndex + 8) > filesToShow ? filesToShow : (startIndex + 8);
-          
-          // Get files for this row
-          final rowFiles = files.sublist(startIndex, endIndex);
-          
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...rowFiles.asMap().entries.map((entry) {
-                  final file = entry.value;
-                  // Add a SizedBox for spacing after each item except the last one
-                  return Row(
-                    children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // Image
-                          Image.asset(
-                            file['path']!,
-                            height: 100,
-                            fit: BoxFit.contain,
-                          ),
-                          // Text overlaid on the image
-                          Positioned(
-                            bottom: 10, // Position from bottom of the stack
-                            child: Text(
-                              file['name']!,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontFamily: screenFontFamily,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      // Add gap after each item except the last one
-                      entry.key < rowFiles.length - 1 
-                          ? SizedBox(width: 30) // Adjust this value to control the gap size
-                          : SizedBox.shrink(),
-                    ],
-                  );
-                }),
-              ],
-            ),
-          );
-        }),
-      ),
-    );
-  }
+  final String titleSmallScreen = "Load your\naudiogram";
+  final String titleBigScreen = "Load your audiogram";
 
   @override
+  State<EchoParseUploadScreen> createState() => _EchoParseUploadScreenState();
+}
+
+class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
+  @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final screenFontFamily = "Aoboshi One";
-
-    // Example file list - in a real app this would come from our data source
-    final sampleFiles = [
-      {'name': 'File 1', 'path': 'assets/images/saved-file-mock.png'},
-      {'name': 'File 2', 'path': 'assets/images/saved-file-mock.png'},
-      {'name': 'File 3', 'path': 'assets/images/saved-file-mock.png'},
-      {'name': 'File 4', 'path': 'assets/images/saved-file-mock.png'},
-      {'name': 'File 5', 'path': 'assets/images/saved-file-mock.png'},
-      {'name': 'File 6', 'path': 'assets/images/saved-file-mock.png'},
-      {'name': 'File 7', 'path': 'assets/images/saved-file-mock.png'},
-    ];
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Container(
-              width: double.infinity,
-              height: screenSize.height - 56, // Ensure it fills the screen height including the top nav bar
-              color: Colors.white,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: screenSize.height - 56,
-                    child: Stack(
-                        children: [
-                        Positioned(
-                          top: 30,
-                          left: 0,
-                          child: SvgPicture.asset(
-                          'assets/images/top_wave_yellow.svg',
-                          height: 400,
-                          fit: BoxFit.contain,
-                          ),
-                        ),
-                        Positioned(
-                          right: 20,
-                          top: 0,
-                          child: SvgPicture.asset(
-                          'assets/images/top_right_waves.svg',
-                          height: 300,
-                          fit: BoxFit.contain,
-                          ),
-                        ),
-                        Positioned(
-                          top: 20,
-                          right: 230,
-                          child: Text(
-                            "Upload your data.",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontFamily: screenFontFamily,
-                            ),
-                          ),
-                        ),
-                        // SVG positioned independently
-                        Positioned(
-                          top: 80,
-                          left: (screenSize.width - 920) / 2,
-                          child: Container(
-                            width: 920,
-                            height: 400,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF21A0AA),
-                              border: Border.all(color: Colors.black, width: 2),
-                              borderRadius: BorderRadius.circular(55),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 170,
-                          top: 135,
-                          child: Image.asset(
-                            'assets/images/audiogram_upload_picture.png',
-                            height: 300,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Positioned(
-                          top: 110,
-                          left: 190,
-                          child: const Text(
-                            "Load your audiogram.",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontFamily: "Aoboshi One",
-                              fontSize: 36,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 165,
-                          left: 190,
-                          child: const Text(
-                            "Accepted format: png, jpg, jpeg",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontFamily: "Aoboshi One",
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 330,
-                          left: 220,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(55),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 50,
-                                vertical: 25,
-                              ),
-                              shadowColor: Colors.black,
-                              elevation: 10,
-                            ),
-                            onPressed: () {
-                              Navigator.pushNamed(context, "/echo_parse/upload_done");
-                            },
-                            child: Center(child:
-                              Text(
-                              "Upload.",
-                              style: TextStyle(
-                                fontFamily: "Aoboshi One",
-                                color: Colors.white,
-                                fontSize: 28,
-                              ),
-                            ),
-                            ) 
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 330,
-                          left: 470,
-                          child: SvgPicture.asset(
-                            'assets/images/load_arrow.svg',
-                            height: 130,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 140,
-                          left: (screenSize.width - 200) / 2, // Center horizontally
-                          child: const Text(
-                          "Saved files.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: "Aoboshi One",
-                            fontSize: 30,
-                            color: Colors.black,
-                          ),
-                          ),
-                        ),
-
-                        Positioned(
-                          bottom: 20,
-                          left: 50, // Add padding from left
-                          child: buildFileGrid(context, sampleFiles),
-                        ),
-                      ],
+      appBar: HMAppBar(title: "Upload files"),
+      body: SizedBox(
+        width: double.infinity,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(48.0),
+            child: Column(
+              children: [
+                SizedBox(height: 24),
+                Text(
+                  MediaQuery.of(context).size.width > 800
+                      ? widget.titleBigScreen
+                      : widget.titleSmallScreen,
+                  textAlign: TextAlign.center,
+                  style: KConstants.headerStyle.copyWith(
+                    fontSize:
+                        MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
+                  ),
+                ),
+                Text(
+                  "Accepted formats: png, jpg",
+                  style: KConstants.helperStyle,
+                ),
+                SizedBox(height: 48),
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    minimumSize: Size(252, 48),
+                    backgroundColor: KConstants.echoParseRed,
+                  ),
+                  onPressed: () {
+                    // TODO: Upload file logic
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Upload",
+                      style: KConstants.hugeButtonStyle.copyWith(
+                        color: Colors.white,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 500
+                                ? 32.0
+                                : 20.0,
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: 32),
+                Lottie.asset(
+                  "assets/lotties/echoparse_arrow_upload.json",
+                  height: 150,
+                ),
+                SizedBox(height: 32),
+                ValueListenableBuilder(
+                  valueListenable: isDarkModeNotifier,
+                  builder: (context, value, child) {
+                    return !value
+                        ? SvgPicture.asset("assets/images/audio-no-shadow.svg")
+                        : SvgPicture.asset(
+                          "assets/images/audio-no-shadow-light.svg",
+                        );
+                  },
+                ),
+                SizedBox(height: 64),
+                Text(
+                  "Saved files",
+                  textAlign: TextAlign.center,
+                  style: KConstants.headerStyle.copyWith(
+                    fontSize:
+                        MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
+                  ),
+                ),
+                SizedBox(height: 48),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final double itemWidth =
+                        MediaQuery.of(context).size.width > 500 ? 200.0 : 130.0;
+                    final double spacing =
+                        MediaQuery.of(context).size.width > 500 ? 40.0 : 20.0;
+                    final double bottomNum =
+                        MediaQuery.of(context).size.width > 500 ? 20.0 : 10.0;
+
+                    return Wrap(
+                      spacing: spacing,
+                      runSpacing: spacing,
+                      children: List.generate(
+                        8, // TODO: change it to the number of files
+                        (index) => SizedBox(
+                          width: itemWidth,
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                "assets/images/saved-file-mock.png",
+                                width: itemWidth,
+                              ),
+                                Positioned(
+                                bottom: bottomNum,
+                                left: 30,
+                                child: Text( // TODO: Change the code to dynamic names
+                                  "File ${index + 1}.csv".length > 10
+                                    ? "${"File ${index + 1}.csv".substring(0, 7)}..."
+                                    : "File ${index + 1}.csv",
+                                  maxLines: 1,
+                                  style: KConstants.paragraphStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
