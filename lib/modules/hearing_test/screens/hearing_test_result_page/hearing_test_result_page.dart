@@ -29,7 +29,7 @@ class HearingTestResultPage extends StatelessWidget {
                 : [];
 
         return Scaffold(
-          appBar: HMAppBar(enableBackButton: false),
+          appBar: HMAppBar(title : "HearMate Project"),
           body: SingleChildScrollView(
             child: Center(
               child: Column(

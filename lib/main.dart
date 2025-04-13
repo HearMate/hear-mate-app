@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hear_mate_app/data/notifiers.dart';
 import 'package:hear_mate_app/home_page.dart';
 
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page/echo_parse_welcome_page.dart';
@@ -17,9 +18,14 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
@@ -41,49 +47,60 @@ class MyApp extends StatelessWidget {
                   hearingTestSoundsPlayerRepository:
                       context.read<HearingTestSoundsPlayerRepository>(),
                 ),
-          ),  
+          ),
         ],
-        child: MaterialApp(
-          routes: {
-            '/hearing_test/welcome': (context) => const HearingTestWelcomePage(),
-            '/hearing_test/start': (context) => const HearingTestPage(),
-            '/hearing_test/result': (context) => HearingTestResultPage(),
-            '/echo_parse/welcome': (context) => EchoParseWelcomeScreen(),
-            '/echo_parse/upload': (context) => EchoParseUploadScreen(),
-            '/echo_parse/upload_done': (context) => EchoParseUploadDoneScreen(),
-            '/echo_parse/collection': (context) => EchoParseCollectScreen(),
-          },
-          onUnknownRoute: (settings) {
-            return MaterialPageRoute(
-              builder:
-                  (context) => Scaffold(
-                    appBar: AppBar(title: const Text('Page Not Found')),
-                    body: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('The requested page was not found.'),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed:
-                                () => Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  '/',
-                                  (route) => false,
-                                ),
-                            child: const Text('Return to Home'),
+        child: ValueListenableBuilder(
+          valueListenable: isDarkModeNotifier,
+          builder: (context, value, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              routes: {
+                '/hearing_test/welcome':
+                    (context) => const HearingTestWelcomePage(),
+                '/hearing_test/start': (context) => const HearingTestPage(),
+                '/hearing_test/result': (context) => HearingTestResultPage(),
+                '/echo_parse/welcome': (context) => EchoParseWelcomeScreen(),
+                '/echo_parse/upload': (context) => EchoParseUploadScreen(),
+                '/echo_parse/upload_done':
+                    (context) => EchoParseUploadDoneScreen(),
+                '/echo_parse/collection': (context) => EchoParseCollectScreen(),
+              },
+              onUnknownRoute: (settings) {
+                return MaterialPageRoute(
+                  builder:
+                      (context) => Scaffold(
+                        appBar: AppBar(title: const Text('Page Not Found')),
+                        body: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('The requested page was not found.'),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed:
+                                    () => Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      '/',
+                                      (route) => false,
+                                    ),
+                                child: const Text('Return to Home'),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                );
+              },
+              title: 'HearMate',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(
+                  seedColor: Colors.teal,
+                  brightness: value ? Brightness.dark : Brightness.light,
+                ),
+              ),
+              home: HomePage(),
             );
           },
-          title: 'HearMate',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          ),
-          home: HomePage(),
         ),
       ),
     );

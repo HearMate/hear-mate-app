@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:hear_mate_app/data/notifiers.dart';
 
 class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
-  HMAppBar({super.key, required this.enableBackButton});
+  const HMAppBar({super.key, required this.title});
 
-  bool enableBackButton;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text(
-        'HearMate',
-        style: TextStyle(
-          color: Colors.white,
-          letterSpacing: 1.0,
-          fontWeight: FontWeight.bold,
+      title: Text(title, style: TextStyle()),
+      actions: [
+        IconButton(
+          onPressed: () {
+            isDarkModeNotifier.value = !isDarkModeNotifier.value;
+          },
+          icon: ValueListenableBuilder(
+            valueListenable: isDarkModeNotifier,
+            builder: (context, value, child) {
+              return Icon(value ? Icons.light_mode : Icons.dark_mode);
+            },
+          ),
         ),
-      ),
-      backgroundColor: Colors.blueAccent,
-      leading:
-          enableBackButton
-              ? IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-              : null,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
+          child: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+        ),
+      ],
     );
   }
 
