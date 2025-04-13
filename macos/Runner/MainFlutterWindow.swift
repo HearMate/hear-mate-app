@@ -11,12 +11,12 @@ class MainFlutterWindow: NSWindow {
     self.contentViewController = flutterViewController
     self.setFrame(windowFrame, display: true)
 
-    // Ustawienie minimalnego i maksymalnego rozmiaru na aktualny rozmiar okna
-    self.minSize = windowFrame.size
-    self.maxSize = windowFrame.size
+    // // Ustawienie minimalnego i maksymalnego rozmiaru na aktualny rozmiar okna
+    // self.minSize = windowFrame.size
+    // self.maxSize = windowFrame.size
     
-    // Usunięcie możliwości zmiany rozmiaru
-    self.styleMask.remove(.resizable)
+    // // Usunięcie możliwości zmiany rozmiaru
+    // self.styleMask.remove(.resizable)
 
     RegisterGeneratedPlugins(registry: flutterViewController)
 
