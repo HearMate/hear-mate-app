@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class KConstants {
+  static const echoParseRed = Color(0xFFF94F46);
+
   static const headerStyle = TextStyle(
     fontSize: 64.0,
     fontWeight: FontWeight.bold,
@@ -10,10 +12,16 @@ class KConstants {
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
   );
+  
+  static const hugeButtonStyle = TextStyle(
+    fontSize: 32.0,
+    fontWeight: FontWeight.bold,
+  );
+
   static const bigButtonStyleRed = TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
-    color: Color(0xFFF94F46),
+    color: echoParseRed,
   );
 
   static const paragraphStyle = TextStyle(
