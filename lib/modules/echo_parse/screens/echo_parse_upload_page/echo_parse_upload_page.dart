@@ -20,7 +20,7 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(title: AppLocalizations.of(context)!.helloWorld),
+      appBar: HMAppBar(title: "Upload"),
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(

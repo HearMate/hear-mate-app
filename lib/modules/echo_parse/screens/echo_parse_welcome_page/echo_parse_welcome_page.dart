@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 
 class EchoParseWelcomeScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(title: "EchoParse"),
+      appBar: HMAppBar(title: AppLocalizations.of(context)!.echoparse_welcome_appbar_title),
       body: Center(
         child: SingleChildScrollView(
           child: SizedBox(
@@ -25,7 +26,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "EchoParse",
+                  AppLocalizations.of(context)!.echoparse_welcome_header,
                   style: KConstants.headerStyle.copyWith(
                   fontSize: MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
                 ),
@@ -38,7 +39,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        "Your audiogram now in CSV!",
+                        AppLocalizations.of(context)!.echoparse_welcome_heading,
                         style: TextStyle(
                           color: Colors.teal,
                           fontWeight: FontWeight.bold,
@@ -49,7 +50,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          "Convert your audiogram photos and files into easy to use, modern CSV documents.",
+                          AppLocalizations.of(context)!.echoparse_welcome_body,
                           style: KConstants.paragraphStyle,
                           textAlign: TextAlign.justify,
                         ),
@@ -70,7 +71,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "Let's go!",
+                              AppLocalizations.of(context)!.echoparse_welcome_button_body,
                               style: KConstants.bigButtonStyle.copyWith(
                                 color: Colors.white
                               ),
