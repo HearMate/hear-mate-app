@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/data/notifiers.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 
 class EchoParseUploadScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(title: "Upload files"),
+      appBar: HMAppBar(title: AppLocalizations.of(context)!.helloWorld),
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(

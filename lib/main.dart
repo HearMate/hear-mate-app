@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/data/notifiers.dart';
 import 'package:hear_mate_app/home_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page/echo_parse_welcome_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_upload_page/echo_parse_upload_page.dart';
@@ -53,6 +55,16 @@ class _MyAppState extends State<MyApp> {
           valueListenable: isDarkModeNotifier,
           builder: (context, value, child) {
             return MaterialApp(
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate
+              ],
+              supportedLocales: [
+                Locale('en'), //? English
+                Locale('pl')  //? Polish
+              ],
               debugShowCheckedModeBanner: false,
               routes: {
                 '/hearing_test/welcome':
