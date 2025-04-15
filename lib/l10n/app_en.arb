@@ -1,6 +1,9 @@
 {
-    "helloWorld": "Hello World!",
-    "@helloWorld": {
-        "description": "The conventional newborn programmer greeting"
-    }
+    "@@locale": "en",
+
+    "echoparse_welcome_appbar_title": "EchoParse",
+    "echoparse_welcome_header": "EchoParse",
+    "echoparse_welcome_heading": "Your audiogram in CSV!",
+    "echoparse_welcome_body": "Convert your audiogram photos and files into easy to use, modern CSV documents.",
+    "echoparse_welcome_button_body": "Let's go!"
 }

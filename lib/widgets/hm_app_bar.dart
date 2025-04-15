@@ -5,7 +5,7 @@ import 'package:hear_mate_app/widgets/locale_provider.dart';
 class HMAppBar extends StatefulWidget implements PreferredSizeWidget {
   const HMAppBar({super.key, required this.title});
 
-  final String title;
+  final String? title;
 
   @override
   State<HMAppBar> createState() => _HMAppBarState();
@@ -19,7 +19,7 @@ class _HMAppBarState extends State<HMAppBar> {
   Widget build(BuildContext context) {
 
     return AppBar(
-      title: Text(widget.title, style: TextStyle()),
+      title: Text(widget.title ?? "", style: TextStyle()),
       
       actions: [
         
