@@ -1,10 +1,10 @@
 {
     "@@locale": "pl",
-
+    
     "echoparse_welcome_appbar_title": "EchoParse",
     "echoparse_welcome_header": "EchoParse",
     "echoparse_welcome_heading": "Twój audiogram w CSV!",
-    "echoparse_welcome_body": "Zamień zdjęcia i pliki swoich audiogramów w nowoczesne dokumenty CSV.",
+    "echoparse_welcome_body": "Zamień swoje stare pliki i zdjęcia audiogramów w nowoczesne dokumenty CSV.",
     "echoparse_welcome_button_body": "Zaczynamy!"
     
 }
