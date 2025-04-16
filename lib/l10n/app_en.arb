@@ -1,22 +1,44 @@
 {
 	"@@locale": "en",
 
-    "hearmate_homepage_button_helper": "Please select a module to continue:",
-    "hearmate_homepage_button_audioTest": "Audio Test Module",
-    "hearmate_homepage_button_echoParse": "Echo Parse",
-    "hearmate_homepage_button_moreModules": "More Modules Coming Soon...",
+    "homepage_button_helper": "Please select a module to continue:",
+    "homepage_button_audioTest": "Audio Test Module",
+    "homepage_button_echoParse": "Echo Parse",
+    "homepage_button_moreModules": "More Modules Coming Soon...",
 
-    "@hearmate_homepage_button_helper": {
+    "@homepage_button_helper": {
         "description": "Helper text prompting the user to select a module on the homepage."
     },
-    "@hearmate_homepage_button_audioTest": {
+    "@homepage_button_audioTest": {
         "description": "Label for the button that navigates to the Audio Test Module."
     },
-    "@hearmate_homepage_button_echoParse": {
+    "@homepage_button_echoParse": {
         "description": "Label for the button that navigates to the Echo Parse Module."
     },
-    "@hearmate_homepage_button_moreModules": {
+    "@homepage_button_moreModules": {
         "description": "Label for the button indicating more modules will be available in the future."
+    },
+
+    "echoparse_upload_appbarTitle": "Upload",
+    "echoparse_upload_headerUpload": "Load your audiogram",
+    "echoparse_upload_buttonHelper": "Accepted formats: png, jpg",
+    "echoparse_upload_buttonUpload": "Upload",
+    "echoparse_upload_savedFilesHeader": "Saved files",
+
+    "@echoparse_upload_appbarTitle": {
+        "description": "Title displayed in the app bar on the upload screen."
+    },
+    "@echoparse_upload_headerUpload": {
+        "description": "Header text prompting the user to load their audiogram."
+    },
+    "@echoparse_upload_buttonHelper": {
+        "description": "Helper text indicating the accepted file formats for upload."
+    },
+    "@echoparse_upload_buttonUpload": {
+        "description": "Label for the button to upload the audiogram."
+    },
+    "@echoparse_upload_savedFilesHeader": {
+        "description": "Header text for the section displaying saved files."
     },
 
 	"echoparse_welcome_appbar_title": "EchoParse",
