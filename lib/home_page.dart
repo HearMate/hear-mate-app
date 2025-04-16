@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -25,8 +26,8 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Please select a module to continue:',
+              Text(
+                AppLocalizations.of(context)!.hearmate_homepage_button_helper,
                 style: KConstants.helperStyle,
                 textAlign: TextAlign.center,
               ),
@@ -34,16 +35,16 @@ class HomePage extends StatelessWidget {
 
               // Audio Test Module button
               FilledButton(
-                style: FilledButton.styleFrom(
-                  minimumSize: Size(252, 48)
-                ),
+                style: FilledButton.styleFrom(minimumSize: Size(252, 48)),
                 onPressed: () {
                   Navigator.pushNamed(context, '/hearing_test/welcome');
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Audio Test Module',
+                    AppLocalizations.of(
+                      context,
+                    )!.hearmate_homepage_button_audioTest,
                     style: KConstants.bigButtonStyle,
                   ),
                 ),
@@ -53,9 +54,7 @@ class HomePage extends StatelessWidget {
 
               // Echo Parse button
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(252, 48)
-                ),
+                style: OutlinedButton.styleFrom(minimumSize: Size(252, 48)),
                 onPressed: () {
                   Navigator.pushNamed(context, '/echo_parse/welcome');
                 },
@@ -68,10 +67,10 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 40),
 
               // Placeholder for future modules
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  'More Modules Coming Soon...',
+                  AppLocalizations.of(context)!.hearmate_homepage_button_moreModules,
                   style: TextStyle(fontSize: 15, color: Colors.grey),
                 ),
               ),
