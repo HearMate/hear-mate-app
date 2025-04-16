@@ -1,9 +1,43 @@
 {
-    "@@locale": "en",
+	"@@locale": "en",
 
-    "echoparse_welcome_appbar_title": "EchoParse",
-    "echoparse_welcome_header": "EchoParse",
-    "echoparse_welcome_heading": "Your audiogram in CSV!",
-    "echoparse_welcome_body": "Convert your audiogram photos and files into easy to use, modern CSV documents.",
-    "echoparse_welcome_button_body": "Let's go!"
+    "hearmate_homepage_button_helper": "Please select a module to continue:",
+    "hearmate_homepage_button_audioTest": "Audio Test Module",
+    "hearmate_homepage_button_echoParse": "Echo Parse",
+    "hearmate_homepage_button_moreModules": "More Modules Coming Soon...",
+
+    "@hearmate_homepage_button_helper": {
+        "description": "Helper text prompting the user to select a module on the homepage."
+    },
+    "@hearmate_homepage_button_audioTest": {
+        "description": "Label for the button that navigates to the Audio Test Module."
+    },
+    "@hearmate_homepage_button_echoParse": {
+        "description": "Label for the button that navigates to the Echo Parse Module."
+    },
+    "@hearmate_homepage_button_moreModules": {
+        "description": "Label for the button indicating more modules will be available in the future."
+    },
+
+	"echoparse_welcome_appbar_title": "EchoParse",
+	"echoparse_welcome_header": "EchoParse",
+	"echoparse_welcome_heading": "Your audiogram in CSV!",
+	"echoparse_welcome_body": "Convert your audiogram photos and files into easy to use, modern CSV documents.",
+	"echoparse_welcome_button_body": "Let's go!",
+
+    "@echoparse_welcome_header": {
+		"description": "Header text displayed on the welcome screen."
+	},
+    "@echoparse_welcome_appbar_title": {
+		"description": "Title displayed in the app bar on the welcome screen."
+	},
+    "@echoparse_welcome_heading": {
+		"description": "Heading text encouraging users to convert audiograms to CSV."
+	},
+    "@echoparse_welcome_body": {
+		"description": "Body text explaining the purpose of the application."
+	},
+	"@echoparse_welcome_button_body": {
+		"description": "Text displayed on the button to start the process."
+	}
 }
