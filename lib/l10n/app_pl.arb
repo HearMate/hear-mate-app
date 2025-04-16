@@ -1,14 +1,20 @@
 {
 	"@@locale": "pl",
 
-    "hearmate_homepage_button_helper": "Wybierz moduł aby kontynuować:",
-    "hearmate_homepage_button_audioTest": "Test słuchu",
-    "hearmate_homepage_button_echoParse": "Echo Parse",
-    "hearmate_homepage_button_moreModules": "Więcej modułów wkrótce...",
+    "homepage_button_helper": "Wybierz moduł aby kontynuować:",
+    "homepage_button_audioTest": "Test słuchu",
+    "homepage_button_echoParse": "Echo Parse",
+    "homepage_button_moreModules": "Więcej modułów wkrótce...",
 
 	"echoparse_welcome_appbar_title": "EchoParse",
 	"echoparse_welcome_header": "EchoParse",
 	"echoparse_welcome_heading": "Twój audiogram w CSV!",
 	"echoparse_welcome_body": "Zamień swoje stare pliki i zdjęcia audiogramów w nowoczesne dokumenty CSV.",
-	"echoparse_welcome_button_body": "Zaczynamy!"
+	"echoparse_welcome_button_body": "Zaczynamy!",
+
+	"echoparse_upload_appbarTitle": "",
+	"echoparse_upload_headerUpload": "Załaduj audiogram",
+	"echoparse_upload_buttonHelper": "Akceptowane formaty: png, jpg",
+	"echoparse_upload_buttonUpload": "Prześlij",
+	"echoparse_upload_savedFilesHeader": "Zapisane pliki"
 }

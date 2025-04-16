@@ -9,18 +9,18 @@ import 'package:lottie/lottie.dart';
 class EchoParseUploadScreen extends StatefulWidget {
   const EchoParseUploadScreen({super.key});
 
-  final String titleSmallScreen = "Load your\naudiogram";
-  final String titleBigScreen = "Load your audiogram";
+  
 
   @override
   State<EchoParseUploadScreen> createState() => _EchoParseUploadScreenState();
 }
 
 class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(title: "Upload"),
+      appBar: HMAppBar(title: ""),
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(
@@ -31,17 +31,13 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                 SizedBox(height: 24),
                 Text(
                   MediaQuery.of(context).size.width > 800
-                      ? widget.titleBigScreen
-                      : widget.titleSmallScreen,
+                      ? AppLocalizations.of(context)!.echoparse_upload_headerUpload
+                      : AppLocalizations.of(context)!.echoparse_upload_headerUpload,
                   textAlign: TextAlign.center,
                   style: KConstants.headerStyle.copyWith(
                     fontSize:
                         MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
                   ),
-                ),
-                Text(
-                  "Accepted formats: png, jpg",
-                  style: KConstants.helperStyle,
                 ),
                 SizedBox(height: 48),
                 FilledButton(
@@ -52,10 +48,11 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                   onPressed: () {
                     // TODO: Upload file logic
                   },
+                  
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Upload",
+                      AppLocalizations.of(context)!.echoparse_upload_buttonUpload,
                       style: KConstants.hugeButtonStyle.copyWith(
                         color: Colors.white,
                         fontSize:
@@ -65,6 +62,12 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                       ),
                     ),
                   ),
+                ),
+                SizedBox(height: 10),
+
+                Text(
+                  AppLocalizations.of(context)!.echoparse_upload_buttonHelper,
+                  style: KConstants.helperStyle,
                 ),
                 SizedBox(height: 32),
                 Lottie.asset(
@@ -84,7 +87,7 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                 ),
                 SizedBox(height: 64),
                 Text(
-                  "Saved files",
+                  AppLocalizations.of(context)!.echoparse_upload_savedFilesHeader,
                   textAlign: TextAlign.center,
                   style: KConstants.headerStyle.copyWith(
                     fontSize:

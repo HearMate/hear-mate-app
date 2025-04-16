@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                AppLocalizations.of(context)!.hearmate_homepage_button_helper,
+                AppLocalizations.of(context)!.echoparse_welcome_header,
                 style: KConstants.helperStyle,
                 textAlign: TextAlign.center,
               ),
@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                   child: Text(
                     AppLocalizations.of(
                       context,
-                    )!.hearmate_homepage_button_audioTest,
+                    )!.homepage_button_audioTest,
                     style: KConstants.bigButtonStyle,
                   ),
                 ),
@@ -70,7 +70,7 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  AppLocalizations.of(context)!.hearmate_homepage_button_moreModules,
+                  AppLocalizations.of(context)!.homepage_button_moreModules,
                   style: TextStyle(fontSize: 15, color: Colors.grey),
                 ),
               ),
