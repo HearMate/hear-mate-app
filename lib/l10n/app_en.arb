@@ -22,9 +22,9 @@
     "echoparse_upload_appbarTitle": "Upload",
     "echoparse_upload_headerUpload": "Load your audiogram",
     "echoparse_upload_buttonHelper": "Accepted formats: png, jpg",
+    "echoparse_upload_buttonPick": "Pick file",
+    "echoparse_upload_savedFilesHeader": "Recent files",
     "echoparse_upload_buttonUpload": "Upload",
-    "echoparse_upload_savedFilesHeader": "Saved files",
-
     "@echoparse_upload_appbarTitle": {
         "description": "Title displayed in the app bar on the upload screen."
     },
@@ -34,11 +34,14 @@
     "@echoparse_upload_buttonHelper": {
         "description": "Helper text indicating the accepted file formats for upload."
     },
-    "@echoparse_upload_buttonUpload": {
-        "description": "Label for the button to upload the audiogram."
+    "@echoparse_upload_buttonPick": {
+        "description": "Label for the button to pick the audiogram."
     },
     "@echoparse_upload_savedFilesHeader": {
         "description": "Header text for the section displaying saved files."
+    },
+    "@echoparse_upload_buttonUpload": {
+        "description": "Label for the button to upload the audiogram."
     },
 
 	"echoparse_welcome_appbar_title": "EchoParse",
