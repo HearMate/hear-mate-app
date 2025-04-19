@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hear_mate_app/data/constants.dart';
-import 'package:hear_mate_app/data/notifiers.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lottie/lottie.dart';
-
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
-import 'dart:typed_data';
-
-
+import 'package:flutter_animate/flutter_animate.dart';
 
 class EchoParseUploadScreen extends StatefulWidget {
   const EchoParseUploadScreen({super.key});
-
-  
 
   @override
   State<EchoParseUploadScreen> createState() => _EchoParseUploadScreenState();
@@ -24,6 +15,44 @@ class EchoParseUploadScreen extends StatefulWidget {
 
 class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
   var image;
+  var fileName;
+  bool imageLoaded = false;
+
+  void sendImage() async {
+    if (image != null) {
+      var uri = Uri.parse(
+        'https://audiogram-reader-1.onrender.com/upload-image',
+      );
+
+      var request = http.MultipartRequest('POST', uri)
+        ..files.add(
+          http.MultipartFile.fromBytes('image', image, filename: fileName),
+        );
+
+      var response = await request.send();
+      print("Status: ${response.statusCode}");
+      print(await response.stream.bytesToString());
+    }
+  }
+
+  void pickImage() async {
+    var result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      withData: true,
+    );
+
+    if (result != null && result.files.single.bytes != null) {
+      setState(() {
+        image = result.files.single.bytes!;
+        imageLoaded = true;
+        fileName = result.files.single.name;
+      });
+
+      print("file: ${result.files.single.name} (${image.length} bytes)");
+    } else {
+      print("No file selected or file is empty.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +65,15 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
             padding: EdgeInsets.all(48.0),
             child: Column(
               children: [
-                SizedBox(height: 24),
+                SizedBox(height: 14),
                 Text(
                   MediaQuery.of(context).size.width > 800
-                      ? AppLocalizations.of(context)!.echoparse_upload_headerUpload
-                      : AppLocalizations.of(context)!.echoparse_upload_headerUpload,
+                      ? AppLocalizations.of(
+                        context,
+                      )!.echoparse_upload_headerUpload
+                      : AppLocalizations.of(
+                        context,
+                      )!.echoparse_upload_headerUpload,
                   textAlign: TextAlign.center,
                   style: KConstants.headerStyle.copyWith(
                     fontSize:
@@ -48,7 +81,42 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                   ),
                 ),
 
-                // TODO: Here should appear previev of selected file
+                if (imageLoaded) ...[
+                  Column(
+                    children: [
+                      SizedBox(height: 48),
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(color: Colors.cyan, borderRadius: BorderRadius.circular(20)),
+                        child: Image.memory(image),
+                      ),
+                      SizedBox(height: 48),
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                          minimumSize: Size(252, 48),
+                          backgroundColor: KConstants.echoParseRed,
+                        ),
+                        onPressed: sendImage,
+
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.echoparse_upload_buttonUpload,
+                            style: KConstants.hugeButtonStyle.copyWith(
+                              color: Colors.white,
+                              fontSize:
+                                  MediaQuery.of(context).size.width > 500
+                                      ? 32.0
+                                      : 20.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ).animate().fadeIn(duration: 200.ms).scale(),
+                ],
 
                 SizedBox(height: 48),
                 FilledButton(
@@ -56,23 +124,7 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                     minimumSize: Size(252, 48),
                     backgroundColor: KConstants.echoParseRed,
                   ),
-                  // TODO: Should be abstracted to seperate function
-                  onPressed: () async {
-                    image = await FilePicker.platform.pickFiles(
-                                  type: FileType.image,
-                                  withData: true,
-                                  );
-                    if (image != null && image.files.single.bytes != null) {
-                      final file = image.files.single;
-                      Uint8List imageBytes = file.bytes!;
-                      String fileName = file.name;
-
-                      print("file: $fileName (${imageBytes.length} bytes)");
-                    }
-                    else {
-                      print("No file selected or file is empty.");
-                    }
-                  },                  
+                  onPressed: pickImage,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -87,23 +139,25 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 10),
                 Text(
                   AppLocalizations.of(context)!.echoparse_upload_buttonHelper,
                   style: KConstants.helperStyle,
                 ),
-                
+
                 SizedBox(height: 32),
                 Text(
-                  AppLocalizations.of(context)!.echoparse_upload_savedFilesHeader,
+                  AppLocalizations.of(
+                    context,
+                  )!.echoparse_upload_savedFilesHeader,
                   textAlign: TextAlign.center,
                   style: KConstants.headerStyle.copyWith(
                     fontSize:
                         MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
                   ),
                 ),
-                
+
                 SizedBox(height: 48),
                 LayoutBuilder(
                   builder: (context, constraints) {
@@ -118,8 +172,8 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                       spacing: spacing,
                       runSpacing: spacing,
                       children: List.generate(
-                        6, // TODO: change it to the number of files - Michael
-                          //  imo it can also have a hard limit of 6 most recent for estetics - Stanislał
+                        8, // TODO: change it to the number of files - Michael
+                        //  imo it can also have a hard limit of 6 most recent for estetics - Stanislał
                         (index) => SizedBox(
                           width: itemWidth,
                           child: Stack(
@@ -128,13 +182,14 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                                 "assets/images/saved-file-mock.png",
                                 width: itemWidth,
                               ),
-                                Positioned(
+                              Positioned(
                                 bottom: bottomNum,
                                 left: 30,
-                                child: Text( // TODO: Change the code to dynamic names
+                                child: Text(
+                                  // TODO: Change the code to dynamic names
                                   "File ${index + 1}.csv".length > 10
-                                    ? "${"File ${index + 1}.csv".substring(0, 7)}..."
-                                    : "File ${index + 1}.csv",
+                                      ? "${"File ${index + 1}.csv".substring(0, 7)}..."
+                                      : "File ${index + 1}.csv",
                                   maxLines: 1,
                                   style: KConstants.paragraphStyle,
                                 ),
@@ -146,61 +201,11 @@ class _EchoParseUploadScreenState extends State<EchoParseUploadScreen> {
                     );
                   },
                 ),
-                
-                // TODO: button should appear only after selecting a file (preferably next to the preview)
-                SizedBox(height: 48),
-                FilledButton(
-                  style: FilledButton.styleFrom(
-                    minimumSize: Size(252, 48),
-                    backgroundColor: KConstants.echoParseRed,
-                  ),
-                  onPressed: () async {
-                    await sendImage(image);
-                  },
-                  
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      AppLocalizations.of(context)!.echoparse_upload_buttonUpload,
-                      style: KConstants.hugeButtonStyle.copyWith(
-                        color: Colors.white,
-                        fontSize:
-                            MediaQuery.of(context).size.width > 500
-                                ? 32.0
-                                : 20.0,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-Future<void> sendImage(image) async {
-  if (image != null && image.files.single.bytes != null) {
-    final file = image.files.single;
-    Uint8List imageBytes = file.bytes!;
-    String fileName = file.name;
-    
-    // Debug print
-    print("File to be send: $fileName (${imageBytes.length} bytes)");
-
-    var uri = Uri.parse('https://audiogram-reader-1.onrender.com/upload-image');
-
-    var request = http.MultipartRequest('POST', uri)
-      ..files.add(http.MultipartFile.fromBytes(
-        'image',
-        imageBytes,
-        filename: fileName,
-      ));
-
-    var response = await request.send();
-    print("Status: ${response.statusCode}");
-    print(await response.stream.bytesToString());
   }
 }
