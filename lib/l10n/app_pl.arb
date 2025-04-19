@@ -15,6 +15,7 @@
 	"echoparse_upload_appbarTitle": "",
 	"echoparse_upload_headerUpload": "Załaduj audiogram",
 	"echoparse_upload_buttonHelper": "Akceptowane formaty: png, jpg",
-	"echoparse_upload_buttonUpload": "Prześlij",
-	"echoparse_upload_savedFilesHeader": "Zapisane pliki"
+	"echoparse_upload_buttonPick": "Wybierz plik",
+	"echoparse_upload_savedFilesHeader": "Ostatnie pliki",
+	"echoparse_upload_buttonUpload": "Prześlij"
 }
