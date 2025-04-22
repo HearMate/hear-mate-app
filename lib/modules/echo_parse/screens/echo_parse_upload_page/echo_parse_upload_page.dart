@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hm_theme/hm_theme.dart';
+import 'package:lottie/lottie.dart';
 
 class EchoParseUploadScreen extends StatelessWidget {
   const EchoParseUploadScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      appBar: HMAppBar(title: AppLocalizations.of(context)!.echoparse_upload_appbarTitle),
+      appBar: HMAppBar(
+        title: AppLocalizations.of(context)!.echoparse_upload_appbarTitle,
+      ),
       body: BlocBuilder<EchoParseBloc, EchoParseState>(
         builder: (context, state) {
           return SizedBox(
@@ -23,7 +27,9 @@ class EchoParseUploadScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.echoparse_upload_headerUpload,
+                      AppLocalizations.of(
+                        context,
+                      )!.echoparse_upload_headerUpload,
                       textAlign: TextAlign.center,
                       style: KConstants.headerStyle,
                     ),
@@ -46,12 +52,21 @@ class EchoParseUploadScreen extends StatelessWidget {
                               backgroundColor: KConstants.echoParseRed,
                             ),
                             onPressed: () {
-                              context.read<EchoParseBloc>().add(EchoParseUploadAudiogramFileToServerEvent());
-                              Navigator.pushNamed(context, '/echo_parse/upload_done');
+                              context.read<EchoParseBloc>().add(
+                                EchoParseUploadAudiogramFileToServerEvent(),
+                              );
+                              Navigator.pushNamed(
+                                context,
+                                '/echo_parse/upload_done',
+                              );
                             },
                             child: Text(
-                              AppLocalizations.of(context)!.echoparse_upload_buttonUpload,
-                              style: KConstants.hugeButtonStyle.copyWith(color: Colors.white),
+                              AppLocalizations.of(
+                                context,
+                              )!.echoparse_upload_buttonUpload,
+                              style: KConstants.hugeButtonStyle.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],
@@ -63,11 +78,17 @@ class EchoParseUploadScreen extends StatelessWidget {
                         backgroundColor: KConstants.echoParseRed,
                       ),
                       onPressed: () {
-                        context.read<EchoParseBloc>().add(EchoParseChooseAudiogramFileEvent());
+                        context.read<EchoParseBloc>().add(
+                          EchoParseChooseAudiogramFileEvent(),
+                        );
                       },
                       child: Text(
-                        AppLocalizations.of(context)!.echoparse_upload_buttonPick,
-                        style: KConstants.hugeButtonStyle.copyWith(color: Colors.white),
+                        AppLocalizations.of(
+                          context,
+                        )!.echoparse_upload_buttonPick,
+                        style: KConstants.hugeButtonStyle.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],

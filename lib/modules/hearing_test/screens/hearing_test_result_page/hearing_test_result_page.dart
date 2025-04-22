@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/audiogram_chart.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:hm_theme/hm_theme.dart';
 
 class HearingTestResultPage extends StatelessWidget {
   HearingTestResultPage({super.key});
@@ -29,7 +31,7 @@ class HearingTestResultPage extends StatelessWidget {
                 : [];
 
         return Scaffold(
-          appBar: HMAppBar(title : "HearMate Project"),
+          appBar: HMAppBar(title: "HearMate Project"),
           body: SingleChildScrollView(
             child: Center(
               child: Column(
@@ -77,31 +79,51 @@ class HearingTestResultPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Note',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  BlocBuilder<HMThemeBloc, HMThemeState>(
+                    builder: (context, themeState) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color:
+                              themeState.isDarkMode
+                                  ? Colors
+                                      .grey
+                                      .shade800 // Dark theme background
+                                  : Colors
+                                      .grey
+                                      .shade100, // Light theme background
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        SizedBox(height: 15),
-                        Text(
-                          'This generated audiogram and hearing test results are not precise and should be interpreted with caution. '
-                          'For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.',
-                          style: TextStyle(fontSize: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Note',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge?.color,
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'This generated audiogram and hearing test results are not precise and should be interpreted with caution. '
+                              'For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.',
+                              style: KConstants.helperStyle.copyWith(
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium?.color,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(

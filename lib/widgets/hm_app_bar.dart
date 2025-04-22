@@ -1,58 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/data/notifiers.dart';
-import 'package:hear_mate_app/widgets/locale_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hm_theme/hm_theme.dart';
 
-class HMAppBar extends StatefulWidget implements PreferredSizeWidget {
+// THIS IS REALLY BUGGY...
+// A bit of a hack function...
+// We should implement our own router with preserving state in the future.
+String? _getCurrentRouteName(BuildContext context) {
+  String? currentRoute;
+  Navigator.of(context).popUntil((route) {
+    currentRoute = route.settings.name;
+    return true;
+  });
+  return currentRoute;
+}
+
+class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HMAppBar({super.key, required this.title});
-
   final String? title;
 
   @override
-  State<HMAppBar> createState() => _HMAppBarState();
-
-  @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
 
-class _HMAppBarState extends State<HMAppBar> {
   @override
   Widget build(BuildContext context) {
-
     return AppBar(
-      title: Text(widget.title ?? "", style: TextStyle()),
-      
+      title: Text(title ?? "", style: TextStyle()),
       actions: [
-        
-        IconButton(
-          onPressed: () {
-            isDarkModeNotifier.value = !isDarkModeNotifier.value;
-          },
-          icon: ValueListenableBuilder(
-            valueListenable: isDarkModeNotifier,
-            builder: (context, value, child) {
-              return Icon(value ? Icons.light_mode : Icons.dark_mode);
-            },
-          ),
-        ),
-        ValueListenableBuilder(
-          valueListenable: isSettingPageOn,
-          builder: (context, isSettingPage, child) {
-            if (!isSettingPage) {
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
-                child: IconButton(
-                  onPressed: () {
-                    isSettingPageOn.value = !isSettingPageOn.value;
-                    Navigator.pushNamed(context, '/echo_parse/settings');
-                  },
-                  icon: Icon(Icons.settings),
-                ),
-              );
-            } else {
-              return Padding(padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0));
-            }
+        BlocBuilder<HMThemeBloc, HMThemeState>(
+          builder: (context, themeState) {
+            return IconButton(
+              onPressed: () {
+                context.read<HMThemeBloc>().add(HMThemeToggleEvent());
+              },
+              icon: Icon(
+                themeState.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              ),
+            );
           },
         ),
+        _getCurrentRouteName(context) != "/settings"
+            ? IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/settings');
+              },
+              icon: Icon(Icons.settings),
+            )
+            : const SizedBox.shrink(),
       ],
     );
   }

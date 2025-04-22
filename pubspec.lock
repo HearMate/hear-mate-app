@@ -277,6 +277,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  hm_locale:
+    dependency: "direct main"
+    description:
+      path: "packages/hm_locale"
+      relative: true
+    source: path
+    version: "0.0.1"
+  hm_theme:
+    dependency: "direct main"
+    description:
+      path: "packages/hm_theme"
+      relative: true
+    source: path
+    version: "0.0.1"
   http:
     dependency: "direct main"
     description:
@@ -510,7 +524,7 @@ packages:
     source: hosted
     version: "0.28.0"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       sha256: "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5"

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// TODO: Convert to theme
 class KConstants {
   static const echoParseRed = Color(0xFFF94F46);
 
@@ -12,7 +13,7 @@ class KConstants {
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
   );
-  
+
   static const hugeButtonStyle = TextStyle(
     fontSize: 32.0,
     fontWeight: FontWeight.bold,
@@ -24,12 +25,7 @@ class KConstants {
     color: echoParseRed,
   );
 
-  static const paragraphStyle = TextStyle(
-    fontSize: 16.0,
-  );
+  static const paragraphStyle = TextStyle(fontSize: 16.0);
 
-  static const helperStyle = TextStyle(
-    color: Colors.blueGrey,
-    fontSize: 16.0
-  );
+  static const helperStyle = TextStyle(color: Colors.blueGrey, fontSize: 16.0);
 }
