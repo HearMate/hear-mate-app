@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
+// TODO: Remove this
+
 class Languages {
-  static const List<Locale> supportedLocales = [
-    Locale('en'),
-    Locale('pl'),
-  ];
+  static const List<Locale> supportedLocales = [Locale('en'), Locale('pl')];
 
   static List<DropdownMenuEntry<Locale>> getDropdownMenuEntries() {
     return supportedLocales.map((locale) {

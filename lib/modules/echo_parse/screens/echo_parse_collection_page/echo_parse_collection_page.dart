@@ -4,14 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 class EchoParseCollectScreen extends StatelessWidget {
   const EchoParseCollectScreen({super.key});
 
-  
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final screenFontFamily = "Aoboshi One";
-
-    
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -29,30 +25,32 @@ class EchoParseCollectScreen extends StatelessWidget {
           SingleChildScrollView(
             child: Container(
               width: double.infinity,
-              height: screenSize.height - 56, // Ensure it fills the screen height including the top nav bar
+              height:
+                  screenSize.height -
+                  56, // Ensure it fills the screen height including the top nav bar
               color: Colors.white,
               child: Column(
                 children: [
                   SizedBox(
                     height: screenSize.height - 56,
                     child: Stack(
-                        children: [
+                      children: [
                         Positioned(
                           top: -50,
                           left: 0,
                           child: SvgPicture.asset(
-                          'assets/images/top_wave_yellow.svg',
-                          height: 400,
-                          fit: BoxFit.contain,
+                            'assets/images/top_wave_yellow.svg',
+                            height: 400,
+                            fit: BoxFit.contain,
                           ),
                         ),
                         Positioned(
                           right: 0,
                           top: 100,
                           child: SvgPicture.asset(
-                          'assets/images/audio-waves-blue-right.svg',
-                          height: 250,
-                          fit: BoxFit.contain,
+                            'assets/images/audio-waves-blue-right.svg',
+                            height: 250,
+                            fit: BoxFit.contain,
                           ),
                         ),
                         Positioned(
@@ -95,7 +93,7 @@ class EchoParseCollectScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        
+
                         Positioned(
                           right: 0,
                           bottom: 0,
@@ -116,7 +114,6 @@ class EchoParseCollectScreen extends StatelessWidget {
                           ),
                         ),
 
-                        
                         Positioned(
                           bottom: 250,
                           left: 120,
@@ -134,18 +131,21 @@ class EchoParseCollectScreen extends StatelessWidget {
                               elevation: 10,
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, "/echo_parse/upload");
+                              Navigator.pushNamed(
+                                context,
+                                "/echo_parse/upload",
+                              );
                             },
-                            child: Center(child:
-                              Text(
-                              "Parse new doc.",
-                              style: TextStyle(
-                                fontFamily: "Aoboshi One",
-                                color: Colors.white,
-                                fontSize: 24,
+                            child: Center(
+                              child: Text(
+                                "Parse new doc.",
+                                style: TextStyle(
+                                  fontFamily: "Aoboshi One",
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                ),
                               ),
                             ),
-                            ) 
                           ),
                         ),
 
@@ -168,20 +168,18 @@ class EchoParseCollectScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.pushNamed(context, "/");
                             },
-                            child: Center(child:
-                              Text(
-                              "Go back to modules.",
-                              style: TextStyle(
-                                fontFamily: "Aoboshi One",
-                                color: Colors.white,
-                                fontSize: 24,
+                            child: Center(
+                              child: Text(
+                                "Go back to modules.",
+                                style: TextStyle(
+                                  fontFamily: "Aoboshi One",
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                ),
                               ),
                             ),
-                            ) 
                           ),
                         ),
-
-                        
 
                         Positioned(
                           bottom: 250,
@@ -192,8 +190,6 @@ class EchoParseCollectScreen extends StatelessWidget {
                             fit: BoxFit.contain,
                           ),
                         ),
-
-                        
                       ],
                     ),
                   ),

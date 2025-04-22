@@ -26,12 +26,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
-                AppLocalizations.of(context)!.echoparse_welcome_header,
-                style: KConstants.helperStyle,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
 
               // Audio Test Module button
               FilledButton(
@@ -42,9 +36,7 @@ class HomePage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.homepage_button_audioTest,
+                    AppLocalizations.of(context)!.homepage_button_audioTest,
                     style: KConstants.bigButtonStyle,
                   ),
                 ),
