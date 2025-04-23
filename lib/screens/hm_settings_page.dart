@@ -5,15 +5,18 @@ import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:hear_mate_app/widgets/locale_provider.dart';
 import 'package:hm_locale/hm_locale.dart';
 
-class HMSettingPage extends StatelessWidget {
-  const HMSettingPage({super.key});
+class HMSettingsPage extends StatelessWidget {
+  const HMSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HMLocaleBloc, HMLocaleState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: HMAppBar(title: "Settings"),
+          appBar: HMAppBar(
+            title: "Settings",
+            route: ModalRoute.of(context)?.settings.name ?? "",
+          ),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Padding(

@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
                         (context) => EchoParseUploadDoneScreen(),
                     '/echo_parse/collection':
                         (context) => EchoParseCollectScreen(),
-                    '/settings': (context) => HMSettingPage(),
+                    '/settings': (context) => HMSettingsPage(),
                   },
                   onUnknownRoute: (settings) {
                     return MaterialPageRoute(

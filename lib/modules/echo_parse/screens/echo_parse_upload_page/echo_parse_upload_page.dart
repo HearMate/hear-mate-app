@@ -16,6 +16,8 @@ class EchoParseUploadScreen extends StatelessWidget {
     return Scaffold(
       appBar: HMAppBar(
         title: AppLocalizations.of(context)!.echoparse_upload_appbarTitle,
+
+        route: ModalRoute.of(context)?.settings.name ?? "",
       ),
       body: BlocBuilder<EchoParseBloc, EchoParseState>(
         builder: (context, state) {

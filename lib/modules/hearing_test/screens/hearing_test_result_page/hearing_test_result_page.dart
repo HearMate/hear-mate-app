@@ -31,7 +31,10 @@ class HearingTestResultPage extends StatelessWidget {
                 : [];
 
         return Scaffold(
-          appBar: HMAppBar(title: "HearMate Project"),
+          appBar: HMAppBar(
+            title: "HearMate Project",
+            route: ModalRoute.of(context)?.settings.name ?? "",
+          ),
           body: SingleChildScrollView(
             child: Center(
               child: Column(

@@ -11,7 +11,10 @@ class HearingTestPage extends StatelessWidget {
     context.read<HearingTestBloc>().add(HearingTestStartTest());
 
     return Scaffold(
-      appBar: HMAppBar(title : "HearMate Project"),
+      appBar: HMAppBar(
+        title: "HearMate Project",
+        route: ModalRoute.of(context)?.settings.name ?? "",
+      ),
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
         listener: (context, state) {
           if (state is HearingTestCompleted) {
