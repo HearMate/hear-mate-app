@@ -17,9 +17,20 @@ import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hea
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
 import 'package:hear_mate_app/widgets/locale_provider.dart';
+import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
+import 'package:hear_mate_app/modules/echo_parse/repositories/echo_parse_api_repository.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => EchoParseBloc(repository: EchoParseApiRepository()),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

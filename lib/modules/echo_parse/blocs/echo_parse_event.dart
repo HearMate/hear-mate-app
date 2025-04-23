@@ -1,0 +1,18 @@
+part of 'echo_parse_bloc.dart';
+
+@immutable
+sealed class EchoParseEvent {}
+
+class EchoParseChooseAudiogramFileEvent extends EchoParseEvent {}
+
+class EchoParseUploadAudiogramFileToServerEvent extends EchoParseEvent {}
+
+class EchoParseReceivedServerResponseEvent extends EchoParseEvent {
+  final int statusCode;
+  final Map<String, dynamic> audiogramData;
+
+  EchoParseReceivedServerResponseEvent({
+    required this.statusCode,
+    required this.audiogramData,
+  });
+}
