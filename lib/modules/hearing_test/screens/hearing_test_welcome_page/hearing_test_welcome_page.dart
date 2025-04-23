@@ -7,7 +7,10 @@ class HearingTestWelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(title : "HearMate Project"),
+      appBar: HMAppBar(
+        title: "HearMate Project",
+        route: ModalRoute.of(context)?.settings.name ?? "",
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

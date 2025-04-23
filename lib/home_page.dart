@@ -10,7 +10,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(title: ""),
+      appBar: HMAppBar(
+        title: "",
+        route: ModalRoute.of(context)?.settings.name ?? "",
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(

@@ -10,7 +10,10 @@ class EchoParseWelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(title: AppLocalizations.of(context)!.echoparse_welcome_appbar_title),
+      appBar: HMAppBar(
+        title: AppLocalizations.of(context)!.echoparse_welcome_appbar_title,
+        route: ModalRoute.of(context)?.settings.name ?? "",
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: SizedBox(
@@ -28,8 +31,9 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                 Text(
                   AppLocalizations.of(context)!.echoparse_welcome_header,
                   style: KConstants.headerStyle.copyWith(
-                  fontSize: MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
-                ),
+                    fontSize:
+                        MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
+                  ),
                 ),
                 SizedBox(
                   width:
@@ -56,14 +60,15 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.width > 500 ? 0 : 50,
+                        height:
+                            MediaQuery.of(context).size.width > 500 ? 0 : 50,
                       ),
                       Padding(
                         padding: EdgeInsets.all(40.0),
                         child: FilledButton(
                           style: FilledButton.styleFrom(
                             backgroundColor: Color(0xFFF94F46),
-                            minimumSize: Size(252, 48)
+                            minimumSize: Size(252, 48),
                           ),
                           onPressed: () {
                             Navigator.pushNamed(context, '/echo_parse/upload');
@@ -71,15 +76,16 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              AppLocalizations.of(context)!.echoparse_welcome_button_body,
+                              AppLocalizations.of(
+                                context,
+                              )!.echoparse_welcome_button_body,
                               style: KConstants.bigButtonStyle.copyWith(
-                                color: Colors.white
+                                color: Colors.white,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      
                     ],
                   ),
                 ),
