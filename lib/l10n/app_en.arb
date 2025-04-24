@@ -60,7 +60,8 @@
 	"echoparse_welcome_header": "EchoParse",
 	"echoparse_welcome_heading": "Your audiogram in CSV!",
 	"echoparse_welcome_body": "Convert your audiogram photos and files into easy to use, modern CSV documents.",
-	"echoparse_welcome_button_body": "Let's go!",
+	"echoparse_welcome_mainButton": "Let's go!",
+    "echoparse_welcome_creditsButton": "Credits",
 
     "@echoparse_welcome_header": {
 		"description": "Header text displayed on the welcome screen."
@@ -74,7 +75,7 @@
     "@echoparse_welcome_body": {
 		"description": "Body text explaining the purpose of the application."
 	},
-	"@echoparse_welcome_button_body": {
+	"@echoparse_welcome_mainButton": {
 		"description": "Text displayed on the button to start the process."
 	},
 
