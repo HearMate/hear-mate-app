@@ -1,11 +1,25 @@
 {
-	"@@locale": "en",
+    "@@locale": "en",
 
 
     "comment_homepage1": "=====================================",
     "comment_homepage2": "============== HomePage =============",
     "comment_homepage3": "=====================================",
 
+
+    "about_hearmate": "HearMate is an application that supports preliminary hearing analysis, enabling users to obtain initial results and assess whether there is a need for consultation with a specialist. Its goal is to prevent situations in which hearing loss is detected too late, hindering effective treatment or negatively affecting quality of life. The application leverages artificial intelligence mechanisms to analyze audiograms and support the initial diagnostic process.",
+    "about_echoparse": "EchoParse is a dedicated module responsible for converting traditional audiograms—whether in paper or graphic form—into CSV files suitable for further data analysis. This module utilizes artificial intelligence-based solutions that enable automatic recognition and processing of audiometric test results. Developed in collaboration with the Institute of Physiology and Pathology of Hearing, EchoParse serves as a key tool in the digitization and analysis of diagnostic outcomes.",
+    "about_projectTeam": "The Project Team:",
+    
+    "@about_hearmate": {
+        "description": "Description of the HearMate application and its purpose."
+    },
+    "@about_projectTeam": {
+        "description": "Label for the section describing the project team."
+    },
+    "@about_echoparse": {
+        "description": "Description of the EchoParse module and its functionality."
+    },
 
     "homepage_button_helper": "Please select a module to continue:",
     "homepage_button_audioTest": "Audio Test Module",
@@ -56,21 +70,21 @@
         "description": "Label for the button to upload the audiogram."
     },
 
-	"echoparse_welcome_appbar_title": "EchoParse",
-	"echoparse_welcome_header": "EchoParse",
-	"echoparse_welcome_heading": "Your audiogram in CSV!",
-	"echoparse_welcome_body": "Convert your audiogram photos and files into easy to use, modern CSV documents.",
-	"echoparse_welcome_mainButton": "Let's go!",
+    "echoparse_welcome_appbar_title": "EchoParse",
+    "echoparse_welcome_header": "EchoParse",
+    "echoparse_welcome_heading": "Your audiogram in CSV!",
+    "echoparse_welcome_body": "Convert your audiogram photos and files into easy to use, modern CSV documents.",
+    "echoparse_welcome_mainButton": "Let's go!",
 
     "@echoparse_welcome_header": {
-		"description": "Header text displayed on the welcome screen."
-	},
+        "description": "Header text displayed on the welcome screen."
+    },
     "@echoparse_welcome_appbar_title": {
-		"description": "Title displayed in the app bar on the welcome screen."
-	},
+        "description": "Title displayed in the app bar on the welcome screen."
+    },
     "@echoparse_welcome_heading": {
-		"description": "Heading text encouraging users to convert audiograms to CSV."
-	},
+        "description": "Heading text encouraging users to convert audiograms to CSV."
+    },
     "@echoparse_welcome_body": {
 		"description": "Body text explaining the purpose of the application."
 	},

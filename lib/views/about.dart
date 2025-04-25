@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hear_mate_app/data/notifiers.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
@@ -29,10 +30,7 @@ class AboutPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'HearMate to aplikacja wspierająca wstępną analizę słuchu, umożliwiająca uzyskanie pierwszych wyników i ocenę, '
-                  'czy istnieje potrzeba konsultacji ze specjalistą. Jej celem jest zapobieganie sytuacjom, w których niedosłuch zostaje wykryty zbyt późno, '
-                  'uniemożliwiając skuteczne leczenie lub pogarszając komfort życia. '
-                  'Aplikacja wykorzystuje mechanizmy sztucznej inteligencji do analizy audiogramów oraz wspomagania procesu wstępnej diagnostyki.',
+                  loc.about_hearmate,
                   textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
@@ -55,10 +53,7 @@ class AboutPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'EchoParse to dedykowany moduł odpowiedzialny za konwersję tradycyjnych audiogramów – zarówno w formie papierowej, jak i graficznej – '
-                  'do postaci plików CSV, przystosowanych do dalszej analizy danych. '
-                  'Moduł ten wykorzystuje rozwiązania oparte na sztucznej inteligencji, umożliwiające automatyczne rozpoznawanie i przetwarzanie wyników badań audiometrycznych. '
-                  'EchoParse powstał we współpracy z Instytutem Fizjologii i Patologii Słuchu, stanowiąc istotne wsparcie w cyfryzacji i analizie wyników diagnostycznych.',
+                  loc.about_echoparse,
                   textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
@@ -66,7 +61,7 @@ class AboutPage extends StatelessWidget {
               const SizedBox(height: 32),
 
               Text(
-                'Zespół projektowy:',
+                loc.about_projectTeam,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 16),
@@ -106,11 +101,34 @@ class AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 48),
               Center(
-                child: Image.asset('assets/images/pg_logo.png', height: 150),
+                child: ValueListenableBuilder(
+                  valueListenable: isDarkModeNotifier,
+                  builder: (context, value, child) {
+                    return value
+                        ? Image.asset(
+                          'assets/images/pg_logo_darkmode.png',
+                          height: 150,
+                        )
+                        : Image.asset('assets/images/pg_logo.png', height: 150);
+                  },
+                ),
               ),
               const SizedBox(height: 32),
               Center(
-                child: Image.asset('assets/images/ifips_logo.png', height: 150),
+                child: ValueListenableBuilder(
+                  valueListenable: isDarkModeNotifier,
+                  builder: (context, value, child) {
+                    return value
+                        ? Image.asset(
+                          'assets/images/ifips_logo_darkmode.png',
+                          height: 150,
+                        )
+                        : Image.asset(
+                          'assets/images/ifips_logo.png',
+                          height: 150,
+                        );
+                  },
+                ),
               ),
               const SizedBox(height: 48),
 
