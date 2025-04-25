@@ -61,7 +61,6 @@
 	"echoparse_welcome_heading": "Your audiogram in CSV!",
 	"echoparse_welcome_body": "Convert your audiogram photos and files into easy to use, modern CSV documents.",
 	"echoparse_welcome_mainButton": "Let's go!",
-    "echoparse_welcome_creditsButton": "Credits",
 
     "@echoparse_welcome_header": {
 		"description": "Header text displayed on the welcome screen."
