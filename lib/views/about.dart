@@ -70,15 +70,15 @@ class AboutPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '• Prof. Andrzej Czyżewski',
+                    '• prof. dr hab. inż. Andrzej Czyżewski',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   Text(
-                    '• dr Dominika Zagórska',
+                    '• mgr Dominika Zagórska',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   Text(
-                    '• mgr Marina Galanina',
+                    '• mgr inż. Marina Galanina',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   Text(
