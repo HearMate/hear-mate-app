@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
@@ -30,7 +29,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                 ),
                 Text(
                   AppLocalizations.of(context)!.echoparse_welcome_header,
-                  style: KConstants.headerStyle.copyWith(
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
                     fontSize:
                         MediaQuery.of(context).size.width > 500 ? 64.0 : 48.0,
                   ),
@@ -55,7 +54,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           AppLocalizations.of(context)!.echoparse_welcome_body,
-                          style: KConstants.paragraphStyle,
+                          style: Theme.of(context).textTheme.bodyMedium,
                           textAlign: TextAlign.justify,
                         ),
                       ),
@@ -79,9 +78,8 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                               AppLocalizations.of(
                                 context,
                               )!.echoparse_welcome_button_body,
-                              style: KConstants.bigButtonStyle.copyWith(
-                                color: Colors.white,
-                              ),
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(color: Colors.white),
                             ),
                           ),
                         ),
