@@ -12,7 +12,7 @@ class HearingTestSoundsPlayerRepository {
 
   Future<void> initialize() async {
     for (int freq in frequencies) {
-      String basePath = 'tone_${freq}Hz';
+      String basePath = 'tones/tone_${freq}Hz';
       String leftPath = '${basePath}_left.wav';
       String rightPath = '${basePath}_right.wav';
 
