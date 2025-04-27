@@ -52,7 +52,9 @@ class MyApp extends StatelessWidget {
             create:
                 (context) => HearingTestBloc(
                   hearingTestSoundsPlayerRepository:
-                      context.read<HearingTestSoundsPlayerRepository>(),
+                      RepositoryProvider.of<HearingTestSoundsPlayerRepository>(
+                        context,
+                      ),
                 ),
           ),
           BlocProvider(
@@ -70,10 +72,12 @@ class MyApp extends StatelessWidget {
             },
           ),
           BlocProvider(
-            create:
-                (_) => EchoParseBloc(
-                  repository: context.read<EchoParseApiRepository>(),
-                ),
+            create: (context) {
+              final repository = RepositoryProvider.of<EchoParseApiRepository>(
+                context,
+              );
+              return EchoParseBloc(repository: repository);
+            },
           ),
         ],
         child: BlocBuilder<HMLocaleBloc, HMLocaleState>(
