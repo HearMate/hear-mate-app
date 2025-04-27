@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,7 +32,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                         context,
                       )!.echoparse_upload_headerUpload,
                       textAlign: TextAlign.center,
-                      style: KConstants.headerStyle,
+                      style: Theme.of(context).textTheme.displayLarge,
                     ),
                     SizedBox(height: 48),
                     if (state.image != null)
@@ -51,7 +50,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                           FilledButton(
                             style: FilledButton.styleFrom(
                               minimumSize: Size(252, 48),
-                              backgroundColor: KConstants.echoParseRed,
+                              backgroundColor: Theme.of(context).primaryColor,
                             ),
                             onPressed: () {
                               context.read<EchoParseBloc>().add(
@@ -66,9 +65,8 @@ class EchoParseUploadScreen extends StatelessWidget {
                               AppLocalizations.of(
                                 context,
                               )!.echoparse_upload_buttonUpload,
-                              style: KConstants.hugeButtonStyle.copyWith(
-                                color: Colors.white,
-                              ),
+                              style: Theme.of(context).textTheme.displayMedium
+                                  ?.copyWith(color: Colors.white),
                             ),
                           ),
                         ],
@@ -77,7 +75,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                     FilledButton(
                       style: FilledButton.styleFrom(
                         minimumSize: Size(252, 48),
-                        backgroundColor: KConstants.echoParseRed,
+                        backgroundColor: Colors.red,
                       ),
                       onPressed: () {
                         context.read<EchoParseBloc>().add(
@@ -88,9 +86,8 @@ class EchoParseUploadScreen extends StatelessWidget {
                         AppLocalizations.of(
                           context,
                         )!.echoparse_upload_buttonPick,
-                        style: KConstants.hugeButtonStyle.copyWith(
-                          color: Colors.white,
-                        ),
+                        style: Theme.of(context).textTheme.displayMedium
+                            ?.copyWith(color: Colors.white),
                       ),
                     ),
                   ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,11 +19,11 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Lottie.asset("assets/lotties/welcome.json", height: 100),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 20.0),
                 child: Text(
                   'HearMate',
-                  style: KConstants.headerStyle,
+                  style: Theme.of(context).textTheme.displayLarge,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -40,7 +39,7 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     AppLocalizations.of(context)!.homepage_button_audioTest,
-                    style: KConstants.bigButtonStyle,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
               ),
@@ -55,7 +54,10 @@ class HomePage extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Echo Parse', style: KConstants.bigButtonStyle),
+                  child: Text(
+                    'Echo Parse',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
                 ),
               ),
 

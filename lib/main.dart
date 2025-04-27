@@ -144,15 +144,7 @@ class MyApp extends StatelessWidget {
                     );
                   },
                   title: 'HearMate',
-                  theme: ThemeData(
-                    colorScheme: ColorScheme.fromSeed(
-                      seedColor: Colors.teal,
-                      brightness:
-                          themeState.isDarkMode
-                              ? Brightness.dark
-                              : Brightness.light,
-                    ),
-                  ),
+                  theme: buildHearMateTheme(isDarkMode: themeState.isDarkMode),
                   home: HomePage(),
                 );
               },

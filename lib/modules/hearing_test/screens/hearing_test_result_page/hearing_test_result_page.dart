@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/data/constants.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/audiogram_chart.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
@@ -116,7 +115,9 @@ class HearingTestResultPage extends StatelessWidget {
                             Text(
                               'This generated audiogram and hearing test results are not precise and should be interpreted with caution. '
                               'For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.',
-                              style: KConstants.helperStyle.copyWith(
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.copyWith(
                                 color:
                                     Theme.of(
                                       context,
