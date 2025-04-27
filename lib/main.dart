@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,16 +21,7 @@ import 'package:hm_locale/hm_locale.dart';
 import 'package:hm_theme/hm_theme.dart';
 
 void main() {
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => EchoParseBloc(repository: EchoParseApiRepository()),
-        ),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -45,6 +37,12 @@ class MyApp extends StatelessWidget {
                 HearingTestSoundsPlayerRepository();
             hearingTestSoundsPlayerRepository.initialize();
             return hearingTestSoundsPlayerRepository;
+          },
+        ),
+        RepositoryProvider(
+          create: (context) {
+            final echoParseApiRepository = EchoParseApiRepository();
+            return echoParseApiRepository;
           },
         ),
       ],
@@ -64,13 +62,18 @@ class MyApp extends StatelessWidget {
               return themeBloc;
             },
           ),
-          // Add a new bloc for locale management
           BlocProvider(
             create: (context) {
               final localeBloc = HMLocaleBloc();
               localeBloc.add(HMLocaleInitEvent());
               return localeBloc;
             },
+          ),
+          BlocProvider(
+            create:
+                (_) => EchoParseBloc(
+                  repository: context.read<EchoParseApiRepository>(),
+                ),
           ),
         ],
         child: BlocBuilder<HMLocaleBloc, HMLocaleState>(
@@ -84,10 +87,7 @@ class MyApp extends StatelessWidget {
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
                   ],
-                  supportedLocales: const [
-                    Locale('en'), //? English
-                    Locale('pl'), //? Polish
-                  ],
+                  supportedLocales: Languages.supportedLocales,
                   locale: localeState.locale,
                   localeResolutionCallback: (locale, supportedLocales) {
                     if (localeState.locale != null) return localeState.locale;
