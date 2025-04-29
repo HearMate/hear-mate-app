@@ -1,0 +1,73 @@
+{
+	"@@locale": "uk",
+
+    "comment_homepage1": "=====================================",
+    "comment_homepage2": "============== HomePage =============",
+    "comment_homepage3": "=====================================",
+
+	"homepage_button_helper": "Виберіть модуль, щоб продовжити:",
+	"homepage_button_audioTest": "Тест слуху",
+	"homepage_button_echoParse": "Echo Parse",
+	"homepage_button_moreModules": "Більше модулів скоро...",
+
+	"comment_echo_parse1": "=====================================",
+	"comment_echo_parse2": "============= Echo Parse ============",
+	"comment_echo_parse3": "=====================================",
+
+	"echoparse_welcome_appbar_title": "EchoParse",
+	"echoparse_welcome_header": "EchoParse",
+	"echoparse_welcome_heading": "Ваш аудіограм у CSV!",
+	"echoparse_welcome_body": "Перетворіть свої старі файли та зображення аудіограм у сучасні документи CSV.",
+	"echoparse_welcome_button_body": "Почнемо!",
+
+	"echoparse_upload_appbarTitle": "Завантаження",
+	"echoparse_upload_headerUpload": "Завантажити аудіограму",
+	"echoparse_upload_buttonHelper": "Підтримувані формати: png, jpg",
+	"echoparse_upload_buttonPick": "Вибрати файл",
+	"echoparse_upload_buttonUpload": "Завантажити",
+	"echoparse_upload_savedFilesHeader": "Збережені файли",
+
+	"echoparse_settings_appbar_title": "Налаштування",
+	"echoparse_settings_language_title": "Мова",
+
+	"echoparse_upload_done_success_title": "Дані успішно завантажено.",
+	"echoparse_upload_done_loaded_title": "Аудіограма завантажена.",
+	"echoparse_upload_done_processed_title": "Зображення оброблено у CSV.",
+	"echoparse_upload_done_download_title": "Завантажити.",
+	"echoparse_upload_done_saved_title": "Збережені файли",
+
+	"echoparse_collection_thanks_title": "Дякуємо за використання",
+	"echoparse_collection_module_name": "Echo Parse!",
+	"echoparse_collection_choose_title": "Обери свій шлях.",
+	"echoparse_collection_parse_title": "Обробити новий файл.",
+	"echoparse_collection_modules_title": "Повернутися до модулів",
+
+	"comment_hearing_test1": "=====================================",
+	"comment_hearing_test2": "============ Hearing Test ===========",
+	"comment_hearing_test3": "=====================================",
+
+	"hearing_test_test_page_title": "Тест слуху",
+	"hearing_test_test_page_instruction": "Натисніть і тримайте кнопку, коли чуєте звук. Відпустіть, коли більше не чуєте.",
+	"hearing_test_test_page_release": "Відпустіть кнопку зараз.",
+	"hearing_test_test_page_end": "Завершити тест",
+
+	"hearing_test_audiogram_chart_frequency": "Частота (Гц)",
+	"hearing_test_audiogram_chart_mild_loss": "Легка втрата",
+	"hearing_test_audiogram_chart_moderate_loss": "Помірна втрата",
+	"hearing_test_audiogram_chart_severe_loss": "Сильна втрата",
+	"hearing_test_audiogram_chart_left_ear": "Ліве вухо",
+	"hearing_test_audiogram_chart_right_ear": "Праве вухо",
+
+	"hearing_test_result_page_title": "HearMate",
+	"hearing_test_result_page_your_results": "Ваші результати тесту слуху",
+	"hearing_test_result_page_instruction": "Нижче наведено вашу аудіограму, що показує пороги слуху на різних частотах.",
+	"hearing_test_result_page_note": "Примітка",
+	"hearing_test_result_page_note_description": "Ця згенерована аудіограма та результати тесту слуху є приблизними та не повинні сприйматися як точна діагностика. Для достовірних результатів зверніться до кваліфікованого аудіолога або лікаря.",
+	"hearing_test_result_page_save_results": "Зберегти результати",
+	"hearing_test_result_page_home": "Повернутися на головну",
+
+	"hearing_test_welcome_page_title": "Hear Mate",
+	"hearing_test_welcome_page_welcome": "Ласкаво просимо до тесту слуху",
+	"hearing_test_welcome_page_description": "Цей модуль протестує ваш слух на різних частотах.",
+	"hearing_test_welcome_page_start": "Почати тест"
+}
