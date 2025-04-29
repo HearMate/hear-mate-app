@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
@@ -8,26 +9,26 @@ class HearingTestWelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HMAppBar(
-        title: "HearMate Project",
+        title: AppLocalizations.of(context)!.hearing_test_welcome_page_title,
         route: ModalRoute.of(context)?.settings.name ?? "",
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(20.0),
               child: Text(
-                'Welcome to Hearing Test',
+                AppLocalizations.of(context)!.hearing_test_welcome_page_welcome,
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 20),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: Text(
-                'This module will test your hearing ability across different frequencies.',
+                AppLocalizations.of(context)!.hearing_test_welcome_page_description,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -44,8 +45,8 @@ class HearingTestWelcomePage extends StatelessWidget {
                 ),
                 backgroundColor: Colors.blueAccent,
               ),
-              child: const Text(
-                'Start Test',
+              child: Text(
+                AppLocalizations.of(context)!.hearing_test_welcome_page_start,
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),

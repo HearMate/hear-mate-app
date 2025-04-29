@@ -5,6 +5,7 @@ import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_p
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:hm_theme/hm_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HearingTestResultPage extends StatelessWidget {
   HearingTestResultPage({super.key});
@@ -31,7 +32,7 @@ class HearingTestResultPage extends StatelessWidget {
 
         return Scaffold(
           appBar: HMAppBar(
-            title: "HearMate Project",
+            title: AppLocalizations.of(context)!.hearing_test_result_page_title,
             route: ModalRoute.of(context)?.settings.name ?? "",
           ),
           body: SingleChildScrollView(
@@ -39,10 +40,10 @@ class HearingTestResultPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(20.0),
                     child: Text(
-                      'Your Hearing Test Results',
+                      AppLocalizations.of(context)!.hearing_test_result_page_your_results,
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -51,10 +52,10 @@ class HearingTestResultPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
-                      'Below is your audiogram showing hearing thresholds across different frequencies.',
+                      AppLocalizations.of(context)!.hearing_test_result_page_instruction,
                       style: TextStyle(fontSize: 18, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
@@ -101,7 +102,7 @@ class HearingTestResultPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Note',
+                              AppLocalizations.of(context)!.hearing_test_result_page_note,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -113,8 +114,7 @@ class HearingTestResultPage extends StatelessWidget {
                             ),
                             SizedBox(height: 15),
                             Text(
-                              'This generated audiogram and hearing test results are not precise and should be interpreted with caution. '
-                              'For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.',
+                              AppLocalizations.of(context)!.hearing_test_result_page_note_description,
                               style: Theme.of(
                                 context,
                               ).textTheme.bodyMedium?.copyWith(
@@ -139,8 +139,8 @@ class HearingTestResultPage extends StatelessWidget {
                       ),
                       backgroundColor: Colors.blueAccent,
                     ),
-                    child: const Text(
-                      'Save Results',
+                    child: Text(
+                      AppLocalizations.of(context)!.hearing_test_result_page_save_results,
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
@@ -153,8 +153,8 @@ class HearingTestResultPage extends StatelessWidget {
                         (route) => false,
                       );
                     },
-                    child: const Text(
-                      'Back to home',
+                    child: Text(
+                      AppLocalizations.of(context)!.hearing_test_result_page_home,
                       style: TextStyle(fontSize: 16, color: Colors.blueAccent),
                     ),
                   ),

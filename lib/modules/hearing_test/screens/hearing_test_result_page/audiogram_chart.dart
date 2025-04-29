@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /** @TODO
  * This widget needs some changes:
@@ -42,9 +43,9 @@ class AudiogramChart extends StatelessWidget {
             ),
             titlesData: FlTitlesData(
               bottomTitles: AxisTitles(
-                axisNameWidget: const Padding(
+                axisNameWidget: Padding(
                   padding: EdgeInsets.only(top: 1.0),
-                  child: Text('Frequency (Hz)', style: TextStyle(fontSize: 12)),
+                  child: Text(AppLocalizations.of(context)!.hearing_test_audiogram_chart_frequency, style: TextStyle(fontSize: 12)),
                 ),
                 sideTitles: SideTitles(
                   showTitles: true,
@@ -89,9 +90,9 @@ class AudiogramChart extends StatelessWidget {
                 sideTitles: SideTitles(showTitles: false),
               ),
               topTitles: AxisTitles(
-                axisNameWidget: const Padding(
+                axisNameWidget: Padding(
                   padding: EdgeInsets.only(bottom: 20.0),
-                  child: Text('Frequency (Hz)', style: TextStyle(fontSize: 12)),
+                  child: Text(AppLocalizations.of(context)!.hearing_test_audiogram_chart_frequency, style: TextStyle(fontSize: 12)),
                 ),
                 sideTitles: SideTitles(showTitles: false),
               ),
@@ -159,7 +160,7 @@ class AudiogramChart extends StatelessWidget {
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(right: 5, bottom: 5),
                     style: const TextStyle(fontSize: 9, color: Colors.orange),
-                    labelResolver: (line) => 'Mild loss',
+                    labelResolver: (line) => AppLocalizations.of(context)!.hearing_test_audiogram_chart_mild_loss,
                   ),
                 ),
                 HorizontalLine(
@@ -175,7 +176,7 @@ class AudiogramChart extends StatelessWidget {
                       fontSize: 9,
                       color: Colors.deepOrange,
                     ),
-                    labelResolver: (line) => 'Moderate loss',
+                    labelResolver: (line) => AppLocalizations.of(context)!.hearing_test_audiogram_chart_moderate_loss,
                   ),
                 ),
                 HorizontalLine(
@@ -188,7 +189,7 @@ class AudiogramChart extends StatelessWidget {
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(right: 5, bottom: 5),
                     style: const TextStyle(fontSize: 9, color: Colors.red),
-                    labelResolver: (line) => 'Severe loss',
+                    labelResolver: (line) => AppLocalizations.of(context)!.hearing_test_audiogram_chart_severe_loss,
                   ),
                 ),
               ],
@@ -203,11 +204,11 @@ class AudiogramChart extends StatelessWidget {
             children: [
               Container(width: 12, height: 12, color: Colors.blue),
               const SizedBox(width: 4),
-              const Text('Left Ear', style: TextStyle(fontSize: 12)),
+              Text(AppLocalizations.of(context)!.hearing_test_audiogram_chart_left_ear, style: TextStyle(fontSize: 12)),
               const SizedBox(width: 20),
               Container(width: 12, height: 12, color: Colors.red),
               const SizedBox(width: 4),
-              const Text('Right Ear', style: TextStyle(fontSize: 12)),
+              Text(AppLocalizations.of(context)!.hearing_test_audiogram_chart_right_ear, style: TextStyle(fontSize: 12)),
             ],
           ),
         ),

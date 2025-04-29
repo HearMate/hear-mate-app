@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EchoParseCollectScreen extends StatelessWidget {
   const EchoParseCollectScreen({super.key});
@@ -57,7 +58,7 @@ class EchoParseCollectScreen extends StatelessWidget {
                           top: 20,
                           right: 300,
                           child: Text(
-                            "Thank you for using",
+                            AppLocalizations.of(context)!.echoparse_collection_thanks_title,
                             style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.bold,
@@ -70,7 +71,7 @@ class EchoParseCollectScreen extends StatelessWidget {
                           top: 90,
                           right: 300,
                           child: Text(
-                            "EchoParse!",
+                            AppLocalizations.of(context)!.echoparse_collection_module_name,
                             style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.bold,
@@ -84,7 +85,7 @@ class EchoParseCollectScreen extends StatelessWidget {
                           top: 220,
                           left: 350,
                           child: Text(
-                            "Choose your way.",
+                            AppLocalizations.of(context)!.echoparse_collection_choose_title,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -138,7 +139,7 @@ class EchoParseCollectScreen extends StatelessWidget {
                             },
                             child: Center(
                               child: Text(
-                                "Parse new doc.",
+                                AppLocalizations.of(context)!.echoparse_collection_parse_title,
                                 style: TextStyle(
                                   fontFamily: "Aoboshi One",
                                   color: Colors.white,
@@ -170,7 +171,7 @@ class EchoParseCollectScreen extends StatelessWidget {
                             },
                             child: Center(
                               child: Text(
-                                "Go back to modules.",
+                                AppLocalizations.of(context)!.echoparse_collection_modules_title,
                                 style: TextStyle(
                                   fontFamily: "Aoboshi One",
                                   color: Colors.white,
