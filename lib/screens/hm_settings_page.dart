@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:hear_mate_app/widgets/locale_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hm_locale/hm_locale.dart';
 
 class HMSettingsPage extends StatelessWidget {
@@ -14,7 +15,7 @@ class HMSettingsPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: HMAppBar(
-            title: "Settings",
+            title: AppLocalizations.of(context)!.echoparse_settings_appbar_title,
             route: ModalRoute.of(context)?.settings.name ?? "",
           ),
           body: SafeArea(
@@ -25,7 +26,7 @@ class HMSettingsPage extends StatelessWidget {
                   children: [
                     ListTile(
                       leading: Icon(Icons.language),
-                      title: Text("Language"),
+                      title: Text(AppLocalizations.of(context)!.echoparse_settings_language_title),
                       trailing: DropdownMenu<Locale>(
                         initialSelection: state.locale,
                         onSelected: (Locale? locale) {

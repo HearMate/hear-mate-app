@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EchoParseUploadDoneScreen extends StatelessWidget {
   const EchoParseUploadDoneScreen({super.key});
@@ -139,7 +140,7 @@ class EchoParseUploadDoneScreen extends StatelessWidget {
                           top: 20,
                           right: 230,
                           child: Text(
-                            "Data loaded successfully.",
+                            AppLocalizations.of(context)!.echoparse_upload_done_success_title,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -183,8 +184,8 @@ class EchoParseUploadDoneScreen extends StatelessWidget {
                         Positioned(
                           top: 110,
                           left: 190,
-                          child: const Text(
-                            "Audiogram loaded.",
+                          child: Text(
+                            AppLocalizations.of(context)!.echoparse_upload_done_loaded_title,
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontFamily: "Aoboshi One",
@@ -196,8 +197,8 @@ class EchoParseUploadDoneScreen extends StatelessWidget {
                         Positioned(
                           top: 165,
                           left: 190,
-                          child: const Text(
-                            "Image has been processed to CSV.",
+                          child: Text(
+                            AppLocalizations.of(context)!.echoparse_upload_done_processed_title,
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontFamily: "Aoboshi One",
@@ -227,7 +228,7 @@ class EchoParseUploadDoneScreen extends StatelessWidget {
                             },
                             child: Center(child:
                               Text(
-                              "Download.",
+                              AppLocalizations.of(context)!.echoparse_upload_done_download_title,
                               style: TextStyle(
                                 fontFamily: "Aoboshi One",
                                 color: Colors.white,
@@ -249,8 +250,8 @@ class EchoParseUploadDoneScreen extends StatelessWidget {
                         Positioned(
                           bottom: 140,
                           left: (screenSize.width - 200) / 2, // Center horizontally
-                          child: const Text(
-                          "Saved files.",
+                          child: Text(
+                          AppLocalizations.of(context)!.echoparse_upload_done_saved_title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "Aoboshi One",

@@ -1,6 +1,12 @@
 {
 	"@@locale": "en",
 
+
+    "comment_homepage1": "=====================================",
+    "comment_homepage2": "============== HomePage =============",
+    "comment_homepage3": "=====================================",
+
+
     "homepage_button_helper": "Please select a module to continue:",
     "homepage_button_audioTest": "Audio Test Module",
     "homepage_button_echoParse": "Echo Parse",
@@ -18,6 +24,12 @@
     "@homepage_button_moreModules": {
         "description": "Label for the button indicating more modules will be available in the future."
     },
+
+
+    "comment_echo_parse1": "=====================================",
+    "comment_echo_parse2": "============= Echo Parse ============",
+    "comment_echo_parse3": "=====================================",
+
 
     "echoparse_upload_appbarTitle": "Upload",
     "echoparse_upload_headerUpload": "Load your audiogram",
@@ -64,5 +76,157 @@
 	},
 	"@echoparse_welcome_button_body": {
 		"description": "Text displayed on the button to start the process."
-	}
+	},
+
+    "echoparse_settings_appbar_title": "Settings",
+    "echoparse_settings_language_title": "Language",
+
+    "@echoparse_settings_appbar_title": {
+        "description": "Title displayed in the app bar on the settings screen."
+    },
+    "@echoparse_settings_language_title": {
+        "description": "Label for the language selection option in the settings."
+    },
+
+    "echoparse_upload_done_success_title": "Data loaded successfully.",
+    "echoparse_upload_done_loaded_title": "Audiogram loaded.",
+    "echoparse_upload_done_processed_title": "Image has been processed to CSV.",
+    "echoparse_upload_done_download_title": "Download.",
+    "echoparse_upload_done_saved_title": "Saved files",
+
+    "@echoparse_upload_done_success_title": {
+        "description": "Title displayed when data is successfully loaded."
+    },
+    "@echoparse_upload_done_loaded_title": {
+        "description": "Title displayed when the audiogram is successfully loaded."
+    },
+    "@echoparse_upload_done_processed_title": {
+        "description": "Title displayed when the image has been processed into a CSV file."
+    },
+    "@echoparse_upload_done_download_title": {
+        "description": "Label for the button to download the processed CSV file."
+    },
+    "@echoparse_upload_done_saved_title": {
+        "description": "Title for the section displaying saved files."
+    },
+
+    "echoparse_collection_thanks_title": "Thank you for using",
+    "echoparse_collection_module_name": "Echo Parse!",
+    "echoparse_collection_choose_title": "Choose your way.",
+    "echoparse_collection_parse_title": "Parse new file.",
+    "echoparse_collection_modules_title": "Go back to modules",
+
+    "@echoparse_collection_thanks_title": {
+        "description": "Title displayed to thank the user for using the application."
+    },
+    "@echoparse_collection_module_name": {
+        "description": "Name of the Echo Parse module displayed in the collection screen."
+    },
+    "@echoparse_collection_choose_title": {
+        "description": "Title prompting the user to choose their preferred action or path."
+    },
+    "@echoparse_collection_parse_title": {
+        "description": "Label for the option to parse a new document."
+    },
+    "@echoparse_collection_modules_title": {
+        "description": "Label for the option to navigate back to the modules screen."
+    },
+
+
+    "comment_hearing_test1": "=====================================",
+    "comment_hearing_test2": "============ Hearing Test ===========",
+    "comment_hearing_test3": "=====================================",
+
+
+    "hearing_test_test_page_title": "Hearing Test",
+    "hearing_test_test_page_instruction": "Press and hold the button when you can hear the sound. Release when you can no longer hear it.",
+    "hearing_test_test_page_release": "Release the button now.",
+    "hearing_test_test_page_end": "End Test Early",
+
+    "@hearing_test_test_page_title": {
+        "description": "Title displayed on the hearing test page."
+    },
+    "@hearing_test_test_page_instruction": {
+        "description": "Instruction text explaining how to perform the hearing test."
+    },
+    "@hearing_test_test_page_release": {
+        "description": "Text prompting the user to release the button during the hearing test."
+    },
+    "@hearing_test_test_page_end": {
+        "description": "Label for the option to end the hearing test early."
+    },
+
+    "hearing_test_audiogram_chart_frequency": "Frequency (Hz)",
+    "hearing_test_audiogram_chart_mild_loss": "Mild loss",
+    "hearing_test_audiogram_chart_moderate_loss": "Moderate loss",
+    "hearing_test_audiogram_chart_severe_loss": "Severe loss",
+    "hearing_test_audiogram_chart_left_ear": "Left ear",
+    "hearing_test_audiogram_chart_right_ear": "Right ear",
+
+    "@hearing_test_audiogram_chart_frequency": {
+        "description": "Label for the frequency axis on the audiogram chart."
+    },
+    "@hearing_test_audiogram_chart_mild_loss": {
+        "description": "Label indicating mild hearing loss on the audiogram chart."
+    },
+    "@hearing_test_audiogram_chart_moderate_loss": {
+        "description": "Label indicating moderate hearing loss on the audiogram chart."
+    },
+    "@hearing_test_audiogram_chart_severe_loss": {
+        "description": "Label indicating severe hearing loss on the audiogram chart."
+    },
+    "@hearing_test_audiogram_chart_left_ear": {
+        "description": "Label for the left ear data on the audiogram chart."
+    },
+    "@hearing_test_audiogram_chart_right_ear": {
+        "description": "Label for the right ear data on the audiogram chart."
+    },
+
+    "hearing_test_result_page_title": "HearMate",
+    "hearing_test_result_page_your_results": "Your Hearing Test Results",
+    "hearing_test_result_page_instruction": "Below is your audiogram showing hearing thresholds across different frequencies.",
+    "hearing_test_result_page_note": "Note",
+    "hearing_test_result_page_note_description": "This generated audiogram and hearing test results are not precise and should be interpreted with caution. For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.",
+    "hearing_test_result_page_save_results": "Save results",
+    "hearing_test_result_page_home": "Back to home",
+
+    "@hearing_test_result_page_title": {
+        "description": "Title displayed on the hearing test results page."
+    },
+    "@hearing_test_result_page_your_results": {
+        "description": "Header text indicating the user's hearing test results."
+    },
+    "@hearing_test_result_page_instruction": {
+        "description": "Instruction text explaining the audiogram displayed on the results page."
+    },
+    "@hearing_test_result_page_note": {
+        "description": "Label for the note section on the results page."
+    },
+    "@hearing_test_result_page_note_description": {
+        "description": "Description text warning users about the limitations of the generated audiogram and advising consultation with a professional."
+    },
+    "@hearing_test_result_page_save_results": {
+        "description": "Label for the button to save the hearing test results."
+    },
+    "@hearing_test_result_page_home": {
+        "description": "Label for the button to navigate back to the home page."
+    },
+
+    "hearing_test_welcome_page_title": "Hear Mate",
+    "hearing_test_welcome_page_welcome": "Welcome to Hearing Test",
+    "hearing_test_welcome_page_description": "This module will test your hearing ability across different frequencies.",
+    "hearing_test_welcome_page_start": "Start Test",
+
+    "@hearing_test_welcome_page_title": {
+        "description": "Title displayed on the welcome page of the hearing test module."
+    },
+    "@hearing_test_welcome_page_welcome": {
+        "description": "Welcome message displayed on the hearing test module's welcome page."
+    },
+    "@hearing_test_welcome_page_description": {
+        "description": "Description text explaining the purpose of the hearing test module."
+    },
+    "@hearing_test_welcome_page_start": {
+        "description": "Label for the button to start the hearing test."
+    }
 }

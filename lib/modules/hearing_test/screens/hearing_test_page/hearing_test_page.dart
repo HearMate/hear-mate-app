@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 
@@ -12,7 +13,7 @@ class HearingTestPage extends StatelessWidget {
 
     return Scaffold(
       appBar: HMAppBar(
-        title: "HearMate Project",
+        title: AppLocalizations.of(context)!.hearing_test_test_page_title,
         route: ModalRoute.of(context)?.settings.name ?? "",
       ),
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
@@ -24,10 +25,10 @@ class HearingTestPage extends StatelessWidget {
         builder: (context, state) {
           return Column(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  'Press and hold the button when you can hear the sound. Release when you can no longer hear it.',
+                  AppLocalizations.of(context)!.hearing_test_test_page_instruction,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
@@ -38,8 +39,8 @@ class HearingTestPage extends StatelessWidget {
                   height: 24,
                   child:
                       state.wasSoundHeard
-                          ? const Text(
-                            'Release the button now.',
+                          ? Text(
+                            AppLocalizations.of(context)!.hearing_test_test_page_release,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -121,8 +122,8 @@ class HearingTestPage extends StatelessWidget {
                       (route) => false,
                     );
                   },
-                  child: const Text(
-                    'End Test Early',
+                  child: Text(
+                    AppLocalizations.of(context)!.hearing_test_test_page_end,
                     style: TextStyle(color: Colors.red, fontSize: 16),
                   ),
                 ),
