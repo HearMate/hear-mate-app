@@ -1,0 +1,73 @@
+{
+    "@@locale": "de",
+
+    "comment_homepage1": "=====================================",
+    "comment_homepage2": "============== HomePage =============",
+    "comment_homepage3": "=====================================",
+
+    "homepage_button_helper": "Wähle ein Modul, um fortzufahren:",
+    "homepage_button_audioTest": "Hörtest",
+    "homepage_button_echoParse": "Echo Parse",
+    "homepage_button_moreModules": "Weitere Module folgen bald...",
+
+    "comment_echo_parse1": "=====================================",
+    "comment_echo_parse2": "============= Echo Parse ============",
+    "comment_echo_parse3": "=====================================",
+
+    "echoparse_welcome_appbar_title": "EchoParse",
+    "echoparse_welcome_header": "EchoParse",
+    "echoparse_welcome_heading": "Dein Audiogramm als CSV!",
+    "echoparse_welcome_body": "Verwandle deine alten Audiogrammdateien und Bilder in moderne CSV-Dokumente.",
+    "echoparse_welcome_button_body": "Los geht’s!",
+
+    "echoparse_upload_appbarTitle": "Hochladen",
+    "echoparse_upload_headerUpload": "Audiogramm hochladen",
+    "echoparse_upload_buttonHelper": "Akzeptierte Formate: png, jpg",
+    "echoparse_upload_buttonPick": "Datei auswählen",
+    "echoparse_upload_buttonUpload": "Hochladen",
+    "echoparse_upload_savedFilesHeader": "Gespeicherte Dateien",
+
+    "echoparse_settings_appbar_title": "Einstellungen",
+    "echoparse_settings_language_title": "Sprache",
+
+    "echoparse_upload_done_success_title": "Daten erfolgreich geladen.",
+    "echoparse_upload_done_loaded_title": "Audiogramm geladen.",
+    "echoparse_upload_done_processed_title": "Bild wurde in CSV umgewandelt.",
+    "echoparse_upload_done_download_title": "Herunterladen.",
+    "echoparse_upload_done_saved_title": "Gespeicherte Dateien",
+
+    "echoparse_collection_thanks_title": "Vielen Dank für die Nutzung",
+    "echoparse_collection_module_name": "Echo Parse!",
+    "echoparse_collection_choose_title": "Wähle deinen Weg.",
+    "echoparse_collection_parse_title": "Neue Datei verarbeiten.",
+    "echoparse_collection_modules_title": "Zurück zu den Modulen",
+
+    "comment_hearing_test1": "=====================================",
+    "comment_hearing_test2": "============ Hearing Test ===========",
+    "comment_hearing_test3": "=====================================",
+
+    "hearing_test_test_page_title": "Hörtest",
+    "hearing_test_test_page_instruction": "Drücke und halte den Knopf, solange du den Ton hörst. Lass ihn los, wenn du nichts mehr hörst.",
+    "hearing_test_test_page_release": "Lass den Knopf jetzt los.",
+    "hearing_test_test_page_end": "Test beenden",
+
+    "hearing_test_audiogram_chart_frequency": "Frequenz (Hz)",
+    "hearing_test_audiogram_chart_mild_loss": "Leichter Hörverlust",
+    "hearing_test_audiogram_chart_moderate_loss": "Mäßiger Hörverlust",
+    "hearing_test_audiogram_chart_severe_loss": "Starker Hörverlust",
+    "hearing_test_audiogram_chart_left_ear": "Linkes Ohr",
+    "hearing_test_audiogram_chart_right_ear": "Rechtes Ohr",
+
+    "hearing_test_result_page_title": "HearMate",
+    "hearing_test_result_page_your_results": "Deine Hörtestergebnisse",
+    "hearing_test_result_page_instruction": "Unten siehst du dein Audiogramm mit den Hörschwellen bei verschiedenen Frequenzen.",
+    "hearing_test_result_page_note": "Hinweis",
+    "hearing_test_result_page_note_description": "Dieses generierte Audiogramm und die Hörtestergebnisse sind Näherungswerte und sollten nicht als medizinische Diagnose betrachtet werden. Für genaue Ergebnisse wende dich bitte an einen qualifizierten Audiologen oder Arzt.",
+    "hearing_test_result_page_save_results": "Ergebnisse speichern",
+    "hearing_test_result_page_home": "Zurück zur Startseite",
+
+    "hearing_test_welcome_page_title": "Hear Mate",
+    "hearing_test_welcome_page_welcome": "Willkommen zum Hörtest",
+    "hearing_test_welcome_page_description": "Dieses Modul testet dein Hörvermögen bei verschiedenen Frequenzen.",
+    "hearing_test_welcome_page_start": "Test starten"
+}
