@@ -1,21 +1,73 @@
 {
 	"@@locale": "pl",
 
+    "comment_homepage1": "=====================================",
+    "comment_homepage2": "============== HomePage =============",
+    "comment_homepage3": "=====================================",
+
     "homepage_button_helper": "Wybierz moduł aby kontynuować:",
     "homepage_button_audioTest": "Test słuchu",
     "homepage_button_echoParse": "Echo Parse",
     "homepage_button_moreModules": "Więcej modułów wkrótce...",
 
-	"echoparse_welcome_appbar_title": "EchoParse",
+    "comment_echo_parse1": "=====================================",
+    "comment_echo_parse2": "============= Echo Parse ============",
+    "comment_echo_parse3": "=====================================",
+
+    "echoparse_welcome_appbar_title": "EchoParse",
 	"echoparse_welcome_header": "EchoParse",
 	"echoparse_welcome_heading": "Twój audiogram w CSV!",
 	"echoparse_welcome_body": "Zamień swoje stare pliki i zdjęcia audiogramów w nowoczesne dokumenty CSV.",
 	"echoparse_welcome_button_body": "Zaczynamy!",
 
-	"echoparse_upload_appbarTitle": "",
+	"echoparse_upload_appbarTitle": "Prześlij",
 	"echoparse_upload_headerUpload": "Załaduj audiogram",
 	"echoparse_upload_buttonHelper": "Akceptowane formaty: png, jpg",
 	"echoparse_upload_buttonPick": "Wybierz plik",
 	"echoparse_upload_savedFilesHeader": "Ostatnie pliki",
-	"echoparse_upload_buttonUpload": "Prześlij"
+	"echoparse_upload_buttonUpload": "Prześlij",
+
+	"echoparse_settings_appbar_title": "Ustawienia",
+  	"echoparse_settings_language_title": "Język",
+
+	"echoparse_upload_done_success_title": "Dane zostały pomyślnie załadowane.",
+	"echoparse_upload_done_loaded_title": "Audiogram załadowany.",
+	"echoparse_upload_done_processed_title": "Obraz został przetworzony na CSV.",
+	"echoparse_upload_done_download_title": "Pobierz.",
+	"echoparse_upload_done_saved_title": "Zapisane pliki",
+
+	"echoparse_collection_thanks_title": "Dziękujemy za użycie",
+    "echoparse_collection_module_name": "Echo Parse!",
+	"echoparse_collection_choose_title": "Wybierz swoją drogę.",
+	"echoparse_collection_parse_title": "Przetwórz nowy plik.",
+  	"echoparse_collection_modules_title": "Wróć do modułów",
+
+    "comment_hearing_test1": "=====================================",
+    "comment_hearing_test2": "============ Hearing Test ===========",
+    "comment_hearing_test3": "=====================================",
+
+    "hearing_test_test_page_title": "Test słuchu",
+    "hearing_test_test_page_instruction": "Przytrzymaj przycisk, gdy słyszysz dźwięk. Puść, gdy przestaniesz go słyszeć.",
+    "hearing_test_test_page_release": "Puść przycisk teraz.",
+    "hearing_test_test_page_end": "Zakończ test",
+
+    "hearing_test_audiogram_chart_frequency": "Częstotliwość (Hz)",
+    "hearing_test_audiogram_chart_mild_loss": "Lekki ubytek",
+    "hearing_test_audiogram_chart_moderate_loss": "Umiarkowany ubytek",
+    "hearing_test_audiogram_chart_severe_loss": "Znaczny ubytek",
+    "hearing_test_audiogram_chart_left_ear": "Lewe ucho",
+    "hearing_test_audiogram_chart_right_ear": "Prawe ucho",
+
+    "hearing_test_result_page_title": "HearMate",
+    "hearing_test_result_page_your_results": "Twoje wyniki testu słuchu",
+    "hearing_test_result_page_instruction": "Poniżej znajduje się Twój audiogram przedstawiający progi słyszenia dla różnych częstotliwości.",
+    "hearing_test_result_page_note": "Uwaga",
+    "hearing_test_result_page_note_description": "Wygenerowany audiogram i wyniki testu mają charakter orientacyjny i nie są dokładne. Skonsultuj się z wykwalifikowanym specjalistą, aby uzyskać rzetelną diagnozę.",
+    "hearing_test_result_page_save_results": "Zapisz wyniki",
+    "hearing_test_result_page_home": "Powrót do strony głównej",
+
+    "hearing_test_welcome_page_title": "Hear Mate",
+    "hearing_test_welcome_page_welcome": "Witamy w teście słuchu",
+    "hearing_test_welcome_page_description": "Ten moduł przetestuje Twój słuch w różnych częstotliwościach.",
+    "hearing_test_welcome_page_start": "Rozpocznij test"
 }
