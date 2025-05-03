@@ -1,6 +1,11 @@
 import numpy as np
 import scipy.io.wavfile as wav
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 sample_rate = 44100  # 44.1kHz sample rate, common for audio
 duration = 2  # duration of each tone in seconds
@@ -24,9 +29,9 @@ def create_assets_folder():
         # Check if the folder exists, and if not, create it
         if not os.path.exists(assets_path):
             os.makedirs(assets_path)
-        print(f"Assets folder created at: {assets_path}")
+        logger.info(f"Assets folder created at: {assets_path}")
     else:
-        print(
+        logger.error(
             "Error: Not a Flutter project. Please run this script in a Flutter project directory."
         )
 
@@ -48,4 +53,4 @@ for freq in frequencies:
     tone = generate_tone(freq, duration, sample_rate)
     file_name = f"assets/tone_{freq}Hz.wav"
     wav.write(file_name, sample_rate, tone)
-    print(f"Generated {file_name}")
+    logger.info(f"Generated {file_name}")

@@ -183,3 +183,5 @@ pyrightconfig.json
 .flutter-plugins-dependencies
 
 .vscode/
+.DS_Store
+Podfile.lock
