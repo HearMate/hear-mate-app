@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 
 class HearingTestSoundsPlayerRepository {
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -44,10 +45,12 @@ class HearingTestSoundsPlayerRepository {
           _audioPlayer.stop();
         });
       } catch (e) {
-        print("Error loading sound file: $e");
+        if (kDebugMode) {
+          debugPrint("Error loading sound file: $e");
+        }
       }
-    } else {
-      print('No sound found for frequency $frequency Hz');
+    } else if (kDebugMode) {
+      debugPrint('No sound found for frequency $frequency Hz');
     }
   }
 
