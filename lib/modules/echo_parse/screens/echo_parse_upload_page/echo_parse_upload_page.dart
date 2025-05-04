@@ -41,17 +41,15 @@ class EchoParseUploadScreen extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.cyan,
+                              color: Colors.teal,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Image.memory(state.image!),
                           ),
                           SizedBox(height: 48),
+
                           FilledButton(
-                            style: FilledButton.styleFrom(
-                              minimumSize: Size(252, 48),
-                              backgroundColor: Theme.of(context).primaryColor,
-                            ),
+                            style: Theme.of(context).filledButtonTheme.style,
                             onPressed: () {
                               context.read<EchoParseBloc>().add(
                                 EchoParseUploadAudiogramFileToServerEvent(),
@@ -65,18 +63,26 @@ class EchoParseUploadScreen extends StatelessWidget {
                               AppLocalizations.of(
                                 context,
                               )!.echoparse_upload_buttonUpload,
-                              style: Theme.of(context).textTheme.displayMedium
-                                  ?.copyWith(color: Colors.white),
+                              style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
+                          const SizedBox(height: 10),
                         ],
                       ),
-                    SizedBox(height: 48),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        minimumSize: Size(252, 48),
-                        backgroundColor: Colors.red,
+
+                    if (state.image == null)
+                      Column(
+                        children: [
+                          Lottie.asset(
+                            "assets/lotties/echoparse_arrow_upload.json",
+                            height: 150,
+                          ),
+                          SizedBox(height: 48),
+                        ],
                       ),
+
+                    FilledButton(
+                      style: Theme.of(context).filledButtonTheme.style,
                       onPressed: () {
                         context.read<EchoParseBloc>().add(
                           EchoParseChooseAudiogramFileEvent(),
@@ -86,9 +92,56 @@ class EchoParseUploadScreen extends StatelessWidget {
                         AppLocalizations.of(
                           context,
                         )!.echoparse_upload_buttonPick,
-                        style: Theme.of(context).textTheme.displayMedium
-                            ?.copyWith(color: Colors.white),
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
+                    ),
+                    SizedBox(height: 48),
+
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final double itemWidth =
+                            MediaQuery.of(context).size.width > 500
+                                ? 200.0
+                                : 130.0;
+                        final double spacing =
+                            MediaQuery.of(context).size.width > 500
+                                ? 40.0
+                                : 20.0;
+                        final double bottomNum =
+                            MediaQuery.of(context).size.width > 500
+                                ? 20.0
+                                : 10.0;
+
+                        return Wrap(
+                          spacing: spacing,
+                          runSpacing: spacing,
+                          children: List.generate(
+                            6,
+                            (index) => SizedBox(
+                              width: itemWidth,
+                              child: Stack(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/saved-file-mock.png",
+                                    width: itemWidth,
+                                  ),
+                                  Positioned(
+                                    bottom: bottomNum,
+                                    left: 30,
+                                    child: Text(
+                                      // TODO: Change the code to dynamic names
+                                      "File ${index + 1}.csv".length > 10
+                                          ? "${"File ${index + 1}.csv".substring(0, 7)}..."
+                                          : "File ${index + 1}.csv",
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
