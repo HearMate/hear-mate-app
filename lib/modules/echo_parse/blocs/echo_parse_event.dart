@@ -7,6 +7,8 @@ class EchoParseChooseAudiogramFileEvent extends EchoParseEvent {}
 
 class EchoParseUploadAudiogramFileToServerEvent extends EchoParseEvent {}
 
+class EchoParseSaveProcessedCsvEvent extends EchoParseEvent {}
+
 class EchoParseReceivedServerResponseEvent extends EchoParseEvent {
   final int statusCode;
   final Map<String, dynamic> audiogramData;

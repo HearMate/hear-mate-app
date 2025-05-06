@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class EchoParseUploadDoneScreen extends StatelessWidget {
   const EchoParseUploadDoneScreen({super.key});
@@ -224,6 +227,7 @@ class EchoParseUploadDoneScreen extends StatelessWidget {
                               elevation: 10,
                             ),
                             onPressed: () {
+                              context.read<EchoParseBloc>().add(EchoParseSaveProcessedCsvEvent());
                               Navigator.pushNamed(context, "/echo_parse/collection");
                             },
                             child: Center(child:
