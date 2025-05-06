@@ -96,7 +96,8 @@ class MyApp extends StatelessWidget {
                   localeResolutionCallback: (locale, supportedLocales) {
                     if (localeState.locale != null) return localeState.locale;
                     for (var supportedLocale in supportedLocales) {
-                      if (supportedLocale.languageCode ==
+                      if (supported
+                      Locale.languageCode ==
                           locale?.languageCode) {
                         return supportedLocale;
                       }
