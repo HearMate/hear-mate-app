@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:meta/meta.dart';
@@ -140,9 +139,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   ) {
     _soundsPlayerRepository.stopSound();
     emit(state.copyWith(isTestCanceled: true));
-    if (kDebugMode) {
-      debugPrint("${state.results}");
-    }
+    print(state.results);
   }
 
   void _onChangeEar(
@@ -166,8 +163,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestCompleted event,
     Emitter<HearingTestState> emit,
   ) {
-    if (kDebugMode) {
-      debugPrint("${state.results}");
-    }
+    print(state.results);
   }
 }

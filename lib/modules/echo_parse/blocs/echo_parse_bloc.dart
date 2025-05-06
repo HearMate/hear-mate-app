@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hear_mate_app/modules/echo_parse/repositories/echo_parse_api_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -25,9 +24,8 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
         fileName: result.files.single.name,
         image: result.files.single.bytes,
       ));
-    } else if (kDebugMode) {
-        debugPrint("No file selected or file is empty.");
-      }
+    } else {
+      print("No file selected or file is empty.");
     }
   }
 
@@ -42,9 +40,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
           audiogramData: response["audiogramData"],
         ));
       } catch (e) {
-        if (kDebugMode) {
-          debugPrint("$e");
-        }
+        print(e);
       }
     }
   }
