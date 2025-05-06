@@ -1,12 +1,8 @@
 import os
 import soundfile as sf
 import numpy as np
-import logging
 import argparse
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-logger = logging.getLogger(__name__)
 
 def process_tone_files(assets_folder):
     """
@@ -15,7 +11,7 @@ def process_tone_files(assets_folder):
     """
     # Check if the assets folder exists
     if not os.path.exists(assets_folder):
-        logger.error(f"Assets folder '{assets_folder}' not found.")
+        print(f"Error: Assets folder '{assets_folder}' not found.")
         return
 
     # Count processed files
@@ -45,7 +41,7 @@ def process_tone_files(assets_folder):
                     continue
 
                 # Load the audio file
-                logger.info(f"Processing {filename}...")
+                print(f"Processing {filename}...")
                 data, sample_rate = sf.read(file_path)
 
                 # Create stereo version if it's mono
@@ -86,15 +82,15 @@ def process_tone_files(assets_folder):
                 sf.write(right_file, stereo_data_right, sample_rate)
 
                 processed_count += 1
-                logger.info(f"Created: {left_file} and {right_file}")
+                print(f"Created: {left_file} and {right_file}")
 
             except Exception as e:
-                logger.error(f"Error processing {filename}: {str(e)}")
+                print(f"Error processing {filename}: {str(e)}")
 
     if processed_count > 0:
-        logger.info(f"Processed {processed_count} tone files.")
+        print(f"\nProcessed {processed_count} tone files.")
     else:
-        logger.info("No tone files were found or processed.")
+        print("\nNo tone files were found or processed.")
 
 
 if __name__ == "__main__":
