@@ -52,6 +52,7 @@ dependencies:
 
   hm_locale:
     path: ./packages/hm_locale
+  fpdart: ^1.1.1
 
 dev_dependencies:
   flutter_test:

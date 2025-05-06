@@ -1,4 +1,8 @@
 import 'dart:typed_data';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:fpdart/fpdart.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/repositories/echo_parse_api_repository.dart';
@@ -14,6 +18,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
     on<EchoParseChooseAudiogramFileEvent>(_onChooseAudiogramFile);
     on<EchoParseUploadAudiogramFileToServerEvent>(_onSendAudiogramToServer);
     on<EchoParseReceivedServerResponseEvent>(_onReceivedServerResponse);
+    on<EchoParseSaveProcessedCsvEvent>(_onSaveProcessedCsv);
   }
 
   Future<void> _onChooseAudiogramFile(EchoParseChooseAudiogramFileEvent event, Emitter<EchoParseState> emit) async {
@@ -50,5 +55,83 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
       isResultReady: event.statusCode == 200,
       audiogramData: event.audiogramData,
     ));
+  }
+
+  Future<void> _onSaveProcessedCsv(EchoParseSaveProcessedCsvEvent event, Emitter<EchoParseState> emit) async {
+    final data = state.audiogramData;
+
+    if (data.isEmpty) {
+      print("No audiogram data available.");
+      return;
+    }
+    final timestamp = DateTime.now().toIso8601String().split('T').join('_').split('.').first.replaceAll(':', '-');
+    final defaultFileName = 'audiogram_result_$timestamp.csv';
+    final csv = _generateAudiogramCsv(data);
+
+    try {
+      final baseDir = await getApplicationSupportDirectory();
+      final echoParseDir = Directory('${baseDir.path}/EchoParse');
+      if (!await echoParseDir.exists()) {
+        await echoParseDir.create(recursive: true);
+      }
+      final internalPath = '${echoParseDir.path}/$defaultFileName';
+      final internalFile = File(internalPath);
+      await internalFile.writeAsString(csv);
+      print("CSV saved internally at: $internalPath");
+
+      Directory? userDir;
+
+      if (Platform.isAndroid) {
+        userDir = Directory('/storage/emulated/0/Download');
+      } else if (Platform.isIOS) {
+        userDir = await getApplicationDocumentsDirectory();
+      } else {
+        final outputPath = await FilePicker.platform.saveFile(
+          dialogTitle: 'Save as...',
+          fileName: defaultFileName,
+          type: FileType.custom,
+          allowedExtensions: ['csv'],
+        );
+
+        if (outputPath != null) {
+          final userFile = File(outputPath);
+          await userFile.writeAsString(csv);
+          print("CSV saved to user-selected path: $outputPath");
+        } else {
+          print("User canceled save dialog.");
+        }
+        return;
+      }
+
+      final userFilePath = '${userDir.path}/$defaultFileName';
+      final userFile = File(userFilePath);
+      await userFile.writeAsString(csv);
+      print("CSV saved in user directory: $userFilePath");
+      
+    } catch (e) {
+      print("Error saving CSV file: $e");
+    }
+  }
+
+
+  String _generateAudiogramCsv(Map<String, dynamic> data) {
+    final buffer = StringBuffer();
+    buffer.writeln("Ear,Frequency_Hz,Hearing_Level_dB");
+
+    for (final ear in ['Left Ear', 'Right Ear']) {
+      final Option<Map<String, dynamic>> earDataOption =
+          Option.fromNullable(data[ear] as Map<String, dynamic>?);
+
+      earDataOption.match(
+        () => print('No data found for $ear'),
+        (earData) {
+          earData.forEach((frequency, level) {
+            buffer.writeln('$ear,$frequency,$level');
+          });
+        },
+      );
+    }
+
+    return buffer.toString();
   }
 }
