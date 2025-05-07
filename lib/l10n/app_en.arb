@@ -10,7 +10,7 @@
     "menu_settings": "Settings",
 
     "about_hearmate": "HearMate is an application that supports preliminary hearing analysis, enabling users to obtain initial results and assess whether there is a\u00a0need for consultation with a specialist. Its goal is to prevent situations in which hearing loss is detected too late, hindering effective treatment or negatively affecting quality of life. The application leverages artificial intelligence mechanisms to analyze audiograms and support the initial diagnostic process.",
-    "about_echoparse": "EchoParse is a dedicated module responsible for converting traditional audiograms—whether in paper or graphic form—into CSV files suitable for further data analysis. This module utilizes artificial intelligence-based solutions that enable automatic recognition and processing of audiometric test results. Developed in collaboration with the Institute of Physiology and Pathology of Hearing, EchoParse serves as a key tool in the digitization and analysis of diagnostic outcomes.",
+    "about_echoparse": "EchoParse is a dedicated module responsible for converting traditional audiograms—both in paper and graphical formats—into CSV files suitable for further data analysis. This module leverages solutions based on classical element detection methods, enabling the automatic recognition and processing of audiometric test results. EchoParse was developed in collaboration with the Institute of Physiology and Pathology of Hearing, providing essential support in the digitization and analysis of diagnostic outcomes.",
     "about_projectTeam": "The Project Team:",
     
     "@about_hearmate": {
