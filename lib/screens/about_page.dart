@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/data/notifiers.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hm_theme/hm_theme.dart';
 import 'package:lottie/lottie.dart';
 
 class AboutPage extends StatelessWidget {
@@ -12,7 +13,10 @@ class AboutPage extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: HMAppBar(title: loc.menu_about),
+      appBar: HMAppBar(
+        title: loc.menu_about,
+        route: ModalRoute.of(context)?.settings.name ?? "",
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -101,10 +105,9 @@ class AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 48),
               Center(
-                child: ValueListenableBuilder(
-                  valueListenable: isDarkModeNotifier,
-                  builder: (context, value, child) {
-                    return value
+                child: BlocBuilder<HMThemeBloc, HMThemeState>(
+                  builder:(context, themeState) {
+                    return themeState.isDarkMode
                         ? Image.asset(
                           'assets/images/pg_logo_darkmode.png',
                           height: 150,
@@ -115,10 +118,9 @@ class AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Center(
-                child: ValueListenableBuilder(
-                  valueListenable: isDarkModeNotifier,
-                  builder: (context, value, child) {
-                    return value
+                child: BlocBuilder<HMThemeBloc, HMThemeState>(
+                  builder:(context, themeState) {
+                    return themeState.isDarkMode
                         ? Image.asset(
                           'assets/images/ifips_logo_darkmode.png',
                           height: 150,

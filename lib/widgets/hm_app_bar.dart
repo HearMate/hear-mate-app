@@ -12,6 +12,8 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hiddenMenuBarRoutes = ['/menu', '/settings', '/about'];
+
     return AppBar(
       title: Text(title, style: TextStyle()),
       actions: [
@@ -27,14 +29,14 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
             );
           },
         ),
-        route != "/settings"
-            ? IconButton(
+        hiddenMenuBarRoutes.contains(route)
+            ? const SizedBox.shrink()
+            : IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/settings');
+                Navigator.pushNamed(context, '/menu');
               },
-              icon: Icon(Icons.settings),
-            )
-            : const SizedBox.shrink(),
+              icon: Icon(Icons.menu),
+            ),
       ],
     );
   }

@@ -4,7 +4,9 @@ import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/screens/hm_settings_page.dart';
+import 'package:hear_mate_app/screens/about_page.dart';
+import 'package:hear_mate_app/screens/menu_page.dart';
+import 'package:hear_mate_app/screens/settings_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page/echo_parse_welcome_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_upload_page/echo_parse_upload_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_upload_done_page/echo_parse_upload_done_page.dart';
@@ -105,11 +107,19 @@ class MyApp extends StatelessWidget {
                   },
                   debugShowCheckedModeBanner: false,
                   routes: {
+                    //? Global routes
+                    '/settings': (context) => SettingsPage(),
+                    '/about': (context) => AboutPage(),
+                    '/menu': (context) => MenuPage(),
+                    
+                    //? HearMate routes (hearing test)
                     '/hearing_test/welcome':
                         (context) => const HearingTestWelcomePage(),
                     '/hearing_test/start': (context) => const HearingTestPage(),
                     '/hearing_test/result':
                         (context) => HearingTestResultPage(),
+
+                    //? EchoParse routes
                     '/echo_parse/welcome':
                         (context) => EchoParseWelcomeScreen(),
                     '/echo_parse/upload': (context) => EchoParseUploadScreen(),
@@ -117,7 +127,6 @@ class MyApp extends StatelessWidget {
                         (context) => EchoParseUploadDoneScreen(),
                     '/echo_parse/collection':
                         (context) => EchoParseCollectScreen(),
-                    '/settings': (context) => HMSettingsPage(),
                   },
                   onUnknownRoute: (settings) {
                     return MaterialPageRoute(

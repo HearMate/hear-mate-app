@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'package:hear_mate_app/widgets/locale_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hm_locale/hm_locale.dart';
 
-class HMSettingsPage extends StatelessWidget {
-  const HMSettingsPage({super.key});
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return BlocBuilder<HMLocaleBloc, HMLocaleState>(
       builder: (context, state) {
         return Scaffold(
           appBar: HMAppBar(
-            title: AppLocalizations.of(context)!.echoparse_settings_appbar_title,
+            title: loc.echoparse_settings_appbar_title,
             route: ModalRoute.of(context)?.settings.name ?? "",
           ),
           body: SafeArea(
@@ -26,7 +27,7 @@ class HMSettingsPage extends StatelessWidget {
                   children: [
                     ListTile(
                       leading: Icon(Icons.language),
-                      title: Text(AppLocalizations.of(context)!.echoparse_settings_language_title),
+                      title: Text(loc.echoparse_settings_language_title),
                       trailing: DropdownMenu<Locale>(
                         initialSelection: state.locale,
                         onSelected: (Locale? locale) {

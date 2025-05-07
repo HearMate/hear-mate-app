@@ -77,21 +77,11 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                             child: Text(
                               AppLocalizations.of(
                                 context,
-                              )!.echoparse_welcome_button_body,
+                              )!.echoparse_welcome_mainButton,
                               style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(color: Colors.white),
                             ),
                           ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/echo_parse/credits');
-                        },
-                        child: Text(
-                          AppLocalizations.of(
-                            context,
-                          )!.echoparse_welcome_creditsButton,
                         ),
                       ),
                     ],
