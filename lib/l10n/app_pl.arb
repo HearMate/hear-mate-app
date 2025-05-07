@@ -5,7 +5,10 @@
     "comment_homepage2": "============== HomePage =============",
     "comment_homepage3": "=====================================",
 
-	"about_hearmate": "HearMate to aplikacja wspierająca wstępną analizę słuchu, umożliwiająca uzyskanie pierwszych wyników i\u00a0ocenę, czy istnieje potrzeba konsultacji ze specjalistą. Jej celem jest zapobieganie sytuacjom, w\u00a0których niedosłuch zostaje wykryty zbyt późno, uniemożliwiając skuteczne leczenie lub pogarszając komfort życia. Aplikacja wykorzystuje mechanizmy sztucznej inteligencji do analizy audiogramów oraz wspomagania procesu wstępnej diagnostyki.",
+	"menu_about": "O aplikacji",
+    "menu_settings": "Ustawienia",
+    
+    "about_hearmate": "HearMate to aplikacja wspierająca wstępną analizę słuchu, umożliwiająca uzyskanie pierwszych wyników i\u00a0ocenę, czy istnieje potrzeba konsultacji ze specjalistą. Jej celem jest zapobieganie sytuacjom, w\u00a0których niedosłuch zostaje wykryty zbyt późno, uniemożliwiając skuteczne leczenie lub pogarszając komfort życia. Aplikacja wykorzystuje mechanizmy sztucznej inteligencji do analizy audiogramów oraz wspomagania procesu wstępnej diagnostyki.",
     "about_echoparse": "EchoParse to dedykowany moduł odpowiedzialny za konwersję tradycyjnych audiogramów – zarówno w formie papierowej, jak i\u00a0graficznej – do postaci plików CSV, przystosowanych do dalszej analizy danych. Moduł ten wykorzystuje rozwiązania oparte klasycznych metodach wyszukiwania elementów, umożliwiające automatyczne rozpoznawanie i\u00a0przetwarzanie wyników badań audiometrycznych. EchoParse powstał we współpracy z\u00a0Instytutem Fizjologii i\u00a0Patologii Słuchu, stanowiąc istotne wsparcie w cyfryzacji i\u00a0analizie wyników diagnostycznych.",
     "about_projectTeam": "Zespół projektowy:",
 

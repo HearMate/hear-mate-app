@@ -5,6 +5,13 @@
     "comment_homepage2": "============== HomePage =============",
     "comment_homepage3": "=====================================",
 
+    "menu_about": "Über",
+    "menu_settings": "Einstellungen",
+
+    "about_hearmate": "HearMate ist eine Anwendung, die eine erste Analyse des Hörvermögens unterstützt und es den Nutzern ermöglicht, erste Ergebnisse zu erhalten und zu beurteilen, ob eine Konsultation mit einem Spezialisten erforderlich ist. Ziel ist es, Situationen zu vermeiden, in denen ein Hörverlust zu spät erkannt wird, was eine wirksame Behandlung erschwert oder die Lebensqualität beeinträchtigt. Die Anwendung nutzt Mechanismen der künstlichen Intelligenz, um Audiogramme zu analysieren und den ersten Diagnoseprozess zu unterstützen.",
+    "about_echoparse": "EchoParse ist ein spezielles Modul zur Umwandlung traditioneller Audiogramme – sowohl in Papierform als auch als Grafik – in CSV-Dateien, die für die weitere Datenanalyse geeignet sind. Dieses Modul verwendet klassische Methoden der Elementerkennung, um eine automatische Erkennung und Verarbeitung von audiometrischen Testergebnissen zu ermöglichen. EchoParse wurde in Zusammenarbeit mit dem Institut für Physiologie und Pathologie des Hörens entwickelt und unterstützt die Digitalisierung und Analyse diagnostischer Ergebnisse.",
+    "about_projectTeam": "Projektteam:",
+    
     "homepage_button_helper": "Wähle ein Modul, um fortzufahren:",
     "homepage_button_audioTest": "Hörtest",
     "homepage_button_echoParse": "Echo Parse",
@@ -18,7 +25,7 @@
     "echoparse_welcome_header": "EchoParse",
     "echoparse_welcome_heading": "Dein Audiogramm als CSV!",
     "echoparse_welcome_body": "Verwandle deine alten Audiogrammdateien und Bilder in moderne CSV-Dokumente.",
-    "echoparse_welcome_button_body": "Los geht’s!",
+    "echoparse_welcome_mainButton": "Los geht’s!",
 
     "echoparse_upload_appbarTitle": "Hochladen",
     "echoparse_upload_headerUpload": "Audiogramm hochladen",
