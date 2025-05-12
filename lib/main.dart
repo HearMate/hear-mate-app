@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/home_page.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hear_mate_app/screens/about_page.dart';
 import 'package:hear_mate_app/screens/menu_page.dart';
 import 'package:hear_mate_app/screens/settings_page.dart';
@@ -16,7 +16,6 @@ import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sou
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
-import 'package:hear_mate_app/widgets/locale_provider.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/repositories/echo_parse_api_repository.dart';
 import 'package:hm_locale/hm_locale.dart';

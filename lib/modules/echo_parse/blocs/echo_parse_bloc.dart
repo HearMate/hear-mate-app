@@ -1,12 +1,11 @@
-import 'dart:typed_data';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fpdart/fpdart.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/repositories/echo_parse_api_repository.dart';
-import 'package:meta/meta.dart';
 
 part 'echo_parse_event.dart';
 part 'echo_parse_state.dart';
@@ -21,50 +20,79 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
     on<EchoParseSaveProcessedCsvEvent>(_onSaveProcessedCsv);
   }
 
-  Future<void> _onChooseAudiogramFile(EchoParseChooseAudiogramFileEvent event, Emitter<EchoParseState> emit) async {
+  Future<void> _onChooseAudiogramFile(
+    EchoParseChooseAudiogramFileEvent event,
+    Emitter<EchoParseState> emit,
+  ) async {
     var result = await repository.chooseAudiogramFileForUpload();
 
     if (result != null && result.files.single.bytes != null) {
-      emit(state.copyWith(
-        fileName: result.files.single.name,
-        image: result.files.single.bytes,
-      ));
-    } else {
-      print("No file selected or file is empty.");
+      emit(
+        state.copyWith(
+          fileName: result.files.single.name,
+          image: result.files.single.bytes,
+        ),
+      );
+    } else if (kDebugMode) {
+      debugPrint("No file selected or file is empty.");
     }
   }
 
-  Future<void> _onSendAudiogramToServer(EchoParseUploadAudiogramFileToServerEvent event, Emitter<EchoParseState> emit) async {
+  Future<void> _onSendAudiogramToServer(
+    EchoParseUploadAudiogramFileToServerEvent event,
+    Emitter<EchoParseState> emit,
+  ) async {
     if (state.image != null) {
       try {
-        var response = await repository.postAudiogramFileToServer(state.image!, state.fileName);
+        var response = await repository.postAudiogramFileToServer(
+          state.image!,
+          state.fileName,
+        );
 
         // Dispatch the EchoParseResult event with the response data
-        add(EchoParseReceivedServerResponseEvent(
-          statusCode: response["statusCode"],
-          audiogramData: response["audiogramData"],
-        ));
+        add(
+          EchoParseReceivedServerResponseEvent(
+            statusCode: response["statusCode"],
+            audiogramData: response["audiogramData"],
+          ),
+        );
       } catch (e) {
-        print(e);
+        if (kDebugMode) {
+          debugPrint("$e");
+        }
       }
     }
   }
 
-  Future<void> _onReceivedServerResponse(EchoParseReceivedServerResponseEvent event, Emitter<EchoParseState> emit) async {
-    emit(state.copyWith(
-      isResultReady: event.statusCode == 200,
-      audiogramData: event.audiogramData,
-    ));
+  Future<void> _onReceivedServerResponse(
+    EchoParseReceivedServerResponseEvent event,
+    Emitter<EchoParseState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        isResultReady: event.statusCode == 200,
+        audiogramData: event.audiogramData,
+      ),
+    );
   }
 
-  Future<void> _onSaveProcessedCsv(EchoParseSaveProcessedCsvEvent event, Emitter<EchoParseState> emit) async {
+  Future<void> _onSaveProcessedCsv(
+    EchoParseSaveProcessedCsvEvent event,
+    Emitter<EchoParseState> emit,
+  ) async {
     final data = state.audiogramData;
 
-    if (data.isEmpty) {
-      print("No audiogram data available.");
+    if (data.isEmpty && kDebugMode) {
+      debugPrint("No audiogram data available.");
       return;
     }
-    final timestamp = DateTime.now().toIso8601String().split('T').join('_').split('.').first.replaceAll(':', '-');
+    final timestamp = DateTime.now()
+        .toIso8601String()
+        .split('T')
+        .join('_')
+        .split('.')
+        .first
+        .replaceAll(':', '-');
     final defaultFileName = 'audiogram_result_$timestamp.csv';
     final csv = _generateAudiogramCsv(data);
 
@@ -77,7 +105,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
       final internalPath = '${echoParseDir.path}/$defaultFileName';
       final internalFile = File(internalPath);
       await internalFile.writeAsString(csv);
-      print("CSV saved internally at: $internalPath");
+      if (kDebugMode) debugPrint("CSV saved internally at: $internalPath");
 
       Directory? userDir;
 
@@ -96,9 +124,11 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
         if (outputPath != null) {
           final userFile = File(outputPath);
           await userFile.writeAsString(csv);
-          print("CSV saved to user-selected path: $outputPath");
-        } else {
-          print("User canceled save dialog.");
+          if (kDebugMode) {
+            debugPrint("CSV saved to user-selected path: $outputPath");
+          }
+        } else if (kDebugMode) {
+          debugPrint("User canceled save dialog.");
         }
         return;
       }
@@ -106,24 +136,29 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
       final userFilePath = '${userDir.path}/$defaultFileName';
       final userFile = File(userFilePath);
       await userFile.writeAsString(csv);
-      print("CSV saved in user directory: $userFilePath");
-      
+      if (kDebugMode) {
+        debugPrint("CSV saved in user directory: $userFilePath");
+      }
     } catch (e) {
-      print("Error saving CSV file: $e");
+      if (kDebugMode) {
+        debugPrint("Error saving CSV file: $e");
+      }
     }
   }
-
 
   String _generateAudiogramCsv(Map<String, dynamic> data) {
     final buffer = StringBuffer();
     buffer.writeln("Ear,Frequency_Hz,Hearing_Level_dB");
 
     for (final ear in ['Left Ear', 'Right Ear']) {
-      final Option<Map<String, dynamic>> earDataOption =
-          Option.fromNullable(data[ear] as Map<String, dynamic>?);
+      final Option<Map<String, dynamic>> earDataOption = Option.fromNullable(
+        data[ear] as Map<String, dynamic>?,
+      );
 
       earDataOption.match(
-        () => print('No data found for $ear'),
+        () => {
+          if (kDebugMode) {debugPrint('No data found for $ear')},
+        },
         (earData) {
           earData.forEach((frequency, level) {
             buffer.writeln('$ear,$frequency,$level');

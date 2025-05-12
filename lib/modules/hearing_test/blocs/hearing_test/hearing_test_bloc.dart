@@ -1,12 +1,11 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
-import 'package:meta/meta.dart';
 
 part 'hearing_test_event.dart';
 part 'hearing_test_state.dart';
 
-const int MIN_DB_LEVEL = -10;
+const int minDBLevel = -10;
 
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
@@ -68,7 +67,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return;
     }
 
-    if (state.currentDBLevel == MIN_DB_LEVEL) {
+    if (state.currentDBLevel == minDBLevel) {
       return add(HearingTestNextFrequency());
     }
 
@@ -139,7 +138,9 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   ) {
     _soundsPlayerRepository.stopSound();
     emit(state.copyWith(isTestCanceled: true));
-    print(state.results);
+    if (kDebugMode) {
+      debugPrint("${state.results}");
+    }
   }
 
   void _onChangeEar(
@@ -163,6 +164,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestCompleted event,
     Emitter<HearingTestState> emit,
   ) {
-    print(state.results);
+    if (kDebugMode) {
+      debugPrint("${state.results}");
+    }
   }
 }

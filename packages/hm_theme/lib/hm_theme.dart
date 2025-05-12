@@ -1,12 +1,9 @@
-library hm_theme;
-
 import 'package:flutter/material.dart';
 
 export 'src/bloc/hm_theme_bloc.dart';
 
 ThemeData buildHearMateTheme({required bool isDarkMode}) {
   const echoParseRed = Color(0xFFF94F46);
-  const echoParseTeal = Colors.teal;
 
   const TextTheme customTextTheme = TextTheme(
     displayLarge: TextStyle(
