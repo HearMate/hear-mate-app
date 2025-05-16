@@ -31,13 +31,11 @@ class HomePage extends StatelessWidget {
 
               // Audio Test Module button
               FilledButton(
-                style: Theme.of(context).filledButtonTheme.style,
                 onPressed: () {
                   Navigator.pushNamed(context, '/hearing_test/welcome');
                 },
                 child: Text(
                   AppLocalizations.of(context)!.homepage_button_audioTest,
-                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
 
@@ -45,18 +43,11 @@ class HomePage extends StatelessWidget {
 
               // Echo Parse button
               OutlinedButton(
-                style: Theme.of(context).outlinedButtonTheme.style,
                 onPressed: () {
                   Navigator.pushNamed(context, '/echo_parse/welcome');
                 },
                 child: Text(
                   'Echo Parse',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
-                  ),
                 ),
               ),
 
