@@ -18,3 +18,5 @@ class EchoParseReceivedServerResponseEvent extends EchoParseEvent {
     required this.audiogramData,
   });
 }
+
+class EchoParsePrepareForTheNewFileUpload extends EchoParseEvent {}

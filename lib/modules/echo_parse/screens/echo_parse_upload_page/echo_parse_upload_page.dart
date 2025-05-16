@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hm_theme/hm_theme.dart';
 import 'package:lottie/lottie.dart';
 
 class EchoParseUploadScreen extends StatelessWidget {
@@ -30,16 +31,15 @@ class EchoParseUploadScreen extends StatelessWidget {
                         context,
                       )!.echoparse_upload_headerUpload,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.displayLarge,
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
                     SizedBox(height: 48),
-                    if (state.image != null)
+                    if (!state.nextFile)
                       Column(
                         children: [
                           Container(
                             padding: EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.teal,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Image.memory(state.image!),
@@ -47,7 +47,9 @@ class EchoParseUploadScreen extends StatelessWidget {
                           SizedBox(height: 48),
 
                           FilledButton(
-                            style: Theme.of(context).filledButtonTheme.style,
+                            style: attentionFilledButtonStyle(
+                              Theme.of(context).colorScheme,
+                            ),
                             onPressed: () {
                               context.read<EchoParseBloc>().add(
                                 EchoParseUploadAudiogramFileToServerEvent(),
@@ -61,14 +63,13 @@ class EchoParseUploadScreen extends StatelessWidget {
                               AppLocalizations.of(
                                 context,
                               )!.echoparse_upload_buttonUpload,
-                              style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
                           const SizedBox(height: 10),
                         ],
                       ),
 
-                    if (state.image == null)
+                    if (state.nextFile)
                       Column(
                         children: [
                           Lottie.asset(
@@ -80,7 +81,9 @@ class EchoParseUploadScreen extends StatelessWidget {
                       ),
 
                     FilledButton(
-                      style: Theme.of(context).filledButtonTheme.style,
+                      style: attentionFilledButtonStyle(
+                        Theme.of(context).colorScheme,
+                      ),
                       onPressed: () {
                         context.read<EchoParseBloc>().add(
                           EchoParseChooseAudiogramFileEvent(),
@@ -90,11 +93,15 @@ class EchoParseUploadScreen extends StatelessWidget {
                         AppLocalizations.of(
                           context,
                         )!.echoparse_upload_buttonPick,
-                        style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
+                    SizedBox(height: 64),
+                    Text(
+                      "Zapisane pliki",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
                     SizedBox(height: 48),
-
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final double itemWidth =
