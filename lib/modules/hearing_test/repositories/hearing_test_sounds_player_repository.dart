@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hear_mate_app/utils/logger.dart';
 
 class HearingTestSoundsPlayerRepository {
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -45,12 +46,10 @@ class HearingTestSoundsPlayerRepository {
           _audioPlayer.stop();
         });
       } catch (e) {
-        if (kDebugMode) {
-          debugPrint("Error loading sound file: $e");
-        }
+        HMLogger.print("Error loading sound file: $e");
       }
-    } else if (kDebugMode) {
-      debugPrint('No sound found for frequency $frequency Hz');
+    } else {
+      HMLogger.print('No sound found for frequency $frequency Hz');
     }
   }
 
@@ -61,19 +60,19 @@ class HearingTestSoundsPlayerRepository {
   double _decibelsToVolume(double dBHL, {int frequency = 0}) {
     dBHL = dBHL.clamp(-10.0, 120.0);
 
-    double dBSPL = hlToSPL(dBHL, frequency);
+    double dBSPL = _HLToSPL(dBHL, frequency);
 
     // here we should perform correction for specific headphone characteristic
     // a similar process to dB HL to dB SPL correction for each frequency
 
-    double soundPressure = splToSoundPressure(dBSPL);
+    double soundPressure = _SPLToSoundPressure(dBSPL);
     double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);
 
     // the volume is in linear scale from 0 to 1 therefore we use normalized sound pressure
     return normalizedSoundPressure;
   }
 
-  double hlToSPL(double dBHL, int frequency) {
+  double _HLToSPL(double dBHL, int frequency) {
     //needs to be checked against iso 226:2003 standard / consulted with Dominika
     const Map<int, double> referenceSPL = {
       125: 45.0,
@@ -90,7 +89,7 @@ class HearingTestSoundsPlayerRepository {
     return dBSPL;
   }
 
-  double splToSoundPressure(double dBSPL) {
+  double _SPLToSoundPressure(double dBSPL) {
     // Reference pressure in Pa
     const double referencePressure = 20.0e-6;
     double soundPressure =
@@ -104,9 +103,9 @@ class HearingTestSoundsPlayerRepository {
     // this needs to be checked with the dummy head
     double maxDeviceOutputVolume = 60;
 
-    double maxDBSPL = hlToSPL(maxDeviceOutputVolume, 125);
+    double maxDBSPL = _HLToSPL(maxDeviceOutputVolume, 125);
     double normalizedSoundPressure =
-        soundPressure / splToSoundPressure(maxDBSPL);
+        soundPressure / _SPLToSoundPressure(maxDBSPL);
     // Clamp because it seems like dB SPL can go below 0 (???)
     normalizedSoundPressure = normalizedSoundPressure.clamp(0.0, 1.0);
     return normalizedSoundPressure;

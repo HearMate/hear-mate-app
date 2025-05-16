@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:hear_mate_app/utils/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fpdart/fpdart.dart';
@@ -33,8 +34,8 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
           image: result.files.single.bytes,
         ),
       );
-    } else if (kDebugMode) {
-      debugPrint("No file selected or file is empty.");
+    } else {
+      HMLogger.print("No file selected or file is empty.");
     }
   }
 
@@ -57,9 +58,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
           ),
         );
       } catch (e) {
-        if (kDebugMode) {
-          debugPrint("$e");
-        }
+        HMLogger.print("$e");
       }
     }
   }
@@ -82,8 +81,8 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
   ) async {
     final data = state.audiogramData;
 
-    if (data.isEmpty && kDebugMode) {
-      debugPrint("No audiogram data available.");
+    if (data.isEmpty) {
+      HMLogger.print("No audiogram data available."); 
       return;
     }
     final timestamp = DateTime.now()
@@ -105,7 +104,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
       final internalPath = '${echoParseDir.path}/$defaultFileName';
       final internalFile = File(internalPath);
       await internalFile.writeAsString(csv);
-      if (kDebugMode) debugPrint("CSV saved internally at: $internalPath");
+      HMLogger.print("CSV saved internally at: $internalPath");
 
       Directory? userDir;
 
@@ -124,11 +123,9 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
         if (outputPath != null) {
           final userFile = File(outputPath);
           await userFile.writeAsString(csv);
-          if (kDebugMode) {
-            debugPrint("CSV saved to user-selected path: $outputPath");
-          }
-        } else if (kDebugMode) {
-          debugPrint("User canceled save dialog.");
+          HMLogger.print("CSV saved to user-selected path: $outputPath");
+        } else {
+          HMLogger.print("User canceled save dialog.");
         }
         return;
       }
@@ -136,13 +133,9 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
       final userFilePath = '${userDir.path}/$defaultFileName';
       final userFile = File(userFilePath);
       await userFile.writeAsString(csv);
-      if (kDebugMode) {
-        debugPrint("CSV saved in user directory: $userFilePath");
-      }
+      HMLogger.print("CSV saved in user directory: $userFilePath");
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint("Error saving CSV file: $e");
-      }
+      HMLogger.print("Error saving CSV file: $e");
     }
   }
 
@@ -157,7 +150,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
 
       earDataOption.match(
         () => {
-          if (kDebugMode) {debugPrint('No data found for $ear')},
+          HMLogger.print('No data found for $ear'),
         },
         (earData) {
           earData.forEach((frequency, level) {
