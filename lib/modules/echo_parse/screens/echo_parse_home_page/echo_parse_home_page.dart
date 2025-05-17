@@ -66,7 +66,20 @@ class EchoParseHomePage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 48),
 
-                                  _buildUploadButton(context, langLoc),
+                                  FilledButton(
+                                    onPressed: () {
+                                      context.read<EchoParseBloc>().add(
+                                        EchoParseUploadAudiogramFileToServerEvent(),
+                                      );
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/echo_parse/conversion_results',
+                                      );
+                                    },
+                                    child: Text(
+                                      langLoc.echoparse_upload_buttonUpload,
+                                    ),
+                                  ),
                                 ],
                               ),
 
@@ -90,7 +103,17 @@ class EchoParseHomePage extends StatelessWidget {
                                 ],
                               ),
                             SizedBox(height: 8),
-                            _buildFilePickButton(context, langLoc),
+                            FilledButton(
+                              style: attentionFilledButtonStyle(
+                                Theme.of(context).colorScheme,
+                              ),
+                              onPressed: () {
+                                context.read<EchoParseBloc>().add(
+                                  EchoParseChooseAudiogramFileEvent(),
+                                );
+                              },
+                              child: Text(langLoc.echoparse_upload_buttonPick),
+                            ),
                           ],
                         ),
                       if (state.navigationDestinationSelected == 1)
