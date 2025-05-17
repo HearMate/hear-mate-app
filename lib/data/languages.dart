@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hm_theme/hm_theme.dart';
 
 class Languages {
-  static const List<Locale> supportedLocales = [Locale('en'), Locale('pl'), Locale('uk'), Locale('de')];
+  static const List<Locale> supportedLocales = [
+    Locale('en'),
+    Locale('pl'),
+    Locale('uk'),
+    Locale('de'),
+  ];
 
   static List<DropdownMenuEntry<Locale>> getDropdownMenuEntries() {
     return supportedLocales.map((locale) {
       return DropdownMenuEntry<Locale>(
+        style: dropdownEntriesStyle(),
         value: locale,
         label: getLanguageName(locale),
       );

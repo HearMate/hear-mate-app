@@ -8,9 +8,7 @@ class AppColors {
   static const white = Colors.white;
 }
 
-
 ThemeData buildHearMateTheme({required bool isDarkMode}) {
-
   const TextTheme customTextTheme = TextTheme(
     displayLarge: TextStyle(
       fontWeight: FontWeight.bold,
@@ -18,10 +16,7 @@ ThemeData buildHearMateTheme({required bool isDarkMode}) {
     displayMedium: TextStyle(
       fontWeight: FontWeight.bold,
     ),
-    labelLarge: TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 18.0
-    ),
+    labelLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
     bodyMedium: TextStyle(fontSize: 16.0),
   );
 
@@ -31,15 +26,14 @@ ThemeData buildHearMateTheme({required bool isDarkMode}) {
   );
 
   return ThemeData(
-    useMaterial3: true, // ✅ Enables Material 3
+    useMaterial3: true,
     colorScheme: colorScheme,
     textTheme: customTextTheme.apply(
       bodyColor: colorScheme.onSurface,
       displayColor: colorScheme.onSurface,
     ),
-    filledButtonTheme: FilledButtonThemeData(
-      style: defaultFilledButtonStyle(colorScheme)
-    ),
+    filledButtonTheme:
+        FilledButtonThemeData(style: defaultFilledButtonStyle(colorScheme)),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         minimumSize: WidgetStateProperty.all(const Size(252, 48)),
@@ -75,5 +69,26 @@ ButtonStyle defaultFilledButtonStyle(ColorScheme colorScheme) {
       fontWeight: FontWeight.bold,
       fontSize: 18.0,
     )),
+  );
+}
+
+TextStyle textStylePickedOptionGreen() {
+  return TextStyle(
+    fontWeight: FontWeight.bold,
+    color: const Color(0xFF009688),
+  );
+}
+
+InputDecorationTheme inputDecorationDropownMenu() {
+  return InputDecorationTheme(
+    contentPadding: EdgeInsets.only(left: 8.0),
+  );
+}
+
+ButtonStyle dropdownEntriesStyle() {
+  return ButtonStyle(
+    textStyle: WidgetStatePropertyAll(
+      TextStyle(fontWeight: FontWeight.normal, fontSize: 16.0),
+    ),
   );
 }
