@@ -11,11 +11,18 @@ class EchoParseUploadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final langLoc = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: HMAppBar(
-        title: AppLocalizations.of(context)!.echoparse_upload_appbarTitle,
+        title: langLoc.echoparse_upload_appbarTitle,
 
         route: ModalRoute.of(context)?.settings.name ?? "",
+      ),
+      bottomNavigationBar: NavigationBar(
+        destinations: [
+          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+          NavigationDestination(icon: Icon(Icons.save), label: "Saved files"),
+        ],
       ),
       body: BlocBuilder<EchoParseBloc, EchoParseState>(
         builder: (context, state) {
@@ -27,9 +34,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.echoparse_upload_headerUpload,
+                      langLoc.echoparse_upload_headerUpload,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displayMedium,
                     ),
@@ -60,9 +65,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                               );
                             },
                             child: Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.echoparse_upload_buttonUpload,
+                              langLoc.echoparse_upload_buttonUpload,
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -90,9 +93,7 @@ class EchoParseUploadScreen extends StatelessWidget {
                         );
                       },
                       child: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.echoparse_upload_buttonPick,
+                        langLoc.echoparse_upload_buttonPick,
                       ),
                     ),
                     SizedBox(height: 64),
