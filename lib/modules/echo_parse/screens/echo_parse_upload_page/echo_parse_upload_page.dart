@@ -42,12 +42,13 @@ class EchoParseUploadScreen extends StatelessWidget {
             child: Center(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.all(48.0),
+                  padding: EdgeInsets.all(0.0),
                   child: Column(
                     children: [
                       if (state.navigationDestinationSelected == 0)
                         Column(
                           children: [
+                            
                             Text(
                               langLoc.echoparse_upload_headerUpload,
                               textAlign: TextAlign.center,
@@ -114,10 +115,14 @@ class EchoParseUploadScreen extends StatelessWidget {
                       if (state.navigationDestinationSelected == 1)
                         Column(
                           children: [
+                            Lottie.asset(
+                              "assets/lotties/saved.json",
+                              width: 200,
+                            ),
                             Text(
                               "Zapisane pliki",
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.displaySmall,
+                              style: Theme.of(context).textTheme.displayMedium,
                             ),
                             SizedBox(height: 48),
                             LayoutBuilder(
