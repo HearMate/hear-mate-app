@@ -20,3 +20,11 @@ class EchoParseReceivedServerResponseEvent extends EchoParseEvent {
 }
 
 class EchoParsePrepareForTheNewFileUpload extends EchoParseEvent {}
+
+class EchoParseNavigationDestinationSelected extends EchoParseEvent {
+  final int destination;
+
+  EchoParseNavigationDestinationSelected({
+    required this.destination,
+  });
+}

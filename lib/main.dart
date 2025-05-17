@@ -4,6 +4,7 @@ import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_saved_files_page/echo_parse_saved_files_page.dart';
 import 'package:hear_mate_app/screens/about_page.dart';
 import 'package:hear_mate_app/screens/menu_page.dart';
 import 'package:hear_mate_app/screens/settings_page.dart';
@@ -126,6 +127,8 @@ class MyApp extends StatelessWidget {
                         (context) => EchoParseUploadDoneScreen(),
                     '/echo_parse/collection':
                         (context) => EchoParseCollectScreen(),
+                    '/echo_parse/saved_files':
+                        (context) => EchoParseSavedFilesPage(),
                   },
                   onUnknownRoute: (settings) {
                     return MaterialPageRoute(
