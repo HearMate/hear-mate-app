@@ -69,7 +69,7 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                           style: attentionFilledButtonStyle(Theme.of(context).colorScheme),
                           onPressed: () {
                             
-                            Navigator.pushNamed(context, '/echo_parse/upload');
+                            Navigator.pushNamed(context, '/echo_parse/home');
                           },
                           child: Text(
                             AppLocalizations.of(
