@@ -33,12 +33,12 @@
 	"echoparse_upload_buttonHelper": "Akceptowane formaty: png, jpg",
 	"echoparse_upload_buttonPick": "Wybierz plik",
 	"echoparse_upload_savedFilesHeader": "Ostatnie pliki",
-	"echoparse_upload_buttonUpload": "Konwertuj",
+	"echoparse_upload_buttonUpload": "Prześlij",
 
 	"echoparse_settings_appbar_title": "Ustawienia",
   	"echoparse_settings_language_title": "Język",
 
-	"echoparse_upload_done_success_title": "Konwersja zakończona",
+	"echoparse_upload_done_success_title": "Dane zostały pomyślnie załadowane.",
 	"echoparse_upload_done_loaded_title": "Audiogram załadowany.",
 	"echoparse_upload_done_processed_title": "Obraz został przetworzony na CSV.",
 	"echoparse_upload_done_download_title": "Pobierz.",
