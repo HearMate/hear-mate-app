@@ -11,6 +11,8 @@ class EchoParseConversionResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final langLoc = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: HMAppBar(
         title: "",
@@ -32,33 +34,39 @@ class EchoParseConversionResults extends StatelessWidget {
                     ),
                     SizedBox(height: 32),
                     Text(
-                      "Konwersja zakończona",
+                      langLoc.echo_parse_conversion_results_title,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displayMedium,
                     ),
                     SizedBox(height: 12),
                     Text(
-                      "Audiogram został przetworzony na CSV.",
+                      langLoc.echo_parse_conversion_results_heading,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.teal,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
                       ),
                     ),
                     SizedBox(height: 64),
-                    FilledButton(onPressed: () {}, child: Text("Podgląd")),
+                    FilledButton(
+                      style: defaultFilledButtonStyle(
+                        Theme.of(context).colorScheme,
+                      ),
+                      onPressed:
+                          () {}, // TODO: Implement logic for file preview
+                      child: Text(
+                        langLoc.echo_parse_conversion_results_preview,
+                      ),
+                    ),
                     SizedBox(height: 8),
                     FilledButton(
                       style: attentionFilledButtonStyle(
                         Theme.of(context).colorScheme,
                       ),
-                      onPressed: () {
-                        context.read<EchoParseBloc>().add(
-                          EchoParseChooseAudiogramFileEvent(),
-                        );
-                      },
-                      child: Text("Zapisz plik"),
+                      onPressed: () {}, // TODO: Implement logic for file save
+                      child: Text(
+                        langLoc.echo_parse_conversion_results_save_file,
+                      ),
                     ),
                     SizedBox(height: 64),
                     FilledButton(
@@ -71,7 +79,9 @@ class EchoParseConversionResults extends StatelessWidget {
                         );
                         Navigator.pop(context);
                       },
-                      child: Text("Następny plik"),
+                      child: Text(
+                        langLoc.echo_parse_conversion_results_next_file,
+                      ),
                     ),
                   ],
                 ),

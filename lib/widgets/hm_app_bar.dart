@@ -13,7 +13,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final hiddenMenuBarRoutes = ['/menu', '/settings', '/about'];
-    final hiddenBackButtonRoutes = ['/echo_parse/upload_done']; // Add routes where back is hidden
+    final hiddenBackButtonRoutes = ['/echo_parse/conversion_results']; // Routes where back is hidden
 
     return AppBar(
       automaticallyImplyLeading: !hiddenBackButtonRoutes.contains(route),

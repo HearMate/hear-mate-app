@@ -79,20 +79,20 @@ ButtonStyle defaultOutlinedButtonStyle(ColorScheme colorScheme) {
 TextStyle textStylePickedOptionGreen() {
   return TextStyle(
     fontWeight: FontWeight.bold,
-    color: const Color(0xFF009688),
+    color: AppColors.green,
   );
 }
 
 InputDecorationTheme inputDecorationDropownMenu() {
   return InputDecorationTheme(
-    contentPadding: EdgeInsets.only(left: 8.0),
+    contentPadding: const EdgeInsets.only(left: 8.0),
   );
 }
 
 ButtonStyle dropdownEntriesStyle() {
   return ButtonStyle(
     textStyle: WidgetStatePropertyAll(
-      TextStyle(fontWeight: FontWeight.normal, fontSize: 16.0),
+      const TextStyle(fontWeight: FontWeight.normal, fontSize: 16.0),
     ),
   );
 }

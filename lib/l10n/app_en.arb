@@ -53,12 +53,17 @@
     "comment_echo_parse2": "============= Echo Parse ============",
     "comment_echo_parse3": "=====================================",
 
+    "echo_parse_saved_file_saved_label": "Saved",
+
+    "@echo_parse_saved_file_saved_label": {
+        "description": "Label for a date of the saved file"
+    },
 
     "echoparse_upload_appbarTitle": "Upload",
     "echoparse_upload_headerUpload": "Load your audiogram",
     "echoparse_upload_buttonHelper": "Accepted formats: png, jpg",
     "echoparse_upload_buttonPick": "Pick file",
-    "echoparse_upload_savedFilesHeader": "Recent files",
+    "echoparse_upload_savedFilesHeader": "Saved files",
     "echoparse_upload_buttonUpload": "Upload",
     
     "@echoparse_upload_appbarTitle": {
@@ -112,26 +117,27 @@
         "description": "Label for the language selection option in the settings."
     },
 
-    "echoparse_upload_done_success_title": "Data loaded successfully.",
-    "echoparse_upload_done_loaded_title": "Audiogram loaded.",
-    "echoparse_upload_done_processed_title": "Image has been processed to CSV.",
-    "echoparse_upload_done_download_title": "Download.",
-    "echoparse_upload_done_saved_title": "Saved files",
+    "echo_parse_conversion_results_title": "Conversion complete",
+    "echo_parse_conversion_results_heading": "The audiogram has been converted to CSV.",
+    "echo_parse_conversion_results_preview": "Preview",
+    "echo_parse_conversion_results_save_file": "Save file",
+    "echo_parse_conversion_results_next_file": "Next file",
+    
 
-    "@echoparse_upload_done_success_title": {
-        "description": "Title displayed when data is successfully loaded."
+    "@echo_parse_conversion_results_title": {
+        "description": "Title displayed when data is successfully converted."
     },
-    "@echoparse_upload_done_loaded_title": {
-        "description": "Title displayed when the audiogram is successfully loaded."
+    "@echo_parse_conversion_results_heading": {
+        "description": "Description when the audiogram is successfully converted."
     },
-    "@echoparse_upload_done_processed_title": {
-        "description": "Title displayed when the image has been processed into a CSV file."
+    "@echo_parse_conversion_results_preview": {
+        "description": "Button body for file preview."
     },
-    "@echoparse_upload_done_download_title": {
+    "@echo_parse_conversion_results_save_file": {
         "description": "Label for the button to download the processed CSV file."
     },
-    "@echoparse_upload_done_saved_title": {
-        "description": "Title for the section displaying saved files."
+    "@echo_parse_conversion_results_next_file": {
+        "description": "Title for the new file conversion."
     },
 
     "echoparse_collection_thanks_title": "Thank you for using",

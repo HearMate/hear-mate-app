@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/widgets/saved_file_item.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:lottie/lottie.dart';
 
@@ -22,7 +23,10 @@ class EchoParseHomePage extends StatelessWidget {
           ),
           bottomNavigationBar: NavigationBar(
             destinations: [
-              NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+              NavigationDestination(
+                icon: Icon(Icons.home, semanticLabel: 'Home icon'),
+                label: 'Home',
+              ),
               NavigationDestination(
                 icon: Icon(Icons.save),
                 label: 'Saved files',
@@ -56,24 +60,13 @@ class EchoParseHomePage extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: Image.memory(state.image!),
+                                    child: state.image != null
+                                        ? Image.memory(state.image!)
+                                        : SizedBox(), // Or a placeholder
                                   ),
                                   SizedBox(height: 48),
 
-                                  FilledButton(
-                                    onPressed: () {
-                                      context.read<EchoParseBloc>().add(
-                                        EchoParseUploadAudiogramFileToServerEvent(),
-                                      );
-                                      Navigator.pushNamed(
-                                        context,
-                                        '/echo_parse/conversion_results',
-                                      );
-                                    },
-                                    child: Text(
-                                      langLoc.echoparse_upload_buttonUpload,
-                                    ),
-                                  ),
+                                  _buildUploadButton(context, langLoc),
                                 ],
                               ),
 
@@ -97,17 +90,7 @@ class EchoParseHomePage extends StatelessWidget {
                                 ],
                               ),
                             SizedBox(height: 8),
-                            FilledButton(
-                              style: attentionFilledButtonStyle(
-                                Theme.of(context).colorScheme,
-                              ),
-                              onPressed: () {
-                                context.read<EchoParseBloc>().add(
-                                  EchoParseChooseAudiogramFileEvent(),
-                                );
-                              },
-                              child: Text(langLoc.echoparse_upload_buttonPick),
-                            ),
+                            _buildFilePickButton(context, langLoc),
                           ],
                         ),
                       if (state.navigationDestinationSelected == 1)
@@ -118,57 +101,23 @@ class EchoParseHomePage extends StatelessWidget {
                               width: 200,
                             ),
                             Text(
-                              "Zapisane pliki",
+                              langLoc.echoparse_upload_savedFilesHeader,
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.displayMedium,
                             ),
                             SizedBox(height: 48),
-                            LayoutBuilder(
-                              builder: (context, constraints) {
-                                final double itemWidth =
-                                    MediaQuery.of(context).size.width > 500
-                                        ? 200.0
-                                        : 130.0;
-                                final double spacing =
-                                    MediaQuery.of(context).size.width > 500
-                                        ? 40.0
-                                        : 20.0;
-                                final double bottomNum =
-                                    MediaQuery.of(context).size.width > 500
-                                        ? 20.0
-                                        : 10.0;
-
-                                return Wrap(
-                                  spacing: spacing,
-                                  runSpacing: spacing,
-                                  children: List.generate(
-                                    6,
-                                    (index) => SizedBox(
-                                      width: itemWidth,
-                                      child: Stack(
-                                        children: [
-                                          Image.asset(
-                                            "assets/images/saved-file-mock.png",
-                                            width: itemWidth,
-                                          ),
-                                          Positioned(
-                                            bottom: bottomNum,
-                                            left: 30,
-                                            child: Text(
-                                              // TODO: Change the code to dynamic names
-                                              "File ${index + 1}.csv".length >
-                                                      10
-                                                  ? "${"File ${index + 1}.csv".substring(0, 7)}..."
-                                                  : "File ${index + 1}.csv",
-                                              maxLines: 1,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
+                            SavedFileItem(
+                              name:
+                                  "Krystyna Pawłowicz", // TODO: Implement state management for saved files.
+                              savedDate:
+                                  "10:30, 18 maja 2025", // TODO: As above.
+                            ),
+                            SizedBox(height: 16),
+                            SavedFileItem(
+                              name:
+                                  "Jarosław Jakimowicz", // TODO: Implement state management for saved files.
+                              savedDate:
+                                  "12:48, 12 grudnia 2025", // TODO: As above.
                             ),
                           ],
                         ),

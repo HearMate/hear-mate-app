@@ -66,9 +66,10 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.all(40.0),
                         child: FilledButton(
-                          style: attentionFilledButtonStyle(Theme.of(context).colorScheme),
+                          style: attentionFilledButtonStyle(
+                            Theme.of(context).colorScheme,
+                          ),
                           onPressed: () {
-                            
                             Navigator.pushNamed(context, '/echo_parse/home');
                           },
                           child: Text(
