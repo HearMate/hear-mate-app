@@ -2,11 +2,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/** @TODO
- * This widget needs some changes:
- * - add option to save results
- * - make it so that values are being treated like in audiogram - so revert the flip of sign, and then make it possible to add negative values.
- *  */
+// TODO This widget needs some changes:
+// - add option to save results
+// - make it so that values are being treated like in audiogram - so revert the flip of sign, and then make it possible to add negative values.
+
 
 class AudiogramChart extends StatelessWidget {
   final List<FlSpot> leftEarSpots;
@@ -147,12 +146,13 @@ class AudiogramChart extends StatelessWidget {
                 belowBarData: BarAreaData(show: false),
               ),
             ],
-            // Reference lines for hearing loss severity - do we need that? TODO: check
+            // TODO: check
+            // Reference lines for hearing loss severity - do we need that? 
             extraLinesData: ExtraLinesData(
               horizontalLines: [
                 HorizontalLine(
                   y: 25,
-                  color: Colors.orange.withOpacity(0.5),
+                  color: Colors.orange.withValues(alpha: 0.5),
                   strokeWidth: 1,
                   dashArray: [5, 5],
                   label: HorizontalLineLabel(
@@ -165,7 +165,7 @@ class AudiogramChart extends StatelessWidget {
                 ),
                 HorizontalLine(
                   y: 40,
-                  color: Colors.deepOrange.withOpacity(0.5),
+                  color: Colors.deepOrange.withValues(alpha: 0.5),
                   strokeWidth: 1,
                   dashArray: [5, 5],
                   label: HorizontalLineLabel(
@@ -181,7 +181,7 @@ class AudiogramChart extends StatelessWidget {
                 ),
                 HorizontalLine(
                   y: 70,
-                  color: Colors.red.withOpacity(0.5),
+                  color: Colors.red.withValues(alpha: 0.5),
                   strokeWidth: 1,
                   dashArray: [5, 5],
                   label: HorizontalLineLabel(

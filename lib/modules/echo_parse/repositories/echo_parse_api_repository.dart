@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import 'package:hear_mate_app/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 
@@ -26,8 +27,7 @@ class EchoParseApiRepository {
       var response = await request.send();
       var responseBody = await response.stream.bytesToString();
       Map<String, dynamic> audiogramData = jsonDecode(responseBody);
-
-      print("Response: $audiogramData");
+      HMLogger.print("Response: $audiogramData");
 
       return {
         "statusCode": response.statusCode,

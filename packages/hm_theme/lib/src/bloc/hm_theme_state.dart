@@ -7,10 +7,9 @@ abstract class HMThemeState {
 }
 
 class HMThemeInitialState extends HMThemeState {
-  HMThemeInitialState({required bool isDarkMode})
-    : super(isDarkMode: isDarkMode);
+  HMThemeInitialState({required super.isDarkMode});
 }
 
 class HMThemeChanged extends HMThemeState {
-  HMThemeChanged({required bool isDarkMode}) : super(isDarkMode: isDarkMode);
+  HMThemeChanged({required super.isDarkMode});
 }
