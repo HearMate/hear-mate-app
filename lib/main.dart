@@ -4,14 +4,12 @@ import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_saved_files_page/echo_parse_saved_files_page.dart';
 import 'package:hear_mate_app/screens/about_page.dart';
 import 'package:hear_mate_app/screens/menu_page.dart';
 import 'package:hear_mate_app/screens/settings_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page/echo_parse_welcome_page.dart';
-import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_upload_page/echo_parse_upload_page.dart';
-import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_upload_done_page/echo_parse_upload_done_page.dart';
-import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_collection_page/echo_parse_collection_page.dart';
+import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_home_page/echo_parse_home_page.dart';
+import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_conversion_results_page/echo_parse_conversion_results_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
@@ -111,7 +109,7 @@ class MyApp extends StatelessWidget {
                     '/settings': (context) => SettingsPage(),
                     '/about': (context) => AboutPage(),
                     '/menu': (context) => MenuPage(),
-                    
+
                     //? HearMate routes (hearing test)
                     '/hearing_test/welcome':
                         (context) => const HearingTestWelcomePage(),
@@ -122,13 +120,9 @@ class MyApp extends StatelessWidget {
                     //? EchoParse routes
                     '/echo_parse/welcome':
                         (context) => EchoParseWelcomeScreen(),
-                    '/echo_parse/upload': (context) => EchoParseUploadScreen(),
-                    '/echo_parse/upload_done':
-                        (context) => EchoParseUploadDoneScreen(),
-                    '/echo_parse/collection':
-                        (context) => EchoParseCollectScreen(),
-                    '/echo_parse/saved_files':
-                        (context) => EchoParseSavedFilesPage(),
+                    '/echo_parse/home': (context) => EchoParseHomePage(),
+                    '/echo_parse/conversion_results':
+                        (context) => EchoParseConversionResults(),
                   },
                   onUnknownRoute: (settings) {
                     return MaterialPageRoute(
