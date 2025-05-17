@@ -34,15 +34,8 @@ ThemeData buildHearMateTheme({required bool isDarkMode}) {
     ),
     filledButtonTheme:
         FilledButtonThemeData(style: defaultFilledButtonStyle(colorScheme)),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: ButtonStyle(
-        minimumSize: WidgetStateProperty.all(const Size(252, 48)),
-        foregroundColor: WidgetStateProperty.all(colorScheme.primary),
-        side: WidgetStateProperty.all(
-          BorderSide(color: colorScheme.primary),
-        ),
-      ),
-    ),
+    outlinedButtonTheme:
+        OutlinedButtonThemeData(style: defaultOutlinedButtonStyle(colorScheme)),
   );
 }
 
@@ -62,13 +55,24 @@ ButtonStyle attentionFilledButtonStyle(ColorScheme colorScheme) {
 ButtonStyle defaultFilledButtonStyle(ColorScheme colorScheme) {
   return ButtonStyle(
     minimumSize: WidgetStateProperty.all(const Size(252, 48)),
-    padding: WidgetStateProperty.all(const EdgeInsets.all(8.0)),
+    padding: WidgetStateProperty.all(const EdgeInsets.all(16.0)),
     backgroundColor: WidgetStateProperty.all(colorScheme.primary),
     foregroundColor: WidgetStateProperty.all(colorScheme.onPrimary),
     textStyle: WidgetStateProperty.all(const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 18.0,
     )),
+  );
+}
+
+ButtonStyle defaultOutlinedButtonStyle(ColorScheme colorScheme) {
+  return ButtonStyle(
+    minimumSize: WidgetStateProperty.all(const Size(252, 48)),
+    padding: WidgetStateProperty.all(const EdgeInsets.all(12.0)),
+    foregroundColor: WidgetStateProperty.all(colorScheme.primary),
+    side: WidgetStateProperty.all(
+      BorderSide(color: colorScheme.primary),
+    ),
   );
 }
 
