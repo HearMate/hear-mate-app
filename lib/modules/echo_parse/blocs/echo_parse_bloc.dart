@@ -20,23 +20,15 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
     on<EchoParseReceivedServerResponseEvent>(_onReceivedServerResponse);
     on<EchoParseSaveProcessedCsvEvent>(_onSaveProcessedCsv);
     on<EchoParsePrepareForTheNewFileUpload>(_onPrepareForTheNewFile);
-    on<EchoParseNavigationDestinationSelected>(
-      _onNavigationDestinationSelected,
-    );
-  }
-
-  Future<void> _onNavigationDestinationSelected(
-    EchoParseNavigationDestinationSelected event,
-    Emitter<EchoParseState> emit,
-  ) async {
-    emit(state.copyWith(navigationDestinationSelected: event.destination));
   }
 
   Future<void> _onPrepareForTheNewFile(
     EchoParsePrepareForTheNewFileUpload event,
     Emitter<EchoParseState> emit,
   ) async {
-    emit(state.clearFileDataBeforeNewFile());
+    emit(
+      state.clearFileDataBeforeNewFile()
+    );
   }
 
   Future<void> _onChooseAudiogramFile(
@@ -50,7 +42,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
         state.copyWith(
           fileName: result.files.single.name,
           image: result.files.single.bytes,
-          nextFile: false,
+          nextFile: false
         ),
       );
     } else {

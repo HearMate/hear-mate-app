@@ -8,7 +8,7 @@ class EchoParseState {
   // this format should be changed after final backend version, additionally it should be unified with the hearing test
   final Map<String, dynamic> audiogramData;
   final bool nextFile;
-  final int navigationDestinationSelected;
+  
 
   EchoParseState({
     this.isResultReady = false,
@@ -17,7 +17,6 @@ class EchoParseState {
     this.statusCode = 0,
     this.audiogramData = const {},
     this.nextFile = true,
-    this.navigationDestinationSelected = 0,
   });
 
   EchoParseState clearFileDataBeforeNewFile() {
@@ -37,8 +36,7 @@ class EchoParseState {
     Uint8List? image,
     int? statusCode,
     Map<String, dynamic>? audiogramData,
-    bool? nextFile,
-    int? navigationDestinationSelected,
+    bool? nextFile
   }) {
     return EchoParseState(
       isResultReady: isResultReady ?? this.isResultReady,
@@ -47,8 +45,6 @@ class EchoParseState {
       statusCode: statusCode ?? this.statusCode,
       audiogramData: audiogramData ?? this.audiogramData,
       nextFile: nextFile ?? this.nextFile,
-      navigationDestinationSelected:
-          navigationDestinationSelected ?? this.navigationDestinationSelected,
     );
   }
 }
