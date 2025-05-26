@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:lottie/lottie.dart';
 
-part 'widgets/navigation_bar.dart';
 part 'widgets/upload_section.dart';
 part 'widgets/saved_file_item.dart';
 part 'widgets/saved_file_section.dart';
