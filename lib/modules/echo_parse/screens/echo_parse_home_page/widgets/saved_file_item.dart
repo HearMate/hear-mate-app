@@ -1,14 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:hm_theme/hm_theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+part of '../echo_parse_home_page.dart';
 
-
-class SavedFileItem extends StatelessWidget {
+class _SavedFileItem extends StatelessWidget {
   final String name;
   final String savedDate;
   final VoidCallback? onTap;
 
-  const SavedFileItem({
+  const _SavedFileItem({
     super.key,
     required this.name,
     required this.savedDate,
