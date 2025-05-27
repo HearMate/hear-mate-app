@@ -19,16 +19,7 @@ class EchoParseState {
     this.nextFile = true,
   });
 
-  EchoParseState clearFileDataBeforeNewFile() {
-    return EchoParseState(
-      isResultReady: false,
-      fileName: "",
-      image: null,
-      statusCode: 0,
-      audiogramData: const {},
-      nextFile: true,
-    );
-  }
+  
 
   EchoParseState copyWith({
     bool? isResultReady,
@@ -46,5 +37,9 @@ class EchoParseState {
       audiogramData: audiogramData ?? this.audiogramData,
       nextFile: nextFile ?? this.nextFile,
     );
+  }
+
+  EchoParseState clearFileDataBeforeNewFile() {
+    return copyWith(nextFile: true);
   }
 }
