@@ -27,7 +27,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
     Emitter<EchoParseState> emit,
   ) async {
     emit(
-      state.clearFileDataBeforeNewFile()
+      state.resetState()
     );
   }
 

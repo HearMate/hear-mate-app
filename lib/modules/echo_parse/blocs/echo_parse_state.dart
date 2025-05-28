@@ -39,7 +39,7 @@ class EchoParseState {
     );
   }
 
-  EchoParseState clearFileDataBeforeNewFile() {
-    return copyWith(nextFile: true);
+  EchoParseState resetState() {
+    return EchoParseState();
   }
 }
