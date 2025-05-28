@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hm_theme/hm_theme.dart';
 import 'package:lottie/lottie.dart';
 
 class EchoParseWelcomeScreen extends StatelessWidget {
@@ -65,22 +66,16 @@ class EchoParseWelcomeScreen extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.all(40.0),
                         child: FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Color(0xFFF94F46),
-                            minimumSize: Size(252, 48),
+                          style: attentionFilledButtonStyle(
+                            Theme.of(context).colorScheme,
                           ),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/echo_parse/upload');
+                            Navigator.pushNamed(context, '/echo_parse/home');
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.echoparse_welcome_mainButton,
-                              style: Theme.of(context).textTheme.labelLarge
-                                  ?.copyWith(color: Colors.white),
-                            ),
+                          child: Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.echoparse_welcome_mainButton,
                           ),
                         ),
                       ),

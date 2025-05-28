@@ -4,6 +4,7 @@ import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hm_locale/hm_locale.dart';
+import 'package:hm_theme/hm_theme.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -29,6 +30,8 @@ class SettingsPage extends StatelessWidget {
                       leading: Icon(Icons.language),
                       title: Text(loc.echoparse_settings_language_title),
                       trailing: DropdownMenu<Locale>(
+                        textStyle: textStylePickedOptionGreen(),
+                        inputDecorationTheme: inputDecorationDropownMenu(),
                         initialSelection: state.locale,
                         onSelected: (Locale? locale) {
                           if (locale != null) {

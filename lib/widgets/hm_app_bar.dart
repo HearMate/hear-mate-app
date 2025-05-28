@@ -13,8 +13,10 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final hiddenMenuBarRoutes = ['/menu', '/settings', '/about'];
+    final hiddenBackButtonRoutes = ['/echo_parse/conversion_results']; // Routes where back is hidden
 
     return AppBar(
+      automaticallyImplyLeading: !hiddenBackButtonRoutes.contains(route),
       title: Text(title, style: TextStyle()),
       actions: [
         BlocBuilder<HMThemeBloc, HMThemeState>(
@@ -32,11 +34,11 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
         hiddenMenuBarRoutes.contains(route)
             ? const SizedBox.shrink()
             : IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/menu');
-              },
-              icon: Icon(Icons.menu),
-            ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/menu');
+                },
+                icon: Icon(Icons.menu),
+              ),
       ],
     );
   }

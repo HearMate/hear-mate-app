@@ -19,6 +19,16 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
     on<EchoParseUploadAudiogramFileToServerEvent>(_onSendAudiogramToServer);
     on<EchoParseReceivedServerResponseEvent>(_onReceivedServerResponse);
     on<EchoParseSaveProcessedCsvEvent>(_onSaveProcessedCsv);
+    on<EchoParsePrepareForTheNewFileUpload>(_onPrepareForTheNewFile);
+  }
+
+  Future<void> _onPrepareForTheNewFile(
+    EchoParsePrepareForTheNewFileUpload event,
+    Emitter<EchoParseState> emit,
+  ) async {
+    emit(
+      state.resetState()
+    );
   }
 
   Future<void> _onChooseAudiogramFile(
@@ -32,6 +42,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
         state.copyWith(
           fileName: result.files.single.name,
           image: result.files.single.bytes,
+          nextFile: false
         ),
       );
     } else {
@@ -82,7 +93,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
     final data = state.audiogramData;
 
     if (data.isEmpty) {
-      HMLogger.print("No audiogram data available."); 
+      HMLogger.print("No audiogram data available.");
       return;
     }
     final timestamp = DateTime.now()
@@ -148,16 +159,13 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
         data[ear] as Map<String, dynamic>?,
       );
 
-      earDataOption.match(
-        () => {
-          HMLogger.print('No data found for $ear'),
-        },
-        (earData) {
-          earData.forEach((frequency, level) {
-            buffer.writeln('$ear,$frequency,$level');
-          });
-        },
-      );
+      earDataOption.match(() => {HMLogger.print('No data found for $ear')}, (
+        earData,
+      ) {
+        earData.forEach((frequency, level) {
+          buffer.writeln('$ear,$frequency,$level');
+        });
+      });
     }
 
     return buffer.toString();
