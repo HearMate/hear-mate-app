@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 
-class HearingTestSoundsPlayerRepository {
+class SoundsPlayerRepository {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
@@ -40,10 +40,11 @@ class HearingTestSoundsPlayerRepository {
         await _audioPlayer.setSource(AssetSource(assetPath));
         await _audioPlayer.setVolume(volume);
         await _audioPlayer.resume();
+        await _audioPlayer.setReleaseMode(ReleaseMode.loop);
 
-        await Future.delayed(soundDuration, () {
-          _audioPlayer.stop();
-        });
+        // await Future.delayed(soundDuration, () {
+        //   _audioPlayer.stop();
+        // });
       } catch (e) {
         HMLogger.print("Error loading sound file: $e");
       }
@@ -72,7 +73,7 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _HLToSPL(double dBHL, int frequency) {
-    //needs to be checked against iso 226:2003 standard / consulted with Dominika
+    // needs to be checked against iso 226:2003 standard / consulted with Dominika
     const Map<int, double> referenceSPL = {
       125: 45.0,
       250: 25.0,
