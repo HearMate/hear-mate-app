@@ -51,7 +51,6 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              // Echo Parse button
               FilledButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/headset_calibration/home');
