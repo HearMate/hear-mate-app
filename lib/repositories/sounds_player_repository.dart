@@ -27,6 +27,7 @@ class SoundsPlayerRepository {
     int frequency, {
     required double decibels,
     required bool leftEarOnly,
+    double? soundDuration,
   }) async {
     if (_soundAssets.containsKey(frequency)) {
       try {
@@ -42,9 +43,11 @@ class SoundsPlayerRepository {
         await _audioPlayer.resume();
         await _audioPlayer.setReleaseMode(ReleaseMode.loop);
 
-        // await Future.delayed(soundDuration, () {
-        //   _audioPlayer.stop();
-        // });
+        if (soundDuration != null) {
+          await Future.delayed(Duration(seconds: soundDuration.toInt()), () {
+            _audioPlayer.stop();
+          });
+        }
       } catch (e) {
         HMLogger.print("Error loading sound file: $e");
       }

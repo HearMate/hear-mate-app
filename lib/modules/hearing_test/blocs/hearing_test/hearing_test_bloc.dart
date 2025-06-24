@@ -74,6 +74,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       testFrequencies[state.currentFrequencyIndex],
       decibels: state.currentDBLevel,
       leftEarOnly: state.currentEar,
+      soundDuration: 1.0,
     );
 
     if (state.wasSoundHeard) {
