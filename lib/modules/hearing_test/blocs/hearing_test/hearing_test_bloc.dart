@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 
@@ -10,7 +11,7 @@ const int MIN_DB_LEVEL = -10;
 
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
-  final List<int> testFrequencies = [1000, 2000, 4000, 8000, 500, 250, 125];
+  final List<int> testFrequencies = [1000, 2000, 4000, 8000, 1000, 500, 250, 125];
 
   HearingTestBloc({
     required HearingTestSoundsPlayerRepository
@@ -39,7 +40,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         currentFrequencyIndex: 0,
         currentDBLevel: 20,
         dbLevelToHearCountMap: const {},
-        results: [],
       ),
     );
 
@@ -121,9 +121,12 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return add(HearingTestChangeEar());
     }
 
+    state.results[state.currentEar ? 1 : 0][state.currentFrequencyIndex] =
+        state.currentDBLevel.toDouble();
+    
     emit(
       state.copyWith(
-        results: [...state.results, state.currentDBLevel],
+        results: state.results,
         currentFrequencyIndex: state.currentFrequencyIndex + 1,
         currentDBLevel: state.currentDBLevel + 10,
         dbLevelToHearCountMap: {},

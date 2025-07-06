@@ -4,32 +4,58 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // TODO This widget needs some changes:
 // - add option to save results
-// - make it so that values are being treated like in audiogram - so revert the flip of sign, and then make it possible to add negative values.
-
+// - replace circle markers with appropriate icons for left and right ear
+// - adjust for mobile view
 
 class AudiogramChart extends StatelessWidget {
-  final List<FlSpot> leftEarSpots;
-  final List<FlSpot> rightEarSpots;
-  final List<String> frequencyLabels;
+  final List<double?> leftEarSpots;
+  final List<double?> rightEarSpots;
 
   const AudiogramChart({
     super.key,
     required this.leftEarSpots,
     required this.rightEarSpots,
-    required this.frequencyLabels,
   });
 
   @override
   Widget build(BuildContext context) {
     final List<String> frequencyLabels = [
+      '125',
+      '250',
+      '500',
       '1k',
       '2k',
       '4k',
       '8k',
-      '500',
-      '250',
-      '125',
     ];
+
+    final int maxYValue = 100;
+    final int minYValue = -10;
+
+    List<FlSpot> remappedSpots(List<double?> values) {
+      if (values.length != frequencyLabels.length + 1) return [];
+      final List<MapEntry<int, int>> mapping = [
+        MapEntry(7, 0),
+        MapEntry(6, 1),
+        MapEntry(5, 2),
+        // For 1000 Hz we always want to use the second value if available
+        values[4] != null ? MapEntry(4, 3) : MapEntry(0, 3),
+        MapEntry(1, 4),
+        MapEntry(2, 5),
+        MapEntry(3, 6),
+      ];
+      final List<FlSpot> mapped = [];
+      for (final entry in mapping) {
+        final dbValue = values[entry.key];
+        if (dbValue != null) {
+          mapped.add(
+            FlSpot(entry.value.toDouble(), maxYValue - (dbValue - minYValue)),
+          );
+        }
+      }
+      return mapped;
+    }
+
     return Stack(
       children: [
         LineChart(
@@ -38,14 +64,17 @@ class AudiogramChart extends StatelessWidget {
               show: true,
               drawVerticalLine: true,
               drawHorizontalLine: true,
-              horizontalInterval: 20,
+              horizontalInterval: 10,
             ),
             titlesData: FlTitlesData(
               bottomTitles: AxisTitles(
-                axisNameWidget: Padding(
-                  padding: EdgeInsets.only(top: 1.0),
-                  child: Text(AppLocalizations.of(context)!.hearing_test_audiogram_chart_frequency, style: TextStyle(fontSize: 12)),
+                axisNameWidget: Text(
+                  AppLocalizations.of(
+                    context,
+                  )!.hearing_test_audiogram_chart_frequency,
+                  style: TextStyle(fontSize: 12),
                 ),
+
                 sideTitles: SideTitles(
                   showTitles: true,
                   interval: 1,
@@ -68,16 +97,17 @@ class AudiogramChart extends StatelessWidget {
                 ),
               ),
               leftTitles: AxisTitles(
-                axisNameWidget: const Padding(
-                  padding: EdgeInsets.only(bottom: 3.0),
-                  child: Text('dB HL', style: TextStyle(fontSize: 12)),
-                ),
+                axisNameWidget: Text('dB HL', style: TextStyle(fontSize: 12)),
                 sideTitles: SideTitles(
                   showTitles: true,
-                  interval: 20,
+                  interval: 10,
                   reservedSize: 30,
                   getTitlesWidget: (value, meta) {
-                    int displayValue = value.toInt();
+                    int displayValue =
+                        (maxYValue - (value - minYValue)).toInt();
+                    if (displayValue < minYValue || displayValue > maxYValue) {
+                      return const SizedBox.shrink();
+                    }
                     return Text(
                       displayValue.toString(),
                       style: const TextStyle(fontSize: 10),
@@ -91,7 +121,12 @@ class AudiogramChart extends StatelessWidget {
               topTitles: AxisTitles(
                 axisNameWidget: Padding(
                   padding: EdgeInsets.only(bottom: 20.0),
-                  child: Text(AppLocalizations.of(context)!.hearing_test_audiogram_chart_frequency, style: TextStyle(fontSize: 12)),
+                  child: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.hearing_test_audiogram_chart_frequency,
+                    style: TextStyle(fontSize: 12),
+                  ),
                 ),
                 sideTitles: SideTitles(showTitles: false),
               ),
@@ -102,12 +137,12 @@ class AudiogramChart extends StatelessWidget {
             ),
             minX: -0.5,
             maxX: 6.5,
-            minY: -20,
-            maxY: 120,
+            minY: minYValue - 5,
+            maxY: maxYValue + 5,
             lineBarsData: [
               // Left ear line (blue)
               LineChartBarData(
-                spots: leftEarSpots,
+                spots: remappedSpots(leftEarSpots),
                 isCurved: false,
                 color: Colors.blue,
                 barWidth: 2,
@@ -127,7 +162,7 @@ class AudiogramChart extends StatelessWidget {
               ),
               // Right ear line (red)
               LineChartBarData(
-                spots: rightEarSpots,
+                spots: remappedSpots(rightEarSpots),
                 isCurved: false,
                 color: Colors.red,
                 barWidth: 2,
@@ -146,8 +181,9 @@ class AudiogramChart extends StatelessWidget {
                 belowBarData: BarAreaData(show: false),
               ),
             ],
+            lineTouchData: LineTouchData(enabled: false),
             // TODO: check
-            // Reference lines for hearing loss severity - do we need that? 
+            // Reference lines for hearing loss severity - do we need that?
             extraLinesData: ExtraLinesData(
               horizontalLines: [
                 HorizontalLine(
@@ -160,7 +196,11 @@ class AudiogramChart extends StatelessWidget {
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(right: 5, bottom: 5),
                     style: const TextStyle(fontSize: 9, color: Colors.orange),
-                    labelResolver: (line) => AppLocalizations.of(context)!.hearing_test_audiogram_chart_mild_loss,
+                    labelResolver:
+                        (line) =>
+                            AppLocalizations.of(
+                              context,
+                            )!.hearing_test_audiogram_chart_mild_loss,
                   ),
                 ),
                 HorizontalLine(
@@ -176,7 +216,11 @@ class AudiogramChart extends StatelessWidget {
                       fontSize: 9,
                       color: Colors.deepOrange,
                     ),
-                    labelResolver: (line) => AppLocalizations.of(context)!.hearing_test_audiogram_chart_moderate_loss,
+                    labelResolver:
+                        (line) =>
+                            AppLocalizations.of(
+                              context,
+                            )!.hearing_test_audiogram_chart_moderate_loss,
                   ),
                 ),
                 HorizontalLine(
@@ -189,7 +233,11 @@ class AudiogramChart extends StatelessWidget {
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(right: 5, bottom: 5),
                     style: const TextStyle(fontSize: 9, color: Colors.red),
-                    labelResolver: (line) => AppLocalizations.of(context)!.hearing_test_audiogram_chart_severe_loss,
+                    labelResolver:
+                        (line) =>
+                            AppLocalizations.of(
+                              context,
+                            )!.hearing_test_audiogram_chart_severe_loss,
                   ),
                 ),
               ],
@@ -204,11 +252,21 @@ class AudiogramChart extends StatelessWidget {
             children: [
               Container(width: 12, height: 12, color: Colors.blue),
               const SizedBox(width: 4),
-              Text(AppLocalizations.of(context)!.hearing_test_audiogram_chart_left_ear, style: TextStyle(fontSize: 12)),
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.hearing_test_audiogram_chart_left_ear,
+                style: TextStyle(fontSize: 12),
+              ),
               const SizedBox(width: 20),
               Container(width: 12, height: 12, color: Colors.red),
               const SizedBox(width: 4),
-              Text(AppLocalizations.of(context)!.hearing_test_audiogram_chart_right_ear, style: TextStyle(fontSize: 12)),
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.hearing_test_audiogram_chart_right_ear,
+                style: TextStyle(fontSize: 12),
+              ),
             ],
           ),
         ),
