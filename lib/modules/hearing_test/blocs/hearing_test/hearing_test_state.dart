@@ -31,7 +31,6 @@ class HearingTestState {
                null,
              ),
            );
-
   HearingTestState copyWith({
     bool? isButtonPressed,
     bool? wasSoundHeard,
@@ -47,11 +46,9 @@ class HearingTestState {
       wasSoundHeard: wasSoundHeard ?? this.wasSoundHeard,
       currentEar: currentEar ?? this.currentEar,
       isTestCanceled: isTestCanceled ?? this.isTestCanceled,
-      currentFrequencyIndex:
-          currentFrequencyIndex ?? this.currentFrequencyIndex,
+      currentFrequencyIndex: currentFrequencyIndex ?? this.currentFrequencyIndex,
       currentDBLevel: currentDBLevel ?? this.currentDBLevel,
-      dbLevelToHearCountMap:
-          dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
+      dbLevelToHearCountMap: dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
       results: results ?? this.results,
     );
   }
