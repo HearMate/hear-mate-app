@@ -36,18 +36,6 @@ class HearingTestPage extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: SizedBox(
                   height: 24,
-                  child:
-                      state.wasSoundHeard
-                          ? Text(
-                            AppLocalizations.of(context)!.hearing_test_test_page_release,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                          : const SizedBox(),
                 ),
               ),
               const Spacer(),
