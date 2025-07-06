@@ -55,6 +55,10 @@ class HearingTestSoundsPlayerRepository {
   Future<void> stopSound() async {
     await _audioPlayer.stop();
   }
+  
+  bool isPlaying() {
+    return _audioPlayer.state == PlayerState.playing;
+  }
 
   double _decibelsToVolume(double dBHL, {int frequency = 0}) {
     dBHL = dBHL.clamp(-10.0, 120.0);
