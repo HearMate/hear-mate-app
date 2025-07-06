@@ -6,7 +6,7 @@ class HearingTestSoundsPlayerRepository {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
-  final List<int> frequencies = [1000, 2000, 4000, 8000, 500, 250, 125];
+  final List<int> frequencies = [1000, 2000, 4000, 8000, 1000, 500, 250, 125];
 
   // Duration for each tone
   final Duration soundDuration = Duration(seconds: 2);
@@ -98,7 +98,7 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _normalizeSoundPressure(double soundPressure) {
-    // this needs to be also limit the actual app messurement if it turns out output device does not reach 120 dbhl
+    // this needs to be also limit the actual app measurement if it turns out output device does not reach 120 dB HL
     // this needs to be checked with the dummy head
     double maxDeviceOutputVolume = 60;
 

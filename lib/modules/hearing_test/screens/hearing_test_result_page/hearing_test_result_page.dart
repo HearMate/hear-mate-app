@@ -3,33 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/audiogram_chart.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HearingTestResultPage extends StatelessWidget {
-  HearingTestResultPage({super.key});
-  final List<String> frequencyLabels = [
-    '1k',
-    '2k',
-    '4k',
-    '8k',
-    '500',
-    '250',
-    '125',
-  ];
-
+  const HearingTestResultPage({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HearingTestBloc, HearingTestState>(
       builder: (context, state) {
-        final results = state.results;
-        final leftEarResults = results.take(frequencyLabels.length).toList();
-        final rightEarResults =
-            results.length > frequencyLabels.length
-                ? results.sublist(frequencyLabels.length)
-                : [];
-
+        final leftEarResults = state.results[1];
+        final rightEarResults = state.results[0];
+            
         return Scaffold(
           appBar: HMAppBar(
             title: AppLocalizations.of(context)!.hearing_test_result_page_title,
@@ -63,22 +49,15 @@ class HearingTestResultPage extends StatelessWidget {
                   const SizedBox(height: 30),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 320,
+                    height: 420,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
                     child: AudiogramChart(
-                      frequencyLabels: frequencyLabels,
-                      leftEarSpots: List.generate(
-                        leftEarResults.length,
-                        (i) => FlSpot(i.toDouble(), leftEarResults[i]),
-                      ),
-                      rightEarSpots: List.generate(
-                        rightEarResults.length,
-                        (i) => FlSpot(i.toDouble(), rightEarResults[i]),
-                      ),
+                      leftEarSpots: leftEarResults,
+                      rightEarSpots: rightEarResults,
                     ),
                   ),
                   const SizedBox(height: 30),
