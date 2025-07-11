@@ -15,6 +15,7 @@ import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sou
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/repositories/echo_parse_api_repository.dart';
 import 'package:hm_locale/hm_locale.dart';
@@ -116,7 +117,8 @@ class MyApp extends StatelessWidget {
                     '/hearing_test/start': (context) => const HearingTestPage(),
                     '/hearing_test/result':
                         (context) => HearingTestResultPage(),
-
+                    '/hearing_test/history_results':
+                        (context) => HearingTestHistoryResultsPage(),
                     //? EchoParse routes
                     '/echo_parse/welcome':
                         (context) => EchoParseWelcomeScreen(),

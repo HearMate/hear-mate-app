@@ -1,5 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'dart:math';
+import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
@@ -26,6 +29,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestEndTestEarly>(_onEndTestEarly);
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
+    on<HearingTestSaveResult>(_saveTestResult);
   }
 
   void _onStartTest(
@@ -130,9 +134,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     }
 
     if (!state.currentEar) {
-      state.results.leftEarResults[state.currentFrequencyIndex] = state.currentDBLevel.toDouble();
+      state.results.leftEarResults[state.currentFrequencyIndex] =
+          state.currentDBLevel.toDouble();
     } else {
-      state.results.rightEarResults[state.currentFrequencyIndex] = state.currentDBLevel.toDouble();
+      state.results.rightEarResults[state.currentFrequencyIndex] =
+          state.currentDBLevel.toDouble();
     }
 
     emit(
@@ -178,5 +184,33 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     Emitter<HearingTestState> emit,
   ) {
     HMLogger.print("${state.results}");
+  }
+
+  Future<void> _saveTestResult(
+    HearingTestSaveResult event,
+    Emitter<HearingTestState> emit,
+  ) async {
+    final data = jsonEncode(state.results.toJson());
+    final timestamp = DateTime.now()
+        .toIso8601String()
+        .split('T')
+        .join('_')
+        .split('.')
+        .first
+        .replaceAll(':', '-');
+    final defaultFileName = 'audiogram_result_$timestamp.csv';
+
+    try {
+      final baseDir = await getApplicationSupportDirectory();
+      final echoParseDir = Directory('${baseDir.path}/HearingTest');
+      if (!await echoParseDir.exists()) {
+        await echoParseDir.create(recursive: true);
+      }
+      final internalPath = '${echoParseDir.path}/$defaultFileName';
+      final internalFile = File(internalPath);
+      await internalFile.writeAsString(data);
+    } catch (e) {
+      debugPrint("Error saving CSV file: $e");
+    }
   }
 }
