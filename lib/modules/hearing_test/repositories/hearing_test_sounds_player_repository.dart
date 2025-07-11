@@ -60,9 +60,7 @@ class HearingTestSoundsPlayerRepository {
     dBHL = dBHL.clamp(-10.0, 120.0);
 
     double dBSPL = _HLToSPL(dBHL, frequency);
-
-    // here we should perform correction for specific headphone characteristic
-    // a similar process to dB HL to dB SPL correction for each frequency
+    dBSPL = _headphoneCorrection(dBSPL, frequency);
 
     double soundPressure = _SPLToSoundPressure(dBSPL);
     double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);
@@ -108,5 +106,21 @@ class HearingTestSoundsPlayerRepository {
     // Clamp because it seems like dB SPL can go below 0 (???)
     normalizedSoundPressure = normalizedSoundPressure.clamp(0.0, 1.0);
     return normalizedSoundPressure;
+  }
+
+  double _headphoneCorrection(double dBSPL, int frequency) {
+      const Map<int, double> correctionReference = {
+      125: -10.0,
+      250: -8.0,
+      500: -6.5,
+      1000: -7.5,
+      2000: -7.5,
+      4000: -10.0,
+      8000: -4.5,
+    };
+    double correction =
+        correctionReference[frequency] ?? 7.5; // Default to 1000 Hz reference
+    double adjusted = dBSPL + correction;
+    return adjusted;
   }
 }
