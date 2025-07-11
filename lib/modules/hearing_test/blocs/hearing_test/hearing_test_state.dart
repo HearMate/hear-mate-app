@@ -10,9 +10,6 @@ class HearingTestState {
   final Map<double, int> dbLevelToHearCountMap;
   final List<List<double?>> results;
 
-  static const int ears = 2;
-  static const int frequencies = 8; // we test 1000 Hz twice
-
   HearingTestState({
     this.isButtonPressed = false,
     this.wasSoundHeard = false,
@@ -22,7 +19,12 @@ class HearingTestState {
     this.currentDBLevel = 60,
     this.dbLevelToHearCountMap = const {},
     List<List<double?>>? results,
-  }) : results = results ?? List.generate(ears, (_) => List<double?>.filled(frequencies, null));
+  }) : results =
+           results ??
+           List.generate(
+             EAR_COUNT,
+             (_) => List<double?>.filled(TEST_FREQUENCIES.length, null),
+           );
 
   HearingTestState copyWith({
     bool? isButtonPressed,
@@ -39,9 +41,11 @@ class HearingTestState {
       wasSoundHeard: wasSoundHeard ?? this.wasSoundHeard,
       currentEar: currentEar ?? this.currentEar,
       isTestCanceled: isTestCanceled ?? this.isTestCanceled,
-      currentFrequencyIndex: currentFrequencyIndex ?? this.currentFrequencyIndex,
+      currentFrequencyIndex:
+          currentFrequencyIndex ?? this.currentFrequencyIndex,
       currentDBLevel: currentDBLevel ?? this.currentDBLevel,
-      dbLevelToHearCountMap: dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
+      dbLevelToHearCountMap:
+          dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
       results: results ?? this.results,
     );
   }

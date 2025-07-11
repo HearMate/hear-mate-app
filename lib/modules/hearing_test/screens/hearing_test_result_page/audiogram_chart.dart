@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/modules/hearing_test/constants.dart';
 
 // TODO This widget needs some changes:
 // - add option to save results
@@ -30,7 +31,7 @@ class AudiogramChart extends StatelessWidget {
     ];
 
     final int maxYValue = 100;
-    final int minYValue = -10;
+    final int minYValue = MIN_DB_LEVEL;
 
     List<FlSpot> remappedSpots(List<double?> values) {
       if (values.length != frequencyLabels.length + 1) return [];
