@@ -27,7 +27,9 @@ class HearingTestPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  AppLocalizations.of(context)!.hearing_test_test_page_instruction,
+                  AppLocalizations.of(
+                    context,
+                  )!.hearing_test_test_page_instruction,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
@@ -39,7 +41,9 @@ class HearingTestPage extends StatelessWidget {
                   child:
                       state.wasSoundHeard
                           ? Text(
-                            AppLocalizations.of(context)!.hearing_test_test_page_release,
+                            AppLocalizations.of(
+                              context,
+                            )!.hearing_test_test_page_release,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

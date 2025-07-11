@@ -4,6 +4,8 @@ import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hear_mate_app/modules/hearing_calibration/blocs/headset_calibration_bloc/headset_calibration_page_bloc.dart';
+import 'package:hear_mate_app/modules/hearing_calibration/screens/hearing_calibration_page/hearing_calibration_page.dart';
 import 'package:hear_mate_app/screens/about_page.dart';
 import 'package:hear_mate_app/screens/menu_page.dart';
 import 'package:hear_mate_app/screens/settings_page.dart';
@@ -11,7 +13,7 @@ import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_home_page/echo_parse_home_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_conversion_results_page/echo_parse_conversion_results_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/repositories/sounds_player_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
@@ -33,10 +35,9 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider(
           create: (context) {
-            final hearingTestSoundsPlayerRepository =
-                HearingTestSoundsPlayerRepository();
-            hearingTestSoundsPlayerRepository.initialize();
-            return hearingTestSoundsPlayerRepository;
+            final soundsPlayerRepository = SoundsPlayerRepository();
+            soundsPlayerRepository.initialize();
+            return soundsPlayerRepository;
           },
         ),
         RepositoryProvider(
@@ -51,10 +52,14 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create:
                 (context) => HearingTestBloc(
-                  hearingTestSoundsPlayerRepository:
-                      RepositoryProvider.of<HearingTestSoundsPlayerRepository>(
-                        context,
-                      ),
+                  soundsPlayerRepository:
+                      RepositoryProvider.of<SoundsPlayerRepository>(context),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => HeadsetCalibrationBloc(
+                  RepositoryProvider.of<SoundsPlayerRepository>(context),
                 ),
           ),
           BlocProvider(
@@ -123,6 +128,10 @@ class MyApp extends StatelessWidget {
                     '/echo_parse/home': (context) => EchoParseHomePage(),
                     '/echo_parse/conversion_results':
                         (context) => EchoParseConversionResults(),
+
+                    //? HearingCalibration routes
+                    '/headset_calibration/home':
+                        (context) => HeadsetCalibrationPage(),
                   },
                   onUnknownRoute: (settings) {
                     return MaterialPageRoute(
