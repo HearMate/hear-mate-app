@@ -3,15 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/utils/logger.dart';
+import 'package:hear_mate_app/modules/hearing_test/constants.dart';
 
 part 'hearing_test_event.dart';
 part 'hearing_test_state.dart';
 
-const int MIN_DB_LEVEL = -10;
-
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
-  final List<int> testFrequencies = [1000, 2000, 4000, 8000, 1000, 500, 250, 125];
 
   HearingTestBloc({
     required HearingTestSoundsPlayerRepository
@@ -73,7 +71,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     }
 
     await _soundsPlayerRepository.playSound(
-      testFrequencies[state.currentFrequencyIndex],
+      TEST_FREQUENCIES[state.currentFrequencyIndex],
       decibels: state.currentDBLevel,
       leftEarOnly: state.currentEar,
     );
@@ -113,7 +111,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
-    if (state.currentFrequencyIndex == testFrequencies.length - 1) {
+    if (state.currentFrequencyIndex == TEST_FREQUENCIES.length - 1) {
       // check if we have already covered two ears
       if (state.currentEar) {
         return add(HearingTestCompleted());
@@ -123,7 +121,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     state.results[state.currentEar ? 1 : 0][state.currentFrequencyIndex] =
         state.currentDBLevel.toDouble();
-    
+
     emit(
       state.copyWith(
         results: state.results,
