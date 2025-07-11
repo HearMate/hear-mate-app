@@ -8,14 +8,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HearingTestResultPage extends StatelessWidget {
   const HearingTestResultPage({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HearingTestBloc, HearingTestState>(
       builder: (context, state) {
-        final leftEarResults = state.results[1];
-        final rightEarResults = state.results[0];
-            
         return Scaffold(
           appBar: HMAppBar(
             title: AppLocalizations.of(context)!.hearing_test_result_page_title,
@@ -29,7 +26,9 @@ class HearingTestResultPage extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(20.0),
                     child: Text(
-                      AppLocalizations.of(context)!.hearing_test_result_page_your_results,
+                      AppLocalizations.of(
+                        context,
+                      )!.hearing_test_result_page_your_results,
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -41,7 +40,9 @@ class HearingTestResultPage extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
-                      AppLocalizations.of(context)!.hearing_test_result_page_instruction,
+                      AppLocalizations.of(
+                        context,
+                      )!.hearing_test_result_page_instruction,
                       style: TextStyle(fontSize: 18, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
@@ -55,10 +56,7 @@ class HearingTestResultPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
-                    child: AudiogramChart(
-                      leftEarSpots: leftEarResults,
-                      rightEarSpots: rightEarResults,
-                    ),
+                    child: AudiogramChart(),
                   ),
                   const SizedBox(height: 30),
                   BlocBuilder<HMThemeBloc, HMThemeState>(
@@ -81,7 +79,9 @@ class HearingTestResultPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              AppLocalizations.of(context)!.hearing_test_result_page_note,
+                              AppLocalizations.of(
+                                context,
+                              )!.hearing_test_result_page_note,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -93,7 +93,9 @@ class HearingTestResultPage extends StatelessWidget {
                             ),
                             SizedBox(height: 15),
                             Text(
-                              AppLocalizations.of(context)!.hearing_test_result_page_note_description,
+                              AppLocalizations.of(
+                                context,
+                              )!.hearing_test_result_page_note_description,
                               style: Theme.of(
                                 context,
                               ).textTheme.bodyMedium?.copyWith(
@@ -119,7 +121,9 @@ class HearingTestResultPage extends StatelessWidget {
                       backgroundColor: Colors.blueAccent,
                     ),
                     child: Text(
-                      AppLocalizations.of(context)!.hearing_test_result_page_save_results,
+                      AppLocalizations.of(
+                        context,
+                      )!.hearing_test_result_page_save_results,
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
@@ -133,7 +137,9 @@ class HearingTestResultPage extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      AppLocalizations.of(context)!.hearing_test_result_page_home,
+                      AppLocalizations.of(
+                        context,
+                      )!.hearing_test_result_page_home,
                       style: TextStyle(fontSize: 16, color: Colors.blueAccent),
                     ),
                   ),
