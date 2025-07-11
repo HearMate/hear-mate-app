@@ -9,12 +9,11 @@ class HearingTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<HearingTestBloc>().add(HearingTestStartTest());
-
     return Scaffold(
       appBar: HMAppBar(
         title: AppLocalizations.of(context)!.hearing_test_test_page_title,
         route: ModalRoute.of(context)?.settings.name ?? "",
+        onBackPressed: () {context.read<HearingTestBloc>().add(HearingTestEndTestEarly());},
       ),
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
         listener: (context, state) {
