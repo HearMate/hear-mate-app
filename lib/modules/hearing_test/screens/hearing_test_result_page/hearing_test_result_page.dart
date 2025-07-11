@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/audiogram_chart.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -125,7 +125,43 @@ class HearingTestResultPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (state.results.hasMissingValues()) {
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => AlertDialog(
+                                title: Text('Missing Values'),
+                                content: Text(
+                                  'Some test results are missing. Do you want to save anyway?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed:
+                                        () =>
+                                            Navigator.of(
+                                              context,
+                                            ).pop(), // Cancel
+                                    child: Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      context.read<HearingTestBloc>().add(
+                                        HearingTestSaveResult(),
+                                      );
+                                    },
+                                    child: Text('Save'),
+                                  ),
+                                ],
+                              ),
+                        );
+                      } else {
+                        context.read<HearingTestBloc>().add(
+                          HearingTestSaveResult(),
+                        );
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 40,

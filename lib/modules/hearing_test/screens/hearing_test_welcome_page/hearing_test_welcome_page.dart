@@ -3,6 +3,7 @@ import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
 
@@ -29,27 +30,32 @@ class HearingTestWelcomePage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: Text(
-                AppLocalizations.of(context)!.hearing_test_welcome_page_description,
+                AppLocalizations.of(
+                  context,
+                )!.hearing_test_welcome_page_description,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
+            FilledButton(
               onPressed: () {
                 context.read<HearingTestBloc>().add(HearingTestStartTest());
                 Navigator.pushNamed(context, '/hearing_test/start');
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 15,
-                ),
-                backgroundColor: Colors.blueAccent,
-              ),
               child: Text(
                 AppLocalizations.of(context)!.hearing_test_welcome_page_start,
-                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/hearing_test/history_results');
+              },
+              child: Text(
+                'Results',
               ),
             ),
           ],
