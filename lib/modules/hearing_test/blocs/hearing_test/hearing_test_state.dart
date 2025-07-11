@@ -8,7 +8,7 @@ class HearingTestState {
   final int currentFrequencyIndex;
   final double currentDBLevel;
   final Map<double, int> dbLevelToHearCountMap;
-  final List<List<double?>> results;
+  final HearingTestResult results;
 
   HearingTestState({
     this.isButtonPressed = false,
@@ -18,12 +18,18 @@ class HearingTestState {
     this.currentFrequencyIndex = 0,
     this.currentDBLevel = 60,
     this.dbLevelToHearCountMap = const {},
-    List<List<double?>>? results,
+    HearingTestResult? results,
   }) : results =
            results ??
-           List.generate(
-             EAR_COUNT,
-             (_) => List<double?>.filled(TEST_FREQUENCIES.length, null),
+           HearingTestResult(
+             leftEarResults: List<double?>.filled(
+               TEST_FREQUENCIES.length,
+               null,
+             ),
+             rightEarResults: List<double?>.filled(
+               TEST_FREQUENCIES.length,
+               null,
+             ),
            );
 
   HearingTestState copyWith({
@@ -34,7 +40,7 @@ class HearingTestState {
     int? currentFrequencyIndex,
     double? currentDBLevel,
     Map<double, int>? dbLevelToHearCountMap,
-    List<List<double?>>? results,
+    HearingTestResult? results,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,

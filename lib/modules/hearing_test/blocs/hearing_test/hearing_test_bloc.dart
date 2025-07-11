@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 import 'package:hear_mate_app/modules/hearing_test/constants.dart';
+import 'package:hear_mate_app/modules/hearing_test/modules/hearing_test_result.dart';
 
 part 'hearing_test_event.dart';
 part 'hearing_test_state.dart';
@@ -119,8 +120,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return add(HearingTestChangeEar());
     }
 
-    state.results[state.currentEar ? 1 : 0][state.currentFrequencyIndex] =
-        state.currentDBLevel.toDouble();
+    if (!state.currentEar) {
+      state.results.leftEarResults[state.currentFrequencyIndex] = state.currentDBLevel.toDouble();
+    } else {
+      state.results.rightEarResults[state.currentFrequencyIndex] = state.currentDBLevel.toDouble();
+    }
 
     emit(
       state.copyWith(
