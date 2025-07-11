@@ -1,10 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/hearing_test/constants.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+import 'package:hear_mate_app/modules/constants.dart';
 
 // TODO This widget needs some changes:
 // - add option to save results
@@ -12,16 +9,16 @@ import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_te
 // - adjust for mobile view
 
 class AudiogramChart extends StatelessWidget {
-  AudiogramChart({super.key});
-  final List<String> frequencyLabels = [
-    '125',
-    '250',
-    '500',
-    '1k',
-    '2k',
-    '4k',
-    '8k',
-  ];
+  final List<double?> leftEarData;
+  final List<double?> rightEarData;
+  final List<String> frequencyLabels;
+
+  AudiogramChart({
+    super.key,
+    required this.leftEarData,
+    required this.rightEarData,
+    required this.frequencyLabels,
+  });
 
   final int maxYValue = 100;
   final int minYValue = MIN_DB_LEVEL;
@@ -52,232 +49,221 @@ class AudiogramChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HearingTestBloc, HearingTestState>(
-      builder: (context, state) {
-        return Stack(
-          children: [
-            LineChart(
-              LineChartData(
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: true,
-                  drawHorizontalLine: true,
-                  horizontalInterval: 10,
+    return Stack(
+      children: [
+        LineChart(
+          LineChartData(
+            gridData: FlGridData(
+              show: true,
+              drawVerticalLine: true,
+              drawHorizontalLine: true,
+              horizontalInterval: 10,
+            ),
+            titlesData: FlTitlesData(
+              bottomTitles: AxisTitles(
+                axisNameWidget: Text(
+                  AppLocalizations.of(
+                    context,
+                  )!.hearing_test_audiogram_chart_frequency,
+                  style: TextStyle(fontSize: 12),
                 ),
-                titlesData: FlTitlesData(
-                  bottomTitles: AxisTitles(
-                    axisNameWidget: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.hearing_test_audiogram_chart_frequency,
-                      style: TextStyle(fontSize: 12),
-                    ),
 
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: 1,
-                      getTitlesWidget: (value, meta) {
-                        int index = value.round();
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: 1,
+                  getTitlesWidget: (value, meta) {
+                    int index = value.round();
 
-                        // Hide labels if value isn't explicitly mapped to a frequency label
-                        if (index < 0 || index >= frequencyLabels.length) {
-                          return const SizedBox.shrink();
-                        }
+                    // Hide labels if value isn't explicitly mapped to a frequency label
+                    if (index < 0 || index >= frequencyLabels.length) {
+                      return const SizedBox.shrink();
+                    }
 
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            frequencyLabels[index],
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  leftTitles: AxisTitles(
-                    axisNameWidget: Text(
-                      'dB HL',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: 10,
-                      reservedSize: 30,
-                      getTitlesWidget: (value, meta) {
-                        int displayValue =
-                            (maxYValue - (value - minYValue)).toInt();
-                        if (displayValue < minYValue ||
-                            displayValue > maxYValue) {
-                          return const SizedBox.shrink();
-                        }
-                        return Text(
-                          displayValue.toString(),
-                          style: const TextStyle(fontSize: 10),
-                        );
-                      },
-                    ),
-                  ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  topTitles: AxisTitles(
-                    axisNameWidget: Padding(
-                      padding: EdgeInsets.only(bottom: 20.0),
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.hearing_test_audiogram_chart_frequency,
-                        style: TextStyle(fontSize: 12),
+                        frequencyLabels[index],
+                        style: const TextStyle(fontSize: 10),
                       ),
-                    ),
-                    sideTitles: SideTitles(showTitles: false),
+                    );
+                  },
+                ),
+              ),
+              leftTitles: AxisTitles(
+                axisNameWidget: Text('dB HL', style: TextStyle(fontSize: 12)),
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: 10,
+                  reservedSize: 30,
+                  getTitlesWidget: (value, meta) {
+                    int displayValue =
+                        (maxYValue - (value - minYValue)).toInt();
+                    if (displayValue < minYValue || displayValue > maxYValue) {
+                      return const SizedBox.shrink();
+                    }
+                    return Text(
+                      displayValue.toString(),
+                      style: const TextStyle(fontSize: 10),
+                    );
+                  },
+                ),
+              ),
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              topTitles: AxisTitles(
+                axisNameWidget: Padding(
+                  padding: EdgeInsets.only(bottom: 20.0),
+                  child: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.hearing_test_audiogram_chart_frequency,
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
-                borderData: FlBorderData(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+            ),
+            borderData: FlBorderData(
+              show: true,
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            minX: -0.5,
+            maxX: 6.5,
+            minY: minYValue - 5,
+            maxY: maxYValue + 5,
+            lineBarsData: [
+              // Left ear line (blue)
+              LineChartBarData(
+                spots: remapSpots(leftEarData),
+                isCurved: false,
+                color: Colors.blue,
+                barWidth: 2,
+                isStrokeCapRound: true,
+                dotData: FlDotData(
                   show: true,
-                  border: Border.all(color: Colors.grey.shade300),
+                  getDotPainter: (spot, percent, barData, index) {
+                    return FlDotCirclePainter(
+                      radius: 6,
+                      color: Colors.blue,
+                      strokeWidth: 1,
+                      strokeColor: Colors.blue,
+                    );
+                  },
                 ),
-                minX: -0.5,
-                maxX: 6.5,
-                minY: minYValue - 5,
-                maxY: maxYValue + 5,
-                lineBarsData: [
-                  // Left ear line (blue)
-                  LineChartBarData(
-                    spots: remapSpots(state.results.leftEarResults),
-                    isCurved: false,
-                    color: Colors.blue,
-                    barWidth: 2,
-                    isStrokeCapRound: true,
-                    dotData: FlDotData(
-                      show: true,
-                      getDotPainter: (spot, percent, barData, index) {
-                        return FlDotCirclePainter(
-                          radius: 6,
-                          color: Colors.blue,
-                          strokeWidth: 1,
-                          strokeColor: Colors.blue,
-                        );
-                      },
-                    ),
-                    belowBarData: BarAreaData(show: false),
-                  ),
-                  // Right ear line (red)
-                  LineChartBarData(
-                    spots: remapSpots(state.results.rightEarResults),
-                    isCurved: false,
-                    color: Colors.red,
-                    barWidth: 2,
-                    isStrokeCapRound: true,
-                    dotData: FlDotData(
-                      show: true,
-                      getDotPainter: (spot, percent, barData, index) {
-                        return FlDotCirclePainter(
-                          radius: 6,
-                          color: Colors.red,
-                          strokeWidth: 1,
-                          strokeColor: Colors.red,
-                        );
-                      },
-                    ),
-                    belowBarData: BarAreaData(show: false),
-                  ),
-                ],
-                lineTouchData: LineTouchData(enabled: false),
-                // TODO: check
-                // Reference lines for hearing loss severity - do we need that?
-                extraLinesData: ExtraLinesData(
-                  horizontalLines: [
-                    HorizontalLine(
-                      y: 25,
-                      color: Colors.orange.withValues(alpha: 0.5),
+                belowBarData: BarAreaData(show: false),
+              ),
+              // Right ear line (red)
+              LineChartBarData(
+                spots: remapSpots(rightEarData),
+                isCurved: false,
+                color: Colors.red,
+                barWidth: 2,
+                isStrokeCapRound: true,
+                dotData: FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, barData, index) {
+                    return FlDotCirclePainter(
+                      radius: 6,
+                      color: Colors.red,
                       strokeWidth: 1,
-                      dashArray: [5, 5],
-                      label: HorizontalLineLabel(
-                        show: true,
-                        alignment: Alignment.topRight,
-                        padding: const EdgeInsets.only(right: 5, bottom: 5),
-                        style: const TextStyle(
-                          fontSize: 9,
-                          color: Colors.orange,
-                        ),
-                        labelResolver:
-                            (line) =>
-                                AppLocalizations.of(
-                                  context,
-                                )!.hearing_test_audiogram_chart_mild_loss,
-                      ),
-                    ),
-                    HorizontalLine(
-                      y: 40,
-                      color: Colors.deepOrange.withValues(alpha: 0.5),
-                      strokeWidth: 1,
-                      dashArray: [5, 5],
-                      label: HorizontalLineLabel(
-                        show: true,
-                        alignment: Alignment.topRight,
-                        padding: const EdgeInsets.only(right: 5, bottom: 5),
-                        style: const TextStyle(
-                          fontSize: 9,
-                          color: Colors.deepOrange,
-                        ),
-                        labelResolver:
-                            (line) =>
-                                AppLocalizations.of(
-                                  context,
-                                )!.hearing_test_audiogram_chart_moderate_loss,
-                      ),
-                    ),
-                    HorizontalLine(
-                      y: 70,
-                      color: Colors.red.withValues(alpha: 0.5),
-                      strokeWidth: 1,
-                      dashArray: [5, 5],
-                      label: HorizontalLineLabel(
-                        show: true,
-                        alignment: Alignment.topRight,
-                        padding: const EdgeInsets.only(right: 5, bottom: 5),
-                        style: const TextStyle(fontSize: 9, color: Colors.red),
-                        labelResolver:
-                            (line) =>
-                                AppLocalizations.of(
-                                  context,
-                                )!.hearing_test_audiogram_chart_severe_loss,
-                      ),
-                    ),
-                  ],
+                      strokeColor: Colors.red,
+                    );
+                  },
                 ),
-                clipData: FlClipData.all(),
+                belowBarData: BarAreaData(show: false),
               ),
+            ],
+            lineTouchData: LineTouchData(enabled: false),
+            // TODO: check
+            // Reference lines for hearing loss severity - do we need that?
+            extraLinesData: ExtraLinesData(
+              horizontalLines: [
+                HorizontalLine(
+                  y: 25,
+                  color: Colors.orange.withValues(alpha: 0.5),
+                  strokeWidth: 1,
+                  dashArray: [5, 5],
+                  label: HorizontalLineLabel(
+                    show: true,
+                    alignment: Alignment.topRight,
+                    padding: const EdgeInsets.only(right: 5, bottom: 5),
+                    style: const TextStyle(fontSize: 9, color: Colors.orange),
+                    labelResolver:
+                        (line) =>
+                            AppLocalizations.of(
+                              context,
+                            )!.hearing_test_audiogram_chart_mild_loss,
+                  ),
+                ),
+                HorizontalLine(
+                  y: 40,
+                  color: Colors.deepOrange.withValues(alpha: 0.5),
+                  strokeWidth: 1,
+                  dashArray: [5, 5],
+                  label: HorizontalLineLabel(
+                    show: true,
+                    alignment: Alignment.topRight,
+                    padding: const EdgeInsets.only(right: 5, bottom: 5),
+                    style: const TextStyle(
+                      fontSize: 9,
+                      color: Colors.deepOrange,
+                    ),
+                    labelResolver:
+                        (line) =>
+                            AppLocalizations.of(
+                              context,
+                            )!.hearing_test_audiogram_chart_moderate_loss,
+                  ),
+                ),
+                HorizontalLine(
+                  y: 70,
+                  color: Colors.red.withValues(alpha: 0.5),
+                  strokeWidth: 1,
+                  dashArray: [5, 5],
+                  label: HorizontalLineLabel(
+                    show: true,
+                    alignment: Alignment.topRight,
+                    padding: const EdgeInsets.only(right: 5, bottom: 5),
+                    style: const TextStyle(fontSize: 9, color: Colors.red),
+                    labelResolver:
+                        (line) =>
+                            AppLocalizations.of(
+                              context,
+                            )!.hearing_test_audiogram_chart_severe_loss,
+                  ),
+                ),
+              ],
             ),
-            Positioned(
-              top: 25,
-              right: 5,
-              child: Row(
-                children: [
-                  Container(width: 12, height: 12, color: Colors.blue),
-                  const SizedBox(width: 4),
-                  Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.hearing_test_audiogram_chart_left_ear,
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  const SizedBox(width: 20),
-                  Container(width: 12, height: 12, color: Colors.red),
-                  const SizedBox(width: 4),
-                  Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.hearing_test_audiogram_chart_right_ear,
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ],
+            clipData: FlClipData.all(),
+          ),
+        ),
+        Positioned(
+          top: 25,
+          right: 5,
+          child: Row(
+            children: [
+              Container(width: 12, height: 12, color: Colors.blue),
+              const SizedBox(width: 4),
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.hearing_test_audiogram_chart_left_ear,
+                style: TextStyle(fontSize: 12),
               ),
-            ),
-          ],
-        );
-      },
+              const SizedBox(width: 20),
+              Container(width: 12, height: 12, color: Colors.red),
+              const SizedBox(width: 4),
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.hearing_test_audiogram_chart_right_ear,
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
