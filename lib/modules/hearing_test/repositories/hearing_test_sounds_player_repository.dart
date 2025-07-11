@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hear_mate_app/utils/logger.dart';
-import 'package:hear_mate_app/modules/hearing_test/constants.dart';
+import 'package:hear_mate_app/modules/constants.dart';
 
 class HearingTestSoundsPlayerRepository {
   final AudioPlayer _audioPlayer = AudioPlayer();

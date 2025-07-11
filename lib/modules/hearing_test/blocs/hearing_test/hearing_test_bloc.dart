@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/utils/logger.dart';
-import 'package:hear_mate_app/modules/hearing_test/constants.dart';
+import 'package:hear_mate_app/modules/constants.dart';
 import 'package:hear_mate_app/modules/hearing_test/modules/hearing_test_result.dart';
 
 part 'hearing_test_event.dart';

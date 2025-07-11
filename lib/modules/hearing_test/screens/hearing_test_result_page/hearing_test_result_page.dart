@@ -7,7 +7,16 @@ import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HearingTestResultPage extends StatelessWidget {
-  const HearingTestResultPage({super.key});
+  HearingTestResultPage({super.key});
+  final List<String> frequencyLabels = [
+    '125',
+    '250',
+    '500',
+    '1k',
+    '2k',
+    '4k',
+    '8k',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +65,11 @@ class HearingTestResultPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
-                    child: AudiogramChart(),
+                    child: AudiogramChart(
+                      leftEarData: state.results.leftEarResults,
+                      rightEarData: state.results.rightEarResults,
+                      frequencyLabels: frequencyLabels,
+                    ),
                   ),
                   const SizedBox(height: 30),
                   BlocBuilder<HMThemeBloc, HMThemeState>(
