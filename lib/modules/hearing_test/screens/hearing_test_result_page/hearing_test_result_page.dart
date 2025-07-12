@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -23,10 +22,6 @@ class HearingTestResultPage extends StatelessWidget {
     return BlocBuilder<HearingTestBloc, HearingTestState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: HMAppBar(
-            title: AppLocalizations.of(context)!.hearing_test_result_page_title,
-            route: ModalRoute.of(context)?.settings.name ?? "",
-          ),
           body: SingleChildScrollView(
             child: Center(
               child: Column(
