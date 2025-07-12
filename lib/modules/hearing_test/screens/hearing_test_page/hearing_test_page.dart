@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 
 class HearingTestPage extends StatelessWidget {
   const HearingTestPage({super.key});
@@ -10,11 +9,6 @@ class HearingTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HMAppBar(
-        title: AppLocalizations.of(context)!.hearing_test_test_page_title,
-        route: ModalRoute.of(context)?.settings.name ?? "",
-        onBackPressed: () {context.read<HearingTestBloc>().add(HearingTestEndTestEarly());},
-      ),
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
         listener: (context, state) {
           if (state is HearingTestCompleted) {
@@ -27,16 +21,16 @@ class HearingTestPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  AppLocalizations.of(context)!.hearing_test_test_page_instruction,
+                  AppLocalizations.of(
+                    context,
+                  )!.hearing_test_test_page_instruction,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 24,
-                ),
+                child: SizedBox(height: 24),
               ),
               const Spacer(),
               Center(
@@ -103,11 +97,7 @@ class HearingTestPage extends StatelessWidget {
                     context.read<HearingTestBloc>().add(
                       HearingTestEndTestEarly(),
                     );
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/hearing_test/result',
-                      (route) => false,
-                    );
+                    Navigator.pushNamed(context, '/hearing_test/result');
                   },
                   child: Text(
                     AppLocalizations.of(context)!.hearing_test_test_page_end,
