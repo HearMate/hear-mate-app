@@ -198,7 +198,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         .split('.')
         .first
         .replaceAll(':', '-');
-    final defaultFileName = 'audiogram_result_$timestamp.csv';
+    final defaultFileName = 'test_result_$timestamp.json';
 
     try {
       final baseDir = await getApplicationSupportDirectory();
