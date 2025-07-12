@@ -8,10 +8,12 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.route,
     required this.title,
     this.onBackPressed,
+    this.customBackRoute,
   });
   final String title;
   final String route;
-  final VoidCallback? onBackPressed;
+  final Future<void> Function()? onBackPressed;
+  final String? customBackRoute;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -29,11 +31,18 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
           !hiddenBackButtonRoutes.contains(route)
               ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () {
+                onPressed: () async {
                   if (onBackPressed != null) {
-                    onBackPressed!();
+                    await onBackPressed!();
                   }
-                  Navigator.of(context).pop();
+                  if (customBackRoute != null) {
+                    Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(customBackRoute!),
+                    );
+                  } else {
+                    Navigator.of(context).pop();
+                  }
                 },
               )
               : null,

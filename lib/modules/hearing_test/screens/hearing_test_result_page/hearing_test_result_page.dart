@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+
+// FIXME:
+// - language support
 
 class HearingTestResultPage extends StatelessWidget {
   HearingTestResultPage({super.key});
@@ -26,6 +29,35 @@ class HearingTestResultPage extends StatelessWidget {
           appBar: HMAppBar(
             title: AppLocalizations.of(context)!.hearing_test_result_page_title,
             route: ModalRoute.of(context)?.settings.name ?? "",
+            customBackRoute: '/hearing_test/welcome',
+            onBackPressed: () async {
+              await showDialog<void>(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      title: Text('Save Results'),
+                      content: Text(
+                        'Do you want to save your hearing test results?',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed:
+                              () => Navigator.of(context).pop(false), // Cancel
+                          child: Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(true); // Save and go back
+                            context.read<HearingTestBloc>().add(
+                              HearingTestSaveResult(),
+                            );
+                          },
+                          child: Text('Save'),
+                        ),
+                      ],
+                    ),
+              );
+            },
           ),
           body: SingleChildScrollView(
             child: Center(
@@ -174,22 +206,6 @@ class HearingTestResultPage extends StatelessWidget {
                         context,
                       )!.hearing_test_result_page_save_results,
                       style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/',
-                        (route) => false,
-                      );
-                    },
-                    child: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.hearing_test_result_page_home,
-                      style: TextStyle(fontSize: 16, color: Colors.blueAccent),
                     ),
                   ),
                   const SizedBox(height: 30),
