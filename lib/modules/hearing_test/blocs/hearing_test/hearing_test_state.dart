@@ -9,6 +9,7 @@ class HearingTestState {
   final double currentDBLevel;
   final Map<double, int> dbLevelToHearCountMap;
   final HearingTestResult results;
+  final bool resultSaved;
 
   HearingTestState({
     this.isButtonPressed = false,
@@ -18,6 +19,7 @@ class HearingTestState {
     this.currentFrequencyIndex = 0,
     this.currentDBLevel = 60,
     this.dbLevelToHearCountMap = const {},
+    this.resultSaved = false,
     HearingTestResult? results,
   }) : results =
            results ??
@@ -40,6 +42,7 @@ class HearingTestState {
     double? currentDBLevel,
     Map<double, int>? dbLevelToHearCountMap,
     HearingTestResult? results,
+    bool? resultSaved,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
@@ -50,6 +53,7 @@ class HearingTestState {
       currentDBLevel: currentDBLevel ?? this.currentDBLevel,
       dbLevelToHearCountMap: dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
       results: results ?? this.results,
+      resultSaved: resultSaved ?? this.resultSaved,
     );
   }
 }

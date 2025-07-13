@@ -12,7 +12,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
   final String title;
   final String route;
-  final Future<void> Function()? onBackPressed;
+  final Future<bool> Function()? onBackPressed;
   final String? customBackRoute;
 
   @override
@@ -32,16 +32,19 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () async {
+                  bool shouldPop = true;
                   if (onBackPressed != null) {
-                    await onBackPressed!();
+                    shouldPop = await onBackPressed!();
                   }
-                  if (customBackRoute != null) {
-                    Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(customBackRoute!),
-                    );
-                  } else {
-                    Navigator.of(context).pop();
+                  if (shouldPop) {
+                    if (customBackRoute != null) {
+                      Navigator.popUntil(
+                        context,
+                        ModalRoute.withName(customBackRoute!),
+                      );
+                    } else {
+                      Navigator.of(context).pop();
+                    }
                   }
                 },
               )
