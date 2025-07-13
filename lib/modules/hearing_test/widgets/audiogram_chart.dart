@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/constants.dart';
 
-// TODO This widget needs some changes:
-// - add option to save results
+// TODO
 // - replace circle markers with appropriate icons for left and right ear
-// - adjust for mobile view
 
 class AudiogramChart extends StatelessWidget {
   final List<double?> leftEarData;

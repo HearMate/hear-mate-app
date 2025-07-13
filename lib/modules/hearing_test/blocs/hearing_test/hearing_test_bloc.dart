@@ -44,6 +44,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         currentFrequencyIndex: 0,
         currentDBLevel: 20,
         dbLevelToHearCountMap: const {},
+        resultSaved: false,
       ),
     );
 
@@ -209,6 +210,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       final internalPath = '${echoParseDir.path}/$defaultFileName';
       final internalFile = File(internalPath);
       await internalFile.writeAsString(data);
+      emit(
+      state.copyWith(
+        resultSaved: true,
+      ),
+    );
     } catch (e) {
       debugPrint("Error saving CSV file: $e");
     }

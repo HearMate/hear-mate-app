@@ -5,7 +5,7 @@ import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart.dart'
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/alert_dialogs.dart';
 // FIXME:
 // - language support
 
@@ -21,6 +21,14 @@ class HearingTestResultPage extends StatelessWidget {
     '8k',
   ];
 
+  Future<bool> _backDialog(BuildContext context) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => BackAlertDialog(),
+    );
+    return result == true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HearingTestBloc, HearingTestState>(
@@ -30,34 +38,12 @@ class HearingTestResultPage extends StatelessWidget {
             title: AppLocalizations.of(context)!.hearing_test_result_page_title,
             route: ModalRoute.of(context)?.settings.name ?? "",
             customBackRoute: '/hearing_test/welcome',
-            onBackPressed: () async {
-              await showDialog<void>(
-                context: context,
-                builder:
-                    (context) => AlertDialog(
-                      title: Text('Save Results'),
-                      content: Text(
-                        'Do you want to save your hearing test results?',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed:
-                              () => Navigator.of(context).pop(false), // Cancel
-                          child: Text('No'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(true); // Save and go back
-                            context.read<HearingTestBloc>().add(
-                              HearingTestSaveResult(),
-                            );
-                          },
-                          child: Text('Save'),
-                        ),
-                      ],
-                    ),
-              );
-            },
+            onBackPressed:
+                state.resultSaved
+                    ? null
+                    : () {
+                      return _backDialog(context);
+                    },
           ),
           body: SingleChildScrollView(
             child: Center(
@@ -158,39 +144,24 @@ class HearingTestResultPage extends StatelessWidget {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
-                      if (state.results.hasMissingValues()) {
+                      if(state.resultSaved){
                         showDialog(
                           context: context,
-                          builder:
-                              (context) => AlertDialog(
-                                title: Text('Missing Values'),
-                                content: Text(
-                                  'Some test results are missing. Do you want to save anyway?',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed:
-                                        () =>
-                                            Navigator.of(
-                                              context,
-                                            ).pop(), // Cancel
-                                    child: Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      context.read<HearingTestBloc>().add(
-                                        HearingTestSaveResult(),
-                                      );
-                                    },
-                                    child: Text('Save'),
-                                  ),
-                                ],
-                              ),
+                          builder: (context) => AlreadySavedDialog(),
+                        );
+                      }
+                      else if (state.results.hasMissingValues()) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => MissingValuesAlertDialog(),
                         );
                       } else {
                         context.read<HearingTestBloc>().add(
                           HearingTestSaveResult(),
+                        );
+                        showDialog(
+                          context: context,
+                          builder: (context) => SavedDialog(),
                         );
                       }
                     },

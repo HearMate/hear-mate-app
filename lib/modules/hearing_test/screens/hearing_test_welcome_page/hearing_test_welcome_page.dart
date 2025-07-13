@@ -4,6 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 
+// FIXME:
+// - language support
+
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
 
