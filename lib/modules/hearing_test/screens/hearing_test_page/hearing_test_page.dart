@@ -9,12 +9,11 @@ class HearingTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<HearingTestBloc>().add(HearingTestStartTest());
-
     return Scaffold(
       appBar: HMAppBar(
         title: AppLocalizations.of(context)!.hearing_test_test_page_title,
         route: ModalRoute.of(context)?.settings.name ?? "",
+        onBackPressed: () {context.read<HearingTestBloc>().add(HearingTestEndTestEarly());},
       ),
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
         listener: (context, state) {
@@ -37,18 +36,6 @@ class HearingTestPage extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: SizedBox(
                   height: 24,
-                  child:
-                      state.wasSoundHeard
-                          ? Text(
-                            AppLocalizations.of(context)!.hearing_test_test_page_release,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                          : const SizedBox(),
                 ),
               ),
               const Spacer(),

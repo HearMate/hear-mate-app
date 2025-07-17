@@ -1,18 +1,18 @@
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hear_mate_app/utils/logger.dart';
+import 'package:hear_mate_app/modules/constants.dart';
 
 class HearingTestSoundsPlayerRepository {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
-  final List<int> frequencies = [1000, 2000, 4000, 8000, 500, 250, 125];
 
   // Duration for each tone
   final Duration soundDuration = Duration(seconds: 2);
 
   Future<void> initialize() async {
-    for (int freq in frequencies) {
+    for (int freq in TEST_FREQUENCIES) {
       String basePath = 'tones/tone_${freq}Hz';
       String leftPath = '${basePath}_left.wav';
       String rightPath = '${basePath}_right.wav';
@@ -55,6 +55,10 @@ class HearingTestSoundsPlayerRepository {
   Future<void> stopSound() async {
     await _audioPlayer.stop();
   }
+  
+  bool isPlaying() {
+    return _audioPlayer.state == PlayerState.playing;
+  }
 
   double _decibelsToVolume(double dBHL, {int frequency = 0}) {
     dBHL = dBHL.clamp(-10.0, 120.0);
@@ -96,7 +100,7 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _normalizeSoundPressure(double soundPressure) {
-    // this needs to be also limit the actual app messurement if it turns out output device does not reach 120 dbhl
+    // this needs to be also limit the actual app measurement if it turns out output device does not reach 120 dB HL
     // this needs to be checked with the dummy head
     double maxDeviceOutputVolume = 60;
 

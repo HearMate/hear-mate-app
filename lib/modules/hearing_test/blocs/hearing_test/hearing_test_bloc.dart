@@ -1,16 +1,17 @@
 import 'package:bloc/bloc.dart';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/utils/logger.dart';
+import 'package:hear_mate_app/modules/constants.dart';
+import 'package:hear_mate_app/modules/hearing_test/modules/hearing_test_result.dart';
 
 part 'hearing_test_event.dart';
 part 'hearing_test_state.dart';
 
-const int MIN_DB_LEVEL = -10;
-
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
-  final List<int> testFrequencies = [1000, 2000, 4000, 8000, 500, 250, 125];
 
   HearingTestBloc({
     required HearingTestSoundsPlayerRepository
@@ -39,7 +40,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         currentFrequencyIndex: 0,
         currentDBLevel: 20,
         dbLevelToHearCountMap: const {},
-        results: [],
       ),
     );
 
@@ -50,7 +50,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestButtonPressed event,
     Emitter<HearingTestState> emit,
   ) async {
-    emit(state.copyWith(isButtonPressed: true, wasSoundHeard: true));
+    if (_soundsPlayerRepository.isPlaying()) {
+      _soundsPlayerRepository.stopSound();
+      emit(state.copyWith(isButtonPressed: true, wasSoundHeard: true));
+      return;
+    }
   }
 
   void _onButtonReleased(
@@ -68,12 +72,16 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return;
     }
 
-    if (state.currentDBLevel == MIN_DB_LEVEL) {
+    if (state.currentDBLevel < MIN_DB_LEVEL) {
       return add(HearingTestNextFrequency());
     }
 
+    final random = Random();
+    final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
+    await Future.delayed(Duration(milliseconds: delayMs));
+
     await _soundsPlayerRepository.playSound(
-      testFrequencies[state.currentFrequencyIndex],
+      TEST_FREQUENCIES[state.currentFrequencyIndex],
       decibels: state.currentDBLevel,
       leftEarOnly: state.currentEar,
     );
@@ -89,7 +97,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     }
 
     // if user didn't hear the sound 2 times, switch frequencies
-    if (state.dbLevelToHearCountMap[state.currentDBLevel] == -2) {
+    if (state.dbLevelToHearCountMap[state.currentDBLevel] == 0) {
       emit(state.copyWith(currentDBLevel: state.currentDBLevel + 5));
       return add(HearingTestNextFrequency());
     }
@@ -113,7 +121,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
-    if (state.currentFrequencyIndex == testFrequencies.length - 1) {
+    if (state.currentFrequencyIndex == TEST_FREQUENCIES.length - 1) {
       // check if we have already covered two ears
       if (state.currentEar) {
         return add(HearingTestCompleted());
@@ -121,9 +129,15 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return add(HearingTestChangeEar());
     }
 
+    if (!state.currentEar) {
+      state.results.leftEarResults[state.currentFrequencyIndex] = state.currentDBLevel.toDouble();
+    } else {
+      state.results.rightEarResults[state.currentFrequencyIndex] = state.currentDBLevel.toDouble();
+    }
+
     emit(
       state.copyWith(
-        results: [...state.results, state.currentDBLevel],
+        results: state.results,
         currentFrequencyIndex: state.currentFrequencyIndex + 1,
         currentDBLevel: state.currentDBLevel + 10,
         dbLevelToHearCountMap: {},

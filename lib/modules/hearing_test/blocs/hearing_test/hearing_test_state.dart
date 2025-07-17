@@ -8,7 +8,7 @@ class HearingTestState {
   final int currentFrequencyIndex;
   final double currentDBLevel;
   final Map<double, int> dbLevelToHearCountMap;
-  final List<double> results;
+  final HearingTestResult results;
 
   HearingTestState({
     this.isButtonPressed = false,
@@ -18,9 +18,19 @@ class HearingTestState {
     this.currentFrequencyIndex = 0,
     this.currentDBLevel = 60,
     this.dbLevelToHearCountMap = const {},
-    this.results = const [],
-  });
-
+    HearingTestResult? results,
+  }) : results =
+           results ??
+           HearingTestResult(
+             leftEarResults: List<double?>.filled(
+               TEST_FREQUENCIES.length,
+               null,
+             ),
+             rightEarResults: List<double?>.filled(
+               TEST_FREQUENCIES.length,
+               null,
+             ),
+           );
   HearingTestState copyWith({
     bool? isButtonPressed,
     bool? wasSoundHeard,
@@ -29,18 +39,16 @@ class HearingTestState {
     int? currentFrequencyIndex,
     double? currentDBLevel,
     Map<double, int>? dbLevelToHearCountMap,
-    List<double>? results,
+    HearingTestResult? results,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
       wasSoundHeard: wasSoundHeard ?? this.wasSoundHeard,
       currentEar: currentEar ?? this.currentEar,
       isTestCanceled: isTestCanceled ?? this.isTestCanceled,
-      currentFrequencyIndex:
-          currentFrequencyIndex ?? this.currentFrequencyIndex,
+      currentFrequencyIndex: currentFrequencyIndex ?? this.currentFrequencyIndex,
       currentDBLevel: currentDBLevel ?? this.currentDBLevel,
-      dbLevelToHearCountMap:
-          dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
+      dbLevelToHearCountMap: dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
       results: results ?? this.results,
     );
   }
