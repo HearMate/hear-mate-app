@@ -1,7 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/constants.dart';
+import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+    as HearingTestConstants;
 
 // TODO
 // - replace circle markers with appropriate icons for left and right ear
@@ -9,17 +10,25 @@ import 'package:hear_mate_app/modules/constants.dart';
 class AudiogramChart extends StatelessWidget {
   final List<double?> leftEarData;
   final List<double?> rightEarData;
-  final List<String> frequencyLabels;
+
+  final List<String> frequencyLabels = const [
+    '125',
+    '250',
+    '500',
+    '1k',
+    '2k',
+    '4k',
+    '8k',
+  ];
 
   AudiogramChart({
     super.key,
     required this.leftEarData,
     required this.rightEarData,
-    required this.frequencyLabels,
   });
 
   final int maxYValue = 100;
-  final int minYValue = MIN_DB_LEVEL;
+  final int minYValue = HearingTestConstants.MIN_DB_LEVEL;
 
   List<FlSpot> remapSpots(List<double?> values) {
     if (values.length != frequencyLabels.length + 1) return [];

@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+    as HearingTestConstants;
 import 'package:hear_mate_app/utils/logger.dart';
-import 'package:hear_mate_app/modules/constants.dart';
 
 class HearingTestSoundsPlayerRepository {
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -12,7 +13,7 @@ class HearingTestSoundsPlayerRepository {
   final Duration soundDuration = Duration(seconds: 2);
 
   Future<void> initialize() async {
-    for (int freq in TEST_FREQUENCIES) {
+    for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
       String basePath = 'tones/tone_${freq}Hz';
       String leftPath = '${basePath}_left.wav';
       String rightPath = '${basePath}_right.wav';
@@ -55,7 +56,7 @@ class HearingTestSoundsPlayerRepository {
   Future<void> stopSound() async {
     await _audioPlayer.stop();
   }
-  
+
   bool isPlaying() {
     return _audioPlayer.state == PlayerState.playing;
   }
