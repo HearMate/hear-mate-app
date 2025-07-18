@@ -24,12 +24,14 @@ class HearingTestState {
   }) : results =
            results ??
            HearingTestResult(
+             filePath: "",
+             dateLabel: "",
              leftEarResults: List<double?>.filled(
-               TEST_FREQUENCIES.length,
+               HearingTestConstants.TEST_FREQUENCIES.length,
                null,
              ),
              rightEarResults: List<double?>.filled(
-               TEST_FREQUENCIES.length,
+               HearingTestConstants.TEST_FREQUENCIES.length,
                null,
              ),
            );
@@ -49,9 +51,11 @@ class HearingTestState {
       wasSoundHeard: wasSoundHeard ?? this.wasSoundHeard,
       currentEar: currentEar ?? this.currentEar,
       isTestCanceled: isTestCanceled ?? this.isTestCanceled,
-      currentFrequencyIndex: currentFrequencyIndex ?? this.currentFrequencyIndex,
+      currentFrequencyIndex:
+          currentFrequencyIndex ?? this.currentFrequencyIndex,
       currentDBLevel: currentDBLevel ?? this.currentDBLevel,
-      dbLevelToHearCountMap: dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
+      dbLevelToHearCountMap:
+          dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
       results: results ?? this.results,
       resultSaved: resultSaved ?? this.resultSaved,
     );

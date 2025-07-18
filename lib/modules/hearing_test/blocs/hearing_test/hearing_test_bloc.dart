@@ -7,8 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/utils/logger.dart';
-import 'package:hear_mate_app/modules/constants.dart';
-import 'package:hear_mate_app/modules/hearing_test/modules/hearing_test_result.dart';
+import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_result.dart';
+import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+    as HearingTestConstants;
 
 part 'hearing_test_event.dart';
 part 'hearing_test_state.dart';
@@ -77,7 +78,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return;
     }
 
-    if (state.currentDBLevel < MIN_DB_LEVEL) {
+    if (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL) {
       return add(HearingTestNextFrequency());
     }
 
@@ -86,7 +87,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     await Future.delayed(Duration(milliseconds: delayMs));
 
     await _soundsPlayerRepository.playSound(
-      TEST_FREQUENCIES[state.currentFrequencyIndex],
+      HearingTestConstants.TEST_FREQUENCIES[state.currentFrequencyIndex],
       decibels: state.currentDBLevel,
       leftEarOnly: state.currentEar,
     );
@@ -126,7 +127,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
-    if (state.currentFrequencyIndex == TEST_FREQUENCIES.length - 1) {
+    if (state.currentFrequencyIndex ==
+        HearingTestConstants.TEST_FREQUENCIES.length - 1) {
       // check if we have already covered two ears
       if (state.currentEar) {
         return add(HearingTestCompleted());
@@ -210,11 +212,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       final internalPath = '${echoParseDir.path}/$defaultFileName';
       final internalFile = File(internalPath);
       await internalFile.writeAsString(data);
-      emit(
-      state.copyWith(
-        resultSaved: true,
-      ),
-    );
+      emit(state.copyWith(resultSaved: true));
     } catch (e) {
       debugPrint("Error saving CSV file: $e");
     }
