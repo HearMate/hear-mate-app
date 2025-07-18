@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 
 class HearingTestPage extends StatelessWidget {
   const HearingTestPage({super.key});
@@ -12,7 +13,15 @@ class HearingTestPage extends StatelessWidget {
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
         listener: (context, state) {
           if (state is HearingTestCompleted) {
-            Navigator.pushNamed(context, 'hearing_test/result');
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder:
+                    (_) => BlocProvider.value(
+                      value: context.read<HearingTestBloc>(),
+                      child: HearingTestResultPage(),
+                    ),
+              ),
+            );
           }
         },
         builder: (context, state) {
@@ -94,7 +103,16 @@ class HearingTestPage extends StatelessWidget {
                       context.read<HearingTestBloc>().add(
                         HearingTestEndTestEarly(),
                       );
-                      Navigator.pushNamed(context, '/hearing_test/result');
+
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder:
+                              (_) => BlocProvider.value(
+                                value: context.read<HearingTestBloc>(),
+                                child: HearingTestResultPage(),
+                              ),
+                        ),
+                      );
                     },
                     child: Text(
                       AppLocalizations.of(context)!.hearing_test_test_page_end,
