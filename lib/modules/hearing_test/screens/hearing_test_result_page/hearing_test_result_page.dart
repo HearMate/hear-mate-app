@@ -11,6 +11,7 @@ import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_p
 // - language support
 
 // TODO: Talk if we want this kind of approach.
+// TODO: Some kind of paging probably...
 
 class HearingTestResultPage extends StatelessWidget {
   HearingTestResultPage({super.key});
@@ -18,7 +19,11 @@ class HearingTestResultPage extends StatelessWidget {
   Future<bool> _backDialog(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) => const BackAlertDialog(),
+      builder:
+          (dialogContext) => BlocProvider.value(
+            value: context.read<HearingTestBloc>(),
+            child: const BackAlertDialog(),
+          ),
     );
     return result == true;
   }
@@ -50,7 +55,7 @@ class HearingTestResultPage extends StatelessWidget {
                   const SizedBox(height: 30),
                   _buildNoteSection(context, loc),
                   const SizedBox(height: 30),
-                  _buildSaveButton(context, state, loc),
+                  _buildSaveButton(context, loc),
                   const SizedBox(height: 30),
                 ],
               ),
@@ -129,39 +134,51 @@ class HearingTestResultPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSaveButton(
-    BuildContext context,
-    HearingTestState state,
-    AppLocalizations loc,
-  ) {
-    return ElevatedButton(
-      onPressed: () {
-        if (state.resultSaved) {
-          showDialog(
-            context: context,
-            builder: (context) => const AlreadySavedDialog(),
-          );
-        } else if (state.results.hasMissingValues()) {
-          showDialog(
-            context: context,
-            builder: (context) => const MissingValuesAlertDialog(),
-          );
-        } else {
-          context.read<HearingTestBloc>().add(HearingTestSaveResult());
-          showDialog(
-            context: context,
-            builder: (context) => const SavedDialog(),
-          );
-        }
+  Widget _buildSaveButton(BuildContext context, AppLocalizations loc) {
+    return BlocBuilder<HearingTestBloc, HearingTestState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          onPressed: () {
+            if (state.resultSaved) {
+              showDialog(
+                context: context,
+                builder:
+                    (dialogContext) => BlocProvider.value(
+                      value: context.read<HearingTestBloc>(),
+                      child: AlreadySavedDialog(),
+                    ),
+              );
+            } else if (state.results.hasMissingValues()) {
+              showDialog(
+                context: context,
+                builder:
+                    (dialogContext) => BlocProvider.value(
+                      value: context.read<HearingTestBloc>(),
+                      child: MissingValuesAlertDialog(),
+                    ),
+              );
+            } else {
+              context.read<HearingTestBloc>().add(HearingTestSaveResult());
+              showDialog(
+                context: context,
+                builder:
+                    (dialogContext) => BlocProvider.value(
+                      value: context.read<HearingTestBloc>(),
+                      child: SavedDialog(),
+                    ),
+              );
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+            backgroundColor: Colors.blueAccent,
+          ),
+          child: Text(
+            loc.hearing_test_result_page_save_results,
+            style: const TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        );
       },
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-        backgroundColor: Colors.blueAccent,
-      ),
-      child: Text(
-        loc.hearing_test_result_page_save_results,
-        style: const TextStyle(fontSize: 18, color: Colors.white),
-      ),
     );
   }
 }

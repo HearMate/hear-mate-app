@@ -5,9 +5,14 @@ import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
 import 'package:hear_mate_app/utils/logger.dart';
 
 class HearingTestSoundsPlayerRepository {
+  HearingTestSoundsPlayerRepository() {
+    initialize();
+  }
+
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
+  bool _playCanceled = false;
 
   // Duration for each tone
   final Duration soundDuration = Duration(seconds: 2);
@@ -43,8 +48,12 @@ class HearingTestSoundsPlayerRepository {
         await _audioPlayer.resume();
 
         await Future.delayed(soundDuration, () {
-          _audioPlayer.stop();
+          _playCanceled = true;
         });
+
+        if (_playCanceled) {
+          _audioPlayer.stop();
+        }
       } catch (e) {
         HMLogger.print("Error loading sound file: $e");
       }
@@ -54,6 +63,7 @@ class HearingTestSoundsPlayerRepository {
   }
 
   Future<void> stopSound() async {
+    _playCanceled = true;
     await _audioPlayer.stop();
   }
 

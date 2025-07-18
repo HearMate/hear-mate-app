@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/tab_navigation_cubit.dart';
+import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_conversion_results_page/echo_parse_conversion_results_page.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hm_theme/hm_theme.dart';
@@ -36,7 +37,9 @@ class EchoParseHomePage extends StatelessWidget {
             ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: currentIndex,
-              onTap: (index) => context.read<TabNavigationCubit>().changeTab(index),
+              onTap:
+                  (index) =>
+                      context.read<TabNavigationCubit>().changeTab(index),
               type: BottomNavigationBarType.fixed,
               items: [
                 BottomNavigationBarItem(
@@ -49,10 +52,7 @@ class EchoParseHomePage extends StatelessWidget {
                 ),
               ],
             ),
-            body: IndexedStack(
-              index: currentIndex,
-              children: pages,
-            ),
+            body: IndexedStack(index: currentIndex, children: pages),
           );
         },
       ),

@@ -89,7 +89,7 @@ class MissingValuesAlertDialog extends StatelessWidget {
         SizedBox(width: 4.0),
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(true);
             context.read<HearingTestBloc>().add(HearingTestSaveResult());
           },
           style: ElevatedButton.styleFrom(
@@ -123,6 +123,7 @@ class SavedDialog extends StatelessWidget {
         padding: EdgeInsets.only(top: 12.0, bottom: 4),
         child: Text('Your results have been successfully saved.'),
       ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -150,6 +151,7 @@ class AlreadySavedDialog extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 8.0),
         child: Text('You’ve already saved these results.'),
       ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
