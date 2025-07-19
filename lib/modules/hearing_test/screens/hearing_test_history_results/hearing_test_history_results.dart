@@ -1,9 +1,3 @@
-// TODO:
-// - show trends what has happened with hearing over time / from last test
-
-// FIXME:
-// - preserve the open graph on theme change (probably cubit?)
-// - language support
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_results/hearing_test_history_results_cubit.dart';
@@ -12,11 +6,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/alert_dialogs.dart';
 
+// TODO:
+// - show trends what has happened with hearing over time / from last test
+
 class HearingTestHistoryResultsPage extends StatelessWidget {
   const HearingTestHistoryResultsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocProvider(
       create: (_) => HearingTestHistoryResultsCubit(),
       child: Scaffold(
@@ -34,7 +33,7 @@ class HearingTestHistoryResultsPage extends StatelessWidget {
             }
 
             if (state.error != null) {
-              return Center(child: Text('Error: ${state.error}'));
+              return Center(child: Text(l10n.error_message(state.error ?? '')));
             }
 
             return ListView.builder(
@@ -49,8 +48,10 @@ class HearingTestHistoryResultsPage extends StatelessWidget {
                     ListTile(
                       title: Text(result.dateLabel),
                       subtitle: Text(
-                        'Left: ${result.leftEarResults.map((e) => e ?? "-")}\n'
-                        'Right: ${result.rightEarResults.map((e) => e ?? "-")}',
+                        l10n.hearing_test_history_page_result_info(
+                          result.leftEarResults.map((e) => e ?? "-"),
+                          result.rightEarResults.map((e) => e ?? "-"),
+                        ),
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),

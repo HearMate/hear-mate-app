@@ -7,9 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/alert_dialogs.dart';
 
-// FIXME:
-// - language support
-
 // TODO: Talk if we want this kind of approach.
 // TODO: Some kind of paging probably...
 

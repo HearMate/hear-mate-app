@@ -7,8 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 
-// FIXME:
-// - language support
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
 
@@ -78,7 +76,7 @@ class HearingTestWelcomePageView extends StatelessWidget {
                   ),
                 );
               },
-              child: Text(l10n.hearing_test_welcome_page_start),
+              child: Text(l10n.hearing_test_welcome_page_start_hearing_test),
             ),
             const SizedBox(height: 10),
             OutlinedButton(
@@ -93,7 +91,7 @@ class HearingTestWelcomePageView extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Results'),
+              child: Text(l10n.hearing_test_result_history_page),
             ),
           ],
         ),
