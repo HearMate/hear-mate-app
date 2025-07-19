@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo -e "Checking Dart code formatting...\n"
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$')
+
+HAS_ERROR=0
+
+for file in $FILES; do
+	if [ -f "$file" ]; then
+		OUTPUT=$(dart format --set-exit-if-changed "$file" 2>&1)
+		if [ $? -ne 0 ]; then
+			echo -e "$file (formatted)."
+		else
+			echo "$file (not changed)."  
+		fi
+	fi
+done
+
+echo -e "\nAll Dart files are now properly formatted."
+echo -e "\033[31mAdd changed files to staging area to commit the changes.\033[0m"
+exit 0
