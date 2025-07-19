@@ -1,40 +1,40 @@
 import 'package:flutter/material.dart';
-
-//FIXME:
-// - language support
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeleteAlertDialog extends StatelessWidget {
   const DeleteAlertDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return AlertDialog(
       titlePadding: const EdgeInsets.fromLTRB(24, 24, 16, 0),
       title: Row(
-        children: const [
-          Icon(Icons.delete_forever_rounded, color: Colors.red),
-          SizedBox(width: 8),
+        children: [
+          const Icon(Icons.delete_forever_rounded, color: Colors.red),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Delete Result',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              l10n.hearing_test_delete_alert_title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
         ],
       ),
-      content: const Padding(
-        padding: EdgeInsets.only(top: 12.0, bottom: 4),
+      content: Padding(
+        padding: const EdgeInsets.only(top: 12.0, bottom: 4),
         child: Text(
-          'Are you sure you want to permanently delete this result? This action cannot be undone.',
+          l10n.hearing_test_delete_alert_message,
         ),
       ),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
-        SizedBox(width: 4.0),
+        const SizedBox(width: 4.0),
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(true),
           style: ElevatedButton.styleFrom(
@@ -43,7 +43,7 @@ class DeleteAlertDialog extends StatelessWidget {
             minimumSize: const Size(0, 0),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: const Text('Delete', style: TextStyle(color: Colors.white)),
+          child: Text(l10n.delete, style: const TextStyle(color: Colors.white)),
         ),
       ],
     );

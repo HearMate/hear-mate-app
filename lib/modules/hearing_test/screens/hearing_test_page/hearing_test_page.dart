@@ -9,6 +9,8 @@ class HearingTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
         listener: (context, state) {
@@ -31,9 +33,7 @@ class HearingTestPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.fromLTRB(12.0, 56.0, 12.0, 12.0),
                   child: Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.hearing_test_test_page_instruction,
+                    l10n.hearing_test_test_page_instruction,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
                   ),
@@ -89,7 +89,7 @@ class HearingTestPage extends StatelessWidget {
                                     : 24, // Synchronize text size
                             fontWeight: FontWeight.bold,
                           ),
-                          child: const Text('HOLD'),
+                          child: Text(l10n.hearing_test_test_page_button_label),
                         ),
                       ),
                     ),
@@ -115,7 +115,7 @@ class HearingTestPage extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      AppLocalizations.of(context)!.hearing_test_test_page_end,
+                      l10n.hearing_test_test_page_end,
                       style: TextStyle(color: Colors.red, fontSize: 16),
                     ),
                   ),
