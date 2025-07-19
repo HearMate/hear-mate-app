@@ -46,6 +46,18 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         currentDBLevel: 20,
         dbLevelToHearCountMap: const {},
         resultSaved: false,
+        results: HearingTestResult(
+          filePath: "",
+          dateLabel: "",
+          leftEarResults: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+          rightEarResults: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+        ),
       ),
     );
 
