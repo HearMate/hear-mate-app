@@ -101,11 +101,11 @@
         "description": "Heading text encouraging users to convert audiograms to CSV."
     },
     "@echoparse_welcome_body": {
-		"description": "Body text explaining the purpose of the application."
-	},
-	"@echoparse_welcome_mainButton": {
-		"description": "Text displayed on the button to start the process."
-	},
+        "description": "Body text explaining the purpose of the application."
+    },
+    "@echoparse_welcome_mainButton": {
+        "description": "Text displayed on the button to start the process."
+    },
 
     "echoparse_settings_appbar_title": "Settings",
     "echoparse_settings_language_title": "Language",
@@ -172,6 +172,7 @@
     "hearing_test_test_page_instruction": "Press and hold the button when you can hear the sound. Release when you can no longer hear it.",
     "hearing_test_test_page_release": "Release the button now.",
     "hearing_test_test_page_end": "End Test Early",
+    "hearing_test_test_page_button_label": "PRESS",
 
     "@hearing_test_test_page_title": {
         "description": "Title displayed on the hearing test page."
@@ -184,6 +185,9 @@
     },
     "@hearing_test_test_page_end": {
         "description": "Label for the option to end the hearing test early."
+    },
+    "@hearing_test_test_page_button_label": {
+        "description": "Label for the hearing test main button."
     },
 
     "hearing_test_audiogram_chart_frequency": "Frequency (Hz)",
@@ -242,10 +246,42 @@
         "description": "Label for the button to navigate back to the home page."
     },
 
+    "hearing_test_result_page_save_results_missing_values_title": "Incomplete Test",
+    "hearing_test_result_page_save_results_missing_values_prompt": "Some test results are missing. Are you sure you want to save anyway?",
+    "hearing_test_result_page_save_results_missing_values_save_anyway": "Save Anyway",
+
+    "@hearing_test_result_page_save_results_missing_values_title": {
+        "description": "Title for the alert dialog when trying to save results with missing values."
+    },
+    "@hearing_test_result_page_save_results_missing_values_prompt": {
+        "description": "Message in the alert dialog prompting to confirm saving with missing values."
+    },
+    "@hearing_test_result_page_save_results_missing_values_save_anyway": {
+        "description": "Label for the button to confirm saving the results despite missing values."
+    },
+
+    "hearing_test_result_page_save_results_success_message": "Your results have been successfully saved.",
+    "hearing_test_result_page_save_results_on_exit_prompt": "Do you want to save your hearing test results before exiting?",
+    "@hearing_test_result_page_save_results_success_message": {
+        "description": "Message that the results have been saved."
+    },
+    "@hearing_test_result_page_save_results_on_exit_prompt": {
+        "description": "Prompt for saving results before exiting the page"
+    },
+    "hearing_test_result_page_already_saved_title": "Already Saved",
+    "hearing_test_result_page_already_saved_message": "You’ve already saved these results.",
+    "@hearing_test_result_page_already_saved_title": {
+        "description": "Dialog title that the results already have been saved."
+    },
+    "@hearing_test_result_page_already_saved_message": {
+        "description": "Dialog message that the results already have been saved."
+    },
+
+
     "hearing_test_welcome_page_title": "Hear Mate",
     "hearing_test_welcome_page_welcome": "Welcome to Hearing Test",
     "hearing_test_welcome_page_description": "This module will test your hearing ability across different frequencies.",
-    "hearing_test_welcome_page_start": "Start Test",
+    "hearing_test_welcome_page_start_hearing_test": "Start Test",
 
     "@hearing_test_welcome_page_title": {
         "description": "Title displayed on the welcome page of the hearing test module."
@@ -256,7 +292,63 @@
     "@hearing_test_welcome_page_description": {
         "description": "Description text explaining the purpose of the hearing test module."
     },
-    "@hearing_test_welcome_page_start": {
+    "@hearing_test_welcome_page_start_hearing_test": {
         "description": "Label for the button to start the hearing test."
+    },
+
+    "hearing_test_delete_alert_title": "Delete Result",
+    "hearing_test_delete_alert_message": "Are you sure you want to permanently delete this result? This action cannot be undone.",
+    
+    "@hearing_test_delete_alert_title": {
+        "description": "Title for the alert dialog that confirms deletion of a hearing test result."
+    },
+    "@hearing_test_delete_alert_message": {
+        "description": "Message in the deletion confirmation alert dialog."
+    },
+    
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "save": "Save",
+    "success": "Success",
+    "ok": "Ok",
+    "no": "No",
+    "error_message": "Error: {error}",
+    "@cancel": {
+        "description": "Label for the button that cancels action."
+    },
+    "@delete": {
+        "description": "Label for the button that confirms deletion."
+    },
+    "@save": {
+        "description": "Label for the button that confirms saving."
+    },
+    "@success": {
+        "description": "Success info."
+    },
+    "@ok": {
+        "description": "Ok."
+    },
+    "@no": {
+        "description": "No."
+    },
+    "@error_message": {
+        "description": "Displayed when an error occurs, with the error details.",
+        "placeholders": {
+            "error": {}
+        }
+    },
+
+    "hearing_test_history_page_result_info": "Left: {left}\nRight: {right}",
+    "@hearing_test_history_page_result_info": {
+        "description": "Shows left and right ear results in history.",
+        "placeholders": {
+            "left": {},
+            "right": {}
+        }
+    },
+    
+    "hearing_test_result_history_page": "Result history",
+    "@hearing_test_result_history_page": {
+        "description": "Label for the button to see hearing test results."
     }
 }

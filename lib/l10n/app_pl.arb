@@ -58,6 +58,7 @@
     "hearing_test_test_page_instruction": "Przytrzymaj przycisk, gdy słyszysz dźwięk. Puść, gdy przestaniesz go słyszeć.",
     "hearing_test_test_page_release": "Puść przycisk teraz.",
     "hearing_test_test_page_end": "Zakończ test",
+    "hearing_test_test_page_button_label": "NACIŚNIJ",
 
     "hearing_test_audiogram_chart_frequency": "Częstotliwość (Hz)",
     "hearing_test_audiogram_chart_mild_loss": "Lekki ubytek",
@@ -73,9 +74,30 @@
     "hearing_test_result_page_note_description": "Wygenerowany audiogram i wyniki testu mają charakter orientacyjny i nie są dokładne. Skonsultuj się z wykwalifikowanym specjalistą, aby uzyskać rzetelną diagnozę.",
     "hearing_test_result_page_save_results": "Zapisz wyniki",
     "hearing_test_result_page_home": "Powrót do strony głównej",
-
+    "hearing_test_result_page_save_results_missing_values_title": "Niepełny test",
+    "hearing_test_result_page_save_results_missing_values_prompt": "Brakuje części wyników testu. Czy na pewno chcesz zapisać mimo to?",
+    "hearing_test_result_page_save_results_missing_values_save_anyway": "Zapisz mimo to",
+    "hearing_test_result_page_save_results_success_message": "Twoje wyniki zostały pomyślnie zapisane.",
+    "hearing_test_result_page_save_results_on_exit_prompt": "Czy chcesz zapisać wyniki testu słuchu przed wyjściem?",
+    "hearing_test_result_page_already_saved_title": "Już zapisano",
+    "hearing_test_result_page_already_saved_message": "Twoje wyniki są już zapisane.",
+    
     "hearing_test_welcome_page_title": "Hear Mate",
     "hearing_test_welcome_page_welcome": "Witamy w teście słuchu",
     "hearing_test_welcome_page_description": "Ten moduł przetestuje Twój słuch w różnych częstotliwościach.",
-    "hearing_test_welcome_page_start": "Rozpocznij test"
+    "hearing_test_welcome_page_start_hearing_test": "Rozpocznij test",
+
+    "hearing_test_delete_alert_title": "Usuń wynik",
+    "hearing_test_delete_alert_message": "Czy na pewno chcesz trwale usunąć ten wynik? Tej operacji nie można cofnąć.",
+    
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "save": "Zapisz",
+    "success": "Sukces",
+    "ok": "Ok",
+    "no": "Nie",
+    "error_message": "Błąd: {error}",
+    
+    "hearing_test_history_page_result_info": "Lewe: {left}\nPrawe: {right}",
+    "hearing_test_result_history_page": "Historia wyników"
 }

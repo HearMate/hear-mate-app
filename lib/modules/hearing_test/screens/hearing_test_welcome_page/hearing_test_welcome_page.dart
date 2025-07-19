@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return RepositoryProvider<HearingTestSoundsPlayerRepository>(
+      create: (_) => HearingTestSoundsPlayerRepository(),
+      child: BlocProvider<HearingTestBloc>(
+        create:
+            (context) => HearingTestBloc(
+              hearingTestSoundsPlayerRepository:
+                  context.read<HearingTestSoundsPlayerRepository>(),
+            ),
+        child: const HearingTestWelcomePageView(),
+      ),
+    );
+  }
+}
+
+class HearingTestWelcomePageView extends StatelessWidget {
+  const HearingTestWelcomePageView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: HMAppBar(
-        title: AppLocalizations.of(context)!.hearing_test_welcome_page_title,
+        title: l10n.hearing_test_welcome_page_title,
         route: ModalRoute.of(context)?.settings.name ?? "",
       ),
       body: Center(
@@ -18,39 +43,55 @@ class HearingTestWelcomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Text(
-                AppLocalizations.of(context)!.hearing_test_welcome_page_welcome,
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                l10n.hearing_test_welcome_page_welcome,
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 20),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Text(
-                AppLocalizations.of(context)!.hearing_test_welcome_page_description,
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                l10n.hearing_test_welcome_page_description,
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
+            FilledButton(
               onPressed: () {
                 context.read<HearingTestBloc>().add(HearingTestStartTest());
-                Navigator.pushNamed(context, '/hearing_test/start');
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder:
+                        (_) => BlocProvider.value(
+                          value: context.read<HearingTestBloc>(),
+                          child: const HearingTestPage(),
+                        ),
+                  ),
+                );
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 15,
-                ),
-                backgroundColor: Colors.blueAccent,
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.hearing_test_welcome_page_start,
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
+              child: Text(l10n.hearing_test_welcome_page_start_hearing_test),
+            ),
+            const SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder:
+                        (_) => BlocProvider.value(
+                          value: context.read<HearingTestBloc>(),
+                          child: const HearingTestHistoryResultsPage(),
+                        ),
+                  ),
+                );
+              },
+              child: Text(l10n.hearing_test_result_history_page),
             ),
           ],
         ),
