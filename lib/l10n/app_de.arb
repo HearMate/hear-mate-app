@@ -57,6 +57,7 @@
     "hearing_test_test_page_instruction": "Drücke und halte den Knopf, solange du den Ton hörst. Lass ihn los, wenn du nichts mehr hörst.",
     "hearing_test_test_page_release": "Lass den Knopf jetzt los.",
     "hearing_test_test_page_end": "Test beenden",
+    "hearing_test_test_page_button_label": "DRÜCKEN",
 
     "hearing_test_audiogram_chart_frequency": "Frequenz (Hz)",
     "hearing_test_audiogram_chart_mild_loss": "Leichter Hörverlust",
@@ -72,9 +73,30 @@
     "hearing_test_result_page_note_description": "Dieses generierte Audiogramm und die Hörtestergebnisse sind Näherungswerte und sollten nicht als medizinische Diagnose betrachtet werden. Für genaue Ergebnisse wende dich bitte an einen qualifizierten Audiologen oder Arzt.",
     "hearing_test_result_page_save_results": "Ergebnisse speichern",
     "hearing_test_result_page_home": "Zurück zur Startseite",
+    "hearing_test_result_page_save_results_missing_values_title": "Unvollständiger Test",
+    "hearing_test_result_page_save_results_missing_values_prompt": "Einige Testergebnisse fehlen. Möchten Sie trotzdem speichern?",
+    "hearing_test_result_page_save_results_missing_values_save_anyway": "Trotzdem speichern",
+    "hearing_test_result_page_save_results_success_message": "Ihre Ergebnisse wurden erfolgreich gespeichert.",
+    "hearing_test_result_page_save_results_on_exit_prompt": "Möchten Sie Ihre Hörtestergebnisse vor dem Beenden speichern?",
+    "hearing_test_result_page_already_saved_title": "Bereits gespeichert",
+    "hearing_test_result_page_already_saved_message": "Sie haben diese Ergebnisse bereits gespeichert.",
 
     "hearing_test_welcome_page_title": "Hear Mate",
     "hearing_test_welcome_page_welcome": "Willkommen zum Hörtest",
     "hearing_test_welcome_page_description": "Dieses Modul testet dein Hörvermögen bei verschiedenen Frequenzen.",
-    "hearing_test_welcome_page_start": "Test starten"
+    "hearing_test_welcome_page_start_hearing_test": "Test starten",
+
+    "hearing_test_delete_alert_title": "Ergebnis löschen",
+    "hearing_test_delete_alert_message": "Möchten Sie dieses Ergebnis wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "save": "Speichern",
+    "success": "Erfolg",
+    "ok": "Ok",
+    "no": "Nein",
+    "error_message": "Fehler: {error}",
+    
+    "hearing_test_history_page_result_info": "Links: {left}\nRechts: {right}",
+    "hearing_test_result_history_page": "Ergebnisverlauf"
 }

@@ -25,11 +25,16 @@ class _UploadSection extends StatelessWidget {
           FilledButton(
             onPressed: () {
               context.read<EchoParseBloc>().add(
-                    EchoParseUploadAudiogramFileToServerEvent(),
-                  );
-              Navigator.pushNamed(
-                context,
-                '/echo_parse/conversion_results',
+                EchoParseUploadAudiogramFileToServerEvent(),
+              );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder:
+                      (_) => BlocProvider.value(
+                        value: context.read<EchoParseBloc>(),
+                        child: const EchoParseConversionResults(),
+                      ),
+                ),
               );
             },
             child: Text(langLoc.echoparse_upload_buttonUpload),
@@ -52,8 +57,8 @@ class _UploadSection extends StatelessWidget {
           style: attentionFilledButtonStyle(theme.colorScheme),
           onPressed: () {
             context.read<EchoParseBloc>().add(
-                  EchoParseChooseAudiogramFileEvent(),
-                );
+              EchoParseChooseAudiogramFileEvent(),
+            );
           },
           child: Text(langLoc.echoparse_upload_buttonPick),
         ),

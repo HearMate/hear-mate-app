@@ -8,15 +8,7 @@ import 'package:hear_mate_app/screens/about_page.dart';
 import 'package:hear_mate_app/screens/menu_page.dart';
 import 'package:hear_mate_app/screens/settings_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page/echo_parse_welcome_page.dart';
-import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_home_page/echo_parse_home_page.dart';
-import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_conversion_results_page/echo_parse_conversion_results_page.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
-import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
-import 'package:hear_mate_app/modules/echo_parse/repositories/echo_parse_api_repository.dart';
 import 'package:hm_locale/hm_locale.dart';
 import 'package:hm_theme/hm_theme.dart';
 
@@ -29,137 +21,92 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
+    return MultiBlocProvider(
       providers: [
-        RepositoryProvider(
+        BlocProvider(
           create: (context) {
-            final hearingTestSoundsPlayerRepository =
-                HearingTestSoundsPlayerRepository();
-            hearingTestSoundsPlayerRepository.initialize();
-            return hearingTestSoundsPlayerRepository;
+            final themeBloc = HMThemeBloc();
+            themeBloc.add(HMTHemeInitEvent());
+            return themeBloc;
           },
         ),
-        RepositoryProvider(
+        BlocProvider(
           create: (context) {
-            final echoParseApiRepository = EchoParseApiRepository();
-            return echoParseApiRepository;
+            final localeBloc = HMLocaleBloc();
+            localeBloc.add(HMLocaleInitEvent());
+            return localeBloc;
           },
         ),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create:
-                (context) => HearingTestBloc(
-                  hearingTestSoundsPlayerRepository:
-                      RepositoryProvider.of<HearingTestSoundsPlayerRepository>(
-                        context,
-                      ),
-                ),
-          ),
-          BlocProvider(
-            create: (context) {
-              final themeBloc = HMThemeBloc();
-              themeBloc.add(HMTHemeInitEvent());
-              return themeBloc;
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              final localeBloc = HMLocaleBloc();
-              localeBloc.add(HMLocaleInitEvent());
-              return localeBloc;
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              final repository = RepositoryProvider.of<EchoParseApiRepository>(
-                context,
-              );
-              return EchoParseBloc(repository: repository);
-            },
-          ),
-        ],
-        child: BlocBuilder<HMLocaleBloc, HMLocaleState>(
-          builder: (context, localeState) {
-            return BlocBuilder<HMThemeBloc, HMThemeState>(
-              builder: (context, themeState) {
-                return MaterialApp(
-                  localizationsDelegates: [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: Languages.supportedLocales,
-                  locale: localeState.locale,
-                  localeResolutionCallback: (locale, supportedLocales) {
-                    if (localeState.locale != null) return localeState.locale;
-                    for (var supportedLocale in supportedLocales) {
-                      if (supportedLocale.languageCode ==
-                          locale?.languageCode) {
-                        return supportedLocale;
-                      }
+      child: BlocBuilder<HMLocaleBloc, HMLocaleState>(
+        builder: (context, localeState) {
+          return BlocBuilder<HMThemeBloc, HMThemeState>(
+            builder: (context, themeState) {
+              return MaterialApp(
+                localizationsDelegates: [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: Languages.supportedLocales,
+                locale: localeState.locale,
+                localeResolutionCallback: (locale, supportedLocales) {
+                  if (localeState.locale != null) return localeState.locale;
+                  for (var supportedLocale in supportedLocales) {
+                    if (supportedLocale.languageCode == locale?.languageCode) {
+                      return supportedLocale;
                     }
-                    return const Locale('en');
-                  },
-                  debugShowCheckedModeBanner: false,
-                  routes: {
-                    //? Global routes
-                    '/settings': (context) => SettingsPage(),
-                    '/about': (context) => AboutPage(),
-                    '/menu': (context) => MenuPage(),
+                  }
+                  return const Locale('en');
+                },
+                debugShowCheckedModeBanner: false,
+                routes: {
+                  //? Global routes
+                  '/settings': (context) => SettingsPage(),
+                  '/about': (context) => AboutPage(),
+                  '/menu': (context) => MenuPage(),
 
-                    //? HearMate routes (hearing test)
-                    '/hearing_test/welcome':
-                        (context) => const HearingTestWelcomePage(),
-                    '/hearing_test/start': (context) => const HearingTestPage(),
-                    '/hearing_test/result':
-                        (context) => HearingTestResultPage(),
+                  //? HearMate routes (hearing test)
+                  '/hearing_test/welcome':
+                      (context) => const HearingTestWelcomePage(),
 
-                    //? EchoParse routes
-                    '/echo_parse/welcome':
-                        (context) => EchoParseWelcomeScreen(),
-                    '/echo_parse/home': (context) => EchoParseHomePage(),
-                    '/echo_parse/conversion_results':
-                        (context) => EchoParseConversionResults(),
-                  },
-                  onUnknownRoute: (settings) {
-                    return MaterialPageRoute(
-                      builder:
-                          (context) => Scaffold(
-                            appBar: AppBar(title: const Text('Page Not Found')),
-                            body: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'The requested page was not found.',
-                                  ),
-                                  const SizedBox(height: 20),
-                                  ElevatedButton(
-                                    onPressed:
-                                        () => Navigator.pushNamedAndRemoveUntil(
-                                          context,
-                                          '/',
-                                          (route) => false,
-                                        ),
-                                    child: const Text('Return to Home'),
-                                  ),
-                                ],
-                              ),
+                  //? EchoParse routes
+                  '/echo_parse/welcome': (context) => EchoParseWelcomePage(),
+                },
+                onUnknownRoute: (settings) {
+                  return MaterialPageRoute(
+                    builder:
+                        (context) => Scaffold(
+                          appBar: AppBar(title: const Text('Page Not Found')),
+                          body: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('The requested page was not found.'),
+                                const SizedBox(height: 20),
+                                ElevatedButton(
+                                  onPressed:
+                                      () => Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        '/',
+                                        (route) => false,
+                                      ),
+                                  child: const Text('Return to Home'),
+                                ),
+                              ],
                             ),
                           ),
-                    );
-                  },
-                  title: 'HearMate',
-                  theme: buildHearMateTheme(isDarkMode: themeState.isDarkMode),
-                  home: HomePage(),
-                );
-              },
-            );
-          },
-        ),
+                        ),
+                  );
+                },
+                title: 'HearMate',
+                theme: buildHearMateTheme(isDarkMode: themeState.isDarkMode),
+                home: HomePage(),
+              );
+            },
+          );
+        },
       ),
     );
   }

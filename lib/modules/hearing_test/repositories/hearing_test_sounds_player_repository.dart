@@ -1,18 +1,24 @@
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+    as HearingTestConstants;
 import 'package:hear_mate_app/utils/logger.dart';
-import 'package:hear_mate_app/modules/constants.dart';
 
 class HearingTestSoundsPlayerRepository {
+  HearingTestSoundsPlayerRepository() {
+    initialize();
+  }
+
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
+  bool _playCanceled = false;
 
   // Duration for each tone
   final Duration soundDuration = Duration(seconds: 2);
 
   Future<void> initialize() async {
-    for (int freq in TEST_FREQUENCIES) {
+    for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
       String basePath = 'tones/tone_${freq}Hz';
       String leftPath = '${basePath}_left.wav';
       String rightPath = '${basePath}_right.wav';
@@ -42,8 +48,12 @@ class HearingTestSoundsPlayerRepository {
         await _audioPlayer.resume();
 
         await Future.delayed(soundDuration, () {
-          _audioPlayer.stop();
+          _playCanceled = true;
         });
+
+        if (_playCanceled) {
+          _audioPlayer.stop();
+        }
       } catch (e) {
         HMLogger.print("Error loading sound file: $e");
       }
@@ -53,9 +63,10 @@ class HearingTestSoundsPlayerRepository {
   }
 
   Future<void> stopSound() async {
+    _playCanceled = true;
     await _audioPlayer.stop();
   }
-  
+
   bool isPlaying() {
     return _audioPlayer.state == PlayerState.playing;
   }
@@ -64,9 +75,7 @@ class HearingTestSoundsPlayerRepository {
     dBHL = dBHL.clamp(-10.0, 120.0);
 
     double dBSPL = _HLToSPL(dBHL, frequency);
-
-    // here we should perform correction for specific headphone characteristic
-    // a similar process to dB HL to dB SPL correction for each frequency
+    dBSPL = _headphoneCorrection(dBSPL, frequency);
 
     double soundPressure = _SPLToSoundPressure(dBSPL);
     double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);
@@ -112,5 +121,21 @@ class HearingTestSoundsPlayerRepository {
     // Clamp because it seems like dB SPL can go below 0 (???)
     normalizedSoundPressure = normalizedSoundPressure.clamp(0.0, 1.0);
     return normalizedSoundPressure;
+  }
+
+  double _headphoneCorrection(double dBSPL, int frequency) {
+      const Map<int, double> correctionReference = {
+      125: -10.0,
+      250: -8.0,
+      500: -6.5,
+      1000: -7.5,
+      2000: -7.5,
+      4000: -10.0,
+      8000: -4.5,
+    };
+    double correction =
+        correctionReference[frequency] ?? 7.5; // Default to 1000 Hz reference
+    double adjusted = dBSPL + correction;
+    return adjusted;
   }
 }
