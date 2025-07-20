@@ -33,15 +33,13 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
     on<HearingTestSaveResult>(_saveTestResult);
-<<<<<<< HEAD
-
+    on<HearingTestMaskingTestStart>(_onStartMaskedTest);
+    on<HearingTestPlayingMaskedSound>(_onPlayingMaskedSound);
+    on<HearingTestNextMaskedFrequency>(_onNextMaskedFrequency);
     // DEBUG
     on<HearingTestDebugEarLeftPartial>(_onDebugEarLeftPartial);
     on<HearingTestDebugEarRightPartial>(_onDebugEarRightPartial);
     on<HearingTestDebugBothEarsFull>(_onDebugBothEarsFull);
-=======
-    on<HearingTestMaskingTestStart>(_onMaskingTestStart);
->>>>>>> 6ee6673 (masking test data state)
   }
 
   void _onStartTest(
@@ -78,6 +76,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
             null,
           ),
         ),
+        frequenciesThatRequireMasking: null,
       ),
     );
 
@@ -172,6 +171,9 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         HearingTestConstants.TEST_FREQUENCIES.length - 1) {
       // check if we have already covered two ears
       if (state.currentEar == HearingTestEar.RIGHT) {
+        if (state.results.needMasking()) {
+          return add(HearingTestStartMaskedTest());
+        }
         return add(HearingTestCompleted());
       }
       return add(HearingTestChangeEar());
@@ -283,6 +285,14 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
             HearingTestConstants.TEST_FREQUENCIES.length,
             null,
           ),
+          leftEarResultsMasked: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+          rightEarResultsMasked: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
         ),
         isTestCompleted: true,
       ),
@@ -317,6 +327,14 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
           dateLabel: "DEBUG_RIGHT_PARTIAL",
           leftEarResults: leftEarResults,
           rightEarResults: rightEarResults,
+          leftEarResultsMasked: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+          rightEarResultsMasked: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
         ),
         isTestCompleted: true,
       ),
@@ -348,9 +366,152 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
           dateLabel: "DEBUG_FULL",
           leftEarResults: leftEarResults,
           rightEarResults: rightEarResults,
+          leftEarResultsMasked: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+          rightEarResultsMasked: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
         ),
         isTestCompleted: true,
       ),
     );
+  }
+
+  void _onPlayingMaskedSound(
+    HearingTestPlayingMaskedSound event,
+    Emitter<HearingTestState> emit,
+  ) async {
+    if (state.isTestCompleted) {
+      return;
+    }
+
+    if (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL) {
+      return add(HearingTestNextMaskedFrequency());
+    }
+
+    final random = Random();
+    final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
+    await Future.delayed(Duration(milliseconds: delayMs));
+
+    HearingTestEar ear = HearingTestEar.LEFT;
+    if (state.results.leftEarResults[state.currentFrequencyIndex]! >
+        state.results.rightEarResults[state.currentFrequencyIndex]!) {
+      ear = HearingTestEar.RIGHT;
+    }
+
+    await _soundsPlayerRepository.playMaskedSound(
+      frequency:
+          HearingTestConstants.TEST_FREQUENCIES[state.currentFrequencyIndex],
+      decibels: state.currentDBLevel,
+      maskedDecibels: state.currentMaskingDBLevel,
+      ear: ear,
+    );
+
+    if (state.wasSoundHeard) {
+      if (state.maskedHeardCount! >= 2) {
+        return add(HearingTestNextMaskedFrequency());
+      }
+
+      emit(
+        state.copyWith(
+          currentMaskingDBLevel: state.currentMaskingDBLevel + 5,
+          wasSoundHeard: false,
+          maskedHeardCount: state.maskedHeardCount! + 1,
+        ),
+      );
+      return add(HearingTestPlayingSound());
+    }
+
+    emit(
+      state.copyWith(
+        currentDBLevel: state.currentDBLevel + 5,
+        maskedHeardCount: 0,
+      ),
+    );
+
+    add(HearingTestPlayingMaskedSound());
+  }
+
+  void _onNextMaskedFrequency(
+    HearingTestNextMaskedFrequency event,
+    Emitter<HearingTestState> emit,
+  ) async {
+    HearingTestEar ear =
+        state.results.leftEarResults[state.currentFrequencyIndex]! <
+                state.results.rightEarResults[state.currentFrequencyIndex]!
+            ? HearingTestEar.LEFT
+            : HearingTestEar.RIGHT;
+
+    if (ear == HearingTestEar.LEFT) {
+      state.results.leftEarResultsMasked[state.currentFrequencyIndex] =
+          state.currentDBLevel.toDouble();
+    } else {
+      state.results.rightEarResultsMasked[state.currentFrequencyIndex] =
+          state.currentDBLevel.toDouble();
+    }
+
+    state.frequenciesThatRequireMasking![state.frequenciesThatRequireMasking!
+            .indexWhere((element) => element == true)] =
+        false;
+
+    if (state.frequenciesThatRequireMasking!.contains(true) == false) {
+      return add(HearingTestCompleted());
+    }
+
+    int maskedIndex = state.frequenciesThatRequireMasking!.indexWhere(
+      (element) => element == true,
+    );
+
+    emit(
+      state.copyWith(
+        currentFrequencyIndex: maskedIndex,
+        currentMaskingDBLevel:
+            min(
+              state.results.leftEarResultsMasked[maskedIndex]!,
+              state.results.leftEarResultsMasked[maskedIndex]!,
+            ) +
+            15.0,
+        currentDBLevel: max(
+          state.results.leftEarResultsMasked[maskedIndex]!,
+          state.results.leftEarResultsMasked[maskedIndex]!,
+        ),
+        maskedHeardCount: 0,
+      ),
+    );
+
+    add(HearingTestPlayingMaskedSound());
+  }
+
+  void _onStartMaskedTest(
+    HearingTestMaskingTestStart event,
+    Emitter<HearingTestState> emit,
+  ) async {
+    List<bool> frequenciesThatRequireMasking =
+        state.results.getFrequenciesThatRequireMasking();
+    int maskedIndex = frequenciesThatRequireMasking.indexWhere(
+      (element) => element == true,
+    );
+    emit(
+      state.copyWith(
+        frequenciesThatRequireMasking: frequenciesThatRequireMasking,
+        currentFrequencyIndex: maskedIndex,
+        currentMaskingDBLevel:
+            min(
+              state.results.leftEarResultsMasked[maskedIndex]!,
+              state.results.leftEarResultsMasked[maskedIndex]!,
+            ) +
+            15.0,
+        currentDBLevel: max(
+          state.results.leftEarResultsMasked[maskedIndex]!,
+          state.results.leftEarResultsMasked[maskedIndex]!,
+        ),
+        maskedHeardCount: 0,
+      ),
+    );
+
+    add(HearingTestPlayingMaskedSound());
   }
 }

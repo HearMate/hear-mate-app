@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
+
 class HearingTestResult {
   final String filePath;
   final String dateLabel;
@@ -67,7 +68,8 @@ class HearingTestResult {
       if (leftEarResults[i] != null && rightEarResults[i] != null) {
         final leftValue = leftEarResults[i]!;
         final rightValue = rightEarResults[i]!;
-        if ((leftValue - rightValue).abs() >= HearingTestConstants.MASKING_THRESHOLDS[i]) {
+        if ((leftValue - rightValue).abs() >=
+            HearingTestConstants.MASKING_THRESHOLDS[i]) {
           return true;
         }
       }
@@ -75,4 +77,20 @@ class HearingTestResult {
     return false;
   }
 
+  List<bool> getFrequenciesThatRequireMasking() {
+    List<bool> resultsThatNeedMasking = List<bool>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      false,
+    );
+    for (int i = 0; i < HearingTestConstants.TEST_FREQUENCIES.length; i++) {
+      if (leftEarResults[i] != null && rightEarResults[i] != null) {
+        final leftValue = leftEarResults[i]!;
+        final rightValue = rightEarResults[i]!;
+        final threshold = HearingTestConstants.MASKING_THRESHOLDS[i];
+        resultsThatNeedMasking[i] =
+            (leftValue - rightValue).abs() >= threshold;
+      }
+    }
+    return resultsThatNeedMasking;
+  }
 }

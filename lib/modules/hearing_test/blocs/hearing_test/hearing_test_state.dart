@@ -7,11 +7,14 @@ class HearingTestState {
 
   final int currentFrequencyIndex;
   final double currentDBLevel;
+  final double currentMaskingDBLevel;
   final HearingTestEar currentEar;
 
   final Map<double, int> dbLevelToHearCountMap;
   final HearingTestResult results;
   final bool resultSaved;
+  final List<bool>? frequenciesThatRequireMasking;
+  final int? maskedHeardCount;
 
   HearingTestState({
     this.isButtonPressed = false,
@@ -19,9 +22,12 @@ class HearingTestState {
     this.currentEar = HearingTestEar.LEFT,
     this.isTestCompleted = false,
     this.currentFrequencyIndex = 0,
+    this.currentMaskingDBLevel = 0,
     this.currentDBLevel = 60,
     this.dbLevelToHearCountMap = const {},
     this.resultSaved = false,
+    this.frequenciesThatRequireMasking,
+    this.maskedHeardCount = 0,
     HearingTestResult? results,
   }) : results =
            results ??
@@ -52,9 +58,12 @@ class HearingTestState {
     bool? isTestCompleted,
     int? currentFrequencyIndex,
     double? currentDBLevel,
+    double? currentMaskingDBLevel,
     Map<double, int>? dbLevelToHearCountMap,
     HearingTestResult? results,
     bool? resultSaved,
+    List<bool>? frequenciesThatRequireMasking,
+    int? maskedHeardCount,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
@@ -68,6 +77,8 @@ class HearingTestState {
           dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
       results: results ?? this.results,
       resultSaved: resultSaved ?? this.resultSaved,
+      frequenciesThatRequireMasking:
+          frequenciesThatRequireMasking ?? this.frequenciesThatRequireMasking,
     );
   }
 }
