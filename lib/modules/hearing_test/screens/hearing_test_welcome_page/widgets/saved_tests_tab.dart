@@ -40,14 +40,14 @@ class _SavedTestsTab extends StatelessWidget {
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () async {
+                      final cubit =
+                          context.read<HearingTestHistoryResultsCubit>();
                       final confirm = await showDialog<bool>(
                         context: context,
                         builder: (_) => const DeleteAlertDialog(),
                       );
                       if (confirm == true) {
-                        context
-                            .read<HearingTestHistoryResultsCubit>()
-                            .deleteResult(index);
+                        cubit.deleteResult(index);
                       }
                     },
                   ),
