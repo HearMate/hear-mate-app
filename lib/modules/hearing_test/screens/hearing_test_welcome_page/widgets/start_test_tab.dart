@@ -49,21 +49,6 @@ class _StartTestTab extends StatelessWidget {
                 },
                 child: Text(l10n.hearing_test_welcome_page_start_hearing_test),
               ),
-              const SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder:
-                          (_) => BlocProvider.value(
-                            value: context.read<HearingTestBloc>(),
-                            child: const HearingTestHistoryResultsPage(),
-                          ),
-                    ),
-                  );
-                },
-                child: Text(l10n.hearing_test_result_history_page),
-              ),
             ],
           ),
         );
