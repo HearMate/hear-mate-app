@@ -34,6 +34,14 @@ class HearingTestState {
                HearingTestConstants.TEST_FREQUENCIES.length,
                null,
              ),
+             leftEarResultsMasked: List<double?>.filled(
+               HearingTestConstants.TEST_FREQUENCIES.length,
+               null,
+             ),
+             rightEarResultsMasked: List<double?>.filled(
+               HearingTestConstants.TEST_FREQUENCIES.length,
+               null,
+             ),
            );
   HearingTestState copyWith({
     bool? isButtonPressed,

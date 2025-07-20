@@ -31,6 +31,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
     on<HearingTestSaveResult>(_saveTestResult);
+    on<HearingTestMaskingTestStart>(_onMaskingTestStart);
   }
 
   void _onStartTest(
@@ -54,6 +55,14 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
             null,
           ),
           rightEarResults: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+          leftEarResultsMasked: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+          rightEarResultsMasked: List<double?>.filled(
             HearingTestConstants.TEST_FREQUENCIES.length,
             null,
           ),
@@ -143,6 +152,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         HearingTestConstants.TEST_FREQUENCIES.length - 1) {
       // check if we have already covered two ears
       if (state.currentEar) {
+        // check for masking
+        if(state.results.needMasking()){
+          return add(HearingTestMaskingTestStart());
+        }
         return add(HearingTestCompleted());
       }
       return add(HearingTestChangeEar());
@@ -229,4 +242,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       debugPrint("Error saving CSV file: $e");
     }
   }
+
+  
 }
