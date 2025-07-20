@@ -4,8 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 
-// TODO
-// - replace circle markers with appropriate icons for left and right ear
 
 class AudiogramChart extends StatelessWidget {
   final List<double?> leftEarData;
@@ -150,11 +148,10 @@ class AudiogramChart extends StatelessWidget {
                 dotData: FlDotData(
                   show: true,
                   getDotPainter: (spot, percent, barData, index) {
-                    return FlDotCirclePainter(
-                      radius: 6,
+                    return FlDotCrossPainter(
+                      size: 12,
                       color: Colors.blue,
-                      strokeWidth: 1,
-                      strokeColor: Colors.blue,
+                      width: 2,
                     );
                   },
                 ),
@@ -172,8 +169,8 @@ class AudiogramChart extends StatelessWidget {
                   getDotPainter: (spot, percent, barData, index) {
                     return FlDotCirclePainter(
                       radius: 6,
-                      color: Colors.red,
-                      strokeWidth: 1,
+                        color: Colors.transparent,
+                      strokeWidth: 2,
                       strokeColor: Colors.red,
                     );
                   },
@@ -187,24 +184,24 @@ class AudiogramChart extends StatelessWidget {
             extraLinesData: ExtraLinesData(
               horizontalLines: [
                 HorizontalLine(
-                  y: 25,
-                  color: Colors.orange.withValues(alpha: 0.5),
+                  y: 20,
+                  color: Colors.red.withValues(alpha: 0.5),
                   strokeWidth: 1,
                   dashArray: [5, 5],
                   label: HorizontalLineLabel(
                     show: true,
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(right: 5, bottom: 5),
-                    style: const TextStyle(fontSize: 9, color: Colors.orange),
+                    style: const TextStyle(fontSize: 9, color: Colors.red),
                     labelResolver:
                         (line) =>
                             AppLocalizations.of(
                               context,
-                            )!.hearing_test_audiogram_chart_mild_loss,
+                            )!.hearing_test_audiogram_chart_severe_loss,
                   ),
                 ),
                 HorizontalLine(
-                  y: 40,
+                  y: 50,
                   color: Colors.deepOrange.withValues(alpha: 0.5),
                   strokeWidth: 1,
                   dashArray: [5, 5],
@@ -225,19 +222,19 @@ class AudiogramChart extends StatelessWidget {
                 ),
                 HorizontalLine(
                   y: 70,
-                  color: Colors.red.withValues(alpha: 0.5),
+                  color: const Color.fromARGB(255, 138, 124, 0).withValues(alpha: 0.5),
                   strokeWidth: 1,
                   dashArray: [5, 5],
                   label: HorizontalLineLabel(
                     show: true,
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(right: 5, bottom: 5),
-                    style: const TextStyle(fontSize: 9, color: Colors.red),
+                    style: const TextStyle(fontSize: 9, color: Color.fromARGB(255, 138, 124, 0)),
                     labelResolver:
                         (line) =>
                             AppLocalizations.of(
                               context,
-                            )!.hearing_test_audiogram_chart_severe_loss,
+                            )!.hearing_test_audiogram_chart_mild_loss,
                   ),
                 ),
               ],
