@@ -62,6 +62,41 @@ class HearingTestSoundsPlayerRepository {
     }
   }
 
+Future<void> playMaskedSound(
+    int frequency, {
+    required double decibels,
+    required double decibelsNoise,
+    required bool leftEarOnly,
+  }) async {
+    if (_soundAssets.containsKey(frequency)) {
+      try {
+        String assetPath =
+            leftEarOnly
+                ? _soundAssets[frequency]!['left']!
+                : _soundAssets[frequency]!['right']!;
+
+        double volume = _decibelsToVolume(decibels, frequency: frequency);
+
+        await _audioPlayer.setSource(AssetSource(assetPath));
+        await _audioPlayer.setVolume(volume);
+        await _audioPlayer.resume();
+
+        await Future.delayed(soundDuration, () {
+          _playCanceled = true;
+        });
+
+        if (_playCanceled) {
+          _audioPlayer.stop();
+        }
+      } catch (e) {
+        HMLogger.print("Error loading sound file: $e");
+      }
+    } else {
+      HMLogger.print('No sound found for frequency $frequency Hz');
+    }
+  }
+
+
   Future<void> stopSound() async {
     _playCanceled = true;
     await _audioPlayer.stop();

@@ -31,7 +31,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
     on<HearingTestSaveResult>(_saveTestResult);
-    on<HearingTestMaskingTestStart>(_onMaskingTestStart);
+    on<HearingTestPlayingMaskedSound>(_onPlayingMaskedSound);
+    on<HearingTestNextMaskedFrequency>(_onNextMaskedFrequency);
   }
 
   void _onStartTest(
@@ -153,8 +154,17 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       // check if we have already covered two ears
       if (state.currentEar) {
         // check for masking
-        if(state.results.needMasking()){
-          return add(HearingTestMaskingTestStart());
+        if (state.results.needMasking()) {
+          emit(
+            state.copyWith(
+              results: state.results,
+              currentFrequencyIndex: state.currentFrequencyIndex + 1,
+              currentDBLevel: state.currentDBLevel + 10,
+              dbLevelToHearCountMap: {},
+              frequenciesThatRequireMasking: state.results.getFrequenciesThatRequireMasking(),  
+            ),
+          );
+          return add(HearingTestNextMaskedFrequency());
         }
         return add(HearingTestCompleted());
       }
@@ -243,5 +253,103 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     }
   }
 
-  
+  void _onPlayingMaskedSound(
+    HearingTestPlayingMaskedSound event,
+    Emitter<HearingTestState> emit,
+  ) async {
+    if (state.isTestCanceled) {
+      return;
+    }
+
+    if (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL) {
+      return add(HearingTestNextMaskedFrequency());
+    }
+
+    final random = Random();
+    final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
+    await Future.delayed(Duration(milliseconds: delayMs));
+
+    await _soundsPlayerRepository.playMaskedSound(
+      HearingTestConstants.TEST_FREQUENCIES[state.currentFrequencyIndex],
+      decibels: state.currentDBLevel,
+      decibelsNoise: state.currentDBLevel,
+      leftEarOnly: state.currentEar,
+    );
+
+    if (state.wasSoundHeard) {
+      emit(
+        state.copyWith(
+          currentDBLevel: state.currentDBLevel - 5,
+          wasSoundHeard: false,
+        ),
+      );
+      return add(HearingTestPlayingSound());
+    }
+
+    // if user didn't hear the sound 2 times, switch frequencies
+    if (state.dbLevelToHearCountMap[state.currentDBLevel] == 0) {
+      emit(state.copyWith(currentDBLevel: state.currentDBLevel + 5));
+      return add(HearingTestNextMaskedFrequency());
+    }
+
+    // else give him one more chance to hear the sound
+    emit(
+      state.copyWith(
+        currentDBLevel: state.currentDBLevel + 5,
+        dbLevelToHearCountMap: Map.from(state.dbLevelToHearCountMap)..update(
+          state.currentDBLevel,
+          (value) => value - 1,
+          ifAbsent: () => 0,
+        ),
+      ),
+    );
+
+    add(HearingTestPlayingMaskedSound());
+  }
+
+  void _onNextMaskedFrequency(
+    HearingTestNextMaskedFrequency event,
+    Emitter<HearingTestState> emit,
+  ) async {
+    if (state.currentFrequencyIndex ==
+        HearingTestConstants.TEST_FREQUENCIES.length - 1) {
+      // check if we have already covered two ears
+      if (state.currentEar) {
+        // check for masking
+        if (state.results.needMasking()) {
+          emit(
+            state.copyWith(
+              results: state.results,
+              currentFrequencyIndex: state.currentFrequencyIndex + 1,
+              currentDBLevel: state.currentDBLevel + 10,
+              dbLevelToHearCountMap: {},
+              frequenciesThatRequireMasking: state.results.getFrequenciesThatRequireMasking(),  
+            ),
+          );
+          return add(HearingTestPlayingMaskedSound());
+        }
+        return add(HearingTestCompleted());
+      }
+      return add(HearingTestChangeEar());
+    }
+
+    if (!state.currentEar) {
+      state.results.leftEarResults[state.currentFrequencyIndex] =
+          state.currentDBLevel.toDouble();
+    } else {
+      state.results.rightEarResults[state.currentFrequencyIndex] =
+          state.currentDBLevel.toDouble();
+    }
+
+    emit(
+      state.copyWith(
+        results: state.results,
+        currentFrequencyIndex: state.currentFrequencyIndex + 1,
+        currentDBLevel: state.currentDBLevel + 10,
+        dbLevelToHearCountMap: {},
+      ),
+    );
+
+    add(HearingTestPlayingMaskedSound());
+  }
 }
