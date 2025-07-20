@@ -46,19 +46,24 @@ We welcome contributions from the community! To contribute to this project, plea
    git clone https://github.com/your-username/repo.git
    cd repo
    ```
-3. **Create a new branch** for your feature or bugfix:
+3. **Install pre-commit hook** on your local machine:
+   ```bash
+   pip install pre-commit
+   pre-commit install
+   ```
+4. **Create a new branch** for your feature or bugfix:
    ```bash
    git checkout -b feature-or-bugfix-name
    ```
-4. **Make your changes** and commit them with a clear message:
+5. **Make your changes** and commit them with a clear message:
    ```bash
    git commit -m "Description of the changes"
    ```
-5. **Push your changes** to your forked repository:
+6. **Push your changes** to your forked repository:
    ```bash
    git push origin feature-or-bugfix-name
    ```
-6. **Create a pull request** on the original repository and describe your changes.
+7. **Create a pull request** on the original repository and describe your changes.
 
 ### Reporting Issues
 
