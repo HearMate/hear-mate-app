@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_results/hearing_test_history_results_cubit.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/widgets/alert_dialogs.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_welcome_page/tab_navigation_cubit.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,12 +20,19 @@ class HearingTestWelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider<HearingTestSoundsPlayerRepository>(
       create: (_) => HearingTestSoundsPlayerRepository(),
-      child: BlocProvider<HearingTestBloc>(
-        create:
-            (context) => HearingTestBloc(
-              hearingTestSoundsPlayerRepository:
-                  context.read<HearingTestSoundsPlayerRepository>(),
-            ),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<HearingTestBloc>(
+            create:
+                (context) => HearingTestBloc(
+                  hearingTestSoundsPlayerRepository:
+                      context.read<HearingTestSoundsPlayerRepository>(),
+                ),
+          ),
+          BlocProvider<HearingTestHistoryResultsCubit>(
+            create: (_) => HearingTestHistoryResultsCubit(),
+          ),
+        ],
         child: const HearingTestWelcomePageView(),
       ),
     );
@@ -43,7 +52,7 @@ class HearingTestWelcomePageView extends StatelessWidget {
         builder: (context, currentIndex) {
           final List<Widget> pages = [
             const _StartTestTab(),
-            const _StartTestTab(),
+            const _SavedTestsTab(),
           ];
 
           return Scaffold(
