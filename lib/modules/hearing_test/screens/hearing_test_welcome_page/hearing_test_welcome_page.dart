@@ -69,11 +69,11 @@ class HearingTestWelcomePageView extends StatelessWidget {
               items: [
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.headphones),
-                  label: 'Hearing Test',
+                  label: l10n.hearing_test_welcome_page_hearing_test_tab,
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.folder),
-                  label: 'Saved',
+                  label: l10n.hearing_test_welcome_page_saved_tests_tab,
                 ),
               ],
             ),

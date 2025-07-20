@@ -363,5 +363,8 @@
     "hearing_test_result_history_page": "Result history",
     "@hearing_test_result_history_page": {
         "description": "Label for the button to see hearing test results."
-    }
+    },
+
+    "hearing_test_welcome_page_hearing_test_tab": "Hearing test",
+    "hearing_test_welcome_page_saved_tests_tab": "Saved"
 }
