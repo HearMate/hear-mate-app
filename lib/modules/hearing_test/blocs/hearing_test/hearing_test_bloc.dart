@@ -33,11 +33,15 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
     on<HearingTestSaveResult>(_saveTestResult);
+<<<<<<< HEAD
 
     // DEBUG
     on<HearingTestDebugEarLeftPartial>(_onDebugEarLeftPartial);
     on<HearingTestDebugEarRightPartial>(_onDebugEarRightPartial);
     on<HearingTestDebugBothEarsFull>(_onDebugBothEarsFull);
+=======
+    on<HearingTestMaskingTestStart>(_onMaskingTestStart);
+>>>>>>> 6ee6673 (masking test data state)
   }
 
   void _onStartTest(
@@ -62,6 +66,14 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
             null,
           ),
           rightEarResults: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+          leftEarResultsMasked: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+          rightEarResultsMasked: List<double?>.filled(
             HearingTestConstants.TEST_FREQUENCIES.length,
             null,
           ),

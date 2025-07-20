@@ -26,3 +26,5 @@ class HearingTestDebugEarLeftPartial extends HearingTestEvent {}
 class HearingTestDebugEarRightPartial extends HearingTestEvent {}
 
 class HearingTestDebugBothEarsFull extends HearingTestEvent {}
+
+class HearingTestMaskingTestStart extends HearingTestEvent {}
