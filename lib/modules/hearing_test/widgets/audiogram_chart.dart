@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 
@@ -30,16 +31,7 @@ class AudiogramChart extends StatelessWidget {
 
   List<FlSpot> remapSpots(List<double?> values) {
     if (values.length != frequencyLabels.length + 1) return [];
-    final List<MapEntry<int, int>> mapping = [
-      MapEntry(7, 0),
-      MapEntry(6, 1),
-      MapEntry(5, 2),
-      // For 1000 Hz we always want to use the second value if available
-      values[4] != null ? MapEntry(4, 3) : MapEntry(0, 3),
-      MapEntry(1, 4),
-      MapEntry(2, 5),
-      MapEntry(3, 6),
-    ];
+    final mapping = getFrequencyMapping(values);
     final List<FlSpot> mapped = [];
     for (final entry in mapping) {
       final dbValue = values[entry.key];
