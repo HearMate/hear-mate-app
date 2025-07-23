@@ -23,6 +23,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   }) : _soundsPlayerRepository = hearingTestSoundsPlayerRepository,
        super(HearingTestState()) {
     on<HearingTestStartTest>(_onStartTest);
+    on<HearingTestContinueTest>(_onContinueTest);
     on<HearingTestButtonPressed>(_onButtonPressed);
     on<HearingTestButtonReleased>(_onButtonReleased);
     on<HearingTestPlayingSound>(_onPlayingSound);
@@ -39,6 +40,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   ) async {
     emit(
       state.copyWith(
+        currentEar: state.currentEar,
         isTestCanceled: false,
         isButtonPressed: false,
         wasSoundHeard: false,
@@ -58,6 +60,27 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
             null,
           ),
         ),
+      ),
+    );
+
+    add(HearingTestPlayingSound());
+  }
+
+  void _onContinueTest(
+    HearingTestContinueTest event,
+    Emitter<HearingTestState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        currentEar: state.currentEar,
+        isTestCanceled: false,
+        isButtonPressed: false,
+        wasSoundHeard: false,
+        currentFrequencyIndex: 0,
+        currentDBLevel: 20,
+        dbLevelToHearCountMap: const {},
+        resultSaved: false,
+        results: state.results
       ),
     );
 
@@ -139,21 +162,22 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
-    if (state.currentFrequencyIndex ==
-        HearingTestConstants.TEST_FREQUENCIES.length - 1) {
-      // check if we have already covered two ears
-      if (state.currentEar) {
-        return add(HearingTestCompleted());
-      }
-      return add(HearingTestChangeEar());
-    }
 
-    if (!state.currentEar) {
+    if (state.currentEar) {
       state.results.leftEarResults[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     } else {
       state.results.rightEarResults[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
+    }
+
+    if (state.currentFrequencyIndex ==
+        HearingTestConstants.TEST_FREQUENCIES.length - 1) {
+      // check if we have already covered two ears
+      if (!state.currentEar) {
+        return add(HearingTestCompleted());
+      }
+      return add(HearingTestChangeEar());
     }
 
     emit(
@@ -183,7 +207,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   ) {
     emit(
       state.copyWith(
-        currentEar: true,
+        currentEar: false,
         isButtonPressed: false,
         wasSoundHeard: false,
         currentFrequencyIndex: 0,
@@ -191,7 +215,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         dbLevelToHearCountMap: const {},
       ),
     );
-    add(HearingTestStartTest());
+    add(HearingTestContinueTest());
   }
 
   void _onCompleted(

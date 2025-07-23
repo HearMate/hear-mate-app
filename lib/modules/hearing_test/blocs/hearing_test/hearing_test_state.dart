@@ -3,7 +3,7 @@ part of 'hearing_test_bloc.dart';
 class HearingTestState {
   final bool isButtonPressed;
   final bool wasSoundHeard;
-  final bool currentEar; // false is left, true is right
+  final bool currentEar; // true is left, false is right
   final bool isTestCanceled;
   final int currentFrequencyIndex;
   final double currentDBLevel;
@@ -14,7 +14,7 @@ class HearingTestState {
   HearingTestState({
     this.isButtonPressed = false,
     this.wasSoundHeard = false,
-    this.currentEar = false,
+    this.currentEar = true,
     this.isTestCanceled = false,
     this.currentFrequencyIndex = 0,
     this.currentDBLevel = 60,

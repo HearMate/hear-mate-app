@@ -5,6 +5,8 @@ sealed class HearingTestEvent {}
 
 class HearingTestStartTest extends HearingTestEvent {}
 
+class HearingTestContinueTest extends HearingTestEvent {}
+
 class HearingTestButtonPressed extends HearingTestEvent {}
 
 class HearingTestButtonReleased extends HearingTestEvent {}
