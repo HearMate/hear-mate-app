@@ -3,10 +3,12 @@ part of 'hearing_test_bloc.dart';
 class HearingTestState {
   final bool isButtonPressed;
   final bool wasSoundHeard;
-  final bool currentEar; // true is left, false is right
-  final bool isTestCanceled;
+  final bool isTestCompleted;
+
   final int currentFrequencyIndex;
   final double currentDBLevel;
+  final HearingTestEar currentEar;
+
   final Map<double, int> dbLevelToHearCountMap;
   final HearingTestResult results;
   final bool resultSaved;
@@ -14,8 +16,8 @@ class HearingTestState {
   HearingTestState({
     this.isButtonPressed = false,
     this.wasSoundHeard = false,
-    this.currentEar = true,
-    this.isTestCanceled = false,
+    this.currentEar = HearingTestEar.LEFT,
+    this.isTestCompleted = false,
     this.currentFrequencyIndex = 0,
     this.currentDBLevel = 60,
     this.dbLevelToHearCountMap = const {},
@@ -38,8 +40,8 @@ class HearingTestState {
   HearingTestState copyWith({
     bool? isButtonPressed,
     bool? wasSoundHeard,
-    bool? currentEar,
-    bool? isTestCanceled,
+    HearingTestEar? currentEar,
+    bool? isTestCompleted,
     int? currentFrequencyIndex,
     double? currentDBLevel,
     Map<double, int>? dbLevelToHearCountMap,
@@ -50,7 +52,7 @@ class HearingTestState {
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
       wasSoundHeard: wasSoundHeard ?? this.wasSoundHeard,
       currentEar: currentEar ?? this.currentEar,
-      isTestCanceled: isTestCanceled ?? this.isTestCanceled,
+      isTestCompleted: isTestCompleted ?? this.isTestCompleted,
       currentFrequencyIndex:
           currentFrequencyIndex ?? this.currentFrequencyIndex,
       currentDBLevel: currentDBLevel ?? this.currentDBLevel,
