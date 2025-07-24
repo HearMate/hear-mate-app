@@ -33,6 +33,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
     on<HearingTestSaveResult>(_saveTestResult);
+
+    // DEBUG
+    on<HearingTestDebugEarLeftPartial>(_onDebugEarLeftPartial);
+    on<HearingTestDebugEarRightPartial>(_onDebugEarRightPartial);
+    on<HearingTestDebugBothEarsFull>(_onDebugBothEarsFull);
   }
 
   void _onStartTest(
@@ -236,5 +241,104 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     } catch (e) {
       debugPrint("Error saving CSV file: $e");
     }
+  }
+
+  // DEBUG
+
+  void _onDebugEarLeftPartial(
+    HearingTestDebugEarLeftPartial event,
+    Emitter<HearingTestState> emit,
+  ) {
+    if (!kDebugMode) {
+      return;
+    }
+
+    final partialResults = List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    );
+    partialResults[0] = 30.0;
+    partialResults[1] = 35.0;
+    partialResults[2] = 40.0;
+
+    emit(
+      state.copyWith(
+        results: HearingTestResult(
+          filePath: "",
+          dateLabel: "DEBUG_LEFT_PARTIAL",
+          leftEarResults: partialResults,
+          rightEarResults: List<double?>.filled(
+            HearingTestConstants.TEST_FREQUENCIES.length,
+            null,
+          ),
+        ),
+        isTestCompleted: true,
+      ),
+    );
+  }
+
+  void _onDebugEarRightPartial(
+    HearingTestDebugEarRightPartial event,
+    Emitter<HearingTestState> emit,
+  ) {
+    if (!kDebugMode) {
+      return;
+    }
+
+    final leftEarResults = List<double?>.generate(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      (index) => 30.0 + index * 5,
+    );
+
+    final rightEarResults = List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    );
+    rightEarResults[0] = 45.0;
+    rightEarResults[1] = 50.0;
+    rightEarResults[2] = 55.0;
+
+    emit(
+      state.copyWith(
+        results: HearingTestResult(
+          filePath: "",
+          dateLabel: "DEBUG_RIGHT_PARTIAL",
+          leftEarResults: leftEarResults,
+          rightEarResults: rightEarResults,
+        ),
+        isTestCompleted: true,
+      ),
+    );
+  }
+
+  void _onDebugBothEarsFull(
+    HearingTestDebugBothEarsFull event,
+    Emitter<HearingTestState> emit,
+  ) {
+    if (!kDebugMode) {
+      return;
+    }
+
+    final leftEarResults = List<double?>.generate(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      (i) => 30.0 + i * 2, // 30, 32, 34, ...
+    );
+
+    final rightEarResults = List<double?>.generate(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      (i) => 35.0 + i * 3, // 35, 38, 41, ...
+    );
+
+    emit(
+      state.copyWith(
+        results: HearingTestResult(
+          filePath: "",
+          dateLabel: "DEBUG_FULL",
+          leftEarResults: leftEarResults,
+          rightEarResults: rightEarResults,
+        ),
+        isTestCompleted: true,
+      ),
+    );
   }
 }

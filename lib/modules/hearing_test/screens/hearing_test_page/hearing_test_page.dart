@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -101,6 +102,65 @@ class HearingTestPage extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
+
+                if (kDebugMode)
+                  Center(
+                    child: Container(
+                      width: 300,
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.only(top: 16),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(
+                              context,
+                            ).shadowColor.withOpacity(0.2),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Debug Shortcuts",
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 12),
+                          ElevatedButton(
+                            onPressed:
+                                () => context.read<HearingTestBloc>().add(
+                                  HearingTestDebugEarLeftPartial(),
+                                ),
+                            child: const Text("Left Ear Partial"),
+                          ),
+                          const SizedBox(height: 8),
+                          ElevatedButton(
+                            onPressed:
+                                () => context.read<HearingTestBloc>().add(
+                                  HearingTestDebugEarRightPartial(),
+                                ),
+                            child: const Text("Right Ear Partial"),
+                          ),
+                          const SizedBox(height: 8),
+                          ElevatedButton(
+                            onPressed:
+                                () => context.read<HearingTestBloc>().add(
+                                  HearingTestDebugBothEarsFull(),
+                                ),
+                            child: const Text("Both Ears Full"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 40.0),
                   child: TextButton(
