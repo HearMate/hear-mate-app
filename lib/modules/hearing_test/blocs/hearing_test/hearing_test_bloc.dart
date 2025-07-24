@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_ear.dart';
+import 'package:meta/meta.dart';
 import 'dart:math';
 import 'dart:convert';
 import 'dart:io';
@@ -39,7 +41,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   ) async {
     emit(
       state.copyWith(
-        isTestCanceled: false,
+        currentEar: state.currentEar,
+        isTestCompleted: false,
         isButtonPressed: false,
         wasSoundHeard: false,
         currentFrequencyIndex: 0,
@@ -86,7 +89,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestPlayingSound event,
     Emitter<HearingTestState> emit,
   ) async {
-    if (state.isTestCanceled) {
+    if (state.isTestCompleted) {
       return;
     }
 
@@ -99,9 +102,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     await Future.delayed(Duration(milliseconds: delayMs));
 
     await _soundsPlayerRepository.playSound(
-      HearingTestConstants.TEST_FREQUENCIES[state.currentFrequencyIndex],
+      frequency:
+          HearingTestConstants.TEST_FREQUENCIES[state.currentFrequencyIndex],
       decibels: state.currentDBLevel,
-      leftEarOnly: state.currentEar,
+      ear: state.currentEar,
     );
 
     if (state.wasSoundHeard) {
@@ -139,21 +143,21 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
-    if (state.currentFrequencyIndex ==
-        HearingTestConstants.TEST_FREQUENCIES.length - 1) {
-      // check if we have already covered two ears
-      if (state.currentEar) {
-        return add(HearingTestCompleted());
-      }
-      return add(HearingTestChangeEar());
-    }
-
-    if (!state.currentEar) {
+    if (state.currentEar == HearingTestEar.LEFT) {
       state.results.leftEarResults[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     } else {
       state.results.rightEarResults[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
+    }
+
+    if (state.currentFrequencyIndex ==
+        HearingTestConstants.TEST_FREQUENCIES.length - 1) {
+      // check if we have already covered two ears
+      if (state.currentEar == HearingTestEar.RIGHT) {
+        return add(HearingTestCompleted());
+      }
+      return add(HearingTestChangeEar());
     }
 
     emit(
@@ -168,12 +172,13 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     add(HearingTestPlayingSound());
   }
 
+  // It could be probably merged with onCompleted. Right now, we will leave it, because it may be useful in the future.
   void _onEndTestEarly(
     HearingTestEndTestEarly event,
     Emitter<HearingTestState> emit,
   ) {
     _soundsPlayerRepository.stopSound();
-    emit(state.copyWith(isTestCanceled: true));
+    emit(state.copyWith(isTestCompleted: true));
     HMLogger.print("${state.results}");
   }
 
@@ -183,15 +188,17 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   ) {
     emit(
       state.copyWith(
-        currentEar: true,
+        currentEar: HearingTestEar.RIGHT,
         isButtonPressed: false,
         wasSoundHeard: false,
         currentFrequencyIndex: 0,
         currentDBLevel: 20,
         dbLevelToHearCountMap: const {},
+        resultSaved: false,
+        results: state.results,
       ),
     );
-    add(HearingTestStartTest());
+    add(HearingTestPlayingSound());
   }
 
   void _onCompleted(
@@ -199,6 +206,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     Emitter<HearingTestState> emit,
   ) {
     HMLogger.print("${state.results}");
+    emit(state.copyWith(isTestCompleted: true));
   }
 
   Future<void> _saveTestResult(

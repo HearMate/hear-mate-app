@@ -10,21 +10,26 @@ class HearingTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
         listener: (context, state) {
-          if (state is HearingTestCompleted) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder:
-                    (_) => BlocProvider.value(
-                      value: context.read<HearingTestBloc>(),
-                      child: HearingTestResultPage(),
-                    ),
-              ),
-            );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder:
+                  (_) => BlocProvider.value(
+                    value: context.read<HearingTestBloc>(),
+                    child: HearingTestResultPage(),
+                  ),
+            ),
+          );
+        },
+        listenWhen: (previous, current) {
+          if (previous.isTestCompleted == false &&
+              current.isTestCompleted == true) {
+            return true;
           }
+          return false;
         },
         builder: (context, state) {
           return SafeArea(
@@ -102,16 +107,6 @@ class HearingTestPage extends StatelessWidget {
                     onPressed: () {
                       context.read<HearingTestBloc>().add(
                         HearingTestEndTestEarly(),
-                      );
-
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder:
-                              (_) => BlocProvider.value(
-                                value: context.read<HearingTestBloc>(),
-                                child: HearingTestResultPage(),
-                              ),
-                        ),
                       );
                     },
                     child: Text(

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
+import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_ear.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 
 class HearingTestSoundsPlayerRepository {
@@ -29,15 +30,15 @@ class HearingTestSoundsPlayerRepository {
     await _audioPlayer.setReleaseMode(ReleaseMode.stop);
   }
 
-  Future<void> playSound(
-    int frequency, {
+  Future<void> playSound({
+    required int frequency,
     required double decibels,
-    required bool leftEarOnly,
+    required HearingTestEar ear,
   }) async {
     if (_soundAssets.containsKey(frequency)) {
       try {
         String assetPath =
-            leftEarOnly
+            ear == HearingTestEar.LEFT
                 ? _soundAssets[frequency]!['left']!
                 : _soundAssets[frequency]!['right']!;
 
@@ -124,7 +125,7 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _headphoneCorrection(double dBSPL, int frequency) {
-      const Map<int, double> correctionReference = {
+    const Map<int, double> correctionReference = {
       125: -10.0,
       250: -8.0,
       500: -6.5,
