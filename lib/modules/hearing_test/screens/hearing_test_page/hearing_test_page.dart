@@ -110,14 +110,18 @@ class HearingTestPage extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       margin: const EdgeInsets.only(top: 16),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.shade400),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
+                            color: Theme.of(
+                              context,
+                            ).shadowColor.withOpacity(0.2),
                             blurRadius: 6,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
@@ -126,7 +130,8 @@ class HearingTestPage extends StatelessWidget {
                         children: [
                           Text(
                             "Debug Shortcuts",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 12),
                           ElevatedButton(
