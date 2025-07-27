@@ -65,6 +65,7 @@
 	"hearing_test_audiogram_chart_severe_loss": "Сильна втрата",
 	"hearing_test_audiogram_chart_left_ear": "Ліве вухо",
 	"hearing_test_audiogram_chart_right_ear": "Праве вухо",
+	"hearing_test_audiogram_chart_masking_explanation": "Під час вашого тесту слуху було використано маскування. Воно полягає у ізоляції тестованого вуха шляхом відтворення шуму в іншому вусі для забезпечення точності результатів.",
 
 	"hearing_test_result_page_title": "HearMate",
 	"hearing_test_result_page_your_results": "Ваші результати тесту слуху",
