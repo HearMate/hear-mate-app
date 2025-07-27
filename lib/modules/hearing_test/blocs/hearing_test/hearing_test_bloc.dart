@@ -172,7 +172,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         HearingTestConstants.TEST_FREQUENCIES.length - 1) {
       // check if we have already covered two ears
       if (state.currentEar == HearingTestEar.RIGHT) {
-        if (state.results.needMasking()) {
+        if (state.results.getFrequenciesThatRequireMasking().contains(true)) {
           emit(state.copyWith(isMaskingStarted: true));
           return add(HearingTestStartMaskedTest());
         }
@@ -332,14 +332,18 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
           state.currentDBLevel.toDouble();
     }
 
+    if (state.frequenciesThatRequireMasking == null) {
+      debugPrint("frequenciesThatRequireMasking was null during masking test");
+      return;
+    }
     state.frequenciesThatRequireMasking![state.currentFrequencyIndex] = false;
     // handle double 1k record
-    if(state.currentFrequencyIndex == 0){
-      state.frequenciesThatRequireMasking![4] = false;  
+    if (state.currentFrequencyIndex == 0) {
+      state.frequenciesThatRequireMasking![4] = false;
     }
 
     if (state.frequenciesThatRequireMasking!.contains(true) == false) {
-      emit (state.copyWith(isTestCompleted: true));
+      emit(state.copyWith(isTestCompleted: true));
       return add(HearingTestCompleted());
     }
 
@@ -381,7 +385,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         frequenciesThatRequireMasking: frequenciesThatRequireMasking,
         currentFrequencyIndex: maskedIndex,
         currentMaskingDBLevel:
-            15.0 +
             min(
               state.results.leftEarResults[maskedIndex]!,
               state.results.rightEarResults[maskedIndex]!,
@@ -516,11 +519,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
             null,
           ),
         ),
-        isMaskingStarted: true,
-        //isTestCompleted: true,
+        isTestCompleted: true,
+        //isMaskingStarted: true, // uncomment this and line below and comment line above if want to test masking
       ),
     );
-
-    return add(HearingTestStartMaskedTest());
+    //return add(HearingTestStartMaskedTest());
   }
 }

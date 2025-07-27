@@ -37,31 +37,31 @@ class HearingTestSoundsPlayerRepository {
     required double decibels,
     required HearingTestEar ear,
   }) async {
-    if (_soundAssets.containsKey(frequency)) {
-      try {
-        String assetPath =
-            ear == HearingTestEar.LEFT
-                ? _soundAssets[frequency]!['left']!
-                : _soundAssets[frequency]!['right']!;
-
-        double volume = _decibelsToVolume(decibels, frequency: frequency);
-
-        await _audioPlayer.setSource(AssetSource(assetPath));
-        await _audioPlayer.setVolume(volume);
-        await _audioPlayer.resume();
-
-        await Future.delayed(_soundDuration, () {
-          _playCanceled = true;
-        });
-
-        if (_playCanceled) {
-          _audioPlayer.stop();
-        }
-      } catch (e) {
-        HMLogger.print("Error loading sound file: $e");
-      }
-    } else {
+    if (!_soundAssets.containsKey(frequency)) {
       HMLogger.print('No sound found for frequency $frequency Hz');
+      return;
+    }
+    try {
+      String assetPath =
+          ear == HearingTestEar.LEFT
+              ? _soundAssets[frequency]!['left']!
+              : _soundAssets[frequency]!['right']!;
+
+      double volume = _decibelsToVolume(decibels, frequency: frequency);
+
+      await _audioPlayer.setSource(AssetSource(assetPath));
+      await _audioPlayer.setVolume(volume);
+      await _audioPlayer.resume();
+
+      await Future.delayed(_soundDuration, () {
+        _playCanceled = true;
+      });
+
+      if (_playCanceled) {
+        _audioPlayer.stop();
+      }
+    } catch (e) {
+      HMLogger.print("Error loading sound file: $e");
     }
   }
 
@@ -71,47 +71,50 @@ class HearingTestSoundsPlayerRepository {
     required double maskedDecibels,
     required HearingTestEar ear,
   }) async {
-    if (_soundAssets.containsKey(frequency)) {
-      try {
-        String assetPathL = _soundAssets[frequency]!['left']!;
-        String assetPathR = _pinkNoiseAssetPath;
-
-        double volumeL = _decibelsToVolume(decibels, frequency: frequency);
-        double volumeR = _decibelsToVolume(
-          maskedDecibels,
-          frequency: frequency,
-        );
-
-        if (ear == HearingTestEar.RIGHT) {
-          assetPathR = _soundAssets[frequency]!['right']!;
-          assetPathL = _pinkNoiseAssetPath;
-
-          volumeR = _decibelsToVolume(decibels, frequency: frequency);
-          volumeL = _decibelsToVolume(maskedDecibels, frequency: frequency);
-        }
-
-        await _leftPlayer.setSource(AssetSource(assetPathL));
-        await _leftPlayer.setBalance(-1.0);
-        await _leftPlayer.setVolume(volumeL);
-        await _leftPlayer.resume();
-
-        await _rightPlayer.setSource(AssetSource(assetPathR));
-        await _rightPlayer.setBalance(1.0);
-        await _rightPlayer.setVolume(volumeR);
-        await _rightPlayer.resume();
-
-        await Future.delayed(_soundDuration, () {
-          _playCanceled = true;
-        });
-
-        if (_playCanceled) {
-          _audioPlayer.stop();
-        }
-      } catch (e) {
-        HMLogger.print("Error loading sound file: $e");
-      }
-    } else {
+    if (!_soundAssets.containsKey(frequency)) {
       HMLogger.print('No sound found for frequency $frequency Hz');
+      return;
+    }
+    try {
+      String? assetPathL;
+      String? assetPathR;
+
+      double? volumeL;
+      double? volumeR;
+
+      if (ear == HearingTestEar.RIGHT) {
+        assetPathR = _soundAssets[frequency]!['right']!;
+        assetPathL = _pinkNoiseAssetPath;
+
+        volumeR = _decibelsToVolume(decibels, frequency: frequency);
+        volumeL = _decibelsToVolume(maskedDecibels, frequency: frequency);
+      } else {
+        assetPathR = _pinkNoiseAssetPath;
+        assetPathL = _soundAssets[frequency]!['left']!;
+
+        volumeR = _decibelsToVolume(maskedDecibels, frequency: frequency);
+        volumeL = _decibelsToVolume(decibels, frequency: frequency);
+      }
+
+      await _leftPlayer.setSource(AssetSource(assetPathL));
+      await _leftPlayer.setBalance(-1.0);
+      await _leftPlayer.setVolume(volumeL);
+      await _leftPlayer.resume();
+
+      await _rightPlayer.setSource(AssetSource(assetPathR));
+      await _rightPlayer.setBalance(1.0);
+      await _rightPlayer.setVolume(volumeR);
+      await _rightPlayer.resume();
+
+      await Future.delayed(_soundDuration, () {
+        _playCanceled = true;
+      });
+
+      if (_playCanceled) {
+        _audioPlayer.stop();
+      }
+    } catch (e) {
+      HMLogger.print("Error loading sound file: $e");
     }
   }
 

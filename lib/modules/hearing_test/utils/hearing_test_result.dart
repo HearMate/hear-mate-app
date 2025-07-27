@@ -63,34 +63,18 @@ class HearingTestResult {
     return leftEarResults.contains(null) || rightEarResults.contains(null);
   }
 
-  bool needMasking() {
-    for (int i = 0; i < leftEarResults.length; i++) {
-      if (leftEarResults[i] != null && rightEarResults[i] != null) {
-        final leftValue = leftEarResults[i]!;
-        final rightValue = rightEarResults[i]!;
-        if ((leftValue - rightValue).abs() >=
-            HearingTestConstants.MASKING_THRESHOLDS[i]) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   List<bool> getFrequenciesThatRequireMasking() {
-    List<bool> resultsThatNeedMasking = List<bool>.filled(
-      HearingTestConstants.TEST_FREQUENCIES.length,
-      false,
-    );
-    for (int i = 0; i < HearingTestConstants.TEST_FREQUENCIES.length; i++) {
-      if (leftEarResults[i] != null && rightEarResults[i] != null) {
-        final leftValue = leftEarResults[i]!;
-        final rightValue = rightEarResults[i]!;
-        final threshold = HearingTestConstants.MASKING_THRESHOLDS[i];
-        resultsThatNeedMasking[i] =
-            (leftValue - rightValue).abs() >= threshold;
+    final frequencies = HearingTestConstants.TEST_FREQUENCIES;
+    final thresholds = HearingTestConstants.MASKING_THRESHOLDS;
+
+    return List<bool>.generate(frequencies.length, (i) {
+      final left = leftEarResults[i];
+      final right = rightEarResults[i];
+
+      if (left != null && right != null) {
+        return (left - right).abs() >= thresholds[i];
       }
-    }
-    return resultsThatNeedMasking;
+      return false;
+    });
   }
 }
