@@ -16,7 +16,7 @@ class HearingTestSoundsPlayerRepository {
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
   bool _playCanceled = false;
-  final String _pinkNoiseAssetPath = 'tones/pink_noise_stereo.mp3';
+  final String _pinkNoiseAssetPath = 'tones/pink_noise_stereo.wav';
   // Duration for each tone
   final Duration _soundDuration = Duration(seconds: 2);
 
