@@ -65,6 +65,8 @@
     "hearing_test_audiogram_chart_severe_loss": "Starker Hörverlust",
     "hearing_test_audiogram_chart_left_ear": "Linkes Ohr",
     "hearing_test_audiogram_chart_right_ear": "Rechtes Ohr",
+    "hearing_test_audiogram_chart_left_ear_masked": "Linkes Ohr (maskiert)",
+    "hearing_test_audiogram_chart_right_ear_masked": "Rechtes Ohr (maskiert)",
     "hearing_test_audiogram_chart_masking_explanation": "Bei Ihrem Hörtest wurde eine Maskierung verwendet. Dabei wird das zu testende Ohr isoliert, indem im anderen Ohr ein Rauschen abgespielt wird, um genaue Ergebnisse zu gewährleisten.",
 
     "hearing_test_result_page_title": "HearMate",
