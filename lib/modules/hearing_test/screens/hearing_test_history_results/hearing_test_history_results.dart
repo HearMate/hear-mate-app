@@ -99,6 +99,18 @@ class HearingTestHistoryResultsPage extends StatelessWidget {
                         child: AudiogramChart(
                           leftEarData: result.leftEarResults,
                           rightEarData: result.rightEarResults,
+                          leftEarMaskedData:
+                              result.leftEarResultsMasked.every(
+                                    (elem) => elem == null,
+                                  )
+                                  ? null
+                                  : result.leftEarResultsMasked,
+                          rightEarMaskedData:
+                              result.rightEarResultsMasked.every(
+                                    (elem) => elem == null,
+                                  )
+                                  ? null
+                                  : result.rightEarResultsMasked,
                         ),
                       ),
                   ],
