@@ -196,10 +196,11 @@ class AudiogramChart extends StatelessWidget {
                           size: 12.0,
                         );
                       } else {
-                        return FlDotCrossPainter(
-                          size: 12,
-                          color: Colors.red,
-                          width: 2,
+                        return FlDotCirclePainter(
+                          radius: 6.0,
+                          color: Colors.transparent,
+                          strokeColor: Colors.red,
+                          strokeWidth: 1.0,
                         );
                       }
                     },
