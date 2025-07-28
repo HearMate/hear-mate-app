@@ -92,6 +92,9 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       _soundsPlayerRepository.stopSound();
       emit(state.copyWith(isButtonPressed: true, wasSoundHeard: true));
       return;
+    } else {
+      emit(state.copyWith(isButtonPressed: true));
+      return;
     }
   }
 
