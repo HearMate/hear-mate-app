@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_results/hearing_test_history_results_cubit.dart';
+import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+    as HearingTestConstants;
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
@@ -10,14 +12,31 @@ import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart
 // TODO:
 // - show trends what has happened with hearing over time / from last test
 
-List<String> remapDbValues(List<double?> values) {
-  if (values.length != 8) return [];
+List<String> remapDbValues(List<double?> values, List<double?>? maskedValues) {
+  if (values.length != HearingTestConstants.TEST_FREQUENCIES.length) {
+    return [];
+  }
+
   final mapping = getFrequencyMapping(values);
   final List<String> mapped = [];
+
   for (final entry in mapping) {
-    final dbValue = values[entry.key];
-    mapped.add(dbValue != null ? dbValue.toStringAsFixed(1) : '-');
+    final int index = entry.key;
+    final double? unmaskedValue = values[index];
+    final double? maskedValue =
+        maskedValues != null ? maskedValues[index] : null;
+
+    final bool isMasked = maskedValue != null;
+    final double? dbValue = isMasked ? maskedValue : unmaskedValue;
+
+    if (dbValue != null) {
+      final valueStr = dbValue.toStringAsFixed(1);
+      mapped.add(valueStr);
+    } else {
+      mapped.add('-');
+    }
   }
+
   return mapped;
 }
 
@@ -61,8 +80,14 @@ class HearingTestHistoryResultsPage extends StatelessWidget {
                       title: Text(result.dateLabel),
                       subtitle: Text(
                         l10n.hearing_test_history_page_result_info(
-                          remapDbValues(result.leftEarResults),
-                          remapDbValues(result.rightEarResults),
+                          remapDbValues(
+                            result.leftEarResults,
+                            result.leftEarResultsMasked,
+                          ),
+                          remapDbValues(
+                            result.rightEarResults,
+                            result.rightEarResultsMasked,
+                          ),
                         ),
                       ),
                       trailing: IconButton(
