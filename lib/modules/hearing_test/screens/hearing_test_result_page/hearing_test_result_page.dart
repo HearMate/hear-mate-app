@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
@@ -83,7 +83,6 @@ class HearingTestResultPage extends StatelessWidget {
 
   Widget _buildAudiogramChart(HearingTestState state) => Container(
     margin: const EdgeInsets.symmetric(horizontal: 20),
-    height: 420,
     decoration: BoxDecoration(
       border: Border.all(color: Colors.grey.shade300),
       borderRadius: BorderRadius.circular(10),
@@ -92,6 +91,14 @@ class HearingTestResultPage extends StatelessWidget {
     child: AudiogramChart(
       leftEarData: state.results.leftEarResults,
       rightEarData: state.results.rightEarResults,
+      leftEarMaskedData:
+          state.results.leftEarResultsMasked.every((elem) => elem == null)
+              ? null
+              : state.results.leftEarResultsMasked,
+      rightEarMaskedData:
+          state.results.rightEarResultsMasked.every((elem) => elem == null)
+              ? null
+              : state.results.rightEarResultsMasked,
     ),
   );
 

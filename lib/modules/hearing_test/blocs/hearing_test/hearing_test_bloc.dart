@@ -463,6 +463,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       HearingTestConstants.TEST_FREQUENCIES.length,
       null,
     );
+
     rightEarResults[0] = 45.0;
     rightEarResults[1] = 50.0;
     rightEarResults[2] = 55.0;
@@ -506,6 +507,19 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       (i) => 75.0 - i * 5, // 35, 38, 41, ...
     );
 
+    var leftEarMasked = List<double?>.generate(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      (i) => null,
+    );
+
+    var rightEarMasked = List<double?>.generate(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      (i) => (rightEarResults[i] ?? 0) + 20,
+    );
+
+    rightEarMasked[5] = null;
+    rightEarMasked[3] = null;
+
     emit(
       state.copyWith(
         results: HearingTestResult(
@@ -513,17 +527,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
           dateLabel: "DEBUG_FULL",
           leftEarResults: leftEarResults,
           rightEarResults: rightEarResults,
-          leftEarResultsMasked: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-          rightEarResultsMasked: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
+          leftEarResultsMasked: leftEarMasked,
+          rightEarResultsMasked: rightEarMasked,
         ),
+        // isMaskingStarted: true,
         isTestCompleted: true,
-        //isMaskingStarted: true, // uncomment this and line below and comment line above if want to test masking
       ),
     );
     //return add(HearingTestStartMaskedTest());
