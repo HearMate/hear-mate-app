@@ -343,38 +343,35 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     // handle double 1k record
     if (state.currentFrequencyIndex == 0) {
       state.frequenciesThatRequireMasking![4] = false;
-      if (state.currentFrequencyIndex == 0) {
-        state.frequenciesThatRequireMasking![4] = false;
-      }
-
-      if (state.frequenciesThatRequireMasking!.contains(true) == false) {
-        emit(state.copyWith(isTestCompleted: true));
-        return add(HearingTestCompleted());
-      }
-
-      int maskedIndex = state.frequenciesThatRequireMasking!.indexWhere(
-        (element) => element == true,
-      );
-
-      emit(
-        state.copyWith(
-          currentFrequencyIndex: maskedIndex,
-          currentMaskingDBLevel:
-              min(
-                state.results.leftEarResults[maskedIndex]!,
-                state.results.rightEarResults[maskedIndex]!,
-              ) +
-              15.0,
-          currentDBLevel: max(
-            state.results.leftEarResults[maskedIndex]!,
-            state.results.rightEarResults[maskedIndex]!,
-          ),
-          maskedHeardCount: 0,
-        ),
-      );
-
-      add(HearingTestPlayingMaskedSound());
     }
+
+    if (state.frequenciesThatRequireMasking!.contains(true) == false) {
+      emit(state.copyWith(isTestCompleted: true));
+      return add(HearingTestCompleted());
+    }
+
+    int maskedIndex = state.frequenciesThatRequireMasking!.indexWhere(
+      (element) => element == true,
+    );
+
+    emit(
+      state.copyWith(
+        currentFrequencyIndex: maskedIndex,
+        currentMaskingDBLevel:
+            min(
+              state.results.leftEarResults[maskedIndex]!,
+              state.results.rightEarResults[maskedIndex]!,
+            ) +
+            15.0,
+        currentDBLevel: max(
+          state.results.leftEarResults[maskedIndex]!,
+          state.results.rightEarResults[maskedIndex]!,
+        ),
+        maskedHeardCount: 0,
+      ),
+    );
+
+    add(HearingTestPlayingMaskedSound());
   }
 
   void _onStartMaskedTest(

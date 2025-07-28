@@ -196,8 +196,8 @@
     "hearing_test_audiogram_chart_severe_loss": "Severe loss",
     "hearing_test_audiogram_chart_left_ear": "Left ear",
     "hearing_test_audiogram_chart_right_ear": "Right ear",
-    "hearing_test_audiogram_chart_left_ear_masked": "Left ear masked",
-    "hearing_test_audiogram_chart_right_ear_masked": "Right ear masked",
+    "hearing_test_audiogram_chart_left_ear_masked": "Left ear (masked)",
+    "hearing_test_audiogram_chart_right_ear_masked": "Right ear (masked)",
     "hearing_test_audiogram_chart_masking_explanation": "Masking was detected in your hearing test result. It isolates the test ear by playing noise in the other ear to ensure accurate results.",
 
     "@hearing_test_audiogram_chart_frequency": {

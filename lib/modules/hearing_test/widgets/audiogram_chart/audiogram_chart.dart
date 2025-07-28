@@ -44,16 +44,20 @@ class AudiogramChart extends StatelessWidget {
     if (values.length != frequencyLabels.length + 1) return [];
 
     final mapping = getFrequencyMapping(values);
-
     final List<AudiogramPoint> points = [];
 
     for (final entry in mapping) {
-      final dbValue = values[entry.key];
+      final int index = entry.key;
+      final double? unmaskedValue = values[index];
+      final double? maskedValue =
+          maskedValues != null ? maskedValues[index] : null;
+
+      final bool isMasked = maskedValue != null;
+      final double? dbValue = isMasked ? maskedValue : unmaskedValue;
+
       if (dbValue == null) {
         continue;
       }
-
-      bool isMasked = maskedValues != null && maskedValues[entry.key] != null;
 
       points.add(
         AudiogramPoint(
@@ -62,6 +66,7 @@ class AudiogramChart extends StatelessWidget {
         ),
       );
     }
+
     return points;
   }
 
@@ -78,8 +83,8 @@ class AudiogramChart extends StatelessWidget {
 
     return Column(
       children: [
-        AspectRatio(
-          aspectRatio: 0.9,
+        ConstrainedBox(
+          constraints: BoxConstraints(minHeight: 150, maxHeight: 500),
           child: LineChart(
             LineChartData(
               gridData: FlGridData(
@@ -191,7 +196,7 @@ class AudiogramChart extends StatelessWidget {
                       if (isMasked) {
                         return FlDotTrianglePainter(
                           color: Colors.transparent,
-                          strokeWidth: 1,
+                          strokeWidth: 2.0,
                           strokeColor: Colors.red,
                           size: 12.0,
                         );
@@ -200,7 +205,7 @@ class AudiogramChart extends StatelessWidget {
                           radius: 6.0,
                           color: Colors.transparent,
                           strokeColor: Colors.red,
-                          strokeWidth: 1.0,
+                          strokeWidth: 2.0,
                         );
                       }
                     },

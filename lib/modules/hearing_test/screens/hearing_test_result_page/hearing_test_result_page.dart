@@ -88,19 +88,17 @@ class HearingTestResultPage extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
     ),
     padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
-    child: IntrinsicHeight(
-      child: AudiogramChart(
-        leftEarData: state.results.leftEarResults,
-        rightEarData: state.results.rightEarResults,
-        leftEarMaskedData:
-            state.results.leftEarResultsMasked.every((elem) => elem == null)
-                ? null
-                : state.results.leftEarResultsMasked,
-        rightEarMaskedData:
-            state.results.rightEarResultsMasked.every((elem) => elem == null)
-                ? null
-                : state.results.rightEarResultsMasked,
-      ),
+    child: AudiogramChart(
+      leftEarData: state.results.leftEarResults,
+      rightEarData: state.results.rightEarResults,
+      leftEarMaskedData:
+          state.results.leftEarResultsMasked.every((elem) => elem == null)
+              ? null
+              : state.results.leftEarResultsMasked,
+      rightEarMaskedData:
+          state.results.rightEarResultsMasked.every((elem) => elem == null)
+              ? null
+              : state.results.rightEarResultsMasked,
     ),
   );
 
