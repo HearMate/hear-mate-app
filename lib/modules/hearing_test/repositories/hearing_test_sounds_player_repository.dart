@@ -47,7 +47,7 @@ class HearingTestSoundsPlayerRepository {
               ? _soundAssets[frequency]!['left']!
               : _soundAssets[frequency]!['right']!;
 
-      double volume = _decibelsToVolume(decibels, frequency: frequency);
+      double volume = _dBHLToVolume(decibels, frequency);
 
       await _audioPlayer.setSource(AssetSource(assetPath));
       await _audioPlayer.setVolume(volume);
@@ -86,14 +86,14 @@ class HearingTestSoundsPlayerRepository {
         assetPathR = _soundAssets[frequency]!['right']!;
         assetPathL = _pinkNoiseAssetPath;
 
-        volumeR = _decibelsToVolume(decibels, frequency: frequency);
-        volumeL = _decibelsToVolume(maskedDecibels, frequency: frequency);
+        volumeR = _dBHLToVolume(decibels, frequency);
+        volumeL = _dBEMToVolume(maskedDecibels, frequency);
       } else {
         assetPathR = _pinkNoiseAssetPath;
         assetPathL = _soundAssets[frequency]!['left']!;
 
-        volumeR = _decibelsToVolume(maskedDecibels, frequency: frequency);
-        volumeL = _decibelsToVolume(decibels, frequency: frequency);
+        volumeR = _dBEMToVolume(maskedDecibels, frequency);
+        volumeL = _dBHLToVolume(decibels, frequency);
       }
 
       await _leftPlayer.setSource(AssetSource(assetPathL));
@@ -131,18 +131,42 @@ class HearingTestSoundsPlayerRepository {
         _rightPlayer.state == PlayerState.playing);
   }
 
-  double _decibelsToVolume(
-    double dBHL, {
-    int frequency = 0,
-    bool equalize = true,
-  }) {
-    dBHL = dBHL.clamp(-10.0, 120.0);
-    double dBSPL = dBHL;
+  double _dBEMToVolume(double dBEM, int frequency) {
+    dBEM = dBEM.clamp(0, 120.0);
 
-    if (equalize) {
-      double dBSPL = _HLToSPL(dBHL, frequency);
-      dBSPL = _headphoneCorrection(dBSPL, frequency);
-    }
+    double dBSPL = _EMToSPL(dBEM, frequency);
+    // (still work in progress) we dont make the headphone correlation because the EM to SPL mapping needs to be found without reference point
+    dBSPL = dBSPL.clamp(0, 115); // upper limit according to ANSI
+
+    double soundPressure = _SPLToSoundPressure(dBSPL);
+    double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);
+
+    // the volume is in linear scale from 0 to 1 therefore we use normalized sound pressure
+    return normalizedSoundPressure;
+  }
+
+  double _EMToSPL(double dBEM, int frequency) {
+    // placeholder values assuming that em will vary by freq
+    const Map<int, double> zeroEM = {
+      125: 30.5,
+      250: 18.0,
+      500: 11.0,
+      1000: 5.5,
+      2000: 4.5,
+      4000: 9.5,
+      8000: 17.5,
+    };
+    double reference = zeroEM[frequency]!;
+    double dBSPL = dBEM + reference;
+    return dBSPL;
+  }
+
+  double _dBHLToVolume(double dBHL, int frequency) {
+    dBHL = dBHL.clamp(-10.0, 120.0);
+
+    double dBSPL = _HLToSPL(dBHL, frequency);
+    dBSPL = _headphoneCorrection(dBSPL, frequency);
+    // later we might want to merge both mappings to one because the HL to SPL will change after testing
 
     double soundPressure = _SPLToSoundPressure(dBSPL);
     double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);
