@@ -121,6 +121,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
     await Future.delayed(Duration(milliseconds: delayMs));
 
+    if (state.isTestCompleted || state.isMaskingStarted) {
+      return;
+    }
+
     await _soundsPlayerRepository.playSound(
       frequency:
           HearingTestConstants.TEST_FREQUENCIES[state.currentFrequencyIndex],
@@ -277,6 +281,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     final random = Random();
     final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
     await Future.delayed(Duration(milliseconds: delayMs));
+
+    if (state.isTestCompleted) {
+      return;
+    }
 
     final ear =
         state.results.leftEarResults[state.currentFrequencyIndex]! <
