@@ -152,18 +152,17 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _HLToSPL(double dBHL, int frequency) {
-    //needs to be checked against iso 226:2003 standard / consulted with Dominika
-    const Map<int, double> referenceSPL = {
-      125: 45.0,
-      250: 25.0,
-      500: 13.5,
-      1000: 7.5,
-      2000: 9.0,
-      4000: 12.0,
-      8000: 15.5,
+    // thresholds for Sennheiser HDA200 / RadioEar DD450 according to ANSI/ASA S3.6-2018 and ISO 289-8:2004
+    const Map<int, double> retspl = {
+      125: 30.5,
+      250: 18.0,
+      500: 11.0,
+      1000: 5.5,
+      2000: 4.5,
+      4000: 9.5,
+      8000: 17.5,
     };
-    double reference =
-        referenceSPL[frequency] ?? 7.5; // Default to 1000 Hz reference
+    double reference = retspl[frequency]!;
     double dBSPL = dBHL + reference;
     return dBSPL;
   }
@@ -178,19 +177,14 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _normalizeSoundPressure(double soundPressure) {
-    // this needs to be also limit the actual app measurement if it turns out output device does not reach 120 dB HL
-    // this needs to be checked with the dummy head
-    double maxDeviceOutputVolume = 60;
-
-    double maxDBSPL = _HLToSPL(maxDeviceOutputVolume, 125);
+    double maxDeviceDBSPL = 105;
     double normalizedSoundPressure =
-        soundPressure / _SPLToSoundPressure(maxDBSPL);
-    // Clamp because it seems like dB SPL can go below 0 (???)
-    normalizedSoundPressure = normalizedSoundPressure.clamp(0.0, 1.0);
+        soundPressure / _SPLToSoundPressure(maxDeviceDBSPL);
     return normalizedSoundPressure;
   }
 
   double _headphoneCorrection(double dBSPL, int frequency) {
+    // headphone characteristic flattening
     const Map<int, double> correctionReference = {
       125: -10.0,
       250: -8.0,
@@ -200,8 +194,7 @@ class HearingTestSoundsPlayerRepository {
       4000: -10.0,
       8000: -4.5,
     };
-    double correction =
-        correctionReference[frequency] ?? 7.5; // Default to 1000 Hz reference
+    double correction = correctionReference[frequency]!;
     double adjusted = dBSPL + correction;
     return adjusted;
   }
