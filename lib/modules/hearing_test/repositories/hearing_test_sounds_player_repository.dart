@@ -135,7 +135,6 @@ class HearingTestSoundsPlayerRepository {
     dBEM = dBEM.clamp(0, 120.0);
 
     double dBSPL = _EMToSPL(dBEM, frequency);
-    // (still work in progress) we dont make the headphone correlation because the EM to SPL mapping needs to be found without reference point
     dBSPL = dBSPL.clamp(0, 115); // upper limit according to ANSI
 
     double soundPressure = _SPLToSoundPressure(dBSPL);
@@ -146,19 +145,16 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _EMToSPL(double dBEM, int frequency) {
-    // placeholder values assuming that em will vary by freq
-    const Map<int, double> zeroEM = {
-      125: 30.5,
-      250: 18.0,
-      500: 11.0,
-      1000: 5.5,
-      2000: 4.5,
-      4000: 9.5,
-      8000: 17.5,
+    const Map<int, double> oneThirdOctiveCorrection = {
+      125: 4,
+      250: 4,
+      500: 5,
+      1000: 6,
+      2000: 6,
+      4000: 5,
+      8000: 5,
     };
-    double reference = zeroEM[frequency]!;
-    double dBSPL = dBEM + reference;
-    return dBSPL;
+    return oneThirdOctiveCorrection[frequency]! + _HLToSPL(dBEM, frequency);
   }
 
   double _dBHLToVolume(double dBHL, int frequency) {
