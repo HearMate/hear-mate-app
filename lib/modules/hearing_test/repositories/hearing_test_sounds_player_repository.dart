@@ -11,12 +11,11 @@ class HearingTestSoundsPlayerRepository {
   }
 
   final AudioPlayer _audioPlayer = AudioPlayer();
-  final AudioPlayer _leftPlayer = AudioPlayer();
-  final AudioPlayer _rightPlayer = AudioPlayer();
+  final AudioPlayer _maskingPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
   bool _playCanceled = false;
-  final String _pinkNoiseAssetPath = 'tones/pink_noise_stereo.wav';
+  final String _pinkNoiseAssetPath = 'tones/untitled.wav';
   // Duration for each tone
   final Duration _soundDuration = Duration(seconds: 2);
 
@@ -51,6 +50,7 @@ class HearingTestSoundsPlayerRepository {
 
       await _audioPlayer.setSource(AssetSource(assetPath));
       await _audioPlayer.setVolume(volume);
+      await _delay();
       await _audioPlayer.resume();
 
       await Future.delayed(_soundDuration, () {
@@ -76,35 +76,30 @@ class HearingTestSoundsPlayerRepository {
       return;
     }
     try {
-      String? assetPathL;
-      String? assetPathR;
+      String assetPathMaskingSound = _pinkNoiseAssetPath;
+      String assetPathMainSound =
+          ear == HearingTestEar.LEFT
+              ? _soundAssets[frequency]!['left']!
+              : _soundAssets[frequency]!['right']!;
 
-      double? volumeL;
-      double? volumeR;
+      double volumeMaskingSound = _dBEMToVolume(maskedDecibels, frequency);
+      double volumeMainSound = _dBHLToVolume(decibels, frequency);
+
+      await _maskingPlayer.setSource(AssetSource(assetPathMaskingSound));
+      await _maskingPlayer.setVolume(volumeMaskingSound);
+      await _audioPlayer.setSource(AssetSource(assetPathMainSound));
+      await _audioPlayer.setVolume(volumeMainSound);
 
       if (ear == HearingTestEar.RIGHT) {
-        assetPathR = _soundAssets[frequency]!['right']!;
-        assetPathL = _pinkNoiseAssetPath;
-
-        volumeR = _dBHLToVolume(decibels, frequency);
-        volumeL = _dBEMToVolume(maskedDecibels, frequency);
+        await _audioPlayer.setBalance(1.0);
+        await _maskingPlayer.setBalance(-1.0);
       } else {
-        assetPathR = _pinkNoiseAssetPath;
-        assetPathL = _soundAssets[frequency]!['left']!;
-
-        volumeR = _dBEMToVolume(maskedDecibels, frequency);
-        volumeL = _dBHLToVolume(decibels, frequency);
+        await _audioPlayer.setBalance(-1.0);
+        await _maskingPlayer.setBalance(1.0);
       }
-
-      await _leftPlayer.setSource(AssetSource(assetPathL));
-      await _leftPlayer.setBalance(-1.0);
-      await _leftPlayer.setVolume(volumeL);
-      await _leftPlayer.resume();
-
-      await _rightPlayer.setSource(AssetSource(assetPathR));
-      await _rightPlayer.setBalance(1.0);
-      await _rightPlayer.setVolume(volumeR);
-      await _rightPlayer.resume();
+      await _maskingPlayer.resume();
+      await _delay();
+      await _audioPlayer.resume();
 
       await Future.delayed(_soundDuration, () {
         _playCanceled = true;
@@ -118,17 +113,20 @@ class HearingTestSoundsPlayerRepository {
     }
   }
 
+  Future<void> _delay() async {
+    final random = Random();
+    final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
+    await Future.delayed(Duration(milliseconds: delayMs));
+  }
+
   Future<void> stopSound() async {
     _playCanceled = true;
     await _audioPlayer.stop();
-    await _leftPlayer.stop();
-    await _rightPlayer.stop();
+    await _maskingPlayer.stop();
   }
 
   bool isPlaying() {
-    return (_audioPlayer.state == PlayerState.playing ||
-        _leftPlayer.state == PlayerState.playing ||
-        _rightPlayer.state == PlayerState.playing);
+    return _audioPlayer.state == PlayerState.playing;
   }
 
   double _dBEMToVolume(double dBEM, int frequency) {

@@ -117,10 +117,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return add(HearingTestNextFrequency());
     }
 
-    final random = Random();
-    final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
-    await Future.delayed(Duration(milliseconds: delayMs));
-
     await _soundsPlayerRepository.playSound(
       frequency:
           HearingTestConstants.TEST_FREQUENCIES[state.currentFrequencyIndex],
@@ -273,10 +269,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     if (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL) {
       return add(HearingTestNextMaskedFrequency());
     }
-
-    final random = Random();
-    final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
-    await Future.delayed(Duration(milliseconds: delayMs));
 
     final ear =
         state.results.leftEarResults[state.currentFrequencyIndex]! <
@@ -514,7 +506,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     var rightEarMasked = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => (rightEarResults[i] ?? 0) + 20,
+      (i) => null, //(rightEarResults[i] ?? 0) + 20,
     );
 
     rightEarMasked[5] = null;
@@ -530,10 +522,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
           leftEarResultsMasked: leftEarMasked,
           rightEarResultsMasked: rightEarMasked,
         ),
-        // isMaskingStarted: true,
-        isTestCompleted: true,
+        isMaskingStarted: true,
+        //isTestCompleted: true,
       ),
     );
-    //return add(HearingTestStartMaskedTest());
+    return add(HearingTestStartMaskedTest());
   }
 }
