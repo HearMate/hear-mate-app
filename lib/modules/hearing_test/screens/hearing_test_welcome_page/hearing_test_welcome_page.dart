@@ -10,8 +10,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 
-part 'widgets/start_test_tab.dart';
-part 'widgets/saved_tests_tab.dart';
+part 'screens/start_test_tab.dart';
+part 'screens/saved_tests_tab.dart';
 
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
