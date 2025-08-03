@@ -11,12 +11,11 @@ class HearingTestSoundsPlayerRepository {
   }
 
   final AudioPlayer _audioPlayer = AudioPlayer();
-  final AudioPlayer _leftPlayer = AudioPlayer();
-  final AudioPlayer _rightPlayer = AudioPlayer();
+  final AudioPlayer _maskingPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
+  final Map<int, String> _noiseAssets = {};
   bool _playCanceled = false;
-  final String _pinkNoiseAssetPath = 'tones/pink_noise_stereo.wav';
   // Duration for each tone
   final Duration _soundDuration = Duration(seconds: 2);
 
@@ -27,6 +26,11 @@ class HearingTestSoundsPlayerRepository {
       String rightPath = '${basePath}_right.wav';
 
       _soundAssets[freq] = {'left': leftPath, 'right': rightPath};
+    }
+
+    for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
+      String path = 'tones/${freq}_3.wav';
+      _noiseAssets[freq] = path;
     }
 
     await _audioPlayer.setReleaseMode(ReleaseMode.stop);
@@ -47,10 +51,11 @@ class HearingTestSoundsPlayerRepository {
               ? _soundAssets[frequency]!['left']!
               : _soundAssets[frequency]!['right']!;
 
-      double volume = _decibelsToVolume(decibels, frequency: frequency);
+      double volume = _dBHLToVolume(decibels, frequency);
 
       await _audioPlayer.setSource(AssetSource(assetPath));
       await _audioPlayer.setVolume(volume);
+      await _delay();
       await _audioPlayer.resume();
 
       await Future.delayed(_soundDuration, () {
@@ -71,40 +76,36 @@ class HearingTestSoundsPlayerRepository {
     required double maskedDecibels,
     required HearingTestEar ear,
   }) async {
-    if (!_soundAssets.containsKey(frequency)) {
+    if (!_soundAssets.containsKey(frequency) ||
+        !_noiseAssets.containsKey(frequency)) {
       HMLogger.print('No sound found for frequency $frequency Hz');
       return;
     }
     try {
-      String? assetPathL;
-      String? assetPathR;
+      String assetPathMaskingSound = _noiseAssets[frequency]!;
+      String assetPathMainSound =
+          ear == HearingTestEar.LEFT
+              ? _soundAssets[frequency]!['left']!
+              : _soundAssets[frequency]!['right']!;
 
-      double? volumeL;
-      double? volumeR;
+      double volumeMaskingSound = _dBEMToVolume(maskedDecibels, frequency);
+      double volumeMainSound = _dBHLToVolume(decibels, frequency);
+
+      await _maskingPlayer.setSource(AssetSource(assetPathMaskingSound));
+      await _maskingPlayer.setVolume(volumeMaskingSound);
+      await _audioPlayer.setSource(AssetSource(assetPathMainSound));
+      await _audioPlayer.setVolume(volumeMainSound);
 
       if (ear == HearingTestEar.RIGHT) {
-        assetPathR = _soundAssets[frequency]!['right']!;
-        assetPathL = _pinkNoiseAssetPath;
-
-        volumeR = _decibelsToVolume(decibels, frequency: frequency);
-        volumeL = _decibelsToVolume(maskedDecibels, frequency: frequency);
+        await _audioPlayer.setBalance(1.0);
+        await _maskingPlayer.setBalance(-1.0);
       } else {
-        assetPathR = _pinkNoiseAssetPath;
-        assetPathL = _soundAssets[frequency]!['left']!;
-
-        volumeR = _decibelsToVolume(maskedDecibels, frequency: frequency);
-        volumeL = _decibelsToVolume(decibels, frequency: frequency);
+        await _audioPlayer.setBalance(-1.0);
+        await _maskingPlayer.setBalance(1.0);
       }
-
-      await _leftPlayer.setSource(AssetSource(assetPathL));
-      await _leftPlayer.setBalance(-1.0);
-      await _leftPlayer.setVolume(volumeL);
-      await _leftPlayer.resume();
-
-      await _rightPlayer.setSource(AssetSource(assetPathR));
-      await _rightPlayer.setBalance(1.0);
-      await _rightPlayer.setVolume(volumeR);
-      await _rightPlayer.resume();
+      await _maskingPlayer.resume();
+      await _delay();
+      await _audioPlayer.resume();
 
       await Future.delayed(_soundDuration, () {
         _playCanceled = true;
@@ -118,31 +119,56 @@ class HearingTestSoundsPlayerRepository {
     }
   }
 
-  Future<void> stopSound() async {
+  Future<void> _delay() async {
+    final random = Random();
+    final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
+    await Future.delayed(Duration(milliseconds: delayMs));
+  }
+
+  Future<void> stopSound({bool stopNoise = false}) async {
     _playCanceled = true;
     await _audioPlayer.stop();
-    await _leftPlayer.stop();
-    await _rightPlayer.stop();
+    if (stopNoise) {
+      await _maskingPlayer.stop();
+    }
   }
 
   bool isPlaying() {
-    return (_audioPlayer.state == PlayerState.playing ||
-        _leftPlayer.state == PlayerState.playing ||
-        _rightPlayer.state == PlayerState.playing);
+    return _audioPlayer.state == PlayerState.playing;
   }
 
-  double _decibelsToVolume(
-    double dBHL, {
-    int frequency = 0,
-    bool equalize = true,
-  }) {
-    dBHL = dBHL.clamp(-10.0, 120.0);
-    double dBSPL = dBHL;
+  double _dBEMToVolume(double dBEM, int frequency) {
+    dBEM = dBEM.clamp(0, 120.0);
 
-    if (equalize) {
-      double dBSPL = _HLToSPL(dBHL, frequency);
-      dBSPL = _headphoneCorrection(dBSPL, frequency);
-    }
+    double dBSPL = _EMToSPL(dBEM, frequency);
+    dBSPL = dBSPL.clamp(0, 115); // upper limit according to ANSI
+
+    double soundPressure = _SPLToSoundPressure(dBSPL);
+    double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);
+
+    // the volume is in linear scale from 0 to 1 therefore we use normalized sound pressure
+    return normalizedSoundPressure;
+  }
+
+  double _EMToSPL(double dBEM, int frequency) {
+    const Map<int, double> oneThirdOctiveCorrection = {
+      125: 4,
+      250: 4,
+      500: 5,
+      1000: 6,
+      2000: 6,
+      4000: 5,
+      8000: 5,
+    };
+    return oneThirdOctiveCorrection[frequency]! + _HLToSPL(dBEM, frequency);
+  }
+
+  double _dBHLToVolume(double dBHL, int frequency) {
+    dBHL = dBHL.clamp(-10.0, 120.0);
+
+    double dBSPL = _HLToSPL(dBHL, frequency);
+    dBSPL = _headphoneCorrection(dBSPL, frequency);
+    // later we might want to merge both mappings to one because the HL to SPL will change after testing
 
     double soundPressure = _SPLToSoundPressure(dBSPL);
     double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);

@@ -67,7 +67,7 @@ class HearingTestResult {
     final frequencies = HearingTestConstants.TEST_FREQUENCIES;
     final thresholds = HearingTestConstants.MASKING_THRESHOLDS;
 
-    return List<bool>.generate(frequencies.length, (i) {
+    List<bool> result = List<bool>.generate(frequencies.length, (i) {
       final left = leftEarResults[i];
       final right = rightEarResults[i];
 
@@ -76,5 +76,10 @@ class HearingTestResult {
       }
       return false;
     });
+
+    result[0] = result[4];
+    result[3] = false; // no masking for 8k
+
+    return result;
   }
 }
