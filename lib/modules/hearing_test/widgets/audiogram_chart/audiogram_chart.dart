@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
@@ -168,7 +167,7 @@ class AudiogramChart extends StatelessWidget {
                       if (isMasked) {
                         return FlDotSquarePainter(
                           color: Colors.transparent,
-                          strokeWidth: 1,
+                          strokeWidth: 2,
                           strokeColor: Colors.blue,
                           size: 12.0,
                         );
@@ -307,7 +306,7 @@ class AudiogramChart extends StatelessWidget {
               _legendItem(
                 FlDotSquarePainter(
                   color: Colors.transparent,
-                  strokeWidth: 1,
+                  strokeWidth: 2,
                   strokeColor: Colors.blue,
                   size: 12.0,
                 ),
@@ -319,7 +318,7 @@ class AudiogramChart extends StatelessWidget {
               _legendItem(
                 FlDotTrianglePainter(
                   color: Colors.transparent,
-                  strokeWidth: 1,
+                  strokeWidth: 2,
                   strokeColor: Colors.red,
                   size: 12.0,
                 ),

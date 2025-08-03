@@ -314,7 +314,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     Emitter<HearingTestState> emit,
   ) async {
     final ear =
-        state.results.leftEarResults[state.currentFrequencyIndex]! <
+        state.results.leftEarResults[state.currentFrequencyIndex]! >
                 state.results.rightEarResults[state.currentFrequencyIndex]!
             ? HearingTestEar.LEFT
             : HearingTestEar.RIGHT;
