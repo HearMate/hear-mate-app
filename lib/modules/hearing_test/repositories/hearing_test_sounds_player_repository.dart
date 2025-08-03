@@ -12,7 +12,7 @@ class HearingTestSoundsPlayerRepository {
 
   final AudioPlayer _audioPlayer = AudioPlayer();
   final AudioPlayer _maskingPlayer = AudioPlayer();
-  final Map<int, Map<String, String>> _soundAssets =
+  final Map<int, String> _soundAssets =
       {}; // Stores both left and right variants
   final Map<int, String> _noiseAssets = {};
   bool _playCanceled = false;
@@ -21,16 +21,11 @@ class HearingTestSoundsPlayerRepository {
 
   Future<void> initialize() async {
     for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
-      String basePath = 'tones/tone_${freq}Hz';
-      String leftPath = '${basePath}_left.wav';
-      String rightPath = '${basePath}_right.wav';
-
-      _soundAssets[freq] = {'left': leftPath, 'right': rightPath};
+      _soundAssets[freq] = 'tones/tone_${freq}Hz.wav';
     }
 
     for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
-      String path = 'tones/${freq}_3.wav';
-      _noiseAssets[freq] = path;
+      _noiseAssets[freq] = 'tones/${freq}_3.wav';
     }
 
     await _audioPlayer.setReleaseMode(ReleaseMode.stop);
@@ -46,15 +41,17 @@ class HearingTestSoundsPlayerRepository {
       return;
     }
     try {
-      String assetPath =
-          ear == HearingTestEar.LEFT
-              ? _soundAssets[frequency]!['left']!
-              : _soundAssets[frequency]!['right']!;
+      String assetPath = _soundAssets[frequency]!;
 
       double volume = _dBHLToVolume(decibels, frequency);
 
       await _audioPlayer.setSource(AssetSource(assetPath));
       await _audioPlayer.setVolume(volume);
+      if (ear == HearingTestEar.RIGHT) {
+        await _audioPlayer.setBalance(1.0);
+      } else {
+        await _audioPlayer.setBalance(-1.0);
+      }
       await _delay();
       await _audioPlayer.resume();
 
@@ -83,10 +80,7 @@ class HearingTestSoundsPlayerRepository {
     }
     try {
       String assetPathMaskingSound = _noiseAssets[frequency]!;
-      String assetPathMainSound =
-          ear == HearingTestEar.LEFT
-              ? _soundAssets[frequency]!['left']!
-              : _soundAssets[frequency]!['right']!;
+      String assetPathMainSound = _soundAssets[frequency]!;
 
       double volumeMaskingSound = _dBEMToVolume(maskedDecibels, frequency);
       double volumeMainSound = _dBHLToVolume(decibels, frequency);
