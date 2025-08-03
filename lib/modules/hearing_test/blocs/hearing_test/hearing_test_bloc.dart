@@ -278,6 +278,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return add(HearingTestNextMaskedFrequency());
     }
 
+
     final random = Random();
     final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
     await Future.delayed(Duration(milliseconds: delayMs));
@@ -329,8 +330,9 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextMaskedFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
+    _soundsPlayerRepository.stopSound(stopNoise: true);
     final ear =
-        state.results.leftEarResults[state.currentFrequencyIndex]! <
+        state.results.leftEarResults[state.currentFrequencyIndex]! >
                 state.results.rightEarResults[state.currentFrequencyIndex]!
             ? HearingTestEar.LEFT
             : HearingTestEar.RIGHT;
@@ -522,11 +524,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     var rightEarMasked = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => (rightEarResults[i] ?? 0) + 20,
+      (i) => null, //(rightEarResults[i] ?? 0) + 20,
     );
 
-    rightEarMasked[5] = null;
-    rightEarMasked[3] = null;
+    //rightEarMasked[5] = null;
+    //rightEarMasked[3] = null;
 
     emit(
       state.copyWith(
@@ -538,10 +540,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
           leftEarResultsMasked: leftEarMasked,
           rightEarResultsMasked: rightEarMasked,
         ),
-        // isMaskingStarted: true,
-        isTestCompleted: true,
+        isMaskingStarted: true,
+        //isTestCompleted: true,
       ),
     );
-    //return add(HearingTestStartMaskedTest());
+    return add(HearingTestStartMaskedTest());
   }
 }
