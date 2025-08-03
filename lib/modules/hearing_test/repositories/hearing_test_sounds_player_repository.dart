@@ -52,7 +52,6 @@ class HearingTestSoundsPlayerRepository {
       } else {
         await _audioPlayer.setBalance(-1.0);
       }
-      await _delay();
       await _audioPlayer.resume();
 
       await Future.delayed(_soundDuration, () {
@@ -70,53 +69,29 @@ class HearingTestSoundsPlayerRepository {
   Future<void> playMaskedSound({
     required int frequency,
     required double decibels,
-    required double maskedDecibels,
     required HearingTestEar ear,
   }) async {
-    if (!_soundAssets.containsKey(frequency) ||
-        !_noiseAssets.containsKey(frequency)) {
-      HMLogger.print('No sound found for frequency $frequency Hz');
+    if (!_noiseAssets.containsKey(frequency)) {
+      HMLogger.print('No noise sound found for frequency $frequency Hz');
       return;
     }
     try {
       String assetPathMaskingSound = _noiseAssets[frequency]!;
-      String assetPathMainSound = _soundAssets[frequency]!;
 
-      double volumeMaskingSound = _dBEMToVolume(maskedDecibels, frequency);
-      double volumeMainSound = _dBHLToVolume(decibels, frequency);
+      double volumeMaskingSound = _dBEMToVolume(decibels, frequency);
 
       await _maskingPlayer.setSource(AssetSource(assetPathMaskingSound));
       await _maskingPlayer.setVolume(volumeMaskingSound);
-      await _audioPlayer.setSource(AssetSource(assetPathMainSound));
-      await _audioPlayer.setVolume(volumeMainSound);
 
       if (ear == HearingTestEar.RIGHT) {
-        await _audioPlayer.setBalance(1.0);
-        await _maskingPlayer.setBalance(-1.0);
-      } else {
-        await _audioPlayer.setBalance(-1.0);
         await _maskingPlayer.setBalance(1.0);
+      } else {
+        await _maskingPlayer.setBalance(-1.0);
       }
       await _maskingPlayer.resume();
-      await _delay();
-      await _audioPlayer.resume();
-
-      await Future.delayed(_soundDuration, () {
-        _playCanceled = true;
-      });
-
-      if (_playCanceled) {
-        _audioPlayer.stop();
-      }
     } catch (e) {
       HMLogger.print("Error loading sound file: $e");
     }
-  }
-
-  Future<void> _delay() async {
-    final random = Random();
-    final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
-    await Future.delayed(Duration(milliseconds: delayMs));
   }
 
   Future<void> stopSound({bool stopNoise = false}) async {
