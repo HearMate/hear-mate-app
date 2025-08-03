@@ -14,8 +14,8 @@ class HearingTestSoundsPlayerRepository {
   final AudioPlayer _maskingPlayer = AudioPlayer();
   final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
+  final Map<int, String> _noiseAssets = {};
   bool _playCanceled = false;
-  final String _pinkNoiseAssetPath = 'tones/untitled.wav';
   // Duration for each tone
   final Duration _soundDuration = Duration(seconds: 2);
 
@@ -26,6 +26,11 @@ class HearingTestSoundsPlayerRepository {
       String rightPath = '${basePath}_right.wav';
 
       _soundAssets[freq] = {'left': leftPath, 'right': rightPath};
+    }
+
+    for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
+      String path = 'tones/${freq}_3.wav';
+      _noiseAssets[freq] = path;
     }
 
     await _audioPlayer.setReleaseMode(ReleaseMode.stop);
@@ -71,12 +76,13 @@ class HearingTestSoundsPlayerRepository {
     required double maskedDecibels,
     required HearingTestEar ear,
   }) async {
-    if (!_soundAssets.containsKey(frequency)) {
+    if (!_soundAssets.containsKey(frequency) ||
+        !_noiseAssets.containsKey(frequency)) {
       HMLogger.print('No sound found for frequency $frequency Hz');
       return;
     }
     try {
-      String assetPathMaskingSound = _pinkNoiseAssetPath;
+      String assetPathMaskingSound = _noiseAssets[frequency]!;
       String assetPathMainSound =
           ear == HearingTestEar.LEFT
               ? _soundAssets[frequency]!['left']!
@@ -119,10 +125,12 @@ class HearingTestSoundsPlayerRepository {
     await Future.delayed(Duration(milliseconds: delayMs));
   }
 
-  Future<void> stopSound() async {
+  Future<void> stopSound({bool stopNoise = false}) async {
     _playCanceled = true;
     await _audioPlayer.stop();
-    await _maskingPlayer.stop();
+    if (stopNoise) {
+      await _maskingPlayer.stop();
+    }
   }
 
   bool isPlaying() {

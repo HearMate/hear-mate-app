@@ -78,6 +78,8 @@ class HearingTestResult {
     });
 
     result[0] = result[4];
+    result[3] = false; // no masking for 8k
+
     return result;
   }
 }

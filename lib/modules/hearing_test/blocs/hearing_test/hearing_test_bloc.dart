@@ -313,6 +313,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextMaskedFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
+    _soundsPlayerRepository.stopSound(stopNoise: true);
     final ear =
         state.results.leftEarResults[state.currentFrequencyIndex]! >
                 state.results.rightEarResults[state.currentFrequencyIndex]!
@@ -509,8 +510,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       (i) => null, //(rightEarResults[i] ?? 0) + 20,
     );
 
-    rightEarMasked[5] = null;
-    rightEarMasked[3] = null;
+    //rightEarMasked[5] = null;
+    //rightEarMasked[3] = null;
 
     emit(
       state.copyWith(
