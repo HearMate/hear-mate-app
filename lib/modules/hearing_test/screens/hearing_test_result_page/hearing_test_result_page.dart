@@ -31,6 +31,10 @@ class HearingTestResultPage extends StatelessWidget {
 
     return BlocBuilder<HearingTestBloc, HearingTestState>(
       builder: (context, state) {
+        if (state.isLoadingAudiogramClassificationResults) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
         return Scaffold(
           appBar: HMAppBar(
             title: loc.hearing_test_result_page_title,
@@ -116,6 +120,10 @@ class HearingTestResultPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                context.read<HearingTestBloc>().state.audiogramClassification,
+              ),
+              const SizedBox(height: 15),
               Text(
                 loc.hearing_test_result_page_note,
                 style: TextStyle(
