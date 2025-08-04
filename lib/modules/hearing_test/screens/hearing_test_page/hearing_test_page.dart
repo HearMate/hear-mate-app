@@ -166,7 +166,7 @@ class HearingTestPage extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {
                       context.read<HearingTestBloc>().add(
-                        HearingTestEndTestEarly(),
+                        HearingTestCompleted(),
                       );
                     },
                     child: Text(

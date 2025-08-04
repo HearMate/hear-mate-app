@@ -59,6 +59,27 @@ class HearingTestResult {
     );
   }
 
+  static HearingTestResult get empty => HearingTestResult(
+    filePath: "",
+    dateLabel: "",
+    leftEarResults: List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    ),
+    rightEarResults: List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    ),
+    leftEarResultsMasked: List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    ),
+    rightEarResultsMasked: List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    ),
+  );
+
   bool hasMissingValues() {
     return leftEarResults.contains(null) || rightEarResults.contains(null);
   }

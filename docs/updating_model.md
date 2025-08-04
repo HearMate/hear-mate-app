@@ -1,0 +1,1 @@
+In order to update what classifier is used when running our app, we need to run the following command: `python3 scripts/update_model.py`. This will ensure we have built our python app for every platform. 
