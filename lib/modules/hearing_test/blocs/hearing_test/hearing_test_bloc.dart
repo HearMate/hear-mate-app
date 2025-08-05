@@ -122,6 +122,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     await Future.delayed(Duration(milliseconds: delayMs));
 
     if (state.isTestCompleted || state.isMaskingStarted) {
+      _soundsPlayerRepository.reset();
       return;
     }
 
@@ -133,6 +134,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     );
 
     if (state.isTestCompleted || state.isMaskingStarted) {
+      _soundsPlayerRepository.reset();
       return;
     }
 
@@ -303,6 +305,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     await Future.delayed(Duration(milliseconds: delayMs));
 
     if (state.isTestCompleted) {
+      _soundsPlayerRepository.reset();
       return;
     }
 
@@ -314,6 +317,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     );
 
     if (state.isTestCompleted) {
+      _soundsPlayerRepository.reset();
       return;
     }
 
