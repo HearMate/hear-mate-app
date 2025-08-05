@@ -102,6 +102,11 @@ class HearingTestSoundsPlayerRepository {
     }
   }
 
+  Future<void> reset() async {
+    await _audioPlayer.release();
+    await _maskingPlayer.release();
+  }
+
   bool isPlaying() {
     return _audioPlayer.state == PlayerState.playing;
   }
