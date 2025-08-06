@@ -7,6 +7,27 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 
+void showDisclaimerDialog(BuildContext context) {
+  final l10n = AppLocalizations.of(context)!;
+
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      title: Text(l10n.hearing_test_welcome_page_disclaimer_title),
+      content: Text(
+        l10n.hearing_test_welcome_page_disclaimer
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}
+
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
 
@@ -26,8 +47,26 @@ class HearingTestWelcomePage extends StatelessWidget {
   }
 }
 
-class HearingTestWelcomePageView extends StatelessWidget {
+class HearingTestWelcomePageView extends StatefulWidget {
   const HearingTestWelcomePageView({super.key});
+
+  @override
+  State<HearingTestWelcomePageView> createState() => _HearingTestWelcomePageViewState();
+}
+
+class _HearingTestWelcomePageViewState extends State<HearingTestWelcomePageView> {
+  bool _disclaimerShown = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_disclaimerShown) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDisclaimerDialog(context);
+      });
+      _disclaimerShown = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
