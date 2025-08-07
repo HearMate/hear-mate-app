@@ -102,5 +102,8 @@
     "error_message": "Błąd: {error}",
     
     "hearing_test_history_page_result_info": "Lewe: {left}\nPrawe: {right}",
-    "hearing_test_result_history_page": "Historia wyników"
+    "hearing_test_result_history_page": "Historia wyników",
+
+    "hearing_test_welcome_page_hearing_test_tab": "Test słuchu",
+    "hearing_test_welcome_page_saved_tests_tab": "Zapisane"
 }
