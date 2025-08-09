@@ -11,14 +11,14 @@ import 'package:hear_mate_app/utils/logger.dart';
 import 'package:http/http.dart' as http;
 
 class HearingTestAudiogramClassificationRepository {
-  http.Client httpClient = http.Client();
-  final String baseUrl =
+  http.Client _httpClient = http.Client();
+  final String _baseUrl =
       "http://127.0.0.1:8000 "; // TODO: Change, when deploying to production.
-  final String highFrequencyEndpoint = "/hearing/high-frequency-loss";
-  final String lowFrequencyEndpoint = "/hearing/low-frequency-loss";
+  final String _highFrequencyEndpoint = "/hearing/high-frequency-loss";
+  final String _lowFrequencyEndpoint = "/hearing/low-frequency-loss";
 
   void dispose() {
-    httpClient.close();
+    _httpClient.close();
   }
 
   List<double> _mapEarResults(List<double?> values) {
@@ -35,7 +35,7 @@ class HearingTestAudiogramClassificationRepository {
     return mapped;
   }
 
-  Future<bool> _postBool({
+  Future<bool> _postEarResultsBool({
     required String endpoint,
     required List<double> earResults,
   }) async {
@@ -47,19 +47,11 @@ class HearingTestAudiogramClassificationRepository {
       );
     }
 
-    String _joinUrl(String base, String path) {
-      if (base.endsWith('/') && path.startsWith('/')) {
-        return base.substring(0, base.length - 1) + path;
-      } else if (!base.endsWith('/') && !path.startsWith('/')) {
-        return '$base/$path';
-      }
-      return '$base$path';
-    }
-
-    final uri = Uri.parse(_joinUrl(baseUrl, endpoint));
+    final Uri baseUri = Uri.parse(_baseUrl);
+    final uri = baseUri.resolve(endpoint);
 
     try {
-      final resp = await httpClient
+      final resp = await _httpClient
           .post(
             uri,
             headers: const {'Content-Type': 'application/json'},
@@ -162,13 +154,19 @@ class HearingTestAudiogramClassificationRepository {
   Future<bool> _isHearingLossOnHighFrequencies({
     required List<double> earResults,
   }) {
-    return _postBool(endpoint: highFrequencyEndpoint, earResults: earResults);
+    return _postEarResultsBool(
+      endpoint: _highFrequencyEndpoint,
+      earResults: earResults,
+    );
   }
 
   Future<bool> _isHearingLossOnLowFrequencies({
     required List<double> earResults,
   }) {
-    return _postBool(endpoint: lowFrequencyEndpoint, earResults: earResults);
+    return _postEarResultsBool(
+      endpoint: _lowFrequencyEndpoint,
+      earResults: earResults,
+    );
   }
 
   Future<String> getAudiogramDescription({
@@ -196,18 +194,6 @@ class HearingTestAudiogramClassificationRepository {
       rightEarResults: right,
     );
 
-    final futures = await Future.wait<bool>([
-      _isHearingLossOnHighFrequencies(earResults: left),
-      _isHearingLossOnHighFrequencies(earResults: right),
-      _isHearingLossOnLowFrequencies(earResults: left),
-      _isHearingLossOnLowFrequencies(earResults: right),
-    ]);
-
-    final hasHighFreqLossLeft = futures[0];
-    final hasHighFreqLossRight = futures[1];
-    final hasLowFreqLossLeft = futures[2];
-    final hasLowFreqLossRight = futures[3];
-
     String classifyText(HearingLossClassification c) {
       switch (c) {
         case HearingLossClassification.None:
@@ -233,6 +219,18 @@ class HearingTestAudiogramClassificationRepository {
     } else {
       buffer.write("Hearing loss is asymmetrical. ");
     }
+
+    final futures = await Future.wait<bool>([
+      _isHearingLossOnHighFrequencies(earResults: left),
+      _isHearingLossOnHighFrequencies(earResults: right),
+      _isHearingLossOnLowFrequencies(earResults: left),
+      _isHearingLossOnLowFrequencies(earResults: right),
+    ]);
+
+    final hasHighFreqLossLeft = futures[0];
+    final hasHighFreqLossRight = futures[1];
+    final hasLowFreqLossLeft = futures[2];
+    final hasLowFreqLossRight = futures[3];
 
     if (hasHighFreqLossLeft || hasHighFreqLossRight) {
       if (hasHighFreqLossLeft && hasHighFreqLossRight) {
