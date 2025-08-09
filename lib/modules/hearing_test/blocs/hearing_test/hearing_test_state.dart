@@ -17,6 +17,9 @@ class HearingTestState {
   final List<bool>? frequenciesThatRequireMasking;
   final int? maskedHeardCount;
 
+  final bool isLoadingAudiogramClassificationResults;
+  final String audiogramClassification;
+
   HearingTestState({
     this.isButtonPressed = false,
     this.wasSoundHeard = false,
@@ -25,34 +28,15 @@ class HearingTestState {
     this.isMaskingStarted = false,
     this.currentFrequencyIndex = 0,
     this.currentMaskingDBLevel = 0,
-    this.currentDBLevel = 60,
+    this.currentDBLevel = 20,
     this.dbLevelToHearCountMap = const {},
     this.resultSaved = false,
     this.frequenciesThatRequireMasking,
     this.maskedHeardCount = 0,
+    this.isLoadingAudiogramClassificationResults = false,
+    this.audiogramClassification = "",
     HearingTestResult? results,
-  }) : results =
-           results ??
-           HearingTestResult(
-             filePath: "",
-             dateLabel: "",
-             leftEarResults: List<double?>.filled(
-               HearingTestConstants.TEST_FREQUENCIES.length,
-               null,
-             ),
-             rightEarResults: List<double?>.filled(
-               HearingTestConstants.TEST_FREQUENCIES.length,
-               null,
-             ),
-             leftEarResultsMasked: List<double?>.filled(
-               HearingTestConstants.TEST_FREQUENCIES.length,
-               null,
-             ),
-             rightEarResultsMasked: List<double?>.filled(
-               HearingTestConstants.TEST_FREQUENCIES.length,
-               null,
-             ),
-           );
+  }) : results = results ?? HearingTestResult.empty;
   HearingTestState copyWith({
     bool? isButtonPressed,
     bool? wasSoundHeard,
@@ -67,6 +51,8 @@ class HearingTestState {
     bool? resultSaved,
     List<bool>? frequenciesThatRequireMasking,
     int? maskedHeardCount,
+    bool? isLoadingAudiogramClassificationResults,
+    String? audiogramClassification,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
@@ -77,7 +63,8 @@ class HearingTestState {
       currentFrequencyIndex:
           currentFrequencyIndex ?? this.currentFrequencyIndex,
       currentDBLevel: currentDBLevel ?? this.currentDBLevel,
-      currentMaskingDBLevel: currentMaskingDBLevel ?? this.currentMaskingDBLevel,
+      currentMaskingDBLevel:
+          currentMaskingDBLevel ?? this.currentMaskingDBLevel,
       dbLevelToHearCountMap:
           dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
       results: results ?? this.results,
@@ -85,6 +72,11 @@ class HearingTestState {
       frequenciesThatRequireMasking:
           frequenciesThatRequireMasking ?? this.frequenciesThatRequireMasking,
       maskedHeardCount: maskedHeardCount ?? this.maskedHeardCount,
+      isLoadingAudiogramClassificationResults:
+          isLoadingAudiogramClassificationResults ??
+          this.isLoadingAudiogramClassificationResults,
+      audiogramClassification:
+          audiogramClassification ?? this.audiogramClassification,
     );
   }
 }

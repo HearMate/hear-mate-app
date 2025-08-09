@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_ear.dart';
 import 'package:meta/meta.dart';
 import 'dart:math';
@@ -18,18 +19,22 @@ part 'hearing_test_state.dart';
 
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
+  final HearingTestAudiogramClassificationRepository
+  _audiogramClassificationRepository;
 
   HearingTestBloc({
     required HearingTestSoundsPlayerRepository
     hearingTestSoundsPlayerRepository,
+    required HearingTestAudiogramClassificationRepository
+    audiogramClassificationRepository,
   }) : _soundsPlayerRepository = hearingTestSoundsPlayerRepository,
+       _audiogramClassificationRepository = audiogramClassificationRepository,
        super(HearingTestState()) {
     on<HearingTestStartTest>(_onStartTest);
     on<HearingTestButtonPressed>(_onButtonPressed);
     on<HearingTestButtonReleased>(_onButtonReleased);
     on<HearingTestPlayingSound>(_onPlayingSound);
     on<HearingTestNextFrequency>(_onNextFrequency);
-    on<HearingTestEndTestEarly>(_onEndTestEarly);
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
     on<HearingTestSaveResult>(_saveTestResult);
@@ -46,40 +51,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestStartTest event,
     Emitter<HearingTestState> emit,
   ) async {
-    emit(
-      state.copyWith(
-        currentEar: state.currentEar,
-        isTestCompleted: false,
-        isMaskingStarted: false,
-        isButtonPressed: false,
-        wasSoundHeard: false,
-        currentFrequencyIndex: 0,
-        currentDBLevel: 20,
-        dbLevelToHearCountMap: const {},
-        resultSaved: false,
-        results: HearingTestResult(
-          filePath: "",
-          dateLabel: "",
-          leftEarResults: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-          rightEarResults: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-          leftEarResultsMasked: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-          rightEarResultsMasked: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-        ),
-        frequenciesThatRequireMasking: null,
-      ),
-    );
+    emit(HearingTestState());
 
     add(HearingTestPlayingSound());
   }
@@ -206,16 +178,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     add(HearingTestPlayingSound());
   }
 
-  // It could be probably merged with onCompleted. Right now, we will leave it, because it may be useful in the future.
-  void _onEndTestEarly(
-    HearingTestEndTestEarly event,
-    Emitter<HearingTestState> emit,
-  ) {
-    _soundsPlayerRepository.stopSound(stopNoise: true);
-    emit(state.copyWith(isTestCompleted: true));
-    HMLogger.print("${state.results}");
-  }
-
   void _onChangeEar(
     HearingTestChangeEar event,
     Emitter<HearingTestState> emit,
@@ -238,9 +200,30 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   void _onCompleted(
     HearingTestCompleted event,
     Emitter<HearingTestState> emit,
-  ) {
+  ) async {
+    _soundsPlayerRepository.stopSound(stopNoise: true);
+
     HMLogger.print("${state.results}");
-    emit(state.copyWith(isTestCompleted: true));
+
+    emit(
+      state.copyWith(
+        isTestCompleted: true,
+        isLoadingAudiogramClassificationResults: true,
+      ),
+    );
+
+    final audiogramClassification = await _audiogramClassificationRepository
+        .getAudiogramDescription(
+          leftEarResults: state.results.leftEarResults,
+          rightEarResults: state.results.rightEarResults,
+        );
+
+    emit(
+      state.copyWith(
+        audiogramClassification: audiogramClassification,
+        isLoadingAudiogramClassificationResults: false,
+      ),
+    );
   }
 
   Future<void> _saveTestResult(
@@ -346,6 +329,37 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     add(HearingTestPlayingMaskedSound());
   }
 
+  void _onStartMaskedTest(
+    HearingTestStartMaskedTest event,
+    Emitter<HearingTestState> emit,
+  ) async {
+    await _soundsPlayerRepository.stopSound();
+    List<bool> frequenciesThatRequireMasking =
+        state.results.getFrequenciesThatRequireMasking();
+    int maskedIndex = frequenciesThatRequireMasking.indexWhere(
+      (element) => element == true,
+    );
+    emit(
+      state.copyWith(
+        frequenciesThatRequireMasking: frequenciesThatRequireMasking,
+        currentFrequencyIndex: maskedIndex,
+        currentMaskingDBLevel:
+            min(
+              state.results.leftEarResults[maskedIndex]!,
+              state.results.rightEarResults[maskedIndex]!,
+            ) +
+            15.0,
+        currentDBLevel: max(
+          state.results.leftEarResults[maskedIndex]!,
+          state.results.rightEarResults[maskedIndex]!,
+        ),
+        maskedHeardCount: 0,
+        wasSoundHeard: false,
+      ),
+    );
+    add(HearingTestPlayingMaskedSound());
+  }
+
   void _onNextMaskedFrequency(
     HearingTestNextMaskedFrequency event,
     Emitter<HearingTestState> emit,
@@ -401,37 +415,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       ),
     );
 
-    add(HearingTestPlayingMaskedSound());
-  }
-
-  void _onStartMaskedTest(
-    HearingTestStartMaskedTest event,
-    Emitter<HearingTestState> emit,
-  ) async {
-    await _soundsPlayerRepository.stopSound();
-    List<bool> frequenciesThatRequireMasking =
-        state.results.getFrequenciesThatRequireMasking();
-    int maskedIndex = frequenciesThatRequireMasking.indexWhere(
-      (element) => element == true,
-    );
-    emit(
-      state.copyWith(
-        frequenciesThatRequireMasking: frequenciesThatRequireMasking,
-        currentFrequencyIndex: maskedIndex,
-        currentMaskingDBLevel:
-            min(
-              state.results.leftEarResults[maskedIndex]!,
-              state.results.rightEarResults[maskedIndex]!,
-            ) +
-            15.0,
-        currentDBLevel: max(
-          state.results.leftEarResults[maskedIndex]!,
-          state.results.rightEarResults[maskedIndex]!,
-        ),
-        maskedHeardCount: 0,
-        wasSoundHeard: false,
-      ),
-    );
     add(HearingTestPlayingMaskedSound());
   }
 
@@ -561,11 +544,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
           leftEarResultsMasked: leftEarMasked,
           rightEarResultsMasked: rightEarMasked,
         ),
-        isMaskingStarted: true,
+        // isMaskingStarted: true,
         wasSoundHeard: false,
-        //isTestCompleted: true,
+        isTestCompleted: true,
       ),
     );
-    return add(HearingTestStartMaskedTest());
+    return add(HearingTestCompleted());
   }
 }
