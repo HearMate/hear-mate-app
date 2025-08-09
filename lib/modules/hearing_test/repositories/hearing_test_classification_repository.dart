@@ -6,7 +6,6 @@ import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_loss_classification.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
-import 'package:serious_python/serious_python.dart';
 
 List<double> _mapEarResults(List<double?> values) {
   var mapping = getFrequencyMapping(values);
@@ -113,40 +112,6 @@ class HearingTestAudiogramClassificationRepository {
       leftEarResults: left,
       rightEarResults: right,
     );
-
-    // String platform;
-    // if (Platform.isMacOS) {
-    //   platform = "Darwin";
-    // } else if (Platform.isWindows) {
-    //   platform = "windows";
-    // } else if (Platform.isLinux) {
-    //   platform = "linux";
-    // } else if (Platform.isAndroid) {
-    //   platform = "android";
-    // } else if (Platform.isIOS) {
-    //   platform = "ios";
-    // } else if (kIsWeb) {
-    //   return "Pyodide";
-    // } else {
-    //   platform = "unknown";
-    // }
-
-    // String? modelOutput = await SeriousPython.run(
-    //   "assets/audiogram_classifier/audiogram_classifier_$platform.zip",
-    //   sync: true,
-    //   environmentVariables: {
-    //     'LEFT': left.toString(),
-    //     'RIGHT': right.toString(),
-    //   },
-    // );
-
-    // final Map<String, dynamic> result = jsonDecode(modelOutput!);
-
-    // print(result);
-
-    // There is an issue with packages.
-
-    // TODO: Add support for different languages.
 
     final hasHighFreqLossLeft = _isHearingLossOnHighFrequencies(
       earResults: left,
