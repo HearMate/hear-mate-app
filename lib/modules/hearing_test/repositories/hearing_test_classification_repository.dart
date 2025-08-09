@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,22 +7,100 @@ import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_loss_classification.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
-
-List<double> _mapEarResults(List<double?> values) {
-  var mapping = getFrequencyMapping(values);
-
-  List<double> mapped = List.filled(mapping.length, 0.0);
-  for (final entry in mapping) {
-    final sourceIndex = entry.key;
-    final targetIndex = entry.value;
-    if (sourceIndex >= 0 && sourceIndex < values.length) {
-      mapped[targetIndex] = values[sourceIndex] ?? 0.0;
-    }
-  }
-  return mapped;
-}
+import 'package:hear_mate_app/utils/logger.dart';
+import 'package:http/http.dart' as http;
 
 class HearingTestAudiogramClassificationRepository {
+  http.Client httpClient = http.Client();
+  final String baseUrl =
+      "http://127.0.0.1:8000 "; // TODO: Change, when deploying to production.
+  final String highFrequencyEndpoint = "/hearing/high-frequency-loss";
+  final String lowFrequencyEndpoint = "/hearing/low-frequency-loss";
+
+  void dispose() {
+    httpClient.close();
+  }
+
+  List<double> _mapEarResults(List<double?> values) {
+    var mapping = getFrequencyMapping(values);
+
+    List<double> mapped = List.filled(mapping.length, 0.0);
+    for (final entry in mapping) {
+      final sourceIndex = entry.key;
+      final targetIndex = entry.value;
+      if (sourceIndex >= 0 && sourceIndex < values.length) {
+        mapped[targetIndex] = values[sourceIndex] ?? 0.0;
+      }
+    }
+    return mapped;
+  }
+
+  Future<bool> _postBool({
+    required String endpoint,
+    required List<double> earResults,
+  }) async {
+    const Duration requestTimeout = Duration(seconds: 8);
+
+    if (earResults.length != 7) {
+      throw ArgumentError(
+        "earResults must have exactly 7 values (125..8000 Hz mapped).",
+      );
+    }
+
+    String _joinUrl(String base, String path) {
+      if (base.endsWith('/') && path.startsWith('/')) {
+        return base.substring(0, base.length - 1) + path;
+      } else if (!base.endsWith('/') && !path.startsWith('/')) {
+        return '$base/$path';
+      }
+      return '$base$path';
+    }
+
+    final uri = Uri.parse(_joinUrl(baseUrl, endpoint));
+
+    try {
+      final resp = await httpClient
+          .post(
+            uri,
+            headers: const {'Content-Type': 'application/json'},
+            body: jsonEncode({'earResults': earResults}),
+          )
+          .timeout(requestTimeout);
+
+      if (resp.statusCode != 200) {
+        throw HttpException(
+          '[$endpoint] Server responded with ${resp.statusCode}: ${resp.body}',
+          uri: uri,
+        );
+      }
+
+      final decoded = jsonDecode(resp.body);
+      if (decoded is! Map<String, dynamic> || decoded['result'] is! bool) {
+        throw const FormatException(
+          'Invalid response schema (expected {result: bool}).',
+        );
+      }
+      return decoded['result'] as bool;
+    } on TimeoutException catch (e) {
+      HMLogger.print("[ERROR] [$endpoint] Request timed out: $e");
+      return false;
+    } on SocketException catch (e) {
+      HMLogger.print("[ERROR] [$endpoint] Network error: $e");
+      return false;
+    } on FormatException catch (e) {
+      HMLogger.print(
+        "[ERROR][1] Couldn't send data to server responsible for audiogram description. $e",
+      );
+      return false;
+    } catch (e) {
+      HMLogger.print(
+        "[ERROR][2] Couldn't send data to server responsible for audiogram description. $e",
+      );
+
+      return false;
+    }
+  }
+
   bool _isHearingSymmetrical({
     required List<double> leftEarResults,
     required List<double> rightEarResults,
@@ -80,12 +159,16 @@ class HearingTestAudiogramClassificationRepository {
     }
   }
 
-  bool _isHearingLossOnHighFrequencies({required List<double> earResults}) {
-    return false;
+  Future<bool> _isHearingLossOnHighFrequencies({
+    required List<double> earResults,
+  }) {
+    return _postBool(endpoint: highFrequencyEndpoint, earResults: earResults);
   }
 
-  bool _isHearingLossOnLowFrequencies({required List<double> earResults}) {
-    return false;
+  Future<bool> _isHearingLossOnLowFrequencies({
+    required List<double> earResults,
+  }) {
+    return _postBool(endpoint: lowFrequencyEndpoint, earResults: earResults);
   }
 
   Future<String> getAudiogramDescription({
@@ -113,17 +196,17 @@ class HearingTestAudiogramClassificationRepository {
       rightEarResults: right,
     );
 
-    final hasHighFreqLossLeft = _isHearingLossOnHighFrequencies(
-      earResults: left,
-    );
-    final hasHighFreqLossRight = _isHearingLossOnHighFrequencies(
-      earResults: right,
-    );
+    final futures = await Future.wait<bool>([
+      _isHearingLossOnHighFrequencies(earResults: left),
+      _isHearingLossOnHighFrequencies(earResults: right),
+      _isHearingLossOnLowFrequencies(earResults: left),
+      _isHearingLossOnLowFrequencies(earResults: right),
+    ]);
 
-    final hasLowFreqLossLeft = _isHearingLossOnLowFrequencies(earResults: left);
-    final hasLowFreqLossRight = _isHearingLossOnLowFrequencies(
-      earResults: right,
-    );
+    final hasHighFreqLossLeft = futures[0];
+    final hasHighFreqLossRight = futures[1];
+    final hasLowFreqLossLeft = futures[2];
+    final hasLowFreqLossRight = futures[3];
 
     String classifyText(HearingLossClassification c) {
       switch (c) {
