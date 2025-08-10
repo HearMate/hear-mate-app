@@ -20,6 +20,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final hiddenMenuBarRoutes = ['/menu', '/settings', '/about'];
     final hiddenBackButtonRoutes = [
       '/echo_parse/conversion_results',
@@ -27,6 +28,8 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
     ]; // Routes where back is hidden
 
     return AppBar(
+      backgroundColor: theme.appBarTheme.backgroundColor,
+      foregroundColor: theme.appBarTheme.foregroundColor,
       leading:
           !hiddenBackButtonRoutes.contains(route)
               ? IconButton(
@@ -50,7 +53,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
               )
               : null,
 
-      title: Text(title, style: TextStyle()),
+      title: Text(title, style: theme.appBarTheme.titleTextStyle),
       actions: [
         BlocBuilder<HMThemeBloc, HMThemeState>(
           builder: (context, themeState) {
@@ -60,6 +63,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
               },
               icon: Icon(
                 themeState.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                color: theme.appBarTheme.foregroundColor,
               ),
             );
           },
@@ -70,7 +74,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/menu');
               },
-              icon: Icon(Icons.menu),
+              icon: Icon(Icons.menu, color: theme.appBarTheme.foregroundColor),
             ),
       ],
     );

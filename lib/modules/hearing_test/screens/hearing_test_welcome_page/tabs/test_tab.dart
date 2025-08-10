@@ -21,8 +21,8 @@ class _TestTab extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    theme.primaryColor.withValues(alpha: 0.08),
-                    theme.primaryColor.withValues(alpha: 0.02),
+                    theme.colorScheme.primary.withValues(alpha: 0.08),
+                    theme.colorScheme.primary.withValues(alpha: 0.02),
                   ],
                 ),
                 border: Border(
@@ -37,13 +37,13 @@ class _TestTab extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: theme.primaryColor.withValues(alpha: 0.1),
+                      color: theme.colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.hearing,
                       size: 48,
-                      color: theme.primaryColor,
+                      color: theme.colorScheme.onPrimary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -51,7 +51,7 @@ class _TestTab extends StatelessWidget {
                     "Test słuchu",
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: theme.primaryColor,
+                      color: theme.colorScheme.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -59,7 +59,7 @@ class _TestTab extends StatelessWidget {
                   Text(
                     "Sprawdź swój słuch w zaledwie 10 minut",
                     style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.primaryColor.withValues(alpha: 0.8),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.8),
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
@@ -191,9 +191,11 @@ class _TestTab extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
                 border: Border(
-                  top: BorderSide(color: Colors.grey.shade200, width: 1),
+                  top: BorderSide(
+                    color: theme.primaryColor.withValues(alpha: 0.1),
+                    width: 1,
+                  ),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -286,10 +288,10 @@ class _QuickInfoCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: theme.primaryColor.withValues(alpha: 0.1),
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, size: 20, color: theme.primaryColor),
+            child: Icon(icon, size: 20, color: theme.colorScheme.primary),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -333,16 +335,16 @@ class _SectionHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      color: theme.primaryColor.withValues(alpha: 0.03),
+      color: theme.colorScheme.primary.withValues(alpha: 0.03),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: theme.primaryColor),
+          Icon(icon, size: 20, color: theme.colorScheme.primary),
           const SizedBox(width: 12),
           Text(
             title,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: theme.primaryColor,
+              color: theme.colorScheme.primary,
             ),
           ),
         ],

@@ -91,13 +91,15 @@ class _SavedTab extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          theme.primaryColor.withValues(alpha: 0.08),
-                          theme.primaryColor.withValues(alpha: 0.02),
+                          theme.colorScheme.primary.withValues(alpha: 0.08),
+                          theme.colorScheme.primary.withValues(alpha: 0.02),
                         ],
                       ),
                       border: Border(
                         bottom: BorderSide(
-                          color: theme.primaryColor.withValues(alpha: 0.1),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.1,
+                          ),
                           width: 1,
                         ),
                       ),
@@ -107,13 +109,15 @@ class _SavedTab extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: theme.primaryColor.withValues(alpha: 0.1),
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.1,
+                            ),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.history,
                             size: 32,
-                            color: theme.primaryColor,
+                            color: theme.colorScheme.primary,
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -125,14 +129,14 @@ class _SavedTab extends StatelessWidget {
                                 "Zapisane wyniki",
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: theme.primaryColor,
+                                  color: theme.colorScheme.primary,
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 "${state.results.length} ${state.results.length == 1 ? 'wynik' : 'wyników'} w historii",
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.primaryColor.withValues(
+                                  color: theme.colorScheme.primary.withValues(
                                     alpha: 0.8,
                                   ),
                                   fontWeight: FontWeight.w500,
@@ -151,8 +155,10 @@ class _SavedTab extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       itemCount: state.results.length,
                       separatorBuilder:
-                          (context, index) =>
-                              Divider(height: 1, color: Colors.grey.shade200),
+                          (context, index) => Divider(
+                            height: 1,
+                            color: theme.colorScheme.onPrimary,
+                          ),
                       itemBuilder: (context, index) {
                         final result = state.results[index];
                         final isSelected = state.selectedIndex == index;
@@ -167,14 +173,14 @@ class _SavedTab extends StatelessWidget {
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: theme.primaryColor.withValues(
+                                  color: theme.colorScheme.primary.withValues(
                                     alpha: 0.1,
                                   ),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(
                                   Icons.assessment,
-                                  color: theme.primaryColor,
+                                  color: theme.colorScheme.primary,
                                   size: 20,
                                 ),
                               ),
@@ -212,9 +218,8 @@ class _SavedTab extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       color:
                                           isSelected
-                                              ? theme.primaryColor.withValues(
-                                                alpha: 0.1,
-                                              )
+                                              ? theme.colorScheme.primary
+                                                  .withValues(alpha: 0.1)
                                               : Colors.transparent,
                                       borderRadius: BorderRadius.circular(6),
                                     ),
@@ -224,7 +229,7 @@ class _SavedTab extends StatelessWidget {
                                           : Icons.expand_more,
                                       color:
                                           isSelected
-                                              ? theme.primaryColor
+                                              ? theme.colorScheme.primary
                                               : Colors.grey.shade400,
                                       size: 20,
                                     ),
@@ -277,20 +282,18 @@ class _SavedTab extends StatelessWidget {
                               Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: theme.primaryColor.withValues(
+                                  color: theme.colorScheme.primary.withValues(
                                     alpha: 0.02,
                                   ),
                                   border: Border(
                                     top: BorderSide(
-                                      color: theme.primaryColor.withValues(
-                                        alpha: 0.1,
-                                      ),
+                                      color: theme.colorScheme.primary
+                                          .withValues(alpha: 0.1),
                                       width: 1,
                                     ),
                                     bottom: BorderSide(
-                                      color: theme.primaryColor.withValues(
-                                        alpha: 0.1,
-                                      ),
+                                      color: theme.colorScheme.primary
+                                          .withValues(alpha: 0.1),
                                       width: 1,
                                     ),
                                   ),
@@ -307,7 +310,7 @@ class _SavedTab extends StatelessWidget {
                                         children: [
                                           Icon(
                                             Icons.show_chart,
-                                            color: theme.primaryColor,
+                                            color: theme.colorScheme.primary,
                                             size: 18,
                                           ),
                                           const SizedBox(width: 8),
@@ -316,7 +319,8 @@ class _SavedTab extends StatelessWidget {
                                             style: theme.textTheme.titleSmall
                                                 ?.copyWith(
                                                   fontWeight: FontWeight.w600,
-                                                  color: theme.primaryColor,
+                                                  color:
+                                                      theme.colorScheme.primary,
                                                 ),
                                           ),
                                         ],
@@ -380,13 +384,13 @@ class _EmptyState extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: theme.primaryColor.withValues(alpha: 0.1),
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.folder_open_outlined,
                 size: 48,
-                color: theme.primaryColor.withValues(alpha: 0.6),
+                color: theme.colorScheme.primary.withValues(alpha: 0.6),
               ),
             ),
             const SizedBox(height: 20),
