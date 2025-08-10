@@ -1,19 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_results/hearing_test_history_results_cubit.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
-    as HearingTestConstants;
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/alert_dialogs.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
-
-// TODO:
-// - show trends what has happened with hearing over time / from last test
+part of '../hearing_test_welcome_page.dart';
 
 List<String> remapDbValues(List<double?> values, List<double?>? maskedValues) {
-  if (values.length != HearingTestConstants.TEST_FREQUENCIES.length) {
+  if (values.length != hearing_test_constants.TEST_FREQUENCIES.length) {
     return [];
   }
 
@@ -40,8 +28,8 @@ List<String> remapDbValues(List<double?> values, List<double?>? maskedValues) {
   return mapped;
 }
 
-class HearingTestHistoryResultsPage extends StatelessWidget {
-  const HearingTestHistoryResultsPage({super.key});
+class _SavedTab extends StatelessWidget {
+  const _SavedTab();
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +38,6 @@ class HearingTestHistoryResultsPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => HearingTestHistoryResultsCubit(),
       child: Scaffold(
-        appBar: HMAppBar(
-          title: AppLocalizations.of(context)!.hearing_test_result_page_title,
-          route: ModalRoute.of(context)?.settings.name ?? "",
-        ),
         body: BlocBuilder<
           HearingTestHistoryResultsCubit,
           HearingTestHistoryResultsState
@@ -98,9 +82,11 @@ class HearingTestHistoryResultsPage extends StatelessWidget {
                             builder: (_) => const DeleteAlertDialog(),
                           );
                           if (confirm == true) {
-                            context
+                            if (context.mounted) {
+                              context
                                 .read<HearingTestHistoryResultsCubit>()
                                 .deleteResult(index);
+                            }
                           }
                         },
                       ),
