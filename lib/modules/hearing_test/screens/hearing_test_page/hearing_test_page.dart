@@ -11,6 +11,7 @@ class HearingTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: BlocConsumer<HearingTestBloc, HearingTestState>(
@@ -36,16 +37,8 @@ class HearingTestPage extends StatelessWidget {
           return SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(12.0, 56.0, 12.0, 12.0),
-                  child: Text(
-                    l10n.hearing_test_test_page_instruction,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const Spacer(),
-                Center(
+                // Main Clickable Area with Header positioned in the middle
+                Expanded(
                   child: GestureDetector(
                     onTapDown:
                         (_) => context.read<HearingTestBloc>().add(
@@ -59,119 +52,157 @@ class HearingTestPage extends StatelessWidget {
                         () => context.read<HearingTestBloc>().add(
                           HearingTestButtonReleased(),
                         ),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      curve: Curves.easeInOut,
-                      width:
-                          state.isButtonPressed
-                              ? 162.5
-                              : 150, // Adjust size on press
-                      height:
-                          state.isButtonPressed
-                              ? 162.5
-                              : 150, // Adjust size on press
-                      decoration: BoxDecoration(
-                        color:
-                            state.isButtonPressed
-                                ? Colors.blue.shade800
-                                : Colors.blueAccent,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
+                    child: Container(
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          // Top spacer
+                          const Expanded(flex: 2, child: SizedBox()),
+                          // Header in center
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Text(
+                              l10n.hearing_test_test_page_instruction,
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.7,
+                                ),
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
+
+                          const SizedBox(height: 100),
+
+                          // Button in center
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            curve: Curves.easeInOut,
+                            width: state.isButtonPressed ? 120 : 100,
+                            height: state.isButtonPressed ? 120 : 100,
+                            decoration: BoxDecoration(
+                              color:
+                                  state.isButtonPressed
+                                      ? theme.colorScheme.primary.withValues(
+                                        alpha: 0.8,
+                                      )
+                                      : theme.colorScheme.primary.withValues(
+                                        alpha: 0.6,
+                                      ),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: theme.colorScheme.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                  blurRadius: state.isButtonPressed ? 20 : 15,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Transform.translate(
+                                offset: const Offset(-2, -2),
+                                child: Icon(
+                                  Icons.touch_app,
+                                  color: theme.colorScheme.onPrimary,
+                                  size: state.isButtonPressed ? 40 : 36,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // Bottom spacer
+                          const Expanded(flex: 2, child: SizedBox()),
                         ],
-                      ),
-                      child: Center(
-                        child: AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 150),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize:
-                                state.isButtonPressed
-                                    ? 26
-                                    : 24, // Synchronize text size
-                            fontWeight: FontWeight.bold,
-                          ),
-                          child: Text(l10n.hearing_test_test_page_button_label),
-                        ),
                       ),
                     ),
                   ),
                 ),
-                const Spacer(),
 
+                // Debug Section (only in debug mode)
                 if (kDebugMode)
-                  Center(
-                    child: Container(
-                      width: 300,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(top: 16),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.outline,
+                  Container(
+                    margin: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: theme.dividerColor),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Debug Shortcuts",
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(
-                              context,
-                            ).shadowColor.withOpacity(0.2),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Debug Shortcuts",
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 12),
-                          ElevatedButton(
-                            onPressed:
-                                () => context.read<HearingTestBloc>().add(
-                                  HearingTestDebugEarLeftPartial(),
-                                ),
-                            child: const Text("Left Ear Partial"),
-                          ),
-                          const SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed:
-                                () => context.read<HearingTestBloc>().add(
-                                  HearingTestDebugEarRightPartial(),
-                                ),
-                            child: const Text("Right Ear Partial"),
-                          ),
-                          const SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed:
-                                () => context.read<HearingTestBloc>().add(
-                                  HearingTestDebugBothEarsFull(),
-                                ),
-                            child: const Text("Both Ears Full"),
-                          ),
-                        ],
-                      ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed:
+                                    () => context.read<HearingTestBloc>().add(
+                                      HearingTestDebugEarLeftPartial(),
+                                    ),
+                                child: const Text("L Partial"),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed:
+                                    () => context.read<HearingTestBloc>().add(
+                                      HearingTestDebugEarRightPartial(),
+                                    ),
+                                child: const Text("R Partial"),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed:
+                                    () => context.read<HearingTestBloc>().add(
+                                      HearingTestDebugBothEarsFull(),
+                                    ),
+                                child: const Text("Both"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 40.0),
-                  child: TextButton(
+
+                // Bottom Section
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  child: TextButton.icon(
                     onPressed: () {
                       context.read<HearingTestBloc>().add(
                         HearingTestEndTestEarly(),
                       );
                     },
-                    child: Text(
-                      l10n.hearing_test_test_page_end,
-                      style: TextStyle(color: Colors.red, fontSize: 16),
+                    icon: Icon(
+                      Icons.stop,
+                      color: Colors.red.shade600,
+                      size: 18,
+                    ),
+                    label: Text(
+                      "Zakończ test wcześniej",
+                      style: TextStyle(
+                        color: Colors.red.shade600,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),

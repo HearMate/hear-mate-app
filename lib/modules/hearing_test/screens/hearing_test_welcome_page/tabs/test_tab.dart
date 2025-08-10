@@ -134,6 +134,13 @@ class _TestTab extends StatelessWidget {
                       text: "Dźwięki mogą być bardzo ciche",
                       theme: theme,
                     ),
+                    const Divider(height: 1),
+
+                    _StepItem(
+                      stepNumber: "5",
+                      text: "Test zakończy się sam",
+                      theme: theme,
+                    ),
 
                     const SizedBox(height: 16),
 

@@ -54,7 +54,7 @@
     "comment_hearing_test3": "=====================================",
 
     "hearing_test_test_page_title": "Hörtest",
-    "hearing_test_test_page_instruction": "Drücke und halte den Knopf, solange du den Ton hörst. Lass ihn los, wenn du nichts mehr hörst.",
+    "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",
     "hearing_test_test_page_release": "Lass den Knopf jetzt los.",
     "hearing_test_test_page_end": "Test beenden",
     "hearing_test_test_page_button_label": "DRÜCKEN",

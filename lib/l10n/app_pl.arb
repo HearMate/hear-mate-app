@@ -55,7 +55,7 @@
     "comment_hearing_test3": "=====================================",
 
     "hearing_test_test_page_title": "Test słuchu",
-    "hearing_test_test_page_instruction": "Przytrzymaj przycisk, gdy słyszysz dźwięk. Puść, gdy przestaniesz go słyszeć.",
+    "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",
     "hearing_test_test_page_release": "Puść przycisk teraz.",
     "hearing_test_test_page_end": "Zakończ test",
     "hearing_test_test_page_button_label": "NACIŚNIJ",

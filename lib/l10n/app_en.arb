@@ -169,7 +169,7 @@
 
 
     "hearing_test_test_page_title": "Hearing Test",
-    "hearing_test_test_page_instruction": "Press and hold the button when you can hear the sound. Release when you can no longer hear it.",
+    "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",
     "hearing_test_test_page_release": "Release the button now.",
     "hearing_test_test_page_end": "End Test Early",
     "hearing_test_test_page_button_label": "PRESS",
