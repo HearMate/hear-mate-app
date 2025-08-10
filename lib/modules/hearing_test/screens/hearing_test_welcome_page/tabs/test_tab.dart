@@ -10,229 +10,392 @@ class _TestTab extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 40),
-
-              // Header Section
-              Container(
-                padding: const EdgeInsets.all(24.0),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      theme.primaryColor.withValues(alpha: 0.1),
-                      theme.primaryColor.withValues(alpha: 0.05),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: theme.primaryColor.withValues(alpha: 0.2),
+        child: Column(
+          children: [
+            // Hero Header Section
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    theme.primaryColor.withValues(alpha: 0.08),
+                    theme.primaryColor.withValues(alpha: 0.02),
+                  ],
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: theme.primaryColor.withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.hearing,
+                      size: 48,
+                      color: theme.primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "Test słuchu",
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.primaryColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Sprawdź swój słuch w zaledwie 10 minut",
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: theme.primaryColor.withValues(alpha: 0.8),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+
+            // Content
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Icon(Icons.hearing, size: 64, color: theme.primaryColor),
-                    const SizedBox(height: 16),
-                    Text(
-                      "Test słuchu",
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.primaryColor,
-                      ),
-                      textAlign: TextAlign.center,
+                    const SizedBox(height: 8),
+
+                    // Quick Info Cards
+                    _QuickInfoCard(
+                      icon: Icons.schedule,
+                      title: "10 minut",
+                      subtitle: "Czas trwania testu",
+                      theme: theme,
                     ),
-                  ],
-                ),
-              ),
+                    const Divider(height: 1),
 
-              const SizedBox(height: 32),
+                    _QuickInfoCard(
+                      icon: Icons.headphones,
+                      title: "Słuchawki",
+                      subtitle: "Zalecane do najlepszych wyników",
+                      theme: theme,
+                    ),
+                    const Divider(height: 1),
 
-              // Instructions Section
-              Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                    _QuickInfoCard(
+                      icon: Icons.volume_off,
+                      title: "Cisza",
+                      subtitle: "Znajdź ciche pomieszczenie",
+                      theme: theme,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Instructions Section
+                    _SectionHeader(
+                      icon: Icons.list_alt,
+                      title: "Jak to działa",
+                      theme: theme,
+                    ),
+
+                    _StepItem(
+                      stepNumber: "1",
+                      text: "Kliknij ekran gdy usłyszysz dźwięk",
+                      theme: theme,
+                    ),
+                    const Divider(height: 1),
+
+                    _StepItem(
+                      stepNumber: "2",
+                      text: "Test sprawdzi najpierw prawe ucho",
+                      theme: theme,
+                    ),
+                    const Divider(height: 1),
+
+                    _StepItem(
+                      stepNumber: "3",
+                      text: "Następnie przejdzie do lewego ucha",
+                      theme: theme,
+                    ),
+                    const Divider(height: 1),
+
+                    _StepItem(
+                      stepNumber: "4",
+                      text: "Dźwięki mogą być bardzo ciche",
+                      theme: theme,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Important Notice
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.amber.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
                         children: [
-                          Icon(Icons.info_outline, color: theme.primaryColor),
-                          const SizedBox(width: 8),
-                          Text(
-                            "Instrukcje",
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: theme.primaryColor,
+                          Icon(
+                            Icons.lightbulb_outline,
+                            color: Colors.amber.shade700,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Wskazówka",
+                                  style: theme.textTheme.titleSmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.amber.shade800,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "Nie martw się jeśli nie usłyszysz niektórych dźwięków - to normalne!",
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: Colors.amber.shade700,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                    ),
 
-                      _InstructionItem(
-                        icon: Icons.schedule,
-                        text: "Test potrwa około 10 minut",
-                      ),
-                      const SizedBox(height: 12),
-
-                      _InstructionItem(
-                        icon: Icons.touch_app,
-                        text: "Kliknij ekran gdy usłyszysz dźwięk",
-                      ),
-                      const SizedBox(height: 12),
-
-                      _InstructionItem(
-                        icon: Icons.headphones,
-                        text: "Zalóż słuchawki dla najlepszych rezultatów",
-                      ),
-                      const SizedBox(height: 12),
-
-                      _InstructionItem(
-                        icon: Icons.volume_down,
-                        text: "Dźwięki mogą być bardzo ciche",
-                      ),
-                      const SizedBox(height: 12),
-
-                      _InstructionItem(
-                        icon: Icons.volume_off,
-                        text: "Znajdź ciche pomieszczenie",
-                      ),
-                    ],
-                  ),
+                    const SizedBox(height: 32),
+                  ],
                 ),
               ),
+            ),
 
-              const SizedBox(height: 32),
-
-              // Warning Section
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.amber.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.amber.withValues(alpha: 0.3),
-                  ),
+            // Start Button Section
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  top: BorderSide(color: Colors.grey.shade200, width: 1),
                 ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.warning_amber_outlined,
-                      color: Colors.amber.shade700,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        "Test najpierw sprawdzi prawe ucho, następnie lewe",
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.amber.shade800,
-                          fontWeight: FontWeight.w500,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 12,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: FilledButton(
+                      onPressed: () {
+                        context.read<HearingTestBloc>().add(
+                          HearingTestStartTest(),
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (_) => BlocProvider.value(
+                                  value: context.read<HearingTestBloc>(),
+                                  child: const HearingTestPage(),
+                                ),
+                          ),
+                        );
+                      },
+                      style: FilledButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
+                        elevation: 2,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              // Start Button
-              Container(
-                height: 56,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.primaryColor.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: FilledButton(
-                  onPressed: () {
-                    context.read<HearingTestBloc>().add(HearingTestStartTest());
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder:
-                            (_) => BlocProvider.value(
-                              value: context.read<HearingTestBloc>(),
-                              child: const HearingTestPage(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.play_arrow, size: 24),
+                          const SizedBox(width: 12),
+                          Text(
+                            l10n.hearing_test_welcome_page_start_hearing_test,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
                             ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                  style: FilledButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.play_arrow, size: 24),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.hearing_test_welcome_page_start_hearing_test,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 8),
+                  Text(
+                    "Gotowy? Rozpocznij test już teraz",
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: Colors.grey.shade600,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
+                ],
               ),
-
-              const SizedBox(height: 24),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class _InstructionItem extends StatelessWidget {
+class _QuickInfoCard extends StatelessWidget {
   final IconData icon;
-  final String text;
+  final String title;
+  final String subtitle;
+  final ThemeData theme;
 
-  const _InstructionItem({required this.icon, required this.text});
+  const _QuickInfoCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.theme,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: theme.primaryColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 20, color: theme.primaryColor),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: theme.primaryColor.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(6),
+class _SectionHeader extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final ThemeData theme;
+
+  const _SectionHeader({
+    required this.icon,
+    required this.title,
+    required this.theme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      color: theme.primaryColor.withValues(alpha: 0.03),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: theme.primaryColor),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: theme.primaryColor,
+            ),
           ),
-          child: Icon(icon, size: 16, color: theme.primaryColor),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            text,
-            style: theme.textTheme.bodyMedium?.copyWith(height: 1.4),
+        ],
+      ),
+    );
+  }
+}
+
+class _StepItem extends StatelessWidget {
+  final String stepNumber;
+  final String text;
+  final ThemeData theme;
+
+  const _StepItem({
+    required this.stepNumber,
+    required this.text,
+    required this.theme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Row(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: theme.primaryColor,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                stepNumber,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
-        ),
-      ],
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              text,
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.4),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
