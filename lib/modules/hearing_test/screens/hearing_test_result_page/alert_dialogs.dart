@@ -3,23 +3,45 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 
-class BackAlertDialog extends StatelessWidget {
-  const BackAlertDialog({super.key});
+enum AlertType { back, missingValues, saved, alreadySaved }
+
+class CustomAlertDialog extends StatelessWidget {
+  final AlertType type;
+
+  const CustomAlertDialog({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
+    switch (type) {
+      case AlertType.back:
+        return _buildBackAlert(context, l10n, theme);
+      case AlertType.missingValues:
+        return _buildMissingValuesAlert(context, l10n, theme);
+      case AlertType.saved:
+        return _buildSavedAlert(context, l10n);
+      case AlertType.alreadySaved:
+        return _buildAlreadySavedAlert(context, l10n, theme);
+    }
+  }
+
+  Widget _buildBackAlert(
+    BuildContext context,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
     return AlertDialog(
       titlePadding: const EdgeInsets.fromLTRB(24, 24, 16, 0),
       title: Row(
         children: [
-          const Icon(Icons.save_alt_rounded, color: Colors.blue),
-          const SizedBox(width: 8),
+          Icon(Icons.save_alt_rounded, color: theme.colorScheme.primary),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               l10n.hearing_test_result_page_save_results,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           IconButton(
@@ -37,88 +59,85 @@ class BackAlertDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text(l10n.no, style: TextStyle(color: Colors.red)),
+          child: Text(l10n.no, style: const TextStyle(color: Colors.red)),
         ),
-        SizedBox(width: 4.0),
+        const SizedBox(width: 4.0),
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop(true);
             context.read<HearingTestBloc>().add(HearingTestSaveResult());
           },
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8.0),
-            backgroundColor: Colors.blue,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+            backgroundColor: theme.colorScheme.primary,
           ),
-          child: Text(l10n.save, style: TextStyle(color: Colors.white)),
+          child: Text(
+            l10n.save,
+            style: TextStyle(color: theme.colorScheme.onPrimary),
+          ),
         ),
       ],
     );
   }
-}
 
-class MissingValuesAlertDialog extends StatelessWidget {
-  const MissingValuesAlertDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
+  Widget _buildMissingValuesAlert(
+    BuildContext context,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
     return AlertDialog(
       title: Row(
         children: [
-          const Icon(Icons.warning_amber_rounded, color: Colors.orange),
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.orange,
+            size: 24.0,
+          ),
           const SizedBox(width: 8),
           Text(
             l10n.hearing_test_result_page_save_results_missing_values_title,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ],
       ),
-      content: Padding(
-        padding: const EdgeInsets.symmetric(vertical: .0),
-        child: Text(
-          l10n.hearing_test_result_page_save_results_missing_values_prompt,
-        ),
+      content: Text(
+        l10n.hearing_test_result_page_save_results_missing_values_prompt,
       ),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.cancel, style: TextStyle(color: Colors.red)),
+          child: Text(l10n.cancel, style: const TextStyle(color: Colors.red)),
         ),
-        SizedBox(width: 4.0),
+        const SizedBox(width: 4.0),
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop(true);
             context.read<HearingTestBloc>().add(HearingTestSaveResult());
           },
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            backgroundColor: Colors.blue,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            backgroundColor: theme.colorScheme.primary,
           ),
           child: Text(
-            l10n.hearing_test_result_page_save_results_missing_values_save_anyway,
-            style: TextStyle(color: Colors.white),
+            "Zapisz",
+            style: TextStyle(color: theme.colorScheme.onPrimary),
           ),
         ),
       ],
     );
   }
-}
 
-class SavedDialog extends StatelessWidget {
-  const SavedDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
+  Widget _buildSavedAlert(BuildContext context, AppLocalizations l10n) {
     return AlertDialog(
       title: Row(
         children: [
           const Icon(Icons.check_circle_rounded, color: Colors.green),
           const SizedBox(width: 8),
-          Text(l10n.success, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            l10n.success,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ],
       ),
       content: Padding(
@@ -134,23 +153,24 @@ class SavedDialog extends StatelessWidget {
       ],
     );
   }
-}
 
-class AlreadySavedDialog extends StatelessWidget {
-  const AlreadySavedDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
+  Widget _buildAlreadySavedAlert(
+    BuildContext context,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
     return AlertDialog(
       title: Row(
         children: [
-          const Icon(Icons.info_outline_rounded, color: Colors.blue),
+          Icon(
+            Icons.info_outline_rounded,
+            color: theme.colorScheme.primary,
+            size: 24.0,
+          ),
           const SizedBox(width: 8),
           Text(
             l10n.hearing_test_result_page_already_saved_title,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -160,9 +180,9 @@ class AlreadySavedDialog extends StatelessWidget {
       ),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
-        TextButton(
+        OutlinedButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.ok),
+          child: const Text("Świetnie!"),
         ),
       ],
     );
