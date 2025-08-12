@@ -12,6 +12,10 @@ import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
+import 'tabs/widgets/quick_info_card.dart';
+import 'tabs/widgets/section_header.dart';
+import 'tabs/widgets/step_item.dart';
+import 'tabs/widgets/tip_section.dart';
 
 part 'tabs/test_tab.dart';
 part 'tabs/saved_tab.dart';
