@@ -114,6 +114,8 @@
     "hearing_test_welcome_page_welcome": "Witamy w teście słuchu",
     "hearing_test_welcome_page_description": "Ten moduł przetestuje Twój słuch w różnych częstotliwościach.",
     "hearing_test_welcome_page_start_hearing_test": "Rozpocznij test",
+    "hearing_test_welcome_page_disclaimer_title": "Zastrzeżenie",
+    "hearing_test_welcome_page_disclaimer": "To nie jest produkt medyczny. Przeznaczony jest wyłącznie do używania ze słuchawkami Sony WH-1000XM5, z włączoną redukcją szumów i ustawioną maksymalną głośnością, bez użycia korektora dźwięku.",
 
     "hearing_test_delete_alert_title": "Usuń wynik",
     "hearing_test_delete_alert_message": "Czy na pewno chcesz trwale usunąć ten wynik? Tej operacji nie można cofnąć.",

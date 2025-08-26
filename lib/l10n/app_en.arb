@@ -320,6 +320,9 @@
     "hearing_test_welcome_page_welcome": "Welcome to Hearing Test",
     "hearing_test_welcome_page_description": "This module will test your hearing ability across different frequencies.",
     "hearing_test_welcome_page_start_hearing_test": "Start Test",
+    "hearing_test_welcome_page_disclaimer_title": "Disclaimer",
+    "hearing_test_welcome_page_disclaimer": "This is not a medical grade product. It is intended to be used only with Sony WH-1000XM5 headphones, with noise cancelling turned on and volume set to maximum, equalizer shall not be used.",
+
 
     "@hearing_test_welcome_page_title": {
         "description": "Title displayed on the welcome page of the hearing test module."
@@ -333,6 +336,13 @@
     "@hearing_test_welcome_page_start_hearing_test": {
         "description": "Label for the button to start the hearing test."
     },
+     "@hearing_test_welcome_page_disclaimer_title": {
+        "description": "Title for the disclaimer section on the hearing test welcome page."
+    },
+    "@hearing_test_welcome_page_disclaimer": {
+        "description": "Disclaimer text explaining the limitations and intended use of the hearing test module."
+    },
+
 
     "hearing_test_delete_alert_title": "Delete Result",
     "hearing_test_delete_alert_message": "Are you sure you want to permanently delete this result? This action cannot be undone.",
