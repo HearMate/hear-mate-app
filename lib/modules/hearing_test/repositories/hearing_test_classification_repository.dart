@@ -12,7 +12,7 @@ import 'package:hear_mate_app/utils/logger.dart';
 import 'package:http/http.dart' as http;
 
 class HearingTestAudiogramClassificationRepository {
-  http.Client _httpClient = http.Client();
+  final http.Client _httpClient = http.Client();
   final String _baseUrl =
       "http://127.0.0.1:8000 "; // TODO: Change, when deploying to production.
   final String _highFrequencyEndpoint = "/hearing/high-frequency-loss";
