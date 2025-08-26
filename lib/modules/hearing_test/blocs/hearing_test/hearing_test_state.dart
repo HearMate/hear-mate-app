@@ -17,6 +17,8 @@ class HearingTestState {
   final List<bool>? frequenciesThatRequireMasking;
   final int? maskedHeardCount;
 
+  final bool disclaimerShown;
+
   HearingTestState({
     this.isButtonPressed = false,
     this.wasSoundHeard = false,
@@ -30,6 +32,7 @@ class HearingTestState {
     this.resultSaved = false,
     this.frequenciesThatRequireMasking,
     this.maskedHeardCount = 0,
+    this.disclaimerShown = false,
     HearingTestResult? results,
   }) : results =
            results ??
@@ -67,6 +70,7 @@ class HearingTestState {
     bool? resultSaved,
     List<bool>? frequenciesThatRequireMasking,
     int? maskedHeardCount,
+    bool? disclaimerShown,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
@@ -85,6 +89,7 @@ class HearingTestState {
       frequenciesThatRequireMasking:
           frequenciesThatRequireMasking ?? this.frequenciesThatRequireMasking,
       maskedHeardCount: maskedHeardCount ?? this.maskedHeardCount,
+      disclaimerShown: disclaimerShown ?? this.disclaimerShown,
     );
   }
 }
