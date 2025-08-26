@@ -83,7 +83,32 @@
     "hearing_test_result_page_save_results_on_exit_prompt": "Möchten Sie Ihre Hörtestergebnisse vor dem Beenden speichern?",
     "hearing_test_result_page_already_saved_title": "Bereits gespeichert",
     "hearing_test_result_page_already_saved_message": "Sie haben diese Ergebnisse bereits gespeichert.",
-
+    "hearing_test_incomplete": "Ihr Hörtest ist noch nicht vollständig, daher können wir noch keine vollständige Zusammenfassung anzeigen.",
+    "hearing_test_summary_intro": "Hier ist eine kurze Zusammenfassung Ihres Hörtests:",
+    "hearing_test_ear_left": "Linkes Ohr",
+    "hearing_test_ear_right": "Rechtes Ohr",
+    "hearing_test_ear_line": "{ear}: {classification}.",
+    "@hearing_test_ear_line": {
+        "description": "Einzeilige Zusammenfassung pro Ohr mit Klassifikation.",
+        "placeholders": {
+        "ear": { "type": "String", "example": "Linkes Ohr" },
+        "classification": { "type": "String", "example": "leichter Hörverlust" }
+        }
+    },
+    "hearing_test_classification_normal_hearing": "normales Hören",
+    "hearing_test_classification_mild": "leichter Hörverlust",
+    "hearing_test_classification_moderate": "mittlerer Hörverlust",
+    "hearing_test_classification_severe": "starker Hörverlust",
+    "hearing_test_classification_profound": "sehr starker Hörverlust",
+    "hearing_test_symmetry_symmetrical": "Ihr Hören wirkt in beiden Ohren ähnlich (symmetrisch).",
+    "hearing_test_symmetry_asymmetrical": "Zwischen Ihren Ohren bestehen merkliche Unterschiede (asymmetrisch).",
+    "hearing_test_high_freq_both": "Ein Hörverlust im Hochfrequenzbereich liegt in beiden Ohren vor.",
+    "hearing_test_high_freq_left": "Ein Hörverlust im Hochfrequenzbereich liegt am linken Ohr vor.",
+    "hearing_test_high_freq_right": "Ein Hörverlust im Hochfrequenzbereich liegt am rechten Ohr vor.",
+    "hearing_test_low_freq_both": "Ein Hörverlust im Tieffrequenzbereich liegt in beiden Ohren vor.",
+    "hearing_test_low_freq_left": "Ein Hörverlust im Tieffrequenzbereich liegt am linken Ohr vor.",
+    "hearing_test_low_freq_right": "Ein Hörverlust im Tieffrequenzbereich liegt am rechten Ohr vor.",
+    
     "hearing_test_welcome_page_title": "Hear Mate",
     "hearing_test_welcome_page_welcome": "Willkommen zum Hörtest",
     "hearing_test_welcome_page_description": "Dieses Modul testet dein Hörvermögen bei verschiedenen Frequenzen.",

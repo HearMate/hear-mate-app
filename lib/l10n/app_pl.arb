@@ -84,7 +84,32 @@
     "hearing_test_result_page_save_results_on_exit_prompt": "Czy chcesz zapisać wyniki testu słuchu przed wyjściem?",
     "hearing_test_result_page_already_saved_title": "Już zapisano",
     "hearing_test_result_page_already_saved_message": "Twoje wyniki są już zapisane.",
-    
+    "hearing_test_incomplete": "Twój test słuchu nie jest kompletny, dlatego nie możemy pokazać pełnego podsumowania.",
+    "hearing_test_summary_intro": "Oto krótkie podsumowanie Twojego testu słuchu:",
+    "hearing_test_ear_left": "Lewe ucho",
+    "hearing_test_ear_right": "Prawe ucho",
+    "hearing_test_ear_line": "{ear}: {classification}.",
+    "@hearing_test_ear_line": {
+        "description": "Jednolinijkowe podsumowanie dla ucha z klasyfikacją.",
+        "placeholders": {
+        "ear": { "type": "String", "example": "Lewe ucho" },
+        "classification": { "type": "String", "example": "łagodny ubytek słuchu" }
+        }
+    },
+    "hearing_test_classification_normal_hearing": "prawidłowy słuch",
+    "hearing_test_classification_mild": "łagodny ubytek słuchu",
+    "hearing_test_classification_moderate": "umiarkowany ubytek słuchu",
+    "hearing_test_classification_severe": "znaczny ubytek słuchu",
+    "hearing_test_classification_profound": "głęboki ubytek słuchu",
+    "hearing_test_symmetry_symmetrical": "Słyszenie w obu uszach wygląda podobnie (symetryczność słuchu).",
+    "hearing_test_symmetry_asymmetrical": "Występują zauważalne różnice między uszami (asymetrczność słuchu).",
+    "hearing_test_high_freq_both": "Ubytek słuchu wysokoczęstotliwościowy występuje w obu uszach.",
+    "hearing_test_high_freq_left": "Ubytek słuchu wysokoczęstotliwościowy występuje w lewym uchu.",
+    "hearing_test_high_freq_right": "Ubytek słuchu wysokoczęstotliwościowy występuje w prawym uchu.",
+    "hearing_test_low_freq_both": "Ubytek słuchu niskoczęstotliwościowy występuje w obu uszach.",
+    "hearing_test_low_freq_left": "Ubytek słuchu niskoczęstotliwościowy występuje w lewym uchu.",
+    "hearing_test_low_freq_right": "Ubytek słuchu niskoczęstotliwościowy występuje w prawym uchu.",
+
     "hearing_test_welcome_page_title": "Hear Mate",
     "hearing_test_welcome_page_welcome": "Witamy w teście słuchu",
     "hearing_test_welcome_page_description": "Ten moduł przetestuje Twój słuch w różnych częstotliwościach.",

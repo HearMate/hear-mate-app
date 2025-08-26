@@ -13,8 +13,6 @@ class HearingTestPlayingSound extends HearingTestEvent {}
 
 class HearingTestNextFrequency extends HearingTestEvent {}
 
-class HearingTestEndTestEarly extends HearingTestEvent {}
-
 class HearingTestChangeEar extends HearingTestEvent {}
 
 class HearingTestCompleted extends HearingTestEvent {}
