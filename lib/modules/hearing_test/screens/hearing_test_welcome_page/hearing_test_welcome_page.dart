@@ -13,6 +13,9 @@ class HearingTestWelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // If this will return null, we should crash.
+    final l10n = AppLocalizations.of(context)!;
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<HearingTestSoundsPlayerRepository>(
@@ -25,6 +28,7 @@ class HearingTestWelcomePage extends StatelessWidget {
       child: BlocProvider<HearingTestBloc>(
         create:
             (context) => HearingTestBloc(
+              l10n: l10n,
               hearingTestSoundsPlayerRepository:
                   context.read<HearingTestSoundsPlayerRepository>(),
               audiogramClassificationRepository:

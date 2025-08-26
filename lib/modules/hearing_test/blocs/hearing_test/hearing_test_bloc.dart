@@ -13,6 +13,7 @@ import 'package:hear_mate_app/utils/logger.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_result.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 part 'hearing_test_event.dart';
 part 'hearing_test_state.dart';
@@ -21,13 +22,16 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
   final HearingTestAudiogramClassificationRepository
   _audiogramClassificationRepository;
+  final AppLocalizations _l10n;
 
   HearingTestBloc({
+    required AppLocalizations l10n,
     required HearingTestSoundsPlayerRepository
     hearingTestSoundsPlayerRepository,
     required HearingTestAudiogramClassificationRepository
     audiogramClassificationRepository,
-  }) : _soundsPlayerRepository = hearingTestSoundsPlayerRepository,
+  }) : _l10n = l10n,
+       _soundsPlayerRepository = hearingTestSoundsPlayerRepository,
        _audiogramClassificationRepository = audiogramClassificationRepository,
        super(HearingTestState()) {
     on<HearingTestStartTest>(_onStartTest);
@@ -214,6 +218,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     final audiogramClassification = await _audiogramClassificationRepository
         .getAudiogramDescription(
+          l10n: _l10n,
           leftEarResults: state.results.leftEarResults,
           rightEarResults: state.results.rightEarResults,
         );

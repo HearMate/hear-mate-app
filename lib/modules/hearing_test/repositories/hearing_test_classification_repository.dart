@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_loss_classification.dart';
@@ -170,17 +171,18 @@ class HearingTestAudiogramClassificationRepository {
   }
 
   Future<String> getAudiogramDescription({
+    required AppLocalizations l10n,
     required List<double?> leftEarResults,
     required List<double?> rightEarResults,
   }) async {
     if (leftEarResults.length != HearingTestConstants.TEST_FREQUENCIES.length ||
         rightEarResults.length !=
             HearingTestConstants.TEST_FREQUENCIES.length) {
-      return "Your audiogram is incomplete - we can't provide you with the classification.";
+      return l10n.hearing_test_incomplete;
     }
 
     if (leftEarResults.contains(null) || rightEarResults.contains(null)) {
-      return "Your audiogram is incomplete - we can't provide you with the classification.";
+      return l10n.hearing_test_incomplete;
     }
 
     final left = _mapEarResults(leftEarResults.cast<double>());
@@ -197,29 +199,39 @@ class HearingTestAudiogramClassificationRepository {
     String classifyText(HearingLossClassification c) {
       switch (c) {
         case HearingLossClassification.None:
-          return "normal hearing";
+          return l10n.hearing_test_classification_normal_hearing;
         case HearingLossClassification.Mild:
-          return "mild hearing loss";
+          return l10n.hearing_test_classification_mild;
         case HearingLossClassification.Moderate:
-          return "moderate hearing loss";
+          return l10n.hearing_test_classification_moderate;
         case HearingLossClassification.Severe:
-          return "severe hearing loss";
+          return l10n.hearing_test_classification_severe;
         case HearingLossClassification.Profound:
-          return "profound hearing loss";
+          return l10n.hearing_test_classification_profound;
       }
     }
 
-    StringBuffer buffer = StringBuffer();
+    final buffer = StringBuffer();
 
-    buffer.write('Left ear: ${classifyText(leftClass)}. ');
-    buffer.write('Right ear: ${classifyText(rightClass)}. ');
+    // Friendly intro
+    buffer.write('${l10n.hearing_test_summary_intro} ');
 
-    if (symmetrical) {
-      buffer.write("Hearing loss is symmetrical. ");
-    } else {
-      buffer.write("Hearing loss is asymmetrical. ");
-    }
+    // Per-ear lines
+    buffer.write(
+      '${l10n.hearing_test_ear_line(l10n.hearing_test_ear_left, classifyText(leftClass))} ',
+    );
+    buffer.write(
+      '${l10n.hearing_test_ear_line(l10n.hearing_test_ear_right, classifyText(rightClass))} ',
+    );
 
+    // Symmetry
+    buffer.write(
+      symmetrical
+          ? '${l10n.hearing_test_symmetry_symmetrical} '
+          : '${l10n.hearing_test_symmetry_asymmetrical} ',
+    );
+
+    // Frequency-specific notes
     final futures = await Future.wait<bool>([
       _isHearingLossOnHighFrequencies(earResults: left),
       _isHearingLossOnHighFrequencies(earResults: right),
@@ -234,27 +246,21 @@ class HearingTestAudiogramClassificationRepository {
 
     if (hasHighFreqLossLeft || hasHighFreqLossRight) {
       if (hasHighFreqLossLeft && hasHighFreqLossRight) {
-        buffer.write("High-frequency hearing loss is present in both ears. ");
+        buffer.write('${l10n.hearing_test_high_freq_both} ');
       } else if (hasHighFreqLossLeft) {
-        buffer.write(
-          "High-frequency hearing loss is present in the left ear. ",
-        );
+        buffer.write('${l10n.hearing_test_high_freq_left} ');
       } else {
-        buffer.write(
-          "High-frequency hearing loss is present in the right ear. ",
-        );
+        buffer.write('${l10n.hearing_test_high_freq_right} ');
       }
     }
 
     if (hasLowFreqLossLeft || hasLowFreqLossRight) {
       if (hasLowFreqLossLeft && hasLowFreqLossRight) {
-        buffer.write("Low-frequency hearing loss is present in both ears. ");
+        buffer.write('${l10n.hearing_test_low_freq_both} ');
       } else if (hasLowFreqLossLeft) {
-        buffer.write("Low-frequency hearing loss is present in the left ear. ");
+        buffer.write('${l10n.hearing_test_low_freq_left} ');
       } else {
-        buffer.write(
-          "Low-frequency hearing loss is present in the right ear. ",
-        );
+        buffer.write('${l10n.hearing_test_low_freq_right} ');
       }
     }
 
