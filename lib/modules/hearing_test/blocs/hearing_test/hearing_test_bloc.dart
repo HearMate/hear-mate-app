@@ -520,15 +520,27 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return;
     }
 
-    final leftEarResults = List<double?>.generate(
-      HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => 0.0 + i * 5, // 30, 32, 34, ...
-    );
+    final leftEarResults = [
+      30.0,
+      25.0,
+      25.0,
+      20.0,
+      50.0,
+      50.0,
+      50.0,
+      55.0,
+    ];
 
-    final rightEarResults = List<double?>.generate(
-      HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => 75.0 - i * 5, // 35, 38, 41, ...
-    );
+    final rightEarResults = [
+      55.0,
+      50.0,
+      65.0,
+      90.0,
+      45.0,
+      40.0,
+      40.0,
+      45.0,
+    ];
 
     var leftEarMasked = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
