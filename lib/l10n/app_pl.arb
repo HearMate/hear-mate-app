@@ -84,7 +84,7 @@
     "hearing_test_result_page_save_results_on_exit_prompt": "Czy chcesz zapisać wyniki testu słuchu przed wyjściem?",
     "hearing_test_result_page_already_saved_title": "Już zapisano",
     "hearing_test_result_page_already_saved_message": "Twoje wyniki są już zapisane.",
-    "hearing_test_incomplete": "Twój test słuchu nie jest jeszcze kompletny, dlatego nie możemy pokazać pełnego podsumowania. Dokończ proszę badanie wszystkich częstotliwości dla obu uszu.",
+    "hearing_test_incomplete": "Twój test słuchu nie jest kompletny, dlatego nie możemy pokazać pełnego podsumowania.",
     "hearing_test_summary_intro": "Oto krótkie podsumowanie Twojego testu słuchu:",
     "hearing_test_ear_left": "Lewe ucho",
     "hearing_test_ear_right": "Prawe ucho",

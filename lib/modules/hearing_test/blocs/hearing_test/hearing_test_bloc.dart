@@ -463,6 +463,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         isTestCompleted: true,
       ),
     );
+
+    return add(HearingTestCompleted());
   }
 
   void _onDebugEarRightPartial(
@@ -506,6 +508,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         isTestCompleted: true,
       ),
     );
+
+    return add(HearingTestCompleted());
   }
 
   void _onDebugBothEarsFull(

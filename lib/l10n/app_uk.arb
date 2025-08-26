@@ -83,7 +83,7 @@
 	"hearing_test_result_page_save_results_on_exit_prompt": "Бажаєте зберегти результати слухового тесту перед виходом?",
 	"hearing_test_result_page_already_saved_title": "Вже збережено",
 	"hearing_test_result_page_already_saved_message": "Ви вже зберегли ці результати.",
-	"hearing_test_incomplete": "Ваш тест слуху ще не завершено, тому ми не можемо показати повний підсумок. Будь ласка, пройдіть перевірку всіх частот для обох вух.",
+	"hearing_test_incomplete": "Ваш тест слуху ще не завершено, тому ми не можемо показати повну підсумкову інформацію.",
 	"hearing_test_summary_intro": "Ось коротке резюме вашого тесту слуху:",
 	"hearing_test_ear_left": "Ліве вухо",
 	"hearing_test_ear_right": "Праве вухо",

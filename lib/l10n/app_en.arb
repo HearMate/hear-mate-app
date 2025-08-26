@@ -236,7 +236,7 @@
     "hearing_test_result_page_note_description": "This generated audiogram and hearing test results are not precise and should be interpreted with caution. For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.",
     "hearing_test_result_page_save_results": "Save results",
     "hearing_test_result_page_home": "Back to home",  
-    "hearing_test_incomplete": "Your hearing test isn’t complete yet, so we can’t show a full summary. Please finish testing all frequencies for both ears.",
+    "hearing_test_incomplete": "Your hearing test isn’t complete, so we can’t show a full summary.",
     "hearing_test_summary_intro": "Here’s a quick summary of your hearing test:",
     "hearing_test_ear_left": "Left ear",
     "hearing_test_ear_right": "Right ear",

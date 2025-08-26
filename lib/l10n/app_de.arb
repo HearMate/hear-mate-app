@@ -83,7 +83,7 @@
     "hearing_test_result_page_save_results_on_exit_prompt": "Möchten Sie Ihre Hörtestergebnisse vor dem Beenden speichern?",
     "hearing_test_result_page_already_saved_title": "Bereits gespeichert",
     "hearing_test_result_page_already_saved_message": "Sie haben diese Ergebnisse bereits gespeichert.",
-    "hearing_test_incomplete": "Ihr Hörtest ist noch nicht vollständig, daher können wir noch keine vollständige Zusammenfassung anzeigen. Bitte testen Sie alle Frequenzen für beide Ohren.",
+    "hearing_test_incomplete": "Ihr Hörtest ist noch nicht vollständig, daher können wir noch keine vollständige Zusammenfassung anzeigen.",
     "hearing_test_summary_intro": "Hier ist eine kurze Zusammenfassung Ihres Hörtests:",
     "hearing_test_ear_left": "Linkes Ohr",
     "hearing_test_ear_right": "Rechtes Ohr",
