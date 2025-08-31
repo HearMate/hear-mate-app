@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
@@ -12,13 +13,26 @@ class HearingTestWelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<HearingTestSoundsPlayerRepository>(
-      create: (_) => HearingTestSoundsPlayerRepository(),
+    // If this will return null, we should crash.
+    final l10n = AppLocalizations.of(context)!;
+
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<HearingTestSoundsPlayerRepository>(
+          create: (_) => HearingTestSoundsPlayerRepository(),
+        ),
+        RepositoryProvider<HearingTestAudiogramClassificationRepository>(
+          create: (_) => HearingTestAudiogramClassificationRepository(),
+        ),
+      ],
       child: BlocProvider<HearingTestBloc>(
         create:
             (context) => HearingTestBloc(
+              l10n: l10n,
               hearingTestSoundsPlayerRepository:
                   context.read<HearingTestSoundsPlayerRepository>(),
+              audiogramClassificationRepository:
+                  context.read<HearingTestAudiogramClassificationRepository>(),
             ),
         child: const HearingTestWelcomePageView(),
       ),
