@@ -113,6 +113,8 @@
     "hearing_test_welcome_page_welcome": "Willkommen zum Hörtest",
     "hearing_test_welcome_page_description": "Dieses Modul testet dein Hörvermögen bei verschiedenen Frequenzen.",
     "hearing_test_welcome_page_start_hearing_test": "Test starten",
+    "hearing_test_welcome_page_disclaimer_title": "Haftungsausschluss",
+    "hearing_test_welcome_page_disclaimer": "Dies ist kein medizinisches Produkt. Es ist ausschließlich für die Verwendung mit Sony WH-1000XM5-Kopfhörern vorgesehen, mit eingeschaltetem Geräuschunterdrückung und maximaler Lautstärke, ohne Equalizer.",
 
     "hearing_test_delete_alert_title": "Ergebnis löschen",
     "hearing_test_delete_alert_message": "Möchten Sie dieses Ergebnis wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.",

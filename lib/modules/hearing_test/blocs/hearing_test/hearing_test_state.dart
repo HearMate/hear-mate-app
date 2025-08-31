@@ -20,6 +20,8 @@ class HearingTestState {
   final bool isLoadingAudiogramClassificationResults;
   final String audiogramClassification;
 
+  final bool disclaimerShown;
+
   HearingTestState({
     this.isButtonPressed = false,
     this.wasSoundHeard = false,
@@ -35,6 +37,7 @@ class HearingTestState {
     this.maskedHeardCount = 0,
     this.isLoadingAudiogramClassificationResults = false,
     this.audiogramClassification = "",
+    this.disclaimerShown = false,
     HearingTestResult? results,
   }) : results = results ?? HearingTestResult.empty;
   HearingTestState copyWith({
@@ -53,6 +56,7 @@ class HearingTestState {
     int? maskedHeardCount,
     bool? isLoadingAudiogramClassificationResults,
     String? audiogramClassification,
+    bool? disclaimerShown,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
@@ -77,6 +81,7 @@ class HearingTestState {
           this.isLoadingAudiogramClassificationResults,
       audiogramClassification:
           audiogramClassification ?? this.audiogramClassification,
+      disclaimerShown: disclaimerShown ?? this.disclaimerShown,
     );
   }
 }

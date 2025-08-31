@@ -113,6 +113,8 @@
 	"hearing_test_welcome_page_welcome": "Ласкаво просимо до тесту слуху",
 	"hearing_test_welcome_page_description": "Цей модуль протестує ваш слух на різних частотах.",
 	"hearing_test_welcome_page_start_hearing_test": "Почати тест",
+	"hearing_test_welcome_page_disclaimer_title": "застереження",
+    "hearing_test_welcome_page_disclaimer": "Це не є медичним виробом. Призначено лише для використання з навушниками Sony WH-1000XM5, з увімкненим шумозаглушенням та максимальною гучністю, без використання еквалайзера.",
 
 	"hearing_test_delete_alert_title": "Видалити результат",
 	"hearing_test_delete_alert_message": "Ви впевнені, що хочете остаточно видалити цей результат? Цю дію не можна скасувати.",

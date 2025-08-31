@@ -45,6 +45,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestStartMaskedTest>(_onStartMaskedTest);
     on<HearingTestPlayingMaskedSound>(_onPlayingMaskedSound);
     on<HearingTestNextMaskedFrequency>(_onNextMaskedFrequency);
+    on<HearingTestDisclaimerShown>(_onDisclaimerShown);
     // DEBUG
     on<HearingTestDebugEarLeftPartial>(_onDebugEarLeftPartial);
     on<HearingTestDebugEarRightPartial>(_onDebugEarRightPartial);
@@ -421,6 +422,13 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     );
 
     add(HearingTestPlayingMaskedSound());
+  }
+
+  void _onDisclaimerShown(
+    HearingTestDisclaimerShown event,
+    Emitter<HearingTestState> emit,
+  ) {
+    emit(state.copyWith(disclaimerShown: true));
   }
 
   // DEBUG
