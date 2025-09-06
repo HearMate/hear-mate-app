@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,13 +15,19 @@ import 'package:hear_mate_app/screens/menu_page.dart';
 import 'package:hear_mate_app/screens/settings_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page/echo_parse_welcome_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
+import 'package:hear_mate_app/utils/logger.dart';
 import 'package:hm_locale/hm_locale.dart';
 import 'package:hm_theme/hm_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // This is necessary.
   dotenv.load(fileName: ".env");
+
+  if (kDebugMode) {
+    dotenv.load(fileName: '.env.local-supabase', isOptional: true);
+  }
 
   runApp(const MyApp());
 }
