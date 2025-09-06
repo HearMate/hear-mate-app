@@ -204,7 +204,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestCompleted event,
     Emitter<HearingTestState> emit,
   ) async {
-    _soundsPlayerRepository.stopSound(stopNoise: true);
+    await _soundsPlayerRepository.stopSound(stopNoise: true);
 
     HMLogger.print("${state.results}");
 
