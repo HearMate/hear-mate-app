@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,6 +18,10 @@ import 'package:hm_locale/hm_locale.dart';
 import 'package:hm_theme/hm_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  dotenv.load(fileName: ".env");
+
   runApp(const MyApp());
 }
 
@@ -25,6 +30,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiUrl = dotenv.env['EBAY_CLIENT_ID'];
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
