@@ -6,6 +6,7 @@ import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_ca
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_end_page/headphones_calibration_end_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_information_between_tests_page/headphones_calibration_information_between_tests_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_welcome_page/headphones_calibration_welcome_page.dart';
+import 'package:hear_mate_app/repositories/database_repository.dart';
 
 class HeadphonesCalibrationModulePage extends StatelessWidget {
   const HeadphonesCalibrationModulePage({super.key});
@@ -13,9 +14,14 @@ class HeadphonesCalibrationModulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final db = RepositoryProvider.of<DatabaseRepository>(context);
 
     return BlocProvider<HeadphonesCalibrationModuleBloc>(
-      create: (context) => HeadphonesCalibrationModuleBloc(l10n: l10n),
+      create:
+          (context) => HeadphonesCalibrationModuleBloc(
+            l10n: l10n,
+            databaseRepository: db,
+          ),
       child: const HeadphonesCalibrationModuleView(),
     );
   }
