@@ -13,14 +13,8 @@ class HearingTestState {
 
   final Map<double, int> dbLevelToHearCountMap;
   final HearingTestResult results;
-  final bool resultSaved;
   final List<bool>? frequenciesThatRequireMasking;
   final int? maskedHeardCount;
-
-  final bool isLoadingAudiogramClassificationResults;
-  final String audiogramClassification;
-
-  final bool disclaimerShown;
 
   HearingTestState({
     this.isButtonPressed = false,
@@ -32,12 +26,8 @@ class HearingTestState {
     this.currentMaskingDBLevel = 0,
     this.currentDBLevel = 20,
     this.dbLevelToHearCountMap = const {},
-    this.resultSaved = false,
     this.frequenciesThatRequireMasking,
     this.maskedHeardCount = 0,
-    this.isLoadingAudiogramClassificationResults = false,
-    this.audiogramClassification = "",
-    this.disclaimerShown = false,
     HearingTestResult? results,
   }) : results = results ?? HearingTestResult.empty;
   HearingTestState copyWith({
@@ -51,12 +41,8 @@ class HearingTestState {
     double? currentMaskingDBLevel,
     Map<double, int>? dbLevelToHearCountMap,
     HearingTestResult? results,
-    bool? resultSaved,
     List<bool>? frequenciesThatRequireMasking,
     int? maskedHeardCount,
-    bool? isLoadingAudiogramClassificationResults,
-    String? audiogramClassification,
-    bool? disclaimerShown,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
@@ -72,16 +58,9 @@ class HearingTestState {
       dbLevelToHearCountMap:
           dbLevelToHearCountMap ?? this.dbLevelToHearCountMap,
       results: results ?? this.results,
-      resultSaved: resultSaved ?? this.resultSaved,
       frequenciesThatRequireMasking:
           frequenciesThatRequireMasking ?? this.frequenciesThatRequireMasking,
       maskedHeardCount: maskedHeardCount ?? this.maskedHeardCount,
-      isLoadingAudiogramClassificationResults:
-          isLoadingAudiogramClassificationResults ??
-          this.isLoadingAudiogramClassificationResults,
-      audiogramClassification:
-          audiogramClassification ?? this.audiogramClassification,
-      disclaimerShown: disclaimerShown ?? this.disclaimerShown,
     );
   }
 }

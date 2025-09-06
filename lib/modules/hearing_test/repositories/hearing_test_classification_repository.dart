@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_loss_classification.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
+import 'package:hear_mate_app/featuers/hearing_test/utils/hearing_test_utils.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 import 'package:http/http.dart' as http;
 

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_ear.dart';
+import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_ear.dart';
 import 'package:meta/meta.dart';
 import 'dart:math';
 import 'dart:convert';
@@ -8,9 +8,9 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/featuers/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/utils/logger.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_result.dart';
+import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_result.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,20 +20,13 @@ part 'hearing_test_state.dart';
 
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
-  final HearingTestAudiogramClassificationRepository
-  _audiogramClassificationRepository;
   final AppLocalizations _l10n;
 
-  HearingTestBloc({
-    required AppLocalizations l10n,
-    required HearingTestSoundsPlayerRepository
-    hearingTestSoundsPlayerRepository,
-    required HearingTestAudiogramClassificationRepository
-    audiogramClassificationRepository,
-  }) : _l10n = l10n,
-       _soundsPlayerRepository = hearingTestSoundsPlayerRepository,
-       _audiogramClassificationRepository = audiogramClassificationRepository,
-       super(HearingTestState()) {
+  HearingTestBloc({required AppLocalizations l10n})
+    : _l10n = l10n,
+      _soundsPlayerRepository = HearingTestSoundsPlayerRepository(),
+      super(HearingTestState()) {
+    on<HearingTestInitialize>(_onInitialize);
     on<HearingTestStartTest>(_onStartTest);
     on<HearingTestButtonPressed>(_onButtonPressed);
     on<HearingTestButtonReleased>(_onButtonReleased);
@@ -41,15 +34,20 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestNextFrequency>(_onNextFrequency);
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onCompleted);
-    on<HearingTestSaveResult>(_saveTestResult);
     on<HearingTestStartMaskedTest>(_onStartMaskedTest);
     on<HearingTestPlayingMaskedSound>(_onPlayingMaskedSound);
     on<HearingTestNextMaskedFrequency>(_onNextMaskedFrequency);
-    on<HearingTestDisclaimerShown>(_onDisclaimerShown);
     // DEBUG
     on<HearingTestDebugEarLeftPartial>(_onDebugEarLeftPartial);
     on<HearingTestDebugEarRightPartial>(_onDebugEarRightPartial);
     on<HearingTestDebugBothEarsFull>(_onDebugBothEarsFull);
+  }
+
+  void _onInitialize(
+    HearingTestInitialize event,
+    Emitter<HearingTestState> emit,
+  ) {
+    emit(HearingTestState());
   }
 
   void _onStartTest(
@@ -195,7 +193,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         currentFrequencyIndex: 0,
         currentDBLevel: 20,
         dbLevelToHearCountMap: const {},
-        resultSaved: false,
         results: state.results,
       ),
     );
@@ -210,55 +207,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     HMLogger.print("${state.results}");
 
-    emit(
-      state.copyWith(
-        isTestCompleted: true,
-        isLoadingAudiogramClassificationResults: true,
-      ),
-    );
-
-    final audiogramClassification = await _audiogramClassificationRepository
-        .getAudiogramDescription(
-          l10n: _l10n,
-          leftEarResults: state.results.leftEarResults,
-          rightEarResults: state.results.rightEarResults,
-        );
-
-    emit(
-      state.copyWith(
-        audiogramClassification: audiogramClassification,
-        isLoadingAudiogramClassificationResults: false,
-      ),
-    );
-  }
-
-  Future<void> _saveTestResult(
-    HearingTestSaveResult event,
-    Emitter<HearingTestState> emit,
-  ) async {
-    final data = jsonEncode(state.results.toJson());
-    final timestamp = DateTime.now()
-        .toIso8601String()
-        .split('T')
-        .join('_')
-        .split('.')
-        .first
-        .replaceAll(':', '-');
-    final defaultFileName = 'test_result_$timestamp.json';
-
-    try {
-      final baseDir = await getApplicationSupportDirectory();
-      final echoParseDir = Directory('${baseDir.path}/HearingTest');
-      if (!await echoParseDir.exists()) {
-        await echoParseDir.create(recursive: true);
-      }
-      final internalPath = '${echoParseDir.path}/$defaultFileName';
-      final internalFile = File(internalPath);
-      await internalFile.writeAsString(data);
-      emit(state.copyWith(resultSaved: true));
-    } catch (e) {
-      debugPrint("Error saving CSV file: $e");
-    }
+    emit(state.copyWith(isTestCompleted: true));
   }
 
   void _onPlayingMaskedSound(
@@ -422,13 +371,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     );
 
     add(HearingTestPlayingMaskedSound());
-  }
-
-  void _onDisclaimerShown(
-    HearingTestDisclaimerShown event,
-    Emitter<HearingTestState> emit,
-  ) {
-    emit(state.copyWith(disclaimerShown: true));
   }
 
   // DEBUG

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 
 class HearingTestPage extends StatelessWidget {
@@ -14,25 +14,7 @@ class HearingTestPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: BlocConsumer<HearingTestBloc, HearingTestState>(
-        listener: (context, state) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder:
-                  (_) => BlocProvider.value(
-                    value: context.read<HearingTestBloc>(),
-                    child: HearingTestResultPage(),
-                  ),
-            ),
-          );
-        },
-        listenWhen: (previous, current) {
-          if (previous.isTestCompleted == false &&
-              current.isTestCompleted == true) {
-            return true;
-          }
-          return false;
-        },
+      body: BlocBuilder<HearingTestBloc, HearingTestState>(
         builder: (context, state) {
           return SafeArea(
             child: Column(

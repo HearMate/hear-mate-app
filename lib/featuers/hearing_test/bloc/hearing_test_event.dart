@@ -3,6 +3,8 @@ part of 'hearing_test_bloc.dart';
 @immutable
 sealed class HearingTestEvent {}
 
+class HearingTestInitialize extends HearingTestEvent {}
+
 class HearingTestStartTest extends HearingTestEvent {}
 
 class HearingTestButtonPressed extends HearingTestEvent {}
@@ -17,15 +19,11 @@ class HearingTestChangeEar extends HearingTestEvent {}
 
 class HearingTestCompleted extends HearingTestEvent {}
 
-class HearingTestSaveResult extends HearingTestEvent {}
-
 class HearingTestPlayingMaskedSound extends HearingTestEvent {}
 
 class HearingTestNextMaskedFrequency extends HearingTestEvent {}
 
 class HearingTestStartMaskedTest extends HearingTestEvent {}
-
-class HearingTestDisclaimerShown extends HearingTestEvent {}
 
 // DEBUG
 

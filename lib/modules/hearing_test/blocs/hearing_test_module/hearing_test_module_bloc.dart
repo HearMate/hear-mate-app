@@ -1,0 +1,145 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:bloc/bloc.dart';
+import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
+import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:hear_mate_app/featuers/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_result.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
+
+part 'hearing_test_module_event.dart';
+part 'hearing_test_module_state.dart';
+
+class HearingTestModuleBloc
+    extends Bloc<HearingTestModuleBlocEvent, HearingTestModuleState> {
+  final HearingTestBloc hearingTestBloc;
+  final AppLocalizations l10n;
+  final HearingTestAudiogramClassificationRepository
+  _audiogramClassificationRepository;
+
+  HearingTestModuleBloc({required this.l10n})
+    : hearingTestBloc = HearingTestBloc(l10n: l10n),
+      _audiogramClassificationRepository =
+          HearingTestAudiogramClassificationRepository(),
+      super(HearingTestModuleState()) {
+    on<HearingTestModuleStart>(_onStartModule);
+    on<HearingTestModuleNavigateToWelcome>(_onNavigateToWelcome);
+    on<HearingTestModuleNavigateToHistory>(_onNavigateToHistory);
+    on<HearingTestModuleNavigateToTest>(_onNavigateToTest);
+    on<HearingTestModuleShowDisclaimer>(_onShowDisclaimer);
+    on<HearingTestModuleTestCompleted>(_onTestCompleted);
+    on<HearingTestModuleSaveTestResults>(_onSaveTestResult);
+    hearingTestBloc.stream.listen((hearingTestState) {
+      if (hearingTestState.isTestCompleted) {
+        add(HearingTestModuleTestCompleted(results: hearingTestState.results));
+      }
+    });
+  }
+
+  void _onStartModule(
+    HearingTestModuleStart event,
+    Emitter<HearingTestModuleState> emit,
+  ) {
+    if (!state.disclaimerShown) {
+      add(HearingTestModuleShowDisclaimer());
+      return;
+    }
+    emit(HearingTestModuleState());
+    emit(state.copyWith(currentStep: HearingTestPageStep.welcome));
+
+    hearingTestBloc.add(HearingTestStartTest());
+  }
+
+  void _onNavigateToWelcome(
+    HearingTestModuleNavigateToWelcome event,
+    Emitter<HearingTestModuleState> emit,
+  ) {
+    hearingTestBloc.add(HearingTestInitialize());
+    emit(HearingTestModuleState());
+    emit(state.copyWith(currentStep: HearingTestPageStep.welcome));
+  }
+
+  void _onNavigateToHistory(
+    HearingTestModuleNavigateToHistory event,
+    Emitter<HearingTestModuleState> emit,
+  ) {
+    emit(state.copyWith(currentStep: HearingTestPageStep.history));
+  }
+
+  void _onShowDisclaimer(
+    HearingTestModuleShowDisclaimer event,
+    Emitter<HearingTestModuleState> emit,
+  ) {
+    emit(state.copyWith(disclaimerShown: true));
+  }
+
+  void _onNavigateToTest(
+    HearingTestModuleNavigateToTest event,
+    Emitter<HearingTestModuleState> emit,
+  ) {
+    hearingTestBloc.add(HearingTestStartTest());
+    emit(state.copyWith(currentStep: HearingTestPageStep.test));
+  }
+
+  Future<void> _onTestCompleted(
+    HearingTestModuleTestCompleted event,
+    Emitter<HearingTestModuleState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        results: event.results,
+        isLoadingAudiogramClassificationResults: true,
+      ),
+    );
+
+    final classification = await _audiogramClassificationRepository
+        .getAudiogramDescription(
+          l10n: l10n,
+          leftEarResults: event.results.leftEarResults,
+          rightEarResults: event.results.rightEarResults,
+        );
+
+    emit(
+      state.copyWith(
+        isLoadingAudiogramClassificationResults: false,
+        audiogramClassification: classification,
+        currentStep: HearingTestPageStep.result,
+      ),
+    );
+  }
+
+  Future<void> _onSaveTestResult(
+    HearingTestModuleSaveTestResults event,
+    Emitter<HearingTestModuleState> emit,
+  ) async {
+    final data = jsonEncode(state.results?.toJson());
+    final timestamp = DateTime.now()
+        .toIso8601String()
+        .split('T')
+        .join('_')
+        .split('.')
+        .first
+        .replaceAll(':', '-');
+    final defaultFileName = 'test_result_$timestamp.json';
+
+    try {
+      final baseDir = await getApplicationSupportDirectory();
+      final echoParseDir = Directory('${baseDir.path}/HearingTest');
+      if (!await echoParseDir.exists()) {
+        await echoParseDir.create(recursive: true);
+      }
+      final internalPath = '${echoParseDir.path}/$defaultFileName';
+      final internalFile = File(internalPath);
+      await internalFile.writeAsString(data);
+
+      emit(state.copyWith(resultsSaved: true));
+      add(HearingTestModuleNavigateToWelcome());
+    } catch (e) {
+      debugPrint("Error saving CSV file: $e");
+    }
+  }
+}

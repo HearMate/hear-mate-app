@@ -30,7 +30,7 @@ class HearingTestResultPage extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return BlocBuilder<HearingTestBloc, HearingTestState>(
+    return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
         if (state.isLoadingAudiogramClassificationResults) {
           return const Center(child: CircularProgressIndicator());
@@ -42,7 +42,7 @@ class HearingTestResultPage extends StatelessWidget {
             route: ModalRoute.of(context)?.settings.name ?? "",
             customBackRoute: '/hearing_test/welcome',
             onBackPressed:
-                state.resultSaved ? null : () => _backDialog(context),
+                state.resultsSaved ? null : () => _backDialog(context),
           ),
           body: SafeArea(
             child: Column(

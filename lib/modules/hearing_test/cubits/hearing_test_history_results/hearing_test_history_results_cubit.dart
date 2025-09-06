@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_result.dart';
+import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_result.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:path_provider/path_provider.dart';
