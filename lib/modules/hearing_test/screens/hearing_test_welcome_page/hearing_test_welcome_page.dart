@@ -1,92 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:hear_mate_app/home_page.dart';
+import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/featuers/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
+import 'package:hear_mate_app/featuers/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
-
-void showDisclaimerDialog(BuildContext context) {
-  final l10n = AppLocalizations.of(context)!;
-  final bloc = context.read<HearingTestBloc>();
-
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => AlertDialog(
-      title: Text(l10n.hearing_test_welcome_page_disclaimer_title),
-      content: Text(
-        l10n.hearing_test_welcome_page_disclaimer
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            bloc.add(HearingTestStartTest());
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: bloc,
-                  child: const HearingTestPage(),
-                ),
-              ),
-            );
-          },
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
 
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // If this will return null, we should crash.
     final l10n = AppLocalizations.of(context)!;
 
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<HearingTestSoundsPlayerRepository>(
-          create: (_) => HearingTestSoundsPlayerRepository(),
-        ),
-        RepositoryProvider<HearingTestAudiogramClassificationRepository>(
-          create: (_) => HearingTestAudiogramClassificationRepository(),
-        ),
-      ],
-      child: BlocProvider<HearingTestBloc>(
-        create:
-            (context) => HearingTestBloc(
-              l10n: l10n,
-              hearingTestSoundsPlayerRepository:
-                  context.read<HearingTestSoundsPlayerRepository>(),
-              audiogramClassificationRepository:
-                  context.read<HearingTestAudiogramClassificationRepository>(),
-            ),
-        child: const HearingTestWelcomePageView(),
-      ),
-    );
-  }
-}
-
-class HearingTestWelcomePageView extends StatelessWidget {
-  const HearingTestWelcomePageView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return BlocListener<HearingTestBloc, HearingTestState>(
-      listenWhen: (previous, current) => 
-          !previous.disclaimerShown && !current.disclaimerShown,
+    return BlocListener<HearingTestModuleBloc, HearingTestModuleState>(
+      listenWhen:
+          (previous, current) =>
+              !previous.disclaimerShown && !current.disclaimerShown,
       listener: (context, state) {
         if (!state.disclaimerShown) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.read<HearingTestBloc>().add(HearingTestDisclaimerShown());
+            context.read<HearingTestModuleBloc>().add(
+              HearingTestModuleShowDisclaimer(),
+            );
           });
         }
       },
@@ -94,6 +33,7 @@ class HearingTestWelcomePageView extends StatelessWidget {
         appBar: HMAppBar(
           title: l10n.hearing_test_welcome_page_title,
           route: ModalRoute.of(context)?.settings.name ?? "",
+          customBackRoute: "/",
         ),
         body: Center(
           child: Column(
@@ -122,33 +62,17 @@ class HearingTestWelcomePageView extends StatelessWidget {
               const SizedBox(height: 40),
               FilledButton(
                 onPressed: () {
-                  if (context.read<HearingTestBloc>().state.disclaimerShown) {
-                    context.read<HearingTestBloc>().add(HearingTestStartTest());
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<HearingTestBloc>(),
-                          child: const HearingTestPage(),
-                        ),
-                      ),
-                    );
-                  } else {
-                    showDisclaimerDialog(context);
-                  }
+                  context.read<HearingTestModuleBloc>().add(
+                    HearingTestModuleNavigateToTest(),
+                  );
                 },
                 child: Text(l10n.hearing_test_welcome_page_start_hearing_test),
               ),
               const SizedBox(height: 10),
               OutlinedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder:
-                          (_) => BlocProvider.value(
-                            value: context.read<HearingTestBloc>(),
-                            child: const HearingTestHistoryResultsPage(),
-                          ),
-                    ),
+                  context.read<HearingTestModuleBloc>().add(
+                    HearingTestModuleNavigateToHistory(),
                   );
                 },
                 child: Text(l10n.hearing_test_result_history_page),

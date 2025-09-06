@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
+import 'package:hear_mate_app/featuers/hearing_test/utils/hearing_test_utils.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_point.dart';

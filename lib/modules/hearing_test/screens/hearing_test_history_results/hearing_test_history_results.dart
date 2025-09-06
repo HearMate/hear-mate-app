@@ -7,7 +7,7 @@ import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/alert_dialogs.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
+import 'package:hear_mate_app/featuers/hearing_test/utils/hearing_test_utils.dart';
 
 // TODO:
 // - show trends what has happened with hearing over time / from last test

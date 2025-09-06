@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,7 +19,7 @@ class HearingTestResultPage extends StatelessWidget {
       context: context,
       builder:
           (dialogContext) => BlocProvider.value(
-            value: context.read<HearingTestBloc>(),
+            value: context.read<HearingTestModuleBloc>(),
             child: const BackAlertDialog(),
           ),
     );
@@ -29,7 +30,7 @@ class HearingTestResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
-    return BlocBuilder<HearingTestBloc, HearingTestState>(
+    return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
         if (state.isLoadingAudiogramClassificationResults) {
           return const Center(child: CircularProgressIndicator());
@@ -41,7 +42,7 @@ class HearingTestResultPage extends StatelessWidget {
             route: ModalRoute.of(context)?.settings.name ?? "",
             customBackRoute: '/hearing_test/welcome',
             onBackPressed:
-                state.resultSaved ? null : () => _backDialog(context),
+                state.resultsSaved ? null : () => _backDialog(context),
           ),
           body: SingleChildScrollView(
             child: Center(
@@ -85,7 +86,7 @@ class HearingTestResultPage extends StatelessWidget {
     ),
   );
 
-  Widget _buildAudiogramChart(HearingTestState state) => Container(
+  Widget _buildAudiogramChart(HearingTestModuleState state) => Container(
     margin: const EdgeInsets.symmetric(horizontal: 20),
     decoration: BoxDecoration(
       border: Border.all(color: Colors.grey.shade300),
@@ -93,16 +94,23 @@ class HearingTestResultPage extends StatelessWidget {
     ),
     padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
     child: AudiogramChart(
-      leftEarData: state.results.leftEarResults,
-      rightEarData: state.results.rightEarResults,
+      leftEarData: state.results?.leftEarResults ?? [],
+      rightEarData: state.results?.rightEarResults ?? [],
       leftEarMaskedData:
-          state.results.leftEarResultsMasked.every((elem) => elem == null)
+          (state.results?.leftEarResultsMasked == null ||
+                  state.results!.leftEarResultsMasked.every(
+                    (elem) => elem == null,
+                  ))
               ? null
-              : state.results.leftEarResultsMasked,
+              : state.results!.leftEarResultsMasked,
+
       rightEarMaskedData:
-          state.results.rightEarResultsMasked.every((elem) => elem == null)
+          (state.results?.rightEarResultsMasked == null ||
+                  state.results!.rightEarResultsMasked.every(
+                    (elem) => elem == null,
+                  ))
               ? null
-              : state.results.rightEarResultsMasked,
+              : state.results!.rightEarResultsMasked,
     ),
   );
 
@@ -121,7 +129,10 @@ class HearingTestResultPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                context.read<HearingTestBloc>().state.audiogramClassification,
+                context
+                    .read<HearingTestModuleBloc>()
+                    .state
+                    .audiogramClassification,
               ),
               const SizedBox(height: 15),
               Text(
@@ -147,35 +158,37 @@ class HearingTestResultPage extends StatelessWidget {
   }
 
   Widget _buildSaveButton(BuildContext context, AppLocalizations loc) {
-    return BlocBuilder<HearingTestBloc, HearingTestState>(
+    return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
         return ElevatedButton(
           onPressed: () {
-            if (state.resultSaved) {
+            if (state.resultsSaved) {
               showDialog(
                 context: context,
                 builder:
                     (dialogContext) => BlocProvider.value(
-                      value: context.read<HearingTestBloc>(),
+                      value: context.read<HearingTestModuleBloc>(),
                       child: AlreadySavedDialog(),
                     ),
               );
-            } else if (state.results.hasMissingValues()) {
+            } else if (state.results?.hasMissingValues() ?? true) {
               showDialog(
                 context: context,
                 builder:
                     (dialogContext) => BlocProvider.value(
-                      value: context.read<HearingTestBloc>(),
+                      value: context.read<HearingTestModuleBloc>(),
                       child: MissingValuesAlertDialog(),
                     ),
               );
             } else {
-              context.read<HearingTestBloc>().add(HearingTestSaveResult());
+              context.read<HearingTestModuleBloc>().add(
+                HearingTestModuleSaveTestResults(),
+              );
               showDialog(
                 context: context,
                 builder:
                     (dialogContext) => BlocProvider.value(
-                      value: context.read<HearingTestBloc>(),
+                      value: context.read<HearingTestModuleBloc>(),
                       child: SavedDialog(),
                     ),
               );

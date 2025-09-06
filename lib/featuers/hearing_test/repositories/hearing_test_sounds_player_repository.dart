@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
     as HearingTestConstants;
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_ear.dart';
+import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_ear.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 
 class HearingTestSoundsPlayerRepository {
