@@ -4,6 +4,7 @@ import 'package:hear_mate_app/data/languages.dart';
 import 'package:hear_mate_app/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_module_page/headphones_calibration_module_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_welcome_page/headphones_calibration_welcome_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_module_page/hearing_test_module_page.dart';
@@ -76,6 +77,9 @@ class MyApp extends StatelessWidget {
 
                   //? EchoParse routes
                   '/echo_parse/welcome': (context) => EchoParseWelcomePage(),
+
+                  '/headphones_calibration/welcome':
+                      (context) => HeadphonesCalibrationModulePage(),
                 },
                 onUnknownRoute: (settings) {
                   return MaterialPageRoute(

@@ -7,6 +7,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.route,
     required this.title,
+    this.hideBackArrow = false,
     this.onBackPressed,
     this.customBackRoute,
   });
@@ -14,6 +15,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String route;
   final Future<bool> Function()? onBackPressed;
   final String? customBackRoute;
+  final bool hideBackArrow;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -30,8 +32,9 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: theme.appBarTheme.backgroundColor,
       foregroundColor: theme.appBarTheme.foregroundColor,
+      automaticallyImplyLeading: false,
       leading:
-          !hiddenBackButtonRoutes.contains(route)
+          (!hideBackArrow && !hiddenBackButtonRoutes.contains(route))
               ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () async {
