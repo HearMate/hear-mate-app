@@ -47,6 +47,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestInitialize event,
     Emitter<HearingTestState> emit,
   ) {
+    _soundsPlayerRepository.stopSound();
     emit(HearingTestState());
   }
 
