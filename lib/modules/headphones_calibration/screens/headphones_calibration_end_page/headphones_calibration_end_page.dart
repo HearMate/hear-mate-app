@@ -26,7 +26,6 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Success animation container
                     Container(
                       width: 140,
                       height: 140,
@@ -68,7 +67,6 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
 
-                    // Success title
                     Text(
                       'Congratulations!',
                       style: Theme.of(
@@ -81,7 +79,6 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // Success subtitle
                     Text(
                       'Calibration Complete',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -92,9 +89,8 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
 
-                    // Thank you message
                     Text(
-                      'Thank you for your cooperation! Your headphones have been successfully calibrated and are now optimized for the best audio experience.',
+                      'Thank you for your cooperation! You have just made our app more accessible!',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Colors.grey.shade700,
                         height: 1.5,

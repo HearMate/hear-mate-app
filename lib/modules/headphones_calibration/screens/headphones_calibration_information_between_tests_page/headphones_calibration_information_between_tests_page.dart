@@ -66,7 +66,7 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
 
                     // Title
                     Text(
-                      'Great Progress!',
+                      'Great!',
                       style: Theme.of(
                         context,
                       ).textTheme.headlineMedium?.copyWith(
@@ -78,9 +78,26 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                     const SizedBox(height: 16),
 
                     // Description
-                    Text(
-                      'You\'ve completed the first calibration test successfully. '
-                      'Now we\'ll run the second test to fine-tune your headphones for optimal sound quality.',
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text:
+                                "You have completed the first test with reference headphones. Now switch to ",
+                          ),
+                          TextSpan(
+                            text:
+                                context
+                                    .read<HeadphonesCalibrationModuleBloc>()
+                                    .state
+                                    .selectedTargetHeadphone
+                                    ?.name ??
+                                "",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(text: " and continue!"),
+                        ],
+                      ),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Colors.grey.shade700,
                         height: 1.5,
@@ -88,92 +105,6 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 24),
-
-                    // Info cards
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.green.shade50,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.green.shade200),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.check_circle,
-                            color: Colors.green.shade600,
-                            size: 24,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'First Test Complete',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green.shade700,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Basic frequency response calibrated',
-                                  style: TextStyle(
-                                    color: Colors.green.shade600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.shade50,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.orange.shade200),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.pending,
-                            color: Colors.orange.shade600,
-                            size: 24,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Next: Advanced Calibration',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.orange.shade700,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Fine-tune for your specific headphones',
-                                  style: TextStyle(
-                                    color: Colors.orange.shade600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
