@@ -9,6 +9,7 @@ class HearingTestModuleState {
   final bool isLoadingAudiogramClassificationResults;
   final String audiogramClassification;
   final bool resultsSaved;
+  final HeadphonesModel? headphonesModel;
 
   HearingTestModuleState({
     this.currentStep = HearingTestPageStep.welcome,
@@ -17,6 +18,7 @@ class HearingTestModuleState {
     this.isLoadingAudiogramClassificationResults = false,
     this.audiogramClassification = "",
     this.resultsSaved = false,
+    this.headphonesModel,
   });
 
   HearingTestModuleState copyWith({
@@ -26,6 +28,7 @@ class HearingTestModuleState {
     bool? isLoadingAudiogramClassificationResults,
     String? audiogramClassification,
     bool? resultsSaved,
+    HeadphonesModel? headphonesModel,
   }) {
     return HearingTestModuleState(
       currentStep: currentStep ?? this.currentStep,
@@ -37,6 +40,7 @@ class HearingTestModuleState {
       audiogramClassification:
           audiogramClassification ?? this.audiogramClassification,
       resultsSaved: resultsSaved ?? this.resultsSaved,
+      headphonesModel: headphonesModel ?? this.headphonesModel,
     );
   }
 }

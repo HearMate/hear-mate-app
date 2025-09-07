@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
+import 'package:hear_mate_app/repositories/database_repository.dart';
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/featuers/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
@@ -20,8 +23,9 @@ class HearingTestModuleBloc
   final AppLocalizations l10n;
   final HearingTestAudiogramClassificationRepository
   _audiogramClassificationRepository;
+  final DatabaseRepository databaseRepository;
 
-  HearingTestModuleBloc({required this.l10n})
+  HearingTestModuleBloc({required this.l10n, required this.databaseRepository})
     : hearingTestBloc = HearingTestBloc(l10n: l10n),
       _audiogramClassificationRepository =
           HearingTestAudiogramClassificationRepository(),
@@ -33,6 +37,7 @@ class HearingTestModuleBloc
     on<HearingTestModuleShowDisclaimer>(_onShowDisclaimer);
     on<HearingTestModuleTestCompleted>(_onTestCompleted);
     on<HearingTestModuleSaveTestResults>(_onSaveTestResult);
+    on<HearingTestModuleSelectHeadphoneFromSearch>(_onSelectHeadphones);
     hearingTestBloc.stream.listen((hearingTestState) {
       if (hearingTestState.isTestCompleted) {
         add(HearingTestModuleTestCompleted(results: hearingTestState.results));
@@ -141,5 +146,16 @@ class HearingTestModuleBloc
     } catch (e) {
       debugPrint("Error saving CSV file: $e");
     }
+  }
+
+  void _onSelectHeadphones(
+    HearingTestModuleSelectHeadphoneFromSearch event,
+    Emitter<HearingTestModuleState> emit,
+  ) async {
+    final headphonesModel =
+        await databaseRepository.searchHeadphone(name: event.headphone.name) ??
+        HeadphonesModel.empty(name: event.headphone.name);
+
+    emit(state.copyWith(headphonesModel: headphonesModel));
   }
 }

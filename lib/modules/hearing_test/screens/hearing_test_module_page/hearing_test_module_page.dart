@@ -6,6 +6,7 @@ import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/repositories/database_repository.dart';
 
 class HearingTestModulePage extends StatelessWidget {
   const HearingTestModulePage({super.key});
@@ -13,9 +14,12 @@ class HearingTestModulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final db = RepositoryProvider.of<DatabaseRepository>(context);
 
     return BlocProvider<HearingTestModuleBloc>(
-      create: (context) => HearingTestModuleBloc(l10n: l10n),
+      create:
+          (context) =>
+              HearingTestModuleBloc(l10n: l10n, databaseRepository: db),
       child: const HearingTestModulePageView(),
     );
   }

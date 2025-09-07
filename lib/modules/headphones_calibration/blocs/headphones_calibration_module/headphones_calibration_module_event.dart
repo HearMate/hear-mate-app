@@ -47,19 +47,6 @@ class HeadphonesCalibrationModuleRemoveTargetHeadphone
   HeadphonesCalibrationModuleRemoveTargetHeadphone(this.headphone);
 }
 
-class HeadphonesCalibrationModuleUpdateSearchQuery
-    extends HeadphonesCalibrationModuleEvent {
-  final String query;
-  HeadphonesCalibrationModuleUpdateSearchQuery(this.query);
-}
-
-class HeadphonesCalibrationModulePerformSearch
-    extends HeadphonesCalibrationModuleEvent {
-  final String query;
-
-  HeadphonesCalibrationModulePerformSearch(this.query);
-}
-
 class HeadphonesCalibrationModuleAddHeadphoneFromSearch
     extends HeadphonesCalibrationModuleEvent {
   final HeadphonesModel headphone;
