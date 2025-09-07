@@ -11,6 +11,7 @@ import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_module_page/hearing_test_module_page.dart';
 import 'package:hear_mate_app/repositories/database_repository.dart';
+import 'package:hear_mate_app/repositories/headphones_searcher_repository.dart';
 import 'package:hear_mate_app/screens/about_page.dart';
 import 'package:hear_mate_app/screens/menu_page.dart';
 import 'package:hear_mate_app/screens/settings_page.dart';
@@ -23,12 +24,17 @@ import 'package:hm_theme/hm_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // This is necessary.
-  await dotenv.load(fileName: ".env");
+  Map<String, String> env = {};
 
+  // This is optional
   if (kDebugMode) {
     await dotenv.load(fileName: '.env.local-supabase', isOptional: true);
+
+    env = Map<String, String>.from(dotenv.env);
   }
+
+  // This is necessary.
+  await dotenv.load(fileName: ".env", mergeWith: env);
 
   runApp(const MyApp());
 }
@@ -38,8 +44,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<DatabaseRepository>(
-      create: (context) => DatabaseRepository(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<HeadphonesSearcherRepository>(
+          create: (context) => HeadphonesSearcherRepository(),
+        ),
+        RepositoryProvider<DatabaseRepository>(
+          create: (context) => DatabaseRepository(),
+        ),
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(

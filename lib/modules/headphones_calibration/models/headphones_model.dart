@@ -173,4 +173,18 @@ class HeadphonesModel {
         'createdAt: $createdAt'
         '}';
   }
+
+  factory HeadphonesModel.empty({String name = ''}) => HeadphonesModel(
+    id: '',
+    createdAt: DateTime.now(),
+    name: name,
+    grade: 0,
+    hz125Correction: 0,
+    hz250Correction: 0,
+    hz500Correction: 0,
+    hz1000Correction: 0,
+    hz2000Correction: 0,
+    hz4000Correction: 0,
+    hz8000Correction: 0,
+  );
 }
