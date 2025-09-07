@@ -114,9 +114,8 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                       onPressed: () {
                         // Navigate to home
                         context.read<HeadphonesCalibrationModuleBloc>().add(
-                          HeadphonesCalibrationModuleNavigateToWelcome(),
+                          HeadphonesCalibrationModuleNavigateToExit(),
                         );
-                        Navigator.pop(context);
                       },
                       icon: const Icon(Icons.home),
                       label: const Text('Go Home'),

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
@@ -6,7 +9,10 @@ import 'package:hear_mate_app/featuers/hearing_test/utils/hearing_test_utils.dar
     as HearingTestUtils;
 import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_search_result.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/repositories/headphones_searcher_repository.dart';
 import 'package:hear_mate_app/repositories/database_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'headphones_calibration_module_event.dart';
 part 'headphones_calibration_module_state.dart';
@@ -18,33 +24,22 @@ class HeadphonesCalibrationModuleBloc
           HeadphonesCalibrationModuleState
         > {
   final DatabaseRepository databaseRepository;
+  final HeadphonesSearcherRepository headphonesSearcherRepository;
   final AppLocalizations l10n;
   final HearingTestBloc hearingTestBloc;
 
-  final _dummyReferenceHeadphones = [
-    const HeadphonesModel(name: 'HD 600', manufacturer: 'Sennheiser'),
-    const HeadphonesModel(name: 'K701', manufacturer: 'AKG'),
-    const HeadphonesModel(name: 'DT 990 Pro', manufacturer: 'Beyerdynamic'),
-    const HeadphonesModel(name: 'ATH-M50x', manufacturer: 'Audio-Technica'),
-  ];
+  Timer? _searchDebounceTimer;
+  static const Duration _searchDebounceDelay = Duration(milliseconds: 500);
 
-  final _dummyTargetHeadphones = [
-    const HeadphonesModel(name: 'WH-1000XM4', manufacturer: 'Sony'),
-    const HeadphonesModel(name: 'AirPods Max', manufacturer: 'Apple'),
-    const HeadphonesModel(name: 'QuietComfort 35 II', manufacturer: 'Bose'),
-    const HeadphonesModel(
-      name: 'Momentum 3 Wireless',
-      manufacturer: 'Sennheiser',
-    ),
-    const HeadphonesModel(name: 'H9i', manufacturer: 'Bang & Olufsen'),
-    const HeadphonesModel(name: 'PX7', manufacturer: 'Bowers & Wilkins'),
-    const HeadphonesModel(name: 'Elite 85h', manufacturer: 'Jabra'),
-  ];
+  final HEADPHONES_GRADE_THRESHOLD = 3;
+  final LOCAL_STORAGE_REFERENCE_HEADPHONES = "available_reference_headphones";
+  final LOCAL_STORAGE_TARGET_HEADPHONES = "available_target_headphones";
 
   HeadphonesCalibrationModuleBloc({
     required this.l10n,
     required this.databaseRepository,
   }) : hearingTestBloc = HearingTestBloc(l10n: l10n),
+       headphonesSearcherRepository = HeadphonesSearcherRepository(),
        super(HeadphonesCalibrationModuleState()) {
     on<HeadphonesCalibrationModuleStart>(_onStart);
     on<HeadphonesCalibrationModuleNavigateToWelcome>(_onNavigateToWelcome);
@@ -56,13 +51,24 @@ class HeadphonesCalibrationModuleBloc
       _onNavigateToSecondTest,
     );
     on<HeadphonesCalibrationModuleNavigateToEnd>(_onNavigateToEnd);
+    on<HeadphonesCalibrationModuleNavigateToExit>(_onNavigateToExit);
     on<HeadphonesCalibrationModuleSelectReferenceHeadphone>(
       _onSelectReferenceHeadphone,
     );
     on<HeadphonesCalibrationModuleSelectTargetHeadphone>(
       _onSelectTargetHeadphone,
     );
+    on<HeadphonesCalibrationModuleRemoveReferenceHeadphone>(
+      _onRemoveReferenceHeadphone,
+    );
+    on<HeadphonesCalibrationModuleRemoveTargetHeadphone>(
+      _onRemoveTargetHeadphone,
+    );
     on<HeadphonesCalibrationModuleUpdateSearchQuery>(_onUpdateSearchQuery);
+    on<HeadphonesCalibrationModulePerformSearch>(_onPerformSearch);
+    on<HeadphonesCalibrationModuleAddHeadphoneFromSearch>(
+      _onAddHeadphoneFromSearch,
+    );
     on<HeadphonesCalibrationModuleTestCompleted>(_onHearingTestCompleted);
 
     hearingTestBloc.stream.listen((hearingTestState) {
@@ -78,18 +84,81 @@ class HeadphonesCalibrationModuleBloc
     add(HeadphonesCalibrationModuleStart());
   }
 
-  void _onStart(
-    HeadphonesCalibrationModuleStart event,
+  @override
+  Future<void> close() {
+    _searchDebounceTimer?.cancel();
+    return super.close();
+  }
+
+  Future<void> _saveHeadphonesToLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setStringList(
+      LOCAL_STORAGE_REFERENCE_HEADPHONES,
+      state.availableReferenceHeadphones.map((h) => h.name).toList(),
+    );
+    prefs.setStringList(
+      LOCAL_STORAGE_TARGET_HEADPHONES,
+      state.availableTargetHeadphones.map((h) => h.name).toList(),
+    );
+  }
+
+  Future<void> _loadHeadphonesFromLocalStorage(
     Emitter<HeadphonesCalibrationModuleState> emit,
-  ) {
-    emit(HeadphonesCalibrationModuleState());
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final storedReferenceNames =
+        prefs.getStringList(LOCAL_STORAGE_REFERENCE_HEADPHONES) ?? [];
+    final storedTargetNames =
+        prefs.getStringList(LOCAL_STORAGE_TARGET_HEADPHONES) ?? [];
+
+    final allNames = {...storedReferenceNames, ...storedTargetNames}.toList();
+    final futures =
+        allNames
+            .map((name) => databaseRepository.searchHeadphone(name: name))
+            .toList();
+
+    // Wait for all async results
+    final allHeadphonesWithNulls = await Future.wait(futures);
+
+    // Remove nulls
+    final allHeadphones =
+        allHeadphonesWithNulls.whereType<HeadphonesModel>().toList();
+
+    // Split based on grade threshold
+    final availableReferences =
+        allHeadphones
+            .where((h) => h.grade > HEADPHONES_GRADE_THRESHOLD)
+            .toList();
+
+    final availableTargets =
+        allHeadphones
+            .where((h) => h.grade <= HEADPHONES_GRADE_THRESHOLD)
+            .toList();
 
     emit(
       state.copyWith(
-        availableReferenceHeadphones: _dummyReferenceHeadphones,
-        availableTargetHeadphones: _dummyTargetHeadphones,
+        availableReferenceHeadphones: availableReferences,
+        availableTargetHeadphones: availableTargets,
       ),
     );
+  }
+
+  void _onStart(
+    HeadphonesCalibrationModuleStart event,
+    Emitter<HeadphonesCalibrationModuleState> emit,
+  ) async {
+    emit(HeadphonesCalibrationModuleState());
+
+    await _loadHeadphonesFromLocalStorage(emit);
+  }
+
+  void _onNavigateToExit(
+    HeadphonesCalibrationModuleNavigateToExit event,
+    Emitter<HeadphonesCalibrationModuleState> emit,
+  ) {
+    emit(state.copyWith(currentStep: HeadphonesCalibrationStep.exit));
   }
 
   void _onNavigateToWelcome(
@@ -98,13 +167,6 @@ class HeadphonesCalibrationModuleBloc
   ) {
     hearingTestBloc.add(HearingTestInitialize());
     emit(HeadphonesCalibrationModuleState());
-
-    emit(
-      state.copyWith(
-        availableReferenceHeadphones: _dummyReferenceHeadphones,
-        availableTargetHeadphones: _dummyTargetHeadphones,
-      ),
-    );
 
     emit(state.copyWith(currentStep: HeadphonesCalibrationStep.welcome));
   }
@@ -148,21 +210,165 @@ class HeadphonesCalibrationModuleBloc
     HeadphonesCalibrationModuleSelectReferenceHeadphone event,
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) {
-    emit(state.copyWith(selectedReferenceHeadphone: event.headphone));
+    emit(
+      state.copyWith(
+        selectedReferenceHeadphone:
+            event.headphone == state.selectedReferenceHeadphone
+                ? null
+                : event.headphone,
+      ),
+    );
   }
 
   void _onSelectTargetHeadphone(
     HeadphonesCalibrationModuleSelectTargetHeadphone event,
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) {
-    emit(state.copyWith(selectedTargetHeadphone: event.headphone));
+    emit(
+      state.copyWith(
+        selectedTargetHeadphone:
+            event.headphone == state.selectedTargetHeadphone
+                ? null
+                : event.headphone,
+      ),
+    );
+  }
+
+  void _onRemoveReferenceHeadphone(
+    HeadphonesCalibrationModuleRemoveReferenceHeadphone event,
+    Emitter<HeadphonesCalibrationModuleState> emit,
+  ) {
+    final updated = List.of(state.availableReferenceHeadphones)
+      ..remove(event.headphone);
+    emit(
+      state.copyWith(
+        availableReferenceHeadphones: updated,
+        selectedReferenceHeadphone: null,
+      ),
+    );
+    _saveHeadphonesToLocalStorage();
+  }
+
+  void _onRemoveTargetHeadphone(
+    HeadphonesCalibrationModuleRemoveTargetHeadphone event,
+    Emitter<HeadphonesCalibrationModuleState> emit,
+  ) {
+    final updated = List.of(state.availableTargetHeadphones)
+      ..remove(event.headphone);
+    emit(
+      state.copyWith(
+        availableTargetHeadphones: updated,
+        selectedTargetHeadphone: null,
+      ),
+    );
+    _saveHeadphonesToLocalStorage();
   }
 
   void _onUpdateSearchQuery(
     HeadphonesCalibrationModuleUpdateSearchQuery event,
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) {
-    emit(state.copyWith(searchQuery: event.query));
+    emit(
+      state.copyWith(
+        searchQuery: event.query,
+        searchResult: '',
+        isSearching: false,
+      ),
+    );
+
+    _searchDebounceTimer?.cancel();
+
+    emit(state.copyWith(isSearching: true));
+
+    _searchDebounceTimer = Timer(_searchDebounceDelay, () {
+      if (!isClosed) {
+        add(HeadphonesCalibrationModulePerformSearch(event.query));
+      }
+    });
+  }
+
+  void _onPerformSearch(
+    HeadphonesCalibrationModulePerformSearch event,
+    Emitter<HeadphonesCalibrationModuleState> emit,
+  ) async {
+    // Only perform search if the query matches the current state
+    if (event.query != state.searchQuery) {
+      return;
+    }
+
+    emit(state.copyWith(isSearching: true));
+
+    final searchResult = await headphonesSearcherRepository.searchHeadphones(
+      keyword: event.query,
+    );
+
+    // Check again if the query is still current after async operation
+    if (event.query == state.searchQuery) {
+      emit(
+        state.copyWith(
+          searchResult: searchResult.extractedModel,
+          isSearching: false,
+        ),
+      );
+    }
+  }
+
+  void _onAddHeadphoneFromSearch(
+    HeadphonesCalibrationModuleAddHeadphoneFromSearch event,
+    Emitter<HeadphonesCalibrationModuleState> emit,
+  ) async {
+    // Check in what place there should go
+    HeadphonesModel? headphones = await databaseRepository.searchHeadphone(
+      name: event.headphone.name,
+    );
+
+    // If they are new or are not reference headphones.
+    if (headphones == null || headphones.grade < HEADPHONES_GRADE_THRESHOLD) {
+      final alreadyExists = state.availableTargetHeadphones.any(
+        (h) => h.name.toLowerCase() == event.headphone.name.toLowerCase(),
+      );
+
+      if (!alreadyExists) {
+        final updatedTargetHeadphones = [
+          ...state.availableTargetHeadphones,
+          event.headphone,
+        ];
+
+        emit(
+          state.copyWith(
+            availableTargetHeadphones: updatedTargetHeadphones,
+            searchResult: '',
+            searchQuery: '',
+          ),
+        );
+      }
+
+      _saveHeadphonesToLocalStorage();
+
+      return;
+    }
+
+    // They are reference headphones
+    final alreadyExists = state.availableReferenceHeadphones.any(
+      (h) => h.name.toLowerCase() == event.headphone.name.toLowerCase(),
+    );
+
+    if (!alreadyExists) {
+      final updatedReferenceHeadphones = [
+        ...state.availableReferenceHeadphones,
+        event.headphone,
+      ];
+
+      emit(
+        state.copyWith(
+          availableReferenceHeadphones: updatedReferenceHeadphones,
+          searchResult: '',
+          searchQuery: '',
+        ),
+      );
+    }
+
+    _saveHeadphonesToLocalStorage();
   }
 
   void _onHearingTestCompleted(
@@ -246,6 +452,8 @@ class HeadphonesCalibrationModuleBloc
         hz4000Correction: avgCorrections[4000] ?? 0,
         hz8000Correction: avgCorrections[8000] ?? 0,
       );
+
+      hearingTestBloc.add(HearingTestInitialize());
     }
   }
 }

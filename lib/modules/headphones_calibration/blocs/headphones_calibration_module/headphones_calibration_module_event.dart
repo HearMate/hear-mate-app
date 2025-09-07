@@ -5,6 +5,9 @@ abstract class HeadphonesCalibrationModuleEvent {}
 class HeadphonesCalibrationModuleStart
     extends HeadphonesCalibrationModuleEvent {}
 
+class HeadphonesCalibrationModuleNavigateToExit
+    extends HeadphonesCalibrationModuleEvent {}
+
 class HeadphonesCalibrationModuleNavigateToWelcome
     extends HeadphonesCalibrationModuleEvent {}
 
@@ -26,16 +29,42 @@ class HeadphonesCalibrationModuleSelectReferenceHeadphone
   HeadphonesCalibrationModuleSelectReferenceHeadphone(this.headphone);
 }
 
+class HeadphonesCalibrationModuleRemoveReferenceHeadphone
+    extends HeadphonesCalibrationModuleEvent {
+  final HeadphonesModel headphone;
+  HeadphonesCalibrationModuleRemoveReferenceHeadphone(this.headphone);
+}
+
 class HeadphonesCalibrationModuleSelectTargetHeadphone
     extends HeadphonesCalibrationModuleEvent {
   final HeadphonesModel headphone;
   HeadphonesCalibrationModuleSelectTargetHeadphone(this.headphone);
 }
 
+class HeadphonesCalibrationModuleRemoveTargetHeadphone
+    extends HeadphonesCalibrationModuleEvent {
+  final HeadphonesModel headphone;
+  HeadphonesCalibrationModuleRemoveTargetHeadphone(this.headphone);
+}
+
 class HeadphonesCalibrationModuleUpdateSearchQuery
     extends HeadphonesCalibrationModuleEvent {
   final String query;
   HeadphonesCalibrationModuleUpdateSearchQuery(this.query);
+}
+
+class HeadphonesCalibrationModulePerformSearch
+    extends HeadphonesCalibrationModuleEvent {
+  final String query;
+
+  HeadphonesCalibrationModulePerformSearch(this.query);
+}
+
+class HeadphonesCalibrationModuleAddHeadphoneFromSearch
+    extends HeadphonesCalibrationModuleEvent {
+  final HeadphonesModel headphone;
+
+  HeadphonesCalibrationModuleAddHeadphoneFromSearch(this.headphone);
 }
 
 class HeadphonesCalibrationModuleLoadHeadphones

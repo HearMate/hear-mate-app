@@ -20,7 +20,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class HeadphonesCalibrationWelcomePage extends StatelessWidget {
   const HeadphonesCalibrationWelcomePage({super.key});
 
-  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
@@ -40,7 +39,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
               const SizedBox(height: 24),
               const _SelectionStatusSection(),
               const SizedBox(height: 24),
-              const _SearchBar(),
+              _SearchBar(),
               const SizedBox(height: 24),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
@@ -201,9 +200,7 @@ class _SelectionItem extends StatelessWidget {
         const SizedBox(width: 8),
         Expanded(
           child: Text(
-            selection != null
-                ? '${selection!.name} by ${selection!.manufacturer}'
-                : 'Not selected',
+            selection != null ? '${selection!.name}' : 'Not selected',
             style: TextStyle(
               color: selection != null ? Colors.black87 : Colors.grey.shade600,
               fontStyle:
@@ -212,67 +209,6 @@ class _SelectionItem extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SearchBar extends StatelessWidget {
-  const _SearchBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<
-      HeadphonesCalibrationModuleBloc,
-      HeadphonesCalibrationModuleState
-    >(
-      builder: (context, state) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 1,
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: SearchBar(
-            hintText: 'Search for headphones (e.g., Sony, Sennheiser, AKG)...',
-            padding: const MaterialStatePropertyAll<EdgeInsets>(
-              EdgeInsets.symmetric(horizontal: 16.0),
-            ),
-            elevation: const MaterialStatePropertyAll(0),
-            backgroundColor: MaterialStatePropertyAll(Colors.grey.shade50),
-            shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(color: Colors.grey.shade300),
-              ),
-            ),
-            onChanged: (value) {
-              context.read<HeadphonesCalibrationModuleBloc>().add(
-                HeadphonesCalibrationModuleUpdateSearchQuery(value),
-              );
-            },
-            leading: Icon(Icons.search, color: Colors.grey.shade600),
-            trailing:
-                state.searchQuery.isNotEmpty
-                    ? [
-                      IconButton(
-                        icon: Icon(Icons.clear, color: Colors.grey.shade600),
-                        onPressed: () {
-                          context.read<HeadphonesCalibrationModuleBloc>().add(
-                            HeadphonesCalibrationModuleUpdateSearchQuery(''),
-                          );
-                        },
-                      ),
-                    ]
-                    : null,
-          ),
-        );
-      },
     );
   }
 }
@@ -299,8 +235,8 @@ class _HeadphonesTable extends StatelessWidget {
       builder: (context, state) {
         final headphones =
             isReference
-                ? state.filteredReferenceHeadphones
-                : state.filteredTargetHeadphones;
+                ? state.availableReferenceHeadphones
+                : state.availableTargetHeadphones;
 
         final selectedHeadphone =
             isReference
@@ -465,25 +401,32 @@ class _HeadphoneListTile extends StatelessWidget {
             color: isSelected ? Colors.blue.shade700 : null,
           ),
         ),
-        subtitle: Text(
-          headphone.manufacturer,
-          style: TextStyle(
-            color: isSelected ? Colors.blue.shade600 : Colors.grey.shade600,
-            fontSize: 14,
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                if (isReference) {
+                  context.read<HeadphonesCalibrationModuleBloc>().add(
+                    HeadphonesCalibrationModuleRemoveReferenceHeadphone(
+                      headphone,
+                    ),
+                  );
+                } else {
+                  context.read<HeadphonesCalibrationModuleBloc>().add(
+                    HeadphonesCalibrationModuleRemoveTargetHeadphone(headphone),
+                  );
+                }
+              },
+            ),
+            Icon(
+              isSelected ? Icons.check_circle : Icons.arrow_forward_ios,
+              color: isSelected ? Colors.blue.shade600 : Colors.grey.shade400,
+              size: 20,
+            ),
+          ],
         ),
-        trailing:
-            isSelected
-                ? Icon(
-                  Icons.check_circle,
-                  color: Colors.blue.shade600,
-                  size: 20,
-                )
-                : Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: Colors.grey.shade400,
-                ),
         onTap: () {
           if (isReference) {
             context.read<HeadphonesCalibrationModuleBloc>().add(
@@ -541,6 +484,186 @@ class _ActionButtons extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _SearchBar extends StatefulWidget {
+  const _SearchBar();
+
+  @override
+  State<_SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<_SearchBar> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<
+      HeadphonesCalibrationModuleBloc,
+      HeadphonesCalibrationModuleState
+    >(
+      listenWhen:
+          (previous, current) => previous.searchQuery != current.searchQuery,
+      listener: (context, state) {
+        if (_controller.text != state.searchQuery) {
+          _controller.text = state.searchQuery;
+          _controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: _controller.text.length),
+          );
+        }
+      },
+      child: BlocBuilder<
+        HeadphonesCalibrationModuleBloc,
+        HeadphonesCalibrationModuleState
+      >(
+        builder: (context, state) {
+          final resultsVisible =
+              state.searchQuery.isNotEmpty &&
+              state.searchResult != null &&
+              state.searchResult!.isNotEmpty;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Search Bar
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: SearchBar(
+                  controller: _controller,
+                  hintText:
+                      'Search for headphones to add (e.g., Sony, Sennheiser, AKG)...',
+                  onChanged: (value) {
+                    context.read<HeadphonesCalibrationModuleBloc>().add(
+                      HeadphonesCalibrationModuleUpdateSearchQuery(value),
+                    );
+                  },
+                  leading:
+                      state.isSearching
+                          ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.grey.shade600,
+                              ),
+                            ),
+                          )
+                          : Icon(Icons.search, color: Colors.grey.shade600),
+                  trailing:
+                      state.searchQuery.isNotEmpty
+                          ? [
+                            IconButton(
+                              icon: Icon(
+                                Icons.clear,
+                                color: Colors.grey.shade600,
+                              ),
+                              onPressed: () {
+                                context
+                                    .read<HeadphonesCalibrationModuleBloc>()
+                                    .add(
+                                      HeadphonesCalibrationModuleUpdateSearchQuery(
+                                        '',
+                                      ),
+                                    );
+                              },
+                            ),
+                          ]
+                          : null,
+                ),
+              ),
+
+              // Results
+              if (resultsVisible) ...[
+                const SizedBox(height: 4),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      ListTile(
+                        leading: const Icon(
+                          Icons.headphones,
+                          color: Colors.green,
+                        ),
+                        title: Text(
+                          state.searchResult!,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        trailing: ElevatedButton(
+                          onPressed: () {
+                            final headphone = HeadphonesModel.create(
+                              name: state.searchResult!,
+                              grade: 80,
+                              hz125Correction: 0,
+                              hz250Correction: 0,
+                              hz500Correction: 0,
+                              hz1000Correction: 0,
+                              hz2000Correction: 0,
+                              hz4000Correction: 0,
+                              hz8000Correction: 0,
+                            );
+                            context.read<HeadphonesCalibrationModuleBloc>().add(
+                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                headphone,
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            textStyle: const TextStyle(fontSize: 12),
+                          ),
+                          child: const Text("Add"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          );
+        },
+      ),
     );
   }
 }
