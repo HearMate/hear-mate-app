@@ -107,7 +107,7 @@ class _WelcomeSection extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'todo',
+              'This module is for people who want to improve our app and make hearing tests more accessible! Search up all of your headphones, if even one of them is a reference one, they can be used to calibrate all others! First you do the hearing test with reference pair. Then the second with one you wish to calibrate. After that we are done - you just helped others!',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Colors.grey.shade700,
                 height: 1.4,
@@ -459,7 +459,25 @@ class _ActionButtons extends StatelessWidget {
 
         return Column(
           children: [
-            if (!canStartCalibration) Text("You can't calibrate bla bla"),
+            if (!canStartCalibration)
+              Text(
+                "In order to calibrate new headphones you need to have both reference & target headphones.",
+              )
+            else
+              Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: "Great, we can start! Remember to connect ",
+                    ),
+                    TextSpan(
+                      text: state.selectedReferenceHeadphone?.name ?? "",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const TextSpan(text: "!"),
+                  ],
+                ),
+              ),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
