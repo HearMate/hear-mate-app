@@ -13,6 +13,8 @@ class HearingTestModuleNavigateToHistory extends HearingTestModuleBlocEvent {}
 
 class HearingTestModuleNavigateToTest extends HearingTestModuleBlocEvent {}
 
+class HearingTestModuleNavigateToExit extends HearingTestModuleBlocEvent {}
+
 class HearingTestModuleTestCompleted extends HearingTestModuleBlocEvent {
   final HearingTestResult results;
 
@@ -20,3 +22,10 @@ class HearingTestModuleTestCompleted extends HearingTestModuleBlocEvent {
 }
 
 class HearingTestModuleSaveTestResults extends HearingTestModuleBlocEvent {}
+
+class HearingTestModuleSelectHeadphoneFromSearch
+    extends HearingTestModuleBlocEvent {
+  final HeadphonesModel headphone;
+
+  HearingTestModuleSelectHeadphoneFromSearch(this.headphone);
+}
