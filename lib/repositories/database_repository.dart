@@ -73,7 +73,7 @@ class DatabaseRepository {
         // 3. Insert new headphone with grade 0
         final newHeadphone = HeadphonesModel.create(
           name: name.toUpperCase(),
-          grade: 0,
+          grade: 1,
           hz125Correction: hz125Correction,
           hz250Correction: hz250Correction,
           hz500Correction: hz500Correction,
@@ -104,7 +104,7 @@ class DatabaseRepository {
           await _client
               .from('headphones')
               .select()
-              .eq('name', name)
+              .ilike('name', name)
               .limit(1)
               .maybeSingle();
 

@@ -10,7 +10,7 @@ import 'package:hear_mate_app/featuers/hearing_test/utils/hearing_test_utils.dar
 import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_search_result.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/repositories/headphones_searcher_repository.dart';
+import 'package:hear_mate_app/repositories/headphones_searcher_repository.dart';
 import 'package:hear_mate_app/repositories/database_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,8 +38,8 @@ class HeadphonesCalibrationModuleBloc
   HeadphonesCalibrationModuleBloc({
     required this.l10n,
     required this.databaseRepository,
+    required this.headphonesSearcherRepository,
   }) : hearingTestBloc = HearingTestBloc(l10n: l10n),
-       headphonesSearcherRepository = HeadphonesSearcherRepository(),
        super(HeadphonesCalibrationModuleState()) {
     on<HeadphonesCalibrationModuleStart>(_onStart);
     on<HeadphonesCalibrationModuleNavigateToWelcome>(_onNavigateToWelcome);
@@ -122,9 +122,13 @@ class HeadphonesCalibrationModuleBloc
     // Wait for all async results
     final allHeadphonesWithNulls = await Future.wait(futures);
 
-    // Remove nulls
-    final allHeadphones =
-        allHeadphonesWithNulls.whereType<HeadphonesModel>().toList();
+    // Replace nulls with HeadphonesModel using cached name
+    final List<HeadphonesModel> allHeadphones = [];
+    for (int i = 0; i < allNames.length; i++) {
+      final headphone =
+          allHeadphonesWithNulls[i] ?? HeadphonesModel.empty(name: allNames[i]);
+      allHeadphones.add(headphone);
+    }
 
     // Split based on grade threshold
     final availableReferences =
