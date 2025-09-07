@@ -39,6 +39,14 @@ class HeadphonesCalibrationModuleView extends StatelessWidget {
       buildWhen:
           (previous, current) => previous.currentStep != current.currentStep,
       builder: (context, state) {
+        if (state.currentStep == HeadphonesCalibrationStep.exit) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(
+              context,
+            ).popUntil((route) => route.settings.name == '/');
+          });
+          return const SizedBox.shrink();
+        }
         return Navigator(
           pages: [
             const MaterialPage(

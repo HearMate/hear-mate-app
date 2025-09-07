@@ -6,6 +6,7 @@ enum HeadphonesCalibrationStep {
   informationBetweenTests,
   secondTest,
   end,
+  exit,
 }
 
 class HeadphonesCalibrationModuleState {
@@ -15,6 +16,9 @@ class HeadphonesCalibrationModuleState {
   final List<HeadphonesModel> availableReferenceHeadphones;
   final List<HeadphonesModel> availableTargetHeadphones;
   final String searchQuery;
+  final bool isSearching;
+  final String? searchError;
+  final String? searchResult;
   final HearingTestResult? firstTestResults;
   final HearingTestResult? secondTestResults;
 
@@ -24,8 +28,10 @@ class HeadphonesCalibrationModuleState {
     this.selectedTargetHeadphone,
     this.availableReferenceHeadphones = const [],
     this.availableTargetHeadphones = const [],
-
+    this.isSearching = false,
+    this.searchError,
     this.searchQuery = '',
+    this.searchResult,
     this.firstTestResults,
     this.secondTestResults,
   });
@@ -37,6 +43,9 @@ class HeadphonesCalibrationModuleState {
     List<HeadphonesModel>? availableReferenceHeadphones,
     List<HeadphonesModel>? availableTargetHeadphones,
     String? searchQuery,
+    bool? isSearching,
+    String? searchError,
+    String? searchResult,
     HearingTestResult? firstTestResults,
     HearingTestResult? secondTestResults,
   }) {
@@ -51,38 +60,11 @@ class HeadphonesCalibrationModuleState {
       availableTargetHeadphones:
           availableTargetHeadphones ?? this.availableTargetHeadphones,
       searchQuery: searchQuery ?? this.searchQuery,
+      isSearching: isSearching ?? this.isSearching,
+      searchError: searchError ?? this.searchError,
+      searchResult: searchResult ?? this.searchResult,
       firstTestResults: firstTestResults ?? this.firstTestResults,
       secondTestResults: secondTestResults ?? this.secondTestResults,
     );
-  }
-
-  List<HeadphonesModel> get filteredReferenceHeadphones {
-    if (searchQuery.isEmpty) return availableReferenceHeadphones;
-    return availableReferenceHeadphones
-        .where(
-          (headphone) =>
-              headphone.name.toLowerCase().contains(
-                searchQuery.toLowerCase(),
-              ) ||
-              headphone.manufacturer.toLowerCase().contains(
-                searchQuery.toLowerCase(),
-              ),
-        )
-        .toList();
-  }
-
-  List<HeadphonesModel> get filteredTargetHeadphones {
-    if (searchQuery.isEmpty) return availableTargetHeadphones;
-    return availableTargetHeadphones
-        .where(
-          (headphone) =>
-              headphone.name.toLowerCase().contains(
-                searchQuery.toLowerCase(),
-              ) ||
-              headphone.manufacturer.toLowerCase().contains(
-                searchQuery.toLowerCase(),
-              ),
-        )
-        .toList();
   }
 }

@@ -20,14 +20,14 @@ import 'package:hear_mate_app/utils/logger.dart';
 import 'package:hm_locale/hm_locale.dart';
 import 'package:hm_theme/hm_theme.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // This is necessary.
-  dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: ".env");
 
   if (kDebugMode) {
-    dotenv.load(fileName: '.env.local-supabase', isOptional: true);
+    await dotenv.load(fileName: '.env.local-supabase', isOptional: true);
   }
 
   runApp(const MyApp());
@@ -38,8 +38,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final apiUrl = dotenv.env['EBAY_CLIENT_ID'];
-
     return RepositoryProvider<DatabaseRepository>(
       create: (context) => DatabaseRepository(),
       child: MultiBlocProvider(
