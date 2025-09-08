@@ -5,8 +5,6 @@ sealed class HearingTestModuleBlocEvent {}
 
 class HearingTestModuleStart extends HearingTestModuleBlocEvent {}
 
-class HearingTestModuleShowDisclaimer extends HearingTestModuleBlocEvent {}
-
 class HearingTestModuleNavigateToWelcome extends HearingTestModuleBlocEvent {}
 
 class HearingTestModuleNavigateToHistory extends HearingTestModuleBlocEvent {}

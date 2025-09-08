@@ -34,7 +34,6 @@ class HearingTestModuleBloc
     on<HearingTestModuleNavigateToWelcome>(_onNavigateToWelcome);
     on<HearingTestModuleNavigateToHistory>(_onNavigateToHistory);
     on<HearingTestModuleNavigateToTest>(_onNavigateToTest);
-    on<HearingTestModuleShowDisclaimer>(_onShowDisclaimer);
     on<HearingTestModuleTestCompleted>(_onTestCompleted);
     on<HearingTestModuleSaveTestResults>(_onSaveTestResult);
     on<HearingTestModuleSelectHeadphoneFromSearch>(_onSelectHeadphones);
@@ -49,10 +48,6 @@ class HearingTestModuleBloc
     HearingTestModuleStart event,
     Emitter<HearingTestModuleState> emit,
   ) {
-    if (!state.disclaimerShown) {
-      add(HearingTestModuleShowDisclaimer());
-      return;
-    }
     emit(HearingTestModuleState());
     emit(state.copyWith(currentStep: HearingTestPageStep.welcome));
 
@@ -73,13 +68,6 @@ class HearingTestModuleBloc
     Emitter<HearingTestModuleState> emit,
   ) {
     emit(state.copyWith(currentStep: HearingTestPageStep.history));
-  }
-
-  void _onShowDisclaimer(
-    HearingTestModuleShowDisclaimer event,
-    Emitter<HearingTestModuleState> emit,
-  ) {
-    emit(state.copyWith(disclaimerShown: true));
   }
 
   void _onNavigateToTest(
