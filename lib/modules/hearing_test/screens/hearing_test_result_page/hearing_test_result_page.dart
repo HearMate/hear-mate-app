@@ -32,10 +32,6 @@ class HearingTestResultPage extends StatelessWidget {
 
     return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
-        if (state.isLoadingAudiogramClassificationResults) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         return Scaffold(
           appBar: HMAppBar(
             title: loc.hearing_test_result_page_title,
@@ -94,23 +90,8 @@ class HearingTestResultPage extends StatelessWidget {
     ),
     padding: const EdgeInsets.fromLTRB(10, 20, 20, 10),
     child: AudiogramChart(
-      leftEarData: state.results?.leftEarResults ?? [],
-      rightEarData: state.results?.rightEarResults ?? [],
-      leftEarMaskedData:
-          (state.results?.leftEarResultsMasked == null ||
-                  state.results!.leftEarResultsMasked.every(
-                    (elem) => elem == null,
-                  ))
-              ? null
-              : state.results!.leftEarResultsMasked,
-
-      rightEarMaskedData:
-          (state.results?.rightEarResultsMasked == null ||
-                  state.results!.rightEarResultsMasked.every(
-                    (elem) => elem == null,
-                  ))
-              ? null
-              : state.results!.rightEarResultsMasked,
+      hearingLossLeft: state.results?.hearingLossLeft ?? [],
+      hearingLossRight: state.results?.hearingLossRight ?? [],
     ),
   );
 
@@ -130,9 +111,11 @@ class HearingTestResultPage extends StatelessWidget {
             children: [
               Text(
                 context
-                    .read<HearingTestModuleBloc>()
-                    .state
-                    .audiogramClassification,
+                        .read<HearingTestModuleBloc>()
+                        .state
+                        .results
+                        ?.audiogramDescription ??
+                    "",
               ),
               const SizedBox(height: 15),
               Text(

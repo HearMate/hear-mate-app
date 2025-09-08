@@ -12,9 +12,15 @@ class HearingTestState {
   final HearingTestEar currentEar;
 
   final Map<double, int> dbLevelToHearCountMap;
-  final HearingTestResult results;
   final List<bool>? frequenciesThatRequireMasking;
   final int? maskedHeardCount;
+
+  final List<double?> leftEarResults;
+  final List<double?> rightEarResults;
+  final List<double?> leftEarResultsMasked;
+  final List<double?> rightEarResultsMasked;
+
+  final HearingTestResult results;
 
   HearingTestState({
     this.isButtonPressed = false,
@@ -28,8 +34,13 @@ class HearingTestState {
     this.dbLevelToHearCountMap = const {},
     this.frequenciesThatRequireMasking,
     this.maskedHeardCount = 0,
+    this.leftEarResults = const [],
+    this.rightEarResults = const [],
+    this.leftEarResultsMasked = const [],
+    this.rightEarResultsMasked = const [],
     HearingTestResult? results,
   }) : results = results ?? HearingTestResult.empty;
+
   HearingTestState copyWith({
     bool? isButtonPressed,
     bool? wasSoundHeard,
@@ -40,9 +51,13 @@ class HearingTestState {
     double? currentDBLevel,
     double? currentMaskingDBLevel,
     Map<double, int>? dbLevelToHearCountMap,
-    HearingTestResult? results,
     List<bool>? frequenciesThatRequireMasking,
     int? maskedHeardCount,
+    List<double?>? leftEarResults,
+    List<double?>? rightEarResults,
+    List<double?>? leftEarResultsMasked,
+    List<double?>? rightEarResultsMasked,
+    HearingTestResult? results,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
@@ -61,6 +76,11 @@ class HearingTestState {
       frequenciesThatRequireMasking:
           frequenciesThatRequireMasking ?? this.frequenciesThatRequireMasking,
       maskedHeardCount: maskedHeardCount ?? this.maskedHeardCount,
+      leftEarResults: leftEarResults ?? this.leftEarResults,
+      rightEarResults: rightEarResults ?? this.rightEarResults,
+      leftEarResultsMasked: leftEarResultsMasked ?? this.leftEarResultsMasked,
+      rightEarResultsMasked:
+          rightEarResultsMasked ?? this.rightEarResultsMasked,
     );
   }
 }

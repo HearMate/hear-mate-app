@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_result.dart';
-import 'package:hear_mate_app/featuers/hearing_test/utils/hearing_test_utils.dart'
-    as HearingTestUtils;
 import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_search_result.dart';
@@ -190,13 +188,13 @@ class HeadphonesCalibrationModuleBloc
         currentStep: HeadphonesCalibrationStep.informationBetweenTests,
       ),
     );
+    hearingTestBloc.add(HearingTestInitialize());
   }
 
   void _onNavigateToSecondTest(
     HeadphonesCalibrationModuleNavigateToSecondTest event,
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) {
-    hearingTestBloc.add(HearingTestInitialize());
     hearingTestBloc.add(HearingTestStartTest());
     emit(state.copyWith(currentStep: HeadphonesCalibrationStep.secondTest));
   }
@@ -358,28 +356,18 @@ class HeadphonesCalibrationModuleBloc
 
       Map<int, double> avgCorrections = {};
 
-      final firstLeftMapped = _mapHearingTestResults(
-        firstResults.leftEarResults,
-      );
-      final firstRightMapped = _mapHearingTestResults(
-        firstResults.rightEarResults,
-      );
-      final secondLeftMapped = _mapHearingTestResults(
-        secondResults.leftEarResults,
-      );
-      final secondRightMapped = _mapHearingTestResults(
-        secondResults.rightEarResults,
-      );
-
       // Calculate average corrections for each frequency
       for (int i = 0; i < targetFrequencies.length; i++) {
         final freq = targetFrequencies[i];
 
-        // Calculate average difference between second and first test
-        avgCorrections[freq] =
-            ((secondLeftMapped[i] - firstLeftMapped[i]) +
-                (secondRightMapped[i] - firstRightMapped[i])) /
-            2.0;
+        final leftDiff =
+            (secondResults.hearingLossLeft[i]?.value ?? 0) -
+            (firstResults.hearingLossLeft[i]?.value ?? 0);
+        final rightDiff =
+            (secondResults.hearingLossRight[i]?.value ?? 0) -
+            (firstResults.hearingLossRight[i]?.value ?? 0);
+
+        avgCorrections[freq] = (leftDiff + rightDiff) / 2.0;
       }
 
       await databaseRepository.insertOrUpdateHeadphone(
@@ -392,22 +380,6 @@ class HeadphonesCalibrationModuleBloc
         hz4000Correction: avgCorrections[4000] ?? 0,
         hz8000Correction: avgCorrections[8000] ?? 0,
       );
-
-      hearingTestBloc.add(HearingTestInitialize());
     }
   }
-}
-
-// Maybe put it on the level of hearing test?
-List<double> _mapHearingTestResults(List<double?> values) {
-  var mapping = HearingTestUtils.getFrequencyMapping(values);
-  List<double> mapped = List.filled(mapping.length, 0.0);
-  for (final entry in mapping) {
-    final sourceIndex = entry.key;
-    final targetIndex = entry.value;
-    if (sourceIndex >= 0 && sourceIndex < values.length) {
-      mapped[targetIndex] = values[sourceIndex] ?? 0.0;
-    }
-  }
-  return mapped;
 }
