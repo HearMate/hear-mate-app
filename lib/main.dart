@@ -32,13 +32,16 @@ void main() async {
 
   // This is optional
   if (kDebugMode) {
-    await dotenv.load(fileName: '.env.local-supabase', isOptional: true);
+    await dotenv.load(
+      fileName: 'assets/env/.env.local-supabase',
+      isOptional: true,
+    );
 
     env = Map<String, String>.from(dotenv.env);
   }
 
   // This is necessary.
-  await dotenv.load(fileName: ".env", mergeWith: env);
+  await dotenv.load(fileName: "assets/env/.env", mergeWith: env);
 
   runApp(const MyApp());
 }
