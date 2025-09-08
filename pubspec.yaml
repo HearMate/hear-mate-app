@@ -60,6 +60,7 @@ dependencies:
   equatable: ^2.0.7
   flutter_dotenv: ^6.0.0
   supabase_flutter: ^2.10.0
+  pair: ^0.1.2
 
 dev_dependencies:
   flutter_test:

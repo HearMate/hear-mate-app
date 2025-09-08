@@ -32,10 +32,6 @@ class HearingTestResultPage extends StatelessWidget {
 
     return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
-        if (state.isLoadingAudiogramClassificationResults) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         return Scaffold(
           appBar: HMAppBar(
             title: loc.hearing_test_result_page_title,

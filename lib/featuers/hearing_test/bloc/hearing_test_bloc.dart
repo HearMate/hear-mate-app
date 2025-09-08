@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:hear_mate_app/featuers/hearing_test/models/hearing_loss.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
 import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_ear.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
 import 'package:meta/meta.dart';
+import 'package:pair/pair.dart';
 import 'dart:math';
 import 'dart:convert';
 import 'dart:io';
@@ -11,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:hear_mate_app/featuers/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_result.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+import 'package:hear_mate_app/featuers/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -20,11 +23,15 @@ part 'hearing_test_state.dart';
 
 class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
+  final HearingTestAudiogramClassificationRepository
+  _audiogramClassificationRepository;
   final AppLocalizations _l10n;
 
   HearingTestBloc({required AppLocalizations l10n})
     : _l10n = l10n,
       _soundsPlayerRepository = HearingTestSoundsPlayerRepository(),
+      _audiogramClassificationRepository =
+          HearingTestAudiogramClassificationRepository(),
       super(HearingTestState()) {
     on<HearingTestInitialize>(_onInitialize);
     on<HearingTestStartTest>(_onStartTest);
@@ -33,7 +40,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestPlayingSound>(_onPlayingSound);
     on<HearingTestNextFrequency>(_onNextFrequency);
     on<HearingTestChangeEar>(_onChangeEar);
-    on<HearingTestCompleted>(_onCompleted);
+    on<HearingTestCompleted>(_onTestCompleted);
     on<HearingTestStartMaskedTest>(_onStartMaskedTest);
     on<HearingTestPlayingMaskedSound>(_onPlayingMaskedSound);
     on<HearingTestNextMaskedFrequency>(_onNextMaskedFrequency);
@@ -46,8 +53,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   void _onInitialize(
     HearingTestInitialize event,
     Emitter<HearingTestState> emit,
-  ) {
-    _soundsPlayerRepository.stopSound();
+  ) async {
+    await _soundsPlayerRepository.stopSound();
     emit(HearingTestState());
   }
 
@@ -150,10 +157,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     Emitter<HearingTestState> emit,
   ) async {
     if (state.currentEar == HearingTestEar.LEFT) {
-      state.results.leftEarResults[state.currentFrequencyIndex] =
+      state.leftEarResults[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     } else {
-      state.results.rightEarResults[state.currentFrequencyIndex] =
+      state.rightEarResults[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     }
 
@@ -161,7 +168,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         HearingTestConstants.TEST_FREQUENCIES.length - 1) {
       // check if we have already covered two ears
       if (state.currentEar == HearingTestEar.RIGHT) {
-        if (state.results.getFrequenciesThatRequireMasking().contains(true)) {
+        if (_getFrequenciesThatRequireMasking(state).contains(true)) {
           emit(state.copyWith(isMaskingStarted: true));
           return add(HearingTestStartMaskedTest());
         }
@@ -200,15 +207,83 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     add(HearingTestPlayingSound());
   }
 
-  void _onCompleted(
+  void _onTestCompleted(
     HearingTestCompleted event,
     Emitter<HearingTestState> emit,
   ) async {
     await _soundsPlayerRepository.stopSound(stopNoise: true);
 
-    HMLogger.print("${state.results}");
+    List<HearingLoss?> buildHearingLoss(
+      List<double?> earResults,
+      List<double?> earResultsMasked,
+    ) {
+      // Merge masked values with original results and mark if masked
+      List<HearingLoss?> merged = List<HearingLoss?>.generate(
+        earResults.length,
+        (i) {
+          final frequency = HearingTestConstants.TEST_FREQUENCIES[i];
+          if (earResultsMasked[i] != null) {
+            return HearingLoss(
+              frequency: frequency,
+              value: earResultsMasked[i]!,
+              isMasked: true,
+            ); // masked
+          } else if (earResults[i] != null) {
+            return HearingLoss(
+              frequency: frequency,
+              value: earResults[i]!,
+              isMasked: false,
+            ); // unmasked
+          } else {
+            return null; // missing value
+          }
+        },
+      );
 
-    emit(state.copyWith(isTestCompleted: true));
+      // Define the frequency mapping order
+      List<int> frequencyMapping =
+          [
+            7,
+            6,
+            5,
+            (merged.length > 4 && merged[4] != null) ? 4 : 0,
+            1,
+            2,
+            3,
+          ].where((i) => i < merged.length).toList();
+
+      // Build the hearing loss array with exactly the mapping length
+      return frequencyMapping.map((i) => merged[i]).toList();
+    }
+
+    final hearingLossLeft = buildHearingLoss(
+      state.leftEarResults,
+      state.leftEarResultsMasked,
+    );
+
+    final hearingLossRight = buildHearingLoss(
+      state.rightEarResults,
+      state.rightEarResultsMasked,
+    );
+
+    final classification = await _audiogramClassificationRepository
+        .getAudiogramDescription(
+          l10n: _l10n,
+          leftEarResults: hearingLossLeft,
+          rightEarResults: hearingLossRight,
+        );
+
+    final result = HearingTestResult(
+      filePath: "",
+      dateLabel: DateTime.now().toIso8601String(),
+      hearingLossLeft: hearingLossLeft,
+      hearingLossRight: hearingLossRight,
+      audiogramDescription: classification,
+    );
+
+    HMLogger.print("Test completed: $result");
+
+    emit(state.copyWith(results: result, isTestCompleted: true));
   }
 
   void _onPlayingMaskedSound(
@@ -224,8 +299,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     }
 
     final ear =
-        state.results.leftEarResults[state.currentFrequencyIndex]! <
-                state.results.rightEarResults[state.currentFrequencyIndex]!
+        state.leftEarResults[state.currentFrequencyIndex]! <
+                state.rightEarResults[state.currentFrequencyIndex]!
             ? HearingTestEar.RIGHT
             : HearingTestEar.LEFT;
 
@@ -291,7 +366,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   ) async {
     await _soundsPlayerRepository.stopSound();
     List<bool> frequenciesThatRequireMasking =
-        state.results.getFrequenciesThatRequireMasking();
+        _getFrequenciesThatRequireMasking(state);
     int maskedIndex = frequenciesThatRequireMasking.indexWhere(
       (element) => element == true,
     );
@@ -301,13 +376,13 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         currentFrequencyIndex: maskedIndex,
         currentMaskingDBLevel:
             min(
-              state.results.leftEarResults[maskedIndex]!,
-              state.results.rightEarResults[maskedIndex]!,
+              state.leftEarResults[maskedIndex]!,
+              state.rightEarResults[maskedIndex]!,
             ) +
             15.0,
         currentDBLevel: max(
-          state.results.leftEarResults[maskedIndex]!,
-          state.results.rightEarResults[maskedIndex]!,
+          state.leftEarResults[maskedIndex]!,
+          state.rightEarResults[maskedIndex]!,
         ),
         maskedHeardCount: 0,
         wasSoundHeard: false,
@@ -322,16 +397,16 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   ) async {
     _soundsPlayerRepository.stopSound(stopNoise: true);
     final ear =
-        state.results.leftEarResults[state.currentFrequencyIndex]! >
-                state.results.rightEarResults[state.currentFrequencyIndex]!
+        state.leftEarResults[state.currentFrequencyIndex]! >
+                state.rightEarResults[state.currentFrequencyIndex]!
             ? HearingTestEar.LEFT
             : HearingTestEar.RIGHT;
 
     if (ear == HearingTestEar.LEFT) {
-      state.results.leftEarResultsMasked[state.currentFrequencyIndex] =
+      state.leftEarResultsMasked[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     } else {
-      state.results.rightEarResultsMasked[state.currentFrequencyIndex] =
+      state.rightEarResultsMasked[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     }
 
@@ -359,13 +434,13 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         currentFrequencyIndex: maskedIndex,
         currentMaskingDBLevel:
             min(
-              state.results.leftEarResults[maskedIndex]!,
-              state.results.rightEarResults[maskedIndex]!,
+              state.leftEarResults[maskedIndex]!,
+              state.rightEarResults[maskedIndex]!,
             ) +
             15.0,
         currentDBLevel: max(
-          state.results.leftEarResults[maskedIndex]!,
-          state.results.rightEarResults[maskedIndex]!,
+          state.leftEarResults[maskedIndex]!,
+          state.rightEarResults[maskedIndex]!,
         ),
         maskedHeardCount: 0,
       ),
@@ -374,141 +449,164 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     add(HearingTestPlayingMaskedSound());
   }
 
-  // DEBUG
-
+  // DEBUG: partial left ear
   void _onDebugEarLeftPartial(
     HearingTestDebugEarLeftPartial event,
     Emitter<HearingTestState> emit,
-  ) {
-    if (!kDebugMode) {
-      return;
-    }
+  ) async {
+    if (!kDebugMode) return;
 
-    final leftEarResults = List<double?>.filled(
+    await _soundsPlayerRepository.stopSound(stopNoise: true);
+
+    // Set left ear results; only first 3 frequencies have values
+    final leftResults = List<double?>.filled(
       HearingTestConstants.TEST_FREQUENCIES.length,
       null,
     );
-    leftEarResults[0] = 30.0;
-    leftEarResults[1] = 35.0;
-    leftEarResults[2] = 40.0;
+    for (int i = 0; i < 3; i++) {
+      leftResults[i] = 30.0 + i * 5;
+    }
+
+    // Masked left results empty
+    final leftResultsMasked = List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    );
+
+    // Right ear remains empty
+    final rightResults = List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    );
+    final rightResultsMasked = List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    );
 
     emit(
       state.copyWith(
-        results: HearingTestResult(
-          filePath: "",
-          dateLabel: "DEBUG_LEFT_PARTIAL",
-          leftEarResults: leftEarResults,
-          rightEarResults: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-          leftEarResultsMasked: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-          rightEarResultsMasked: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-        ),
-        isTestCompleted: true,
+        leftEarResults: leftResults,
+        leftEarResultsMasked: leftResultsMasked,
+        rightEarResults: rightResults,
+        rightEarResultsMasked: rightResultsMasked,
       ),
     );
 
-    return add(HearingTestCompleted());
+    add(HearingTestCompleted());
   }
 
+  // DEBUG: partial right ear
   void _onDebugEarRightPartial(
     HearingTestDebugEarRightPartial event,
     Emitter<HearingTestState> emit,
-  ) {
-    if (!kDebugMode) {
-      return;
-    }
+  ) async {
+    if (!kDebugMode) return;
 
-    final leftEarResults = List<double?>.generate(
+    await _soundsPlayerRepository.stopSound(stopNoise: true);
+
+    // Left ear full values
+    final leftResults = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (index) => 30.0 + index * 5,
+      (i) => 30.0 + i * 5,
     );
-
-    final rightEarResults = List<double?>.filled(
+    final leftResultsMasked = List<double?>.filled(
       HearingTestConstants.TEST_FREQUENCIES.length,
       null,
     );
 
-    rightEarResults[0] = 45.0;
-    rightEarResults[1] = 50.0;
-    rightEarResults[2] = 55.0;
+    // Right ear: only first 3 frequencies
+    final rightResults = List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    );
+    for (int i = 0; i < 3; i++) {
+      rightResults[i] = 45.0 + i * 5;
+    }
+    final rightResultsMasked = List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
+    );
 
     emit(
       state.copyWith(
-        results: HearingTestResult(
-          filePath: "",
-          dateLabel: "DEBUG_RIGHT_PARTIAL",
-          leftEarResults: leftEarResults,
-          rightEarResults: rightEarResults,
-          leftEarResultsMasked: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-          rightEarResultsMasked: List<double?>.filled(
-            HearingTestConstants.TEST_FREQUENCIES.length,
-            null,
-          ),
-        ),
-        isTestCompleted: true,
+        leftEarResults: leftResults,
+        leftEarResultsMasked: leftResultsMasked,
+        rightEarResults: rightResults,
+        rightEarResultsMasked: rightResultsMasked,
       ),
     );
 
-    return add(HearingTestCompleted());
+    add(HearingTestCompleted());
   }
 
+  // DEBUG: full both ears
   void _onDebugBothEarsFull(
     HearingTestDebugBothEarsFull event,
     Emitter<HearingTestState> emit,
-  ) {
-    if (!kDebugMode) {
-      return;
-    }
+  ) async {
+    if (!kDebugMode) return;
 
-    final leftEarResults = List<double?>.generate(
+    await _soundsPlayerRepository.stopSound(stopNoise: true);
+
+    // Left ear full values
+    final leftResults = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => 0.0 + i * 5, // 30, 32, 34, ...
+      (i) => i * 5.0,
+    );
+    final leftResultsMasked = List<double?>.filled(
+      HearingTestConstants.TEST_FREQUENCIES.length,
+      null,
     );
 
-    final rightEarResults = List<double?>.generate(
+    // Right ear full values
+    final rightResults = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => 75.0 - i * 5, // 35, 38, 41, ...
+      (i) => 75.0 - i * 5,
     );
-
-    var leftEarMasked = List<double?>.generate(
+    final rightResultsMasked = List<double?>.filled(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => null,
+      null,
     );
-
-    var rightEarMasked = List<double?>.generate(
-      HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => null, //(rightEarResults[i] ?? 0) + 20,
-    );
-
-    //rightEarMasked[5] = null;
-    //rightEarMasked[3] = null;
 
     emit(
       state.copyWith(
-        results: HearingTestResult(
-          filePath: "",
-          dateLabel: "DEBUG_FULL",
-          leftEarResults: leftEarResults,
-          rightEarResults: rightEarResults,
-          leftEarResultsMasked: leftEarMasked,
-          rightEarResultsMasked: rightEarMasked,
-        ),
-        // isMaskingStarted: true,
-        wasSoundHeard: false,
-        isTestCompleted: true,
+        leftEarResults: leftResults,
+        leftEarResultsMasked: leftResultsMasked,
+        rightEarResults: rightResults,
+        rightEarResultsMasked: rightResultsMasked,
       ),
     );
-    return add(HearingTestCompleted());
+
+    add(HearingTestCompleted());
+  }
+
+  List<bool> _getFrequenciesThatRequireMasking(HearingTestState state) {
+    final frequencies = HearingTestConstants.TEST_FREQUENCIES;
+    final thresholds = HearingTestConstants.MASKING_THRESHOLDS;
+
+    List<bool> result = List<bool>.generate(frequencies.length, (i) {
+      final left =
+          (i < state.results.hearingLossLeft.length)
+              ? state.results.hearingLossLeft[i]
+              : null;
+      final right =
+          (i < state.results.hearingLossRight.length)
+              ? state.results.hearingLossRight[i]
+              : null;
+
+      if (left != null && right != null) {
+        return (left.value - right.value).abs() >= thresholds[i];
+      }
+      return false;
+    });
+
+    if (result.length > 4) {
+      result[0] = result[4];
+    }
+    if (result.length > 3) {
+      result[3] = false;
+    }
+
+    return result;
   }
 }

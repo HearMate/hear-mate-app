@@ -85,21 +85,6 @@ class HearingTestModuleBloc
     emit(
       state.copyWith(
         results: event.results,
-        isLoadingAudiogramClassificationResults: true,
-      ),
-    );
-
-    final classification = await _audiogramClassificationRepository
-        .getAudiogramDescription(
-          l10n: l10n,
-          leftEarResults: event.results.leftEarResults,
-          rightEarResults: event.results.rightEarResults,
-        );
-
-    emit(
-      state.copyWith(
-        isLoadingAudiogramClassificationResults: false,
-        audiogramClassification: classification,
         currentStep: HearingTestPageStep.result,
       ),
     );

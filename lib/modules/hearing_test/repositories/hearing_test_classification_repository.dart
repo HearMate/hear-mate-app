@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+import 'package:hear_mate_app/featuers/hearing_test/models/hearing_loss.dart';
+import 'package:hear_mate_app/featuers/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/modules/hearing_test/utils/hearing_loss_classification.dart';
-import 'package:hear_mate_app/featuers/hearing_test/utils/hearing_test_utils.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,20 +19,6 @@ class HearingTestAudiogramClassificationRepository {
 
   void dispose() {
     _httpClient.close();
-  }
-
-  List<double> _mapEarResults(List<double?> values) {
-    var mapping = getFrequencyMapping(values);
-
-    List<double> mapped = List.filled(mapping.length, 0.0);
-    for (final entry in mapping) {
-      final sourceIndex = entry.key;
-      final targetIndex = entry.value;
-      if (sourceIndex >= 0 && sourceIndex < values.length) {
-        mapped[targetIndex] = values[sourceIndex] ?? 0.0;
-      }
-    }
-    return mapped;
   }
 
   Future<bool> _postEarResultsBool({
@@ -171,12 +157,13 @@ class HearingTestAudiogramClassificationRepository {
 
   Future<String> getAudiogramDescription({
     required AppLocalizations l10n,
-    required List<double?> leftEarResults,
-    required List<double?> rightEarResults,
+    required List<HearingLoss?> leftEarResults,
+    required List<HearingLoss?> rightEarResults,
   }) async {
-    if (leftEarResults.length != HearingTestConstants.TEST_FREQUENCIES.length ||
+    if (leftEarResults.length !=
+            HearingTestConstants.OUTPUT_FREQUENCIES.length ||
         rightEarResults.length !=
-            HearingTestConstants.TEST_FREQUENCIES.length) {
+            HearingTestConstants.OUTPUT_FREQUENCIES.length) {
       return l10n.hearing_test_incomplete;
     }
 
@@ -184,8 +171,8 @@ class HearingTestAudiogramClassificationRepository {
       return l10n.hearing_test_incomplete;
     }
 
-    final left = _mapEarResults(leftEarResults.cast<double>());
-    final right = _mapEarResults(rightEarResults.cast<double>());
+    final List<double> left = leftEarResults.map((e) => e!.value).toList();
+    final List<double> right = rightEarResults.map((e) => e!.value).toList();
 
     final leftClass = _getHearingLossClassification(earResults: left);
     final rightClass = _getHearingLossClassification(earResults: right);

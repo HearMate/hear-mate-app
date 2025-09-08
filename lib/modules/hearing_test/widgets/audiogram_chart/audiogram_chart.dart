@@ -3,17 +3,15 @@ import 'dart:ui';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/featuers/hearing_test/utils/hearing_test_utils.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+import 'package:hear_mate_app/featuers/hearing_test/models/hearing_loss.dart';
+import 'package:hear_mate_app/featuers/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_point.dart';
 import 'package:hear_mate_app/utils/fl_dot_triangle_painter.dart';
 
 class AudiogramChart extends StatelessWidget {
-  final List<double?> leftEarData;
-  final List<double?> rightEarData;
-  final List<double?>? leftEarMaskedData;
-  final List<double?>? rightEarMaskedData;
+  final List<HearingLoss?> hearingLossLeft;
+  final List<HearingLoss?> hearingLossRight;
 
   final List<String> frequencyLabels = const [
     '125',
@@ -27,58 +25,36 @@ class AudiogramChart extends StatelessWidget {
 
   AudiogramChart({
     super.key,
-    required this.leftEarData,
-    required this.rightEarData,
-    this.leftEarMaskedData,
-    this.rightEarMaskedData,
+    required this.hearingLossLeft,
+    required this.hearingLossRight,
   });
 
-  final int maxYValue = 100;
+  final int maxYValue = HearingTestConstants.MAX_DB_LEVEL;
   final int minYValue = HearingTestConstants.MIN_DB_LEVEL;
 
-  List<AudiogramPoint> buildAudiogramPoints(
-    List<double?> values,
-    List<double?>? maskedValues,
-  ) {
-    if (values.length != frequencyLabels.length + 1) return [];
-
-    final mapping = getFrequencyMapping(values);
-    final List<AudiogramPoint> points = [];
-
-    for (final entry in mapping) {
-      final int index = entry.key;
-      final double? unmaskedValue = values[index];
-      final double? maskedValue =
-          maskedValues != null ? maskedValues[index] : null;
-
-      final bool isMasked = maskedValue != null;
-      final double? dbValue = isMasked ? maskedValue : unmaskedValue;
-
-      if (dbValue == null) {
-        continue;
-      }
-
-      points.add(
-        AudiogramPoint(
-          FlSpot(entry.value.toDouble(), maxYValue - (dbValue - minYValue)),
-          isMasked,
-        ),
-      );
-    }
-
-    return points;
+  List<AudiogramPoint> buildAudiogramPoints(List<HearingLoss?> values) {
+    return values.asMap().entries.where((e) => e.value != null).map((entry) {
+      final i = entry.key.toDouble(); // index 0..6
+      final value = entry.value!;
+      return AudiogramPoint(FlSpot(i, value.value), value.isMasked);
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final leftEarPoints = buildAudiogramPoints(leftEarData, leftEarMaskedData);
+    final leftEarPoints = buildAudiogramPoints(hearingLossLeft);
     final leftEarSpots = leftEarPoints.map((p) => p.spot).toList();
 
-    final rightEarPoints = buildAudiogramPoints(
-      rightEarData,
-      rightEarMaskedData,
-    );
+    final rightEarPoints = buildAudiogramPoints(hearingLossRight);
     final rightEarSpots = rightEarPoints.map((p) => p.spot).toList();
+
+    final bool isLeftMasking = hearingLossLeft.any(
+      (element) => element?.isMasked ?? false,
+    );
+
+    final bool isRightMasking = hearingLossRight.any(
+      (element) => element?.isMasked ?? false,
+    );
 
     return Column(
       children: [
@@ -302,7 +278,7 @@ class AudiogramChart extends StatelessWidget {
                 context,
               )!.hearing_test_audiogram_chart_right_ear,
             ),
-            if (leftEarMaskedData != null)
+            if (isLeftMasking)
               _legendItem(
                 FlDotSquarePainter(
                   color: Colors.transparent,
@@ -314,7 +290,7 @@ class AudiogramChart extends StatelessWidget {
                   context,
                 )!.hearing_test_audiogram_chart_left_ear_masked,
               ),
-            if (rightEarMaskedData != null)
+            if (isRightMasking)
               _legendItem(
                 FlDotTrianglePainter(
                   color: Colors.transparent,
@@ -328,7 +304,7 @@ class AudiogramChart extends StatelessWidget {
               ),
           ],
         ),
-        if (leftEarMaskedData != null || rightEarMaskedData != null)
+        if (isLeftMasking || isRightMasking)
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Text(
