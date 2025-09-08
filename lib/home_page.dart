@@ -41,18 +41,8 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              // Echo Parse button
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/echo_parse/welcome');
-                },
-                child: Text('Echo Parse'),
-              ),
-
-              const SizedBox(height: 10),
-
               // Headphones Calibration button
-              FilledButton(
+              OutlinedButton(
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
