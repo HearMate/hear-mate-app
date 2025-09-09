@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,21 +7,14 @@ import 'package:hear_mate_app/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_module_page/headphones_calibration_module_page.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_welcome_page/headphones_calibration_welcome_page.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_module_page/hearing_test_module_page.dart';
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
-import 'package:hear_mate_app/features/headphones_search/repositories/headphones_searcher_repository.dart';
 import 'package:hear_mate_app/shared/screens/about_page.dart';
 import 'package:hear_mate_app/shared/screens/menu_page.dart';
 import 'package:hear_mate_app/shared/screens/settings_page.dart';
 import 'package:hear_mate_app/modules/echo_parse/screens/echo_parse_welcome_page/echo_parse_welcome_page.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
-import 'package:hear_mate_app/shared/utils/logger.dart';
 import 'package:hm_locale/hm_locale.dart';
 import 'package:hm_theme/hm_theme.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

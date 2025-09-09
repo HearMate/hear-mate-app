@@ -147,7 +147,7 @@ class _SelectionStatusSection extends StatelessWidget {
       builder: (context, state) {
         return Card(
           elevation: 1,
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

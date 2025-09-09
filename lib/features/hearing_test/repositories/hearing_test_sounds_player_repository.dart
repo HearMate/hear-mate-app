@@ -3,7 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:hear_mate_app/features/hearing_test/utils/hearing_test_constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_ear.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
+import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
 import 'package:hear_mate_app/shared/utils/logger.dart';
 
 class HearingTestSoundsPlayerRepository {

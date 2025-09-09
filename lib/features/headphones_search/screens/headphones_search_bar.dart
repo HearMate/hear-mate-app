@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/features/headphones_search_bar/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
+import 'package:hear_mate_app/features/headphones_search/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HeadphonesSearchBarWidget extends StatelessWidget {

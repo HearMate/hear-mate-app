@@ -1,16 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
-import 'package:equatable/equatable.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_search_result.dart';
+import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/utils/headphones_calibration_constants.dart'
     as HeadphonesCalibrationConstants;
-import 'package:hear_mate_app/features/headphones_search_bar/repositories/headphones_searcher_repository.dart';
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
