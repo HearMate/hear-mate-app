@@ -75,7 +75,7 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                       l10n.headphones_calibration_congratulations_title,
                       style: textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: colorScheme.onBackground,
+                        color: colorScheme.onSurface,
                       ),
                       textAlign: TextAlign.center,
                     ),
