@@ -123,7 +123,14 @@ class HearingTestWelcomePage extends StatelessWidget {
 
   Widget _buildStatusMessage(HeadphonesModel? model, AppLocalizations l10n) {
     if (model == null) {
-      return Text(l10n.hearing_test_welcome_page_find_headphones);
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          softWrap: true,
+          l10n.hearing_test_welcome_page_find_headphones,
+          textAlign: TextAlign.center,
+        ),
+      );
     }
 
     final isCalibrated =
@@ -131,10 +138,11 @@ class HearingTestWelcomePage extends StatelessWidget {
         HeadphonesCalibrationConstants.HEADPHONES_GRADE_THRESHOLD;
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 30),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 640),
         child: Text.rich(
+          textAlign: TextAlign.center,
           TextSpan(
             children: [
               TextSpan(
