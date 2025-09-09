@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/models/ebay_item.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_search_result.dart';
-import 'package:hear_mate_app/utils/logger.dart';
+import 'package:hear_mate_app/features/headphones_search/models/ebay_item.dart';
+import 'package:hear_mate_app/features/headphones_search/models/headphones_search_result.dart';
+import 'package:hear_mate_app/shared/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -309,11 +309,6 @@ class HeadphonesSearcherRepository {
     final modelName = modelTokens.join(' ').toUpperCase();
     HMLogger.print("Model name: $modelName");
     return modelName;
-  }
-
-  /// Normalize a token by removing non-alphanumeric characters (except hyphens)
-  String _normalizeToken(String token) {
-    return token.replaceAll(RegExp(r'[^a-zA-Z0-9-]'), '').toLowerCase();
   }
 
   Future<void> clearTokenCache() async {

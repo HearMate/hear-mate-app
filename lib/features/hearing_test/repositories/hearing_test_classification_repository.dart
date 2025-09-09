@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/featuers/hearing_test/models/hearing_loss.dart';
-import 'package:hear_mate_app/featuers/hearing_test/utils/constants.dart'
+import 'package:hear_mate_app/features/hearing_test/models/hearing_loss.dart';
+import 'package:hear_mate_app/features/hearing_test/utils/hearing_test_constants.dart'
     as HearingTestConstants;
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_loss_classification.dart';
-import 'package:hear_mate_app/utils/logger.dart';
+import 'package:hear_mate_app/modules/hearing_test/models/hearing_loss_classification.dart';
+import 'package:hear_mate_app/shared/utils/logger.dart';
 import 'package:http/http.dart' as http;
 
 class HearingTestAudiogramClassificationRepository {

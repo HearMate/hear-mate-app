@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
+import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
-import 'package:hear_mate_app/repositories/database_repository.dart';
+import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/featuers/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
-import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_result.dart';
+import 'package:hear_mate_app/features/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 

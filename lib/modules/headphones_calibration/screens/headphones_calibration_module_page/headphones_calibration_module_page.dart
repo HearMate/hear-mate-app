@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/featuers/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
+import 'package:hear_mate_app/features/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_calibration_module/headphones_calibration_module_bloc.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_end_page/headphones_calibration_end_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_information_between_tests_page/headphones_calibration_information_between_tests_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_welcome_page/headphones_calibration_welcome_page.dart';
-import 'package:hear_mate_app/repositories/database_repository.dart';
-import 'package:hear_mate_app/repositories/headphones_searcher_repository.dart';
+import 'package:hear_mate_app/shared/repositories/database_repository.dart';
+import 'package:hear_mate_app/features/headphones_search_bar/repositories/headphones_searcher_repository.dart';
 
 class HeadphonesCalibrationModulePage extends StatelessWidget {
   const HeadphonesCalibrationModulePage({super.key});
@@ -16,15 +16,12 @@ class HeadphonesCalibrationModulePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final db = RepositoryProvider.of<DatabaseRepository>(context);
-    final headphonesSearcher =
-        RepositoryProvider.of<HeadphonesSearcherRepository>(context);
 
     return BlocProvider<HeadphonesCalibrationModuleBloc>(
       create:
           (context) => HeadphonesCalibrationModuleBloc(
             l10n: l10n,
             databaseRepository: db,
-            headphonesSearcherRepository: headphonesSearcher,
           ),
       child: const HeadphonesCalibrationModuleView(),
     );

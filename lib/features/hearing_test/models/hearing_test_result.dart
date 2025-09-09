@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:hear_mate_app/featuers/hearing_test/utils/constants.dart'
+import 'package:hear_mate_app/features/hearing_test/utils/hearing_test_constants.dart'
     as HearingTestConstants;
-import 'package:hear_mate_app/featuers/hearing_test/models/hearing_loss.dart';
+import 'package:hear_mate_app/features/hearing_test/models/hearing_loss.dart';
 
 class HearingTestResult {
   final String filePath;

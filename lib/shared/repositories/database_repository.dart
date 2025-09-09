@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
-import 'package:hear_mate_app/utils/logger.dart';
+import 'package:hear_mate_app/shared/utils/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
