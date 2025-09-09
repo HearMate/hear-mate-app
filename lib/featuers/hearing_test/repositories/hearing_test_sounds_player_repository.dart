@@ -3,9 +3,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:hear_mate_app/featuers/hearing_test/utils/constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_ear.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
 import 'package:hear_mate_app/utils/logger.dart';
 
 class HearingTestSoundsPlayerRepository {
+  HeadphonesModel headphonesModel = HeadphonesModel.empty();
+
   HearingTestSoundsPlayerRepository() {
     initialize();
   }
@@ -185,15 +188,16 @@ class HearingTestSoundsPlayerRepository {
 
   double _headphoneCorrection(double dBSPL, int frequency) {
     // headphone characteristic flattening
-    const Map<int, double> correctionReference = {
-      125: -10.0,
-      250: -8.0,
-      500: -6.5,
-      1000: -7.5,
-      2000: -7.5,
-      4000: -10.0,
-      8000: -4.5,
+    Map<int, double> correctionReference = {
+      125: headphonesModel.hz125Correction,
+      250: headphonesModel.hz250Correction,
+      500: headphonesModel.hz500Correction,
+      1000: headphonesModel.hz1000Correction,
+      2000: headphonesModel.hz2000Correction,
+      4000: headphonesModel.hz4000Correction,
+      8000: headphonesModel.hz8000Correction,
     };
+
     double correction = correctionReference[frequency]!;
     double adjusted = dBSPL + correction;
     return adjusted;

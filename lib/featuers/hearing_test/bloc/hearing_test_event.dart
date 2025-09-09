@@ -5,7 +5,11 @@ sealed class HearingTestEvent {}
 
 class HearingTestInitialize extends HearingTestEvent {}
 
-class HearingTestStartTest extends HearingTestEvent {}
+class HearingTestStartTest extends HearingTestEvent {
+  final HeadphonesModel headphonesModel;
+
+  HearingTestStartTest({required this.headphonesModel});
+}
 
 class HearingTestButtonPressed extends HearingTestEvent {}
 

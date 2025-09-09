@@ -3,8 +3,6 @@ part of 'hearing_test_module_bloc.dart';
 @immutable
 sealed class HearingTestModuleBlocEvent {}
 
-class HearingTestModuleStart extends HearingTestModuleBlocEvent {}
-
 class HearingTestModuleNavigateToWelcome extends HearingTestModuleBlocEvent {}
 
 class HearingTestModuleNavigateToHistory extends HearingTestModuleBlocEvent {}

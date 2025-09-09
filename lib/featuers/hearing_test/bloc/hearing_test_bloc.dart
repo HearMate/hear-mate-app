@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:hear_mate_app/featuers/hearing_test/models/hearing_loss.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/models/headphones_model.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
 import 'package:hear_mate_app/featuers/hearing_test/models/hearing_test_ear.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
@@ -25,11 +26,10 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
   final HearingTestSoundsPlayerRepository _soundsPlayerRepository;
   final HearingTestAudiogramClassificationRepository
   _audiogramClassificationRepository;
-  final AppLocalizations _l10n;
+  final AppLocalizations l10n;
 
-  HearingTestBloc({required AppLocalizations l10n})
-    : _l10n = l10n,
-      _soundsPlayerRepository = HearingTestSoundsPlayerRepository(),
+  HearingTestBloc({required this.l10n})
+    : _soundsPlayerRepository = HearingTestSoundsPlayerRepository(),
       _audiogramClassificationRepository =
           HearingTestAudiogramClassificationRepository(),
       super(HearingTestState()) {
@@ -63,6 +63,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     Emitter<HearingTestState> emit,
   ) async {
     emit(HearingTestState());
+
+    _soundsPlayerRepository.headphonesModel = event.headphonesModel;
 
     add(HearingTestPlayingSound());
   }
@@ -268,7 +270,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     final classification = await _audiogramClassificationRepository
         .getAudiogramDescription(
-          l10n: _l10n,
+          l10n: l10n,
           leftEarResults: hearingLossLeft,
           rightEarResults: hearingLossRight,
         );
