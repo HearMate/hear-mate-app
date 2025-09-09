@@ -14,7 +14,7 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: HMAppBar(
-        title: 'Headphones Calibration', // todo: add proper localization
+        title: l10n.headphones_calibration_information_between_tests_page_title,
         route: ModalRoute.of(context)?.settings.name ?? "",
         hideBackArrow: true,
       ),
@@ -38,7 +38,7 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        'Step 2 of 3',
+                        l10n.headphones_calibration_step_progress("2", "3"),
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
@@ -66,7 +66,7 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
 
                     // Title
                     Text(
-                      'Great!',
+                      l10n.headphones_calibration_great_title,
                       style: Theme.of(
                         context,
                       ).textTheme.headlineMedium?.copyWith(
@@ -81,9 +81,9 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                     Text.rich(
                       TextSpan(
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text:
-                                "You have completed the first test with reference headphones. Now switch to ",
+                                l10n.headphones_calibration_between_tests_description_prefix,
                           ),
                           TextSpan(
                             text:
@@ -95,7 +95,10 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                                 "",
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          const TextSpan(text: " and continue!"),
+                          TextSpan(
+                            text:
+                                l10n.headphones_calibration_between_tests_description_suffix,
+                          ),
                         ],
                       ),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -123,9 +126,12 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  child: Text(
+                    l10n.headphones_calibration_continue_button,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

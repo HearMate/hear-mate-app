@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HeadphonesSearchBarWidget extends StatelessWidget {
   final String selectedButtonLabel;
@@ -14,6 +15,8 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<HeadphonesSearchBarCubit, HeadphonesSearchBarState>(
       builder: (context, state) {
         final cubit = context.read<HeadphonesSearchBarCubit>();
@@ -26,7 +29,7 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
             // Search Input
             SearchBar(
               controller: cubit.controller,
-              hintText: 'Search for headphones...',
+              hintText: l10n.common_headphones_search_bar_search_hint,
               onChanged: cubit.updateQuery,
               leading:
                   state.isSearching
@@ -67,8 +70,8 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
                     onPressed: () {
                       onSelectedButtonPress(state.result);
                       cubit.clearQuery();
-                    }, // <-- pass result
-                    child: Text(selectedButtonLabel),
+                    },
+                    child: Text(l10n.common_headphones_search_bar_add_button),
                   ),
                 ),
               ),

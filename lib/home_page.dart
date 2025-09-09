@@ -49,7 +49,11 @@ class HomePage extends StatelessWidget {
                     '/headphones_calibration/welcome',
                   );
                 },
-                child: Text('Headphones Calibration'),
+                child: Text(
+                  AppLocalizations.of(
+                    context,
+                  )!.homepage_button_headphonesCalibration,
+                ),
               ),
 
               const SizedBox(height: 40),

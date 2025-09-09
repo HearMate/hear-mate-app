@@ -8,28 +8,17 @@ import 'package:hear_mate_app/repositories/headphones_searcher_repository.dart';
 import 'package:hear_mate_app/widgets/headphones_search_bar.dart';
 import 'package:hear_mate_app/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HeadphonesCalibrationWelcomePage extends StatelessWidget {
   const HeadphonesCalibrationWelcomePage({super.key});
 
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: HMAppBar(
-        title: l10n.hearing_test_welcome_page_title, // todo: change
+        title: l10n.headphones_calibration_page_title,
         route: ModalRoute.of(context)?.settings.name ?? "",
         customBackRoute: "/",
       ),
@@ -51,7 +40,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                       ),
                     ),
                 child: HeadphonesSearchBarWidget(
-                  selectedButtonLabel: "Add",
+                  selectedButtonLabel: l10n.headphones_calibration_add_button,
                   onSelectedButtonPress: (searchedResult) {
                     context.read<HeadphonesCalibrationModuleBloc>().add(
                       HeadphonesCalibrationModuleAddHeadphoneFromSearch(
@@ -64,20 +53,22 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
               const SizedBox(height: 24),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
-                child: const Column(
+                child: Column(
                   children: [
                     Expanded(
                       child: _HeadphonesTable(
-                        title: 'Reference Headphones',
+                        title:
+                            l10n.headphones_calibration_reference_headphones_title,
                         isReference: true,
                         icon: Icons.star_border,
                         color: Colors.blue,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Expanded(
                       child: _HeadphonesTable(
-                        title: 'Headphones to Calibrate',
+                        title:
+                            l10n.headphones_calibration_target_headphones_title,
                         isReference: false,
                         icon: Icons.tune,
                         color: Colors.orange,
@@ -101,6 +92,8 @@ class _WelcomeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Card(
       elevation: 2,
       child: Padding(
@@ -118,7 +111,7 @@ class _WelcomeSection extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Welcome to Headphones Calibration',
+                    l10n.headphones_calibration_welcome_title,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -128,7 +121,7 @@ class _WelcomeSection extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'This module is for people who want to improve our app and make hearing tests more accessible! Search up all of your headphones, if even one of them is a reference one, they can be used to calibrate all others! First you do the hearing test with reference pair. Then the second with one you wish to calibrate. After that we are done - you just helped others!',
+              l10n.headphones_calibration_welcome_description,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Colors.grey.shade700,
                 height: 1.4,
@@ -146,6 +139,8 @@ class _SelectionStatusSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<
       HeadphonesCalibrationModuleBloc,
       HeadphonesCalibrationModuleState
@@ -168,7 +163,7 @@ class _SelectionStatusSection extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Your Selection',
+                      l10n.headphones_calibration_your_selection_title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -177,14 +172,14 @@ class _SelectionStatusSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 _SelectionItem(
-                  label: 'Reference Headphone:',
+                  label: l10n.headphones_calibration_reference_headphone_label,
                   selection: state.selectedReferenceHeadphone,
                   icon: Icons.star,
                   color: Colors.blue,
                 ),
                 const SizedBox(height: 8),
                 _SelectionItem(
-                  label: 'Target Headphone:',
+                  label: l10n.headphones_calibration_target_headphone_label,
                   selection: state.selectedTargetHeadphone,
                   icon: Icons.tune,
                   color: Colors.orange,
@@ -213,6 +208,8 @@ class _SelectionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       children: [
         Icon(icon, size: 16, color: color),
@@ -221,7 +218,9 @@ class _SelectionItem extends StatelessWidget {
         const SizedBox(width: 8),
         Expanded(
           child: Text(
-            selection != null ? '${selection!.name}' : 'Not selected',
+            selection != null
+                ? '${selection!.name}'
+                : l10n.headphones_calibration_not_selected,
             style: TextStyle(
               color: selection != null ? Colors.black87 : Colors.grey.shade600,
               fontStyle:
@@ -249,6 +248,8 @@ class _HeadphonesTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<
       HeadphonesCalibrationModuleBloc,
       HeadphonesCalibrationModuleState
@@ -351,6 +352,8 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -363,14 +366,14 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             isReference
-                ? 'No reference headphones available'
-                : 'No target headphones available',
+                ? l10n.headphones_calibration_no_reference_headphones
+                : l10n.headphones_calibration_no_target_headphones,
             style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 4),
           Text(
-            'Try adjusting your search terms',
+            l10n.headphones_calibration_empty_state_hint,
             style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
           ),
         ],
@@ -426,7 +429,7 @@ class _HeadphoneListTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
+              icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
                 if (isReference) {
                   context.read<HeadphonesCalibrationModuleBloc>().add(
@@ -469,6 +472,8 @@ class _ActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<
       HeadphonesCalibrationModuleBloc,
       HeadphonesCalibrationModuleState
@@ -481,21 +486,17 @@ class _ActionButtons extends StatelessWidget {
         return Column(
           children: [
             if (!canStartCalibration)
-              Text(
-                "In order to calibrate new headphones you need to have both reference & target headphones.",
-              )
+              Text(l10n.headphones_calibration_missing_selection)
             else
               Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(
-                      text: "Great, we can start! Remember to connect ",
-                    ),
+                    TextSpan(text: l10n.headphones_calibration_ready_prefix),
                     TextSpan(
                       text: state.selectedReferenceHeadphone?.name ?? "",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    const TextSpan(text: "!"),
+                    TextSpan(text: l10n.headphones_calibration_ready_suffix),
                   ],
                 ),
               ),
@@ -512,7 +513,7 @@ class _ActionButtons extends StatelessWidget {
                         }
                         : null,
                 icon: const Icon(Icons.play_arrow),
-                label: const Text('Start Calibration'),
+                label: Text(l10n.headphones_calibration_start_button),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   disabledBackgroundColor: Colors.grey.shade300,

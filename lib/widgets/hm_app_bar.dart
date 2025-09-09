@@ -75,7 +75,7 @@ class HMAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? const SizedBox.shrink()
             : IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/menu');
+                Navigator.of(context, rootNavigator: true).pushNamed("/menu");
               },
               icon: Icon(Icons.menu, color: theme.appBarTheme.foregroundColor),
             ),

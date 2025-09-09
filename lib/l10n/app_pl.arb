@@ -14,6 +14,7 @@
 
     "homepage_button_helper": "Wybierz moduł aby kontynuować:",
     "homepage_button_audioTest": "Test słuchu",
+    "homepage_button_headphonesCalibration": "Kalibracja słuchawek",
     "homepage_button_echoParse": "Echo Parse",
     "homepage_button_moreModules": "Więcej modułów wkrótce...",
 
@@ -141,4 +142,46 @@
     "save_button_section_save_results_to_desc": "Zapisz wyniki aby móc je później przeglądać",
     "hearing_test_welcome_page_test": "Test",
     "hearing_test_welcome_page_saved": "Zapisane"
+
+     
+    "comment_headphones_calibration1": "=================================================",
+    "comment_headphones_calibration2": "============= Kalibracja słuchawek ==============",
+    "comment_headphones_calibration3": "=================================================",
+
+    "headphones_calibration_page_title": "Kalibracja słuchawek",
+    "headphones_calibration_add_button": "Dodaj",
+    "headphones_calibration_reference_headphones_title": "Słuchawki referencyjne",
+    "headphones_calibration_target_headphones_title": "Słuchawki do kalibracji",
+    "headphones_calibration_welcome_title": "Witamy w module kalibracji słuchawek",
+    "headphones_calibration_welcome_description": "Ten moduł jest dla osób, które chcą ulepszyć naszą aplikację i uczynić testy słuchu bardziej dostępnymi! Wyszukaj wszystkie swoje słuchawki – jeśli chociaż jedne są referencyjne, mogą posłużyć do kalibracji wszystkich pozostałych! Najpierw wykonujesz test słuchu na słuchawkach referencyjnych. Następnie na tych, które chcesz skalibrować. I to wszystko – właśnie pomogłeś innym!",
+    "headphones_calibration_your_selection_title": "Twój wybór",
+    "headphones_calibration_reference_headphone_label": "Słuchawki referencyjne:",
+    "headphones_calibration_target_headphone_label": "Słuchawki docelowe:",
+    "headphones_calibration_not_selected": "Nie wybrano",
+    "headphones_calibration_no_reference_headphones": "Brak dostępnych słuchawek referencyjnych",
+    "headphones_calibration_no_target_headphones": "Brak dostępnych słuchawek docelowych",
+    "headphones_calibration_empty_state_hint": "Spróbuj zmienić kryteria wyszukiwania",
+    "headphones_calibration_missing_selection": "Aby skalibrować nowe słuchawki, musisz wybrać zarówno referencyjne, jak i docelowe.",
+    "headphones_calibration_ready_prefix": "Świetnie, możemy zaczynać! Pamiętaj, aby podłączyć ",
+    "headphones_calibration_ready_suffix": "!",
+    "headphones_calibration_start_button": "Rozpocznij kalibrację",
+
+    "headphones_calibration_information_between_tests_page_title": "Kalibracja słuchawek",
+    "headphones_calibration_step_progress": "Krok {current} z {total}",
+    "headphones_calibration_great_title": "Świetnie!",
+    "headphones_calibration_between_tests_description_prefix": "Ukończyłeś pierwszy test na słuchawkach referencyjnych. Teraz przełącz się na ",
+    "headphones_calibration_between_tests_description_suffix": " i kontynuuj!",
+    "headphones_calibration_continue_button": "Kontynuuj",
+
+    "headphones_calibration_end_page_title": "Kalibracja zakończona",
+    "headphones_calibration_congratulations_title": "Gratulacje!",
+    "headphones_calibration_complete_label": "Kalibracja zakończona",
+    "headphones_calibration_thank_you_message": "Dziękujemy za współpracę! Właśnie uczyniłeś naszą aplikację bardziej dostępną!",
+    "headphones_calibration_go_home_button": "Przejdź do strony głównej",
+
+    "comment_common_headphones_search_bar1": "=================================================",
+    "comment_common_headphones_search_bar2": "======= Wspólna wyszukiwarka słuchawek ==========",
+    "comment_common_headphones_search_bar3": "=================================================",
+    "common_headphones_search_bar_search_hint": "Wyszukaj słuchawki...",
+    "common_headphones_search_bar_add_button": "Dodaj"
 }
