@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:lottie/lottie.dart';
@@ -21,7 +21,10 @@ class AboutPage extends StatelessWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width > 500 ? 600 : double.infinity,
+              maxWidth:
+                  MediaQuery.of(context).size.width > 500
+                      ? 600
+                      : double.infinity,
             ),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
@@ -50,7 +53,8 @@ class AboutPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 40.0),
                     child: Lottie.asset(
                       "assets/lotties/echoparse_welcome.json",
-                      height: MediaQuery.of(context).size.width > 500 ? 150 : 100,
+                      height:
+                          MediaQuery.of(context).size.width > 500 ? 150 : 100,
                     ),
                   ),
                   Text(
@@ -111,20 +115,23 @@ class AboutPage extends StatelessWidget {
                   const SizedBox(height: 48),
                   Center(
                     child: BlocBuilder<HMThemeBloc, HMThemeState>(
-                      builder:(context, themeState) {
+                      builder: (context, themeState) {
                         return themeState.isDarkMode
                             ? Image.asset(
                               'assets/images/pg_logo_darkmode.png',
                               height: 150,
                             )
-                            : Image.asset('assets/images/pg_logo.png', height: 150);
+                            : Image.asset(
+                              'assets/images/pg_logo.png',
+                              height: 150,
+                            );
                       },
                     ),
                   ),
                   const SizedBox(height: 32),
                   Center(
                     child: BlocBuilder<HMThemeBloc, HMThemeState>(
-                      builder:(context, themeState) {
+                      builder: (context, themeState) {
                         return themeState.isDarkMode
                             ? Image.asset(
                               'assets/images/ifips_logo_darkmode.png',

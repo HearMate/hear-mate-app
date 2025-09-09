@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
+import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/alert_dialogs.dart';
 
 // TODO: Talk if we want this kind of approach.

@@ -3,19 +3,19 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/repositories/headphones_searcher_repository.dart';
+import 'package:hear_mate_app/features/headphones_search_bar/repositories/headphones_searcher_repository.dart';
 
 part 'headphones_search_bar_state.dart';
 
 class HeadphonesSearchBarCubit extends Cubit<HeadphonesSearchBarState> {
-  final HeadphonesSearcherRepository _repository;
+  final HeadphonesSearcherRepository repository =
+      HeadphonesSearcherRepository();
   final TextEditingController controller = TextEditingController();
 
   Timer? _debounce;
   static const Duration _debounceDuration = Duration(milliseconds: 500);
 
-  HeadphonesSearchBarCubit(this._repository)
-    : super(const HeadphonesSearchBarState()) {
+  HeadphonesSearchBarCubit() : super(const HeadphonesSearchBarState()) {
     controller.addListener(() {
       final query = controller.text;
       if (query != state.query) {
@@ -45,7 +45,7 @@ class HeadphonesSearchBarCubit extends Cubit<HeadphonesSearchBarState> {
     }
 
     try {
-      final headphones = await _repository.searchHeadphones(keyword: query);
+      final headphones = await repository.searchHeadphones(keyword: query);
 
       emit(
         state.copyWith(result: headphones.extractedModel, isSearching: false),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/featuers/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
+import 'package:hear_mate_app/features/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/repositories/database_repository.dart';
+import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 
 class HearingTestModulePage extends StatelessWidget {
   const HearingTestModulePage({super.key});
