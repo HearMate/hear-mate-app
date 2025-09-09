@@ -176,7 +176,12 @@ class HeadphonesCalibrationModuleBloc
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) {
     emit(state.copyWith(currentStep: HeadphonesCalibrationStep.firstTest));
-    hearingTestBloc.add(HearingTestStartTest());
+    hearingTestBloc.add(
+      HearingTestStartTest(
+        headphonesModel:
+            state.selectedReferenceHeadphone ?? HeadphonesModel.empty(),
+      ),
+    );
   }
 
   void _onNavigateToInformationBetweenTests(
@@ -195,7 +200,12 @@ class HeadphonesCalibrationModuleBloc
     HeadphonesCalibrationModuleNavigateToSecondTest event,
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) {
-    hearingTestBloc.add(HearingTestStartTest());
+    hearingTestBloc.add(
+      HearingTestStartTest(
+        headphonesModel:
+            state.selectedTargetHeadphone ?? HeadphonesModel.empty(),
+      ),
+    );
     emit(state.copyWith(currentStep: HeadphonesCalibrationStep.secondTest));
   }
 

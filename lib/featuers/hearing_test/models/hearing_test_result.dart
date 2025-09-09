@@ -109,6 +109,9 @@ class HearingTestResult {
   );
 
   bool hasMissingValues() {
-    return hearingLossLeft.contains(null) || hearingLossRight.contains(null);
+    return hearingLossLeft.contains(null) ||
+        hearingLossRight.contains(null) ||
+        hearingLossLeft.isEmpty ||
+        hearingLossRight.isEmpty;
   }
 }

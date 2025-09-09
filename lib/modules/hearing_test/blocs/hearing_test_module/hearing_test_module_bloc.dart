@@ -21,37 +21,23 @@ class HearingTestModuleBloc
     extends Bloc<HearingTestModuleBlocEvent, HearingTestModuleState> {
   final HearingTestBloc hearingTestBloc;
   final AppLocalizations l10n;
-  final HearingTestAudiogramClassificationRepository
-  _audiogramClassificationRepository;
   final DatabaseRepository databaseRepository;
 
   HearingTestModuleBloc({required this.l10n, required this.databaseRepository})
     : hearingTestBloc = HearingTestBloc(l10n: l10n),
-      _audiogramClassificationRepository =
-          HearingTestAudiogramClassificationRepository(),
       super(HearingTestModuleState()) {
-    on<HearingTestModuleStart>(_onStartModule);
     on<HearingTestModuleNavigateToWelcome>(_onNavigateToWelcome);
     on<HearingTestModuleNavigateToHistory>(_onNavigateToHistory);
     on<HearingTestModuleNavigateToTest>(_onNavigateToTest);
     on<HearingTestModuleTestCompleted>(_onTestCompleted);
     on<HearingTestModuleSaveTestResults>(_onSaveTestResult);
     on<HearingTestModuleSelectHeadphoneFromSearch>(_onSelectHeadphones);
+
     hearingTestBloc.stream.listen((hearingTestState) {
       if (hearingTestState.isTestCompleted) {
         add(HearingTestModuleTestCompleted(results: hearingTestState.results));
       }
     });
-  }
-
-  void _onStartModule(
-    HearingTestModuleStart event,
-    Emitter<HearingTestModuleState> emit,
-  ) {
-    emit(HearingTestModuleState());
-    emit(state.copyWith(currentStep: HearingTestPageStep.welcome));
-
-    hearingTestBloc.add(HearingTestStartTest());
   }
 
   void _onNavigateToWelcome(
@@ -74,7 +60,11 @@ class HearingTestModuleBloc
     HearingTestModuleNavigateToTest event,
     Emitter<HearingTestModuleState> emit,
   ) {
-    hearingTestBloc.add(HearingTestStartTest());
+    hearingTestBloc.add(
+      HearingTestStartTest(
+        headphonesModel: state.headphonesModel ?? HeadphonesModel.empty(),
+      ),
+    );
     emit(state.copyWith(currentStep: HearingTestPageStep.test));
   }
 
