@@ -54,6 +54,13 @@
     "comment_hearing_test2": "============ Hearing Test ===========",
     "comment_hearing_test3": "=====================================",
 
+    "hearing_test_welcome_page_select_button_label": "Auswählen",
+    "hearing_test_welcome_page_find_headphones": "Bitte suchen Sie Ihre Kopfhörer, bevor Sie den Test starten",
+    "hearing_test_welcome_page_not_calibrated_part1": "Leider können wir die Qualität dieses Tests nicht garantieren – Ihre Kopfhörer ",
+    "hearing_test_welcome_page_not_calibrated_part2": " sind noch nicht richtig kalibriert!",
+    "hearing_test_welcome_page_calibrated_part1": "Ihre Kopfhörer ",
+    "hearing_test_welcome_page_calibrated_part2": " sind richtig kalibriert! Sie können loslegen!",
+
     "hearing_test_test_page_title": "Hörtest",
     "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",
     "hearing_test_test_page_release": "Lass den Knopf jetzt los.",
