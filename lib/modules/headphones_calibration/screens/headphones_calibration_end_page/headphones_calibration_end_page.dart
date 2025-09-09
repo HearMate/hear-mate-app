@@ -10,6 +10,8 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: HMAppBar(
@@ -26,14 +28,15 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Icon container with success highlight
                     Container(
                       width: 140,
                       height: 140,
                       decoration: BoxDecoration(
-                        color: Colors.green.shade50,
+                        color: colorScheme.primary.withOpacity(0.1),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.green.shade200,
+                          color: colorScheme.primary.withOpacity(0.3),
                           width: 3,
                         ),
                       ),
@@ -43,7 +46,7 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                           Icon(
                             Icons.headphones,
                             size: 50,
-                            color: Colors.green.shade600,
+                            color: colorScheme.primary,
                           ),
                           Positioned(
                             bottom: 35,
@@ -52,12 +55,12 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                               width: 35,
                               height: 35,
                               decoration: BoxDecoration(
-                                color: Colors.green.shade600,
+                                color: colorScheme.primary,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.check,
-                                color: Colors.white,
+                                color: colorScheme.onPrimary,
                                 size: 20,
                               ),
                             ),
@@ -67,32 +70,33 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
 
+                    // Congratulations title
                     Text(
                       l10n.headphones_calibration_congratulations_title,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineMedium?.copyWith(
+                      style: textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: colorScheme.onBackground,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
 
+                    // Complete label
                     Text(
                       l10n.headphones_calibration_complete_label,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.green.shade700,
+                      style: textTheme.titleLarge?.copyWith(
+                        color: colorScheme.primary,
                         fontWeight: FontWeight.w600,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 24),
 
+                    // Thank you message
                     Text(
                       l10n.headphones_calibration_thank_you_message,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey.shade700,
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                         height: 1.5,
                       ),
                       textAlign: TextAlign.center,
@@ -101,7 +105,7 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                 ),
               ),
 
-              // Action buttons
+              // Action button
               Column(
                 children: [
                   SizedBox(
@@ -116,9 +120,9 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                       label: Text(l10n.headphones_calibration_go_home_button),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        textStyle: const TextStyle(
-                          fontSize: 16,
+                        textStyle: textTheme.labelLarge?.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: colorScheme.onPrimary,
                         ),
                       ),
                     ),

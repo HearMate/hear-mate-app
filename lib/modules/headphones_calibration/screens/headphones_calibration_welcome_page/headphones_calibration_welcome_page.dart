@@ -61,7 +61,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                             l10n.headphones_calibration_reference_headphones_title,
                         isReference: true,
                         icon: Icons.star_border,
-                        color: Colors.blue,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -71,7 +71,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                             l10n.headphones_calibration_target_headphones_title,
                         isReference: false,
                         icon: Icons.tune,
-                        color: Colors.orange,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ],
@@ -96,6 +96,7 @@ class _WelcomeSection extends StatelessWidget {
 
     return Card(
       elevation: 2,
+      color: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -106,7 +107,7 @@ class _WelcomeSection extends StatelessWidget {
                 Icon(
                   Icons.headphones,
                   size: 32,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -123,7 +124,7 @@ class _WelcomeSection extends StatelessWidget {
             Text(
               l10n.headphones_calibration_welcome_description,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.grey.shade700,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 height: 1.4,
               ),
             ),
@@ -148,7 +149,7 @@ class _SelectionStatusSection extends StatelessWidget {
       builder: (context, state) {
         return Card(
           elevation: 1,
-          color: Colors.grey.shade50,
+          color: Theme.of(context).colorScheme.surfaceVariant,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -158,7 +159,7 @@ class _SelectionStatusSection extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.check_circle_outline,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 20,
                     ),
                     const SizedBox(width: 8),
@@ -175,14 +176,14 @@ class _SelectionStatusSection extends StatelessWidget {
                   label: l10n.headphones_calibration_reference_headphone_label,
                   selection: state.selectedReferenceHeadphone,
                   icon: Icons.star,
-                  color: Colors.blue,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(height: 8),
                 _SelectionItem(
                   label: l10n.headphones_calibration_target_headphone_label,
                   selection: state.selectedTargetHeadphone,
                   icon: Icons.tune,
-                  color: Colors.orange,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ],
             ),
@@ -208,8 +209,6 @@ class _SelectionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Row(
       children: [
         Icon(icon, size: 16, color: color),
@@ -220,9 +219,14 @@ class _SelectionItem extends StatelessWidget {
           child: Text(
             selection != null
                 ? '${selection!.name}'
-                : l10n.headphones_calibration_not_selected,
+                : AppLocalizations.of(
+                  context,
+                )!.headphones_calibration_not_selected,
             style: TextStyle(
-              color: selection != null ? Colors.black87 : Colors.grey.shade600,
+              color:
+                  selection != null
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
               fontStyle:
                   selection != null ? FontStyle.normal : FontStyle.italic,
             ),
@@ -248,8 +252,6 @@ class _HeadphonesTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return BlocBuilder<
       HeadphonesCalibrationModuleBloc,
       HeadphonesCalibrationModuleState
@@ -267,10 +269,11 @@ class _HeadphonesTable extends StatelessWidget {
 
         return Card(
           elevation: 2,
+          color: Theme.of(context).cardColor,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: color.withAlpha(50),
+              color: color.withOpacity(0.1),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -282,7 +285,7 @@ class _HeadphonesTable extends StatelessWidget {
                       Icon(
                         icon,
                         size: 24,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: 8),
                       Text(
@@ -300,13 +303,13 @@ class _HeadphonesTable extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(
                             context,
-                          ).primaryColor.withOpacity(0.1),
+                          ).colorScheme.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           '${headphones.length}',
                           style: TextStyle(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),
@@ -322,7 +325,10 @@ class _HeadphonesTable extends StatelessWidget {
                             : ListView.separated(
                               itemCount: headphones.length,
                               separatorBuilder:
-                                  (context, index) => const Divider(height: 1),
+                                  (context, index) => Divider(
+                                    height: 1,
+                                    color: Theme.of(context).dividerColor,
+                                  ),
                               itemBuilder: (context, index) {
                                 final headphone = headphones[index];
                                 final isSelected =
@@ -361,20 +367,26 @@ class _EmptyState extends StatelessWidget {
           Icon(
             Icons.headphones_outlined,
             size: 48,
-            color: Colors.grey.shade400,
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurfaceVariant.withOpacity(0.4),
           ),
           const SizedBox(height: 8),
           Text(
             isReference
                 ? l10n.headphones_calibration_no_reference_headphones
                 : l10n.headphones_calibration_no_target_headphones,
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 4),
           Text(
             l10n.headphones_calibration_empty_state_hint,
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),
@@ -397,11 +409,17 @@ class _HeadphoneListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: isSelected ? Colors.blue.shade50 : null,
+        color:
+            isSelected
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                : null,
         borderRadius: BorderRadius.circular(8),
         border:
             isSelected
-                ? Border.all(color: Colors.blue.shade300, width: 2)
+                ? Border.all(
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 2,
+                )
                 : null,
       ),
       child: ListTile(
@@ -409,27 +427,35 @@ class _HeadphoneListTile extends StatelessWidget {
         leading: CircleAvatar(
           backgroundColor:
               isSelected
-                  ? Theme.of(context).primaryColor
-                  : Theme.of(context).primaryColor.withOpacity(0.1),
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.primary.withOpacity(0.1),
           child: Icon(
             isSelected ? Icons.check : Icons.headphones,
-            color: isSelected ? Colors.white : Theme.of(context).primaryColor,
+            color:
+                isSelected
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.primary,
             size: 20,
           ),
         ),
         title: Text(
           headphone.name,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            fontSize: 16,
-            color: isSelected ? Colors.blue.shade700 : null,
+            color:
+                isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurface,
           ),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
+              icon: Icon(
+                Icons.delete,
+                color: Theme.of(context).colorScheme.error,
+              ),
               onPressed: () {
                 if (isReference) {
                   context.read<HeadphonesCalibrationModuleBloc>().add(
@@ -446,7 +472,10 @@ class _HeadphoneListTile extends StatelessWidget {
             ),
             Icon(
               isSelected ? Icons.check_circle : Icons.arrow_forward_ios,
-              color: isSelected ? Colors.blue.shade600 : Colors.grey.shade400,
+              color:
+                  isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
               size: 20,
             ),
           ],
@@ -486,7 +515,12 @@ class _ActionButtons extends StatelessWidget {
         return Column(
           children: [
             if (!canStartCalibration)
-              Text(l10n.headphones_calibration_missing_selection)
+              Text(
+                l10n.headphones_calibration_missing_selection,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              )
             else
               Text.rich(
                 TextSpan(
@@ -499,6 +533,7 @@ class _ActionButtons extends StatelessWidget {
                     TextSpan(text: l10n.headphones_calibration_ready_suffix),
                   ],
                 ),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             const SizedBox(height: 16),
             SizedBox(
@@ -516,8 +551,9 @@ class _ActionButtons extends StatelessWidget {
                 label: Text(l10n.headphones_calibration_start_button),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  disabledBackgroundColor: Colors.grey.shade300,
-                  disabledForegroundColor: Colors.grey.shade600,
+                  disabledBackgroundColor: Theme.of(context).disabledColor,
+                  disabledForegroundColor:
+                      Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
             ),
