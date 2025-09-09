@@ -66,6 +66,8 @@ class HeadphonesSearcherRepository {
     'hi-res',
     'new/sealed',
     'on',
+    "soft",
+    "cushions",
   };
 
   Future<HeadphonesSearchResult> searchHeadphones({

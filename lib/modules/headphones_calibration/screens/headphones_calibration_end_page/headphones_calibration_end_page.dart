@@ -13,7 +13,7 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
 
     return Scaffold(
       appBar: HMAppBar(
-        title: 'Calibration Complete', // todo: add proper localization
+        title: l10n.headphones_calibration_end_page_title,
         route: ModalRoute.of(context)?.settings.name ?? "",
         hideBackArrow: true,
       ),
@@ -68,7 +68,7 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                     const SizedBox(height: 40),
 
                     Text(
-                      'Congratulations!',
+                      l10n.headphones_calibration_congratulations_title,
                       style: Theme.of(
                         context,
                       ).textTheme.headlineMedium?.copyWith(
@@ -80,7 +80,7 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                     const SizedBox(height: 16),
 
                     Text(
-                      'Calibration Complete',
+                      l10n.headphones_calibration_complete_label,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Colors.green.shade700,
                         fontWeight: FontWeight.w600,
@@ -90,7 +90,7 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                     const SizedBox(height: 24),
 
                     Text(
-                      'Thank you for your cooperation! You have just made our app more accessible!',
+                      l10n.headphones_calibration_thank_you_message,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Colors.grey.shade700,
                         height: 1.5,
@@ -108,13 +108,12 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        // Navigate to home
                         context.read<HeadphonesCalibrationModuleBloc>().add(
                           HeadphonesCalibrationModuleNavigateToExit(),
                         );
                       },
                       icon: const Icon(Icons.home),
-                      label: const Text('Go Home'),
+                      label: Text(l10n.headphones_calibration_go_home_button),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         textStyle: const TextStyle(

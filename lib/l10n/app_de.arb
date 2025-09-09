@@ -14,6 +14,7 @@
     
     "homepage_button_helper": "Wähle ein Modul, um fortzufahren:",
     "homepage_button_audioTest": "Hörtest",
+    "homepage_button_headphonesCalibration": "Kopfhörer-Kalibrierung",
     "homepage_button_echoParse": "Echo Parse",
     "homepage_button_moreModules": "Weitere Module folgen bald...",
 
@@ -128,5 +129,47 @@
     "error_message": "Fehler: {error}",
     
     "hearing_test_history_page_result_info": "Links: {left}\nRechts: {right}",
-    "hearing_test_result_history_page": "Ergebnisverlauf"
+    "hearing_test_result_history_page": "Ergebnisverlauf",
+
+    
+    "comment_headphones_calibration1": "=================================================",
+    "comment_headphones_calibration2": "============= Kopfhörer-Kalibrierung ============",
+    "comment_headphones_calibration3": "=================================================",
+
+    "headphones_calibration_page_title": "Kopfhörer-Kalibrierung",
+    "headphones_calibration_add_button": "Hinzufügen",
+    "headphones_calibration_reference_headphones_title": "Referenzkopfhörer",
+    "headphones_calibration_target_headphones_title": "Zu kalibrierende Kopfhörer",
+    "headphones_calibration_welcome_title": "Willkommen zur Kopfhörer-Kalibrierung",
+    "headphones_calibration_welcome_description": "Dieses Modul ist für alle, die unsere App verbessern und Hörtests zugänglicher machen möchten! Suche alle deine Kopfhörer – wenn auch nur einer davon ein Referenzmodell ist, können alle anderen damit kalibriert werden! Zuerst machst du den Hörtest mit dem Referenzpaar. Danach mit dem zu kalibrierenden Paar. Und schon bist du fertig – und hast anderen geholfen!",
+    "headphones_calibration_your_selection_title": "Deine Auswahl",
+    "headphones_calibration_reference_headphone_label": "Referenzkopfhörer:",
+    "headphones_calibration_target_headphone_label": "Zielkopfhörer:",
+    "headphones_calibration_not_selected": "Nicht ausgewählt",
+    "headphones_calibration_no_reference_headphones": "Keine Referenzkopfhörer verfügbar",
+    "headphones_calibration_no_target_headphones": "Keine Zielkopfhörer verfügbar",
+    "headphones_calibration_empty_state_hint": "Versuche, deine Suchbegriffe anzupassen",
+    "headphones_calibration_missing_selection": "Um neue Kopfhörer zu kalibrieren, musst du sowohl Referenz- als auch Zielkopfhörer auswählen.",
+    "headphones_calibration_ready_prefix": "Super, wir können starten! Vergiss nicht, ",
+    "headphones_calibration_ready_suffix": " anzuschließen!",
+    "headphones_calibration_start_button": "Kalibrierung starten",
+
+    "headphones_calibration_information_between_tests_page_title": "Kopfhörer-Kalibrierung",
+    "headphones_calibration_step_progress": "Schritt {current} von {total}",
+    "headphones_calibration_great_title": "Super!",
+    "headphones_calibration_between_tests_description_prefix": "Du hast den ersten Test mit den Referenzkopfhörern abgeschlossen. Wechsle jetzt zu ",
+    "headphones_calibration_between_tests_description_suffix": " und mach weiter!",
+    "headphones_calibration_continue_button": "Weiter",
+
+    "headphones_calibration_end_page_title": "Kalibrierung abgeschlossen",
+    "headphones_calibration_congratulations_title": "Glückwunsch!",
+    "headphones_calibration_complete_label": "Kalibrierung abgeschlossen",
+    "headphones_calibration_thank_you_message": "Vielen Dank für deine Mithilfe! Du hast unsere App gerade ein Stück zugänglicher gemacht!",
+    "headphones_calibration_go_home_button": "Zur Startseite",
+
+    "comment_common_headphones_search_bar1": "=================================================",
+    "comment_common_headphones_search_bar2": "======= Gemeinsame Kopfhörer-Suchleiste ========",
+    "comment_common_headphones_search_bar3": "=================================================",
+    "common_headphones_search_bar_search_hint": "Nach Kopfhörern suchen...",
+    "common_headphones_search_bar_add_button": "Hinzufügen"
 }
