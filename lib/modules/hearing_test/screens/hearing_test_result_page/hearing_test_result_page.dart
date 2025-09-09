@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/featuers/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
 import 'package:hm_theme/hm_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -29,7 +30,6 @@ class HearingTestResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-
     return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
         return Scaffold(

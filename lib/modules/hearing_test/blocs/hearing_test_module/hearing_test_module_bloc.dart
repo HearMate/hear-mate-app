@@ -105,7 +105,6 @@ class HearingTestModuleBloc
       await internalFile.writeAsString(data);
 
       emit(state.copyWith(resultsSaved: true));
-      add(HearingTestModuleNavigateToWelcome());
     } catch (e) {
       debugPrint("Error saving CSV file: $e");
     }

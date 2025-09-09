@@ -158,30 +158,59 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
+    // Copy lists before modifying
+    final updatedLeft = List<double?>.from(state.leftEarResults);
+    final updatedRight = List<double?>.from(state.rightEarResults);
+
     if (state.currentEar == HearingTestEar.LEFT) {
-      state.leftEarResults[state.currentFrequencyIndex] =
+      updatedLeft[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     } else {
-      state.rightEarResults[state.currentFrequencyIndex] =
+      updatedRight[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     }
 
-    if (state.currentFrequencyIndex ==
-        HearingTestConstants.TEST_FREQUENCIES.length - 1) {
-      // check if we have already covered two ears
+    final isLast =
+        state.currentFrequencyIndex ==
+        HearingTestConstants.TEST_FREQUENCIES.length - 1;
+
+    if (isLast) {
+      // If we just finished RIGHT ear, decide on masking or completion
       if (state.currentEar == HearingTestEar.RIGHT) {
         if (_getFrequenciesThatRequireMasking(state).contains(true)) {
-          emit(state.copyWith(isMaskingStarted: true));
+          emit(
+            state.copyWith(
+              leftEarResults: updatedLeft,
+              rightEarResults: updatedRight,
+              isMaskingStarted: true,
+            ),
+          );
           return add(HearingTestStartMaskedTest());
         }
+        emit(
+          state.copyWith(
+            leftEarResults: updatedLeft,
+            rightEarResults: updatedRight,
+          ),
+        );
         return add(HearingTestCompleted());
       }
+
+      // Otherwise switch to RIGHT ear
+      emit(
+        state.copyWith(
+          leftEarResults: updatedLeft,
+          rightEarResults: updatedRight,
+        ),
+      );
       return add(HearingTestChangeEar());
     }
 
+    // Proceed to next frequency on the current ear
     emit(
       state.copyWith(
-        results: state.results,
+        leftEarResults: updatedLeft,
+        rightEarResults: updatedRight,
         currentFrequencyIndex: state.currentFrequencyIndex + 1,
         currentDBLevel: state.currentDBLevel + 10,
         dbLevelToHearCountMap: {},
@@ -397,18 +426,23 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestNextMaskedFrequency event,
     Emitter<HearingTestState> emit,
   ) async {
-    _soundsPlayerRepository.stopSound(stopNoise: true);
+    await _soundsPlayerRepository.stopSound(stopNoise: true);
+
     final ear =
         state.leftEarResults[state.currentFrequencyIndex]! >
                 state.rightEarResults[state.currentFrequencyIndex]!
             ? HearingTestEar.LEFT
             : HearingTestEar.RIGHT;
 
+    // Copy masked results lists before modifying
+    final updatedLeftMasked = List<double?>.from(state.leftEarResultsMasked);
+    final updatedRightMasked = List<double?>.from(state.rightEarResultsMasked);
+
     if (ear == HearingTestEar.LEFT) {
-      state.leftEarResultsMasked[state.currentFrequencyIndex] =
+      updatedLeftMasked[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     } else {
-      state.rightEarResultsMasked[state.currentFrequencyIndex] =
+      updatedRightMasked[state.currentFrequencyIndex] =
           state.currentDBLevel.toDouble();
     }
 
@@ -416,23 +450,40 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       debugPrint("frequenciesThatRequireMasking was null during masking test");
       return;
     }
-    state.frequenciesThatRequireMasking![state.currentFrequencyIndex] = false;
+
+    // Copy masking flags before modifying
+    final updatedMaskFlags = List<bool>.from(
+      state.frequenciesThatRequireMasking!,
+    );
+
+    updatedMaskFlags[state.currentFrequencyIndex] = false;
+
     // handle double 1k record
-    if (state.currentFrequencyIndex == 0) {
-      state.frequenciesThatRequireMasking![4] = false;
+    if (state.currentFrequencyIndex == 0 && updatedMaskFlags.length > 4) {
+      updatedMaskFlags[4] = false;
     }
 
-    if (state.frequenciesThatRequireMasking!.contains(true) == false) {
-      emit(state.copyWith(isTestCompleted: true));
+    if (!updatedMaskFlags.contains(true)) {
+      emit(
+        state.copyWith(
+          leftEarResultsMasked: updatedLeftMasked,
+          rightEarResultsMasked: updatedRightMasked,
+          frequenciesThatRequireMasking: updatedMaskFlags,
+          isTestCompleted: true,
+        ),
+      );
       return add(HearingTestCompleted());
     }
 
-    int maskedIndex = state.frequenciesThatRequireMasking!.indexWhere(
+    final maskedIndex = updatedMaskFlags.indexWhere(
       (element) => element == true,
     );
 
     emit(
       state.copyWith(
+        leftEarResultsMasked: updatedLeftMasked,
+        rightEarResultsMasked: updatedRightMasked,
+        frequenciesThatRequireMasking: updatedMaskFlags,
         currentFrequencyIndex: maskedIndex,
         currentMaskingDBLevel:
             min(

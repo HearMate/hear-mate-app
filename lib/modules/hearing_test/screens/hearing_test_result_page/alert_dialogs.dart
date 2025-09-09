@@ -47,6 +47,9 @@ class BackAlertDialog extends StatelessWidget {
               HearingTestModuleSaveTestResults(),
             );
             Navigator.pop(context);
+            context.read<HearingTestModuleBloc>().add(
+              HearingTestModuleNavigateToWelcome(),
+            );
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8.0),

@@ -34,12 +34,40 @@ class HearingTestState {
     this.dbLevelToHearCountMap = const {},
     this.frequenciesThatRequireMasking,
     this.maskedHeardCount = 0,
-    this.leftEarResults = const [],
-    this.rightEarResults = const [],
-    this.leftEarResultsMasked = const [],
-    this.rightEarResultsMasked = const [],
+    List<double?>? leftEarResults,
+    List<double?>? rightEarResults,
+    List<double?>? leftEarResultsMasked,
+    List<double?>? rightEarResultsMasked,
     HearingTestResult? results,
-  }) : results = results ?? HearingTestResult.empty;
+  }) : leftEarResults =
+           leftEarResults ??
+           List<double?>.filled(
+             HearingTestConstants.TEST_FREQUENCIES.length,
+             null,
+             growable: false,
+           ),
+       rightEarResults =
+           rightEarResults ??
+           List<double?>.filled(
+             HearingTestConstants.TEST_FREQUENCIES.length,
+             null,
+             growable: false,
+           ),
+       leftEarResultsMasked =
+           leftEarResultsMasked ??
+           List<double?>.filled(
+             HearingTestConstants.TEST_FREQUENCIES.length,
+             null,
+             growable: false,
+           ),
+       rightEarResultsMasked =
+           rightEarResultsMasked ??
+           List<double?>.filled(
+             HearingTestConstants.TEST_FREQUENCIES.length,
+             null,
+             growable: false,
+           ),
+       results = results ?? HearingTestResult.empty;
 
   HearingTestState copyWith({
     bool? isButtonPressed,
