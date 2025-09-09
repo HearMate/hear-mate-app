@@ -69,6 +69,9 @@ class CustomAlertDialog extends StatelessWidget {
               HearingTestModuleSaveTestResults(),
             );
             Navigator.pop(context);
+            context.read<HearingTestModuleBloc>().add(
+              HearingTestModuleNavigateToWelcome(),
+            );
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),

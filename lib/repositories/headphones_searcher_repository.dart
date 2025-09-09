@@ -68,6 +68,9 @@ class HeadphonesSearcherRepository {
     'on',
     "soft",
     "cushions",
+    "noise-cancelling",
+    "midnight",
+    "blue",
   };
 
   Future<HeadphonesSearchResult> searchHeadphones({

@@ -16,6 +16,11 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final iconColor = theme.iconTheme.color;
+    final borderColor = theme.dividerColor;
+    final surfaceColor = colors.surface;
 
     return BlocBuilder<HeadphonesSearchBarCubit, HeadphonesSearchBarState>(
       builder: (context, state) {
@@ -33,17 +38,23 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
               onChanged: cubit.updateQuery,
               leading:
                   state.isSearching
-                      ? const SizedBox(
+                      ? SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: colors.primary,
+                        ),
                       )
-                      : Icon(Icons.search, color: Colors.grey.shade600),
+                      : Icon(Icons.search, color: iconColor ?? Colors.grey),
               trailing:
                   state.query.isNotEmpty
                       ? [
                         IconButton(
-                          icon: Icon(Icons.clear, color: Colors.grey.shade600),
+                          icon: Icon(
+                            Icons.clear,
+                            color: iconColor ?? Colors.grey,
+                          ),
                           onPressed: cubit.clearQuery,
                         ),
                       ]
@@ -56,22 +67,24 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey.shade300),
+                  color: surfaceColor,
+                  border: Border.all(color: borderColor),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: ListTile(
-                  leading: const Icon(Icons.headphones, color: Colors.green),
+                  leading: Icon(Icons.headphones, color: colors.primary),
                   title: Text(
                     state.result,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   trailing: ElevatedButton(
                     onPressed: () {
                       onSelectedButtonPress(state.result);
                       cubit.clearQuery();
                     },
-                    child: Text(l10n.common_headphones_search_bar_add_button),
+                    child: Text(selectedButtonLabel),
                   ),
                 ),
               ),
