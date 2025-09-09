@@ -11,6 +11,8 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: HMAppBar(
@@ -34,15 +36,14 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         l10n.headphones_calibration_step_progress("2", "3"),
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.primary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
                         ),
                       ),
                     ),
@@ -53,13 +54,13 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
+                        color: colorScheme.primary.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         Icons.headphones,
                         size: 60,
-                        color: Theme.of(context).primaryColor,
+                        color: colorScheme.primary,
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -67,11 +68,9 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                     // Title
                     Text(
                       l10n.headphones_calibration_great_title,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineMedium?.copyWith(
+                      style: textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: colorScheme.onBackground,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -101,8 +100,8 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey.shade700,
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                         height: 1.5,
                       ),
                       textAlign: TextAlign.center,
@@ -128,9 +127,9 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                   ),
                   child: Text(
                     l10n.headphones_calibration_continue_button,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                 ),
