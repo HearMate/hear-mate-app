@@ -620,10 +620,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         leftEarResultsMasked: leftResultsMasked,
         rightEarResults: rightResults,
         rightEarResultsMasked: rightResultsMasked,
+        isMaskingStarted: true,
       ),
     );
 
-    add(HearingTestCompleted());
+    return add(HearingTestStartMaskedTest());
   }
 
   List<bool> _getFrequenciesThatRequireMasking(HearingTestState state) {
@@ -632,16 +633,12 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     List<bool> result = List<bool>.generate(frequencies.length, (i) {
       final left =
-          (i < state.results.hearingLossLeft.length)
-              ? state.results.hearingLossLeft[i]
-              : null;
+          (i < state.leftEarResults.length) ? state.leftEarResults[i] : null;
       final right =
-          (i < state.results.hearingLossRight.length)
-              ? state.results.hearingLossRight[i]
-              : null;
+          (i < state.rightEarResults.length) ? state.rightEarResults[i] : null;
 
       if (left != null && right != null) {
-        return (left.value - right.value).abs() >= thresholds[i];
+        return (left - right).abs() >= thresholds[i];
       }
       return false;
     });
