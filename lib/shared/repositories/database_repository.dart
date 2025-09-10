@@ -22,74 +22,29 @@ class DatabaseRepository {
     required double hz2000Correction,
     required double hz4000Correction,
     required double hz8000Correction,
+    required HeadphonesModel referenceHeadphone,
   }) async {
     try {
-      // 1. Check if headphone with the exact same name exists
-      final existingList = await _client
-          .from('headphones')
-          .select()
-          .eq('name', name.toUpperCase())
-          .limit(1);
+      // 3. Insert new headphone with grade 0
+      final newHeadphone = HeadphonesModel.create(
+        name: name.toUpperCase(),
+        hz125Correction: hz125Correction,
+        hz250Correction: hz250Correction,
+        hz500Correction: hz500Correction,
+        hz1000Correction: hz1000Correction,
+        hz2000Correction: hz2000Correction,
+        hz4000Correction: hz4000Correction,
+        hz8000Correction: hz8000Correction,
+      );
 
-      if (existingList.isNotEmpty) {
-        // 2. Update existing headphone: average corrections and increment grade
-        final existing = existingList.first;
-        final existingModel = HeadphonesModel.fromMap(existing);
+      Map<String, dynamic> newHeadphoneData = await newHeadphone.toInsertMap(
+        referenceHeadphone,
+      );
+      final insertedList =
+          await _client.from('allRecords').insert(newHeadphoneData).select();
 
-        // Automatically make it upper case.
-        final updatedCorrections = HeadphonesModel.create(
-          name: name.toUpperCase(),
-          grade: existingModel.grade + 1,
-          hz125Correction:
-              (existingModel.hz125Correction + hz125Correction) / 2,
-          hz250Correction:
-              (existingModel.hz250Correction + hz250Correction) / 2,
-          hz500Correction:
-              (existingModel.hz500Correction + hz500Correction) / 2,
-          hz1000Correction:
-              (existingModel.hz1000Correction + hz1000Correction) / 2,
-          hz2000Correction:
-              (existingModel.hz2000Correction + hz2000Correction) / 2,
-          hz4000Correction:
-              (existingModel.hz4000Correction + hz4000Correction) / 2,
-          hz8000Correction:
-              (existingModel.hz8000Correction + hz8000Correction) / 2,
-        );
-
-        // Update the existing record
-        final updatedList =
-            await _client
-                .from('headphones')
-                .update(updatedCorrections.toInsertMap())
-                .eq('id', existingModel.id)
-                .select();
-
-        if (updatedList.isEmpty) {
-          HMLogger.print('Failed to update headphone: No rows affected');
-        }
-      } else {
-        // 3. Insert new headphone with grade 0
-        final newHeadphone = HeadphonesModel.create(
-          name: name.toUpperCase(),
-          grade: 1,
-          hz125Correction: hz125Correction,
-          hz250Correction: hz250Correction,
-          hz500Correction: hz500Correction,
-          hz1000Correction: hz1000Correction,
-          hz2000Correction: hz2000Correction,
-          hz4000Correction: hz4000Correction,
-          hz8000Correction: hz8000Correction,
-        );
-
-        final insertedList =
-            await _client
-                .from('headphones')
-                .insert(newHeadphone.toInsertMap())
-                .select();
-
-        if (insertedList.isEmpty) {
-          HMLogger.print('Failed to insert headphone: No rows returned');
-        }
+      if (insertedList.isEmpty) {
+        HMLogger.print('Failed to insert headphone: No rows returned');
       }
     } catch (e) {
       throw Exception('Failed to insert or update headphone "$name": $e');

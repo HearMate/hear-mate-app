@@ -15,6 +15,7 @@
 	"homepage_button_helper": "Виберіть модуль, щоб продовжити:",
 	"homepage_button_audioTest": "Тест слуху",
 	"homepage_button_headphonesCalibration": "Калібрування навушників",
+	"homepage_button_headphonesCalibration_web_info": "Функція калібрування навушників недоступна у веб-версії",
 	"homepage_button_echoParse": "Echo Parse",
 	"homepage_button_moreModules": "Більше модулів скоро...",
 

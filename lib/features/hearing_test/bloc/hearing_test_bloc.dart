@@ -620,11 +620,12 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         leftEarResultsMasked: leftResultsMasked,
         rightEarResults: rightResults,
         rightEarResultsMasked: rightResultsMasked,
-        isMaskingStarted: true,
+        //isMaskingStarted: true,
       ),
     );
 
-    return add(HearingTestStartMaskedTest());
+    add(HearingTestCompleted());
+    //return add(HearingTestStartMaskedTest());
   }
 
   List<bool> _getFrequenciesThatRequireMasking(HearingTestState state) {

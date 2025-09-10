@@ -15,6 +15,7 @@
     "homepage_button_helper": "Wähle ein Modul, um fortzufahren:",
     "homepage_button_audioTest": "Hörtest",
     "homepage_button_headphonesCalibration": "Kopfhörer-Kalibrierung",
+    "homepage_button_headphonesCalibration_web_info": "Die Kopfhörer-Kalibrierung ist in der Webversion nicht verfügbar",
     "homepage_button_echoParse": "Echo Parse",
     "homepage_button_moreModules": "Weitere Module folgen bald...",
 
