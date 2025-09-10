@@ -333,7 +333,7 @@ class HeadphonesCalibrationModuleBloc
     if (state.currentStep == HeadphonesCalibrationStep.firstTest) {
       emit(
         state.copyWith(
-          firstTestResults: event.results,
+          firstTestResults: event.results.copy(),
           currentStep: HeadphonesCalibrationStep.informationBetweenTests,
         ),
       );
@@ -358,7 +358,7 @@ class HeadphonesCalibrationModuleBloc
 
       final targetFrequencies = [125, 250, 500, 1000, 2000, 4000, 8000];
 
-      Map<int, double> avgCorrections = {};
+      Map<int, double> corrections = {};
 
       // Calculate average corrections for each frequency
       for (int i = 0; i < targetFrequencies.length; i++) {
@@ -371,18 +371,22 @@ class HeadphonesCalibrationModuleBloc
             (secondResults.hearingLossRight[i]?.value ?? 0) -
             (firstResults.hearingLossRight[i]?.value ?? 0);
 
-        avgCorrections[freq] = (leftDiff + rightDiff) / 2.0;
+        if ((leftDiff - rightDiff).abs() > 10) return;
+        double avgDifference = (leftDiff + rightDiff) / 2.0;
+        corrections[freq] =
+            avgDifference + state.selectedReferenceHeadphone!.getFreq(freq);
       }
 
       await databaseRepository.insertOrUpdateHeadphone(
         name: state.selectedTargetHeadphone!.name,
-        hz125Correction: avgCorrections[125] ?? 0,
-        hz250Correction: avgCorrections[250] ?? 0,
-        hz500Correction: avgCorrections[500] ?? 0,
-        hz1000Correction: avgCorrections[1000] ?? 0,
-        hz2000Correction: avgCorrections[2000] ?? 0,
-        hz4000Correction: avgCorrections[4000] ?? 0,
-        hz8000Correction: avgCorrections[8000] ?? 0,
+        hz125Correction: corrections[125] ?? 0,
+        hz250Correction: corrections[250] ?? 0,
+        hz500Correction: corrections[500] ?? 0,
+        hz1000Correction: corrections[1000] ?? 0,
+        hz2000Correction: corrections[2000] ?? 0,
+        hz4000Correction: corrections[4000] ?? 0,
+        hz8000Correction: corrections[8000] ?? 0,
+        referenceHeadphone: state.selectedReferenceHeadphone!,
       );
     }
   }

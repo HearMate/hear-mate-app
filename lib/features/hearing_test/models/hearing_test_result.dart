@@ -34,6 +34,16 @@ class HearingTestResult {
     );
   }
 
+  HearingTestResult copy() {
+    return HearingTestResult(
+      filePath: this.filePath,
+      dateLabel: this.dateLabel,
+      hearingLossLeft: this.hearingLossLeft,
+      hearingLossRight: this.hearingLossRight,
+      audiogramDescription: this.audiogramDescription,
+    );
+  }
+
   Map<String, dynamic> toJson() => {
     'hearingLossLeft':
         hearingLossLeft
