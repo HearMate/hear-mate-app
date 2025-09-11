@@ -59,6 +59,7 @@ class HearingTestModuleBloc
     hearingTestBloc.add(
       HearingTestStartTest(
         headphonesModel: state.headphonesModel ?? HeadphonesModel.empty(),
+        step: 5.0,
       ),
     );
     emit(state.copyWith(currentStep: HearingTestPageStep.test));

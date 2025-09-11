@@ -55,7 +55,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     HearingTestStartTest event,
     Emitter<HearingTestState> emit,
   ) async {
-    emit(HearingTestState());
+    emit(HearingTestState(step: event.step));
 
     _soundsPlayerRepository.headphonesModel = event.headphonesModel;
 
@@ -119,7 +119,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     if (state.wasSoundHeard) {
       emit(
         state.copyWith(
-          currentDBLevel: state.currentDBLevel - 5,
+          currentDBLevel: state.currentDBLevel - state.step,
           wasSoundHeard: false,
         ),
       );
@@ -128,14 +128,14 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     // if user didn't hear the sound 2 times, switch frequencies
     if (state.dbLevelToHearCountMap[state.currentDBLevel] == 0) {
-      emit(state.copyWith(currentDBLevel: state.currentDBLevel + 5));
+      emit(state.copyWith(currentDBLevel: state.currentDBLevel + state.step));
       return add(HearingTestNextFrequency());
     }
 
     // else give him one more chance to hear the sound
     emit(
       state.copyWith(
-        currentDBLevel: state.currentDBLevel + 5,
+        currentDBLevel: state.currentDBLevel + state.step,
         dbLevelToHearCountMap: Map.from(state.dbLevelToHearCountMap)..update(
           state.currentDBLevel,
           (value) => value - 1,
@@ -205,7 +205,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         leftEarResults: updatedLeft,
         rightEarResults: updatedRight,
         currentFrequencyIndex: state.currentFrequencyIndex + 1,
-        currentDBLevel: state.currentDBLevel + 10,
+        currentDBLevel: state.currentDBLevel + 2 * state.step,
         dbLevelToHearCountMap: {},
       ),
     );
@@ -366,7 +366,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
       emit(
         state.copyWith(
-          currentMaskingDBLevel: state.currentMaskingDBLevel + 5,
+          currentMaskingDBLevel: state.currentMaskingDBLevel + state.step,
           wasSoundHeard: false,
           maskedHeardCount: state.maskedHeardCount! + 1,
         ),
@@ -376,7 +376,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     emit(
       state.copyWith(
-        currentDBLevel: state.currentDBLevel + 5,
+        currentDBLevel: state.currentDBLevel + state.step,
         maskedHeardCount: 0,
       ),
     );

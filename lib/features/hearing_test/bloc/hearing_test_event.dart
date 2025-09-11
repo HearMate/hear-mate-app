@@ -7,8 +7,9 @@ class HearingTestInitialize extends HearingTestEvent {}
 
 class HearingTestStartTest extends HearingTestEvent {
   final HeadphonesModel headphonesModel;
+  final double step;
 
-  HearingTestStartTest({required this.headphonesModel});
+  HearingTestStartTest({required this.headphonesModel, required this.step});
 }
 
 class HearingTestButtonPressed extends HearingTestEvent {}

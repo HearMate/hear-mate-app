@@ -158,6 +158,7 @@ class HeadphonesCalibrationModuleBloc
       HearingTestStartTest(
         headphonesModel:
             state.selectedReferenceHeadphone ?? HeadphonesModel.empty(),
+        step: 2.5,
       ),
     );
   }
@@ -182,6 +183,7 @@ class HeadphonesCalibrationModuleBloc
       HearingTestStartTest(
         headphonesModel:
             state.selectedTargetHeadphone ?? HeadphonesModel.empty(),
+        step: 2.5,
       ),
     );
     emit(state.copyWith(currentStep: HeadphonesCalibrationStep.secondTest));
