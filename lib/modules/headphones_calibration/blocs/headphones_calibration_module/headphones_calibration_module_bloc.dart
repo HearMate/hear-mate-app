@@ -6,6 +6,7 @@ import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart'
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
 import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
+import 'package:hear_mate_app/shared/utils/cooldown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'headphones_calibration_module_event.dart';
@@ -130,6 +131,8 @@ class HeadphonesCalibrationModuleBloc
     emit(HeadphonesCalibrationModuleState());
 
     await _loadHeadphonesFromLocalStorage(emit);
+    final isCooldownActive = await Cooldown.isCooldownActive();
+    emit(state.copyWith(isCooldownActive: isCooldownActive));
   }
 
   void _onNavigateToExit(
@@ -328,6 +331,8 @@ class HeadphonesCalibrationModuleBloc
           currentStep: HeadphonesCalibrationStep.end,
         ),
       );
+
+      Cooldown.startCooldown(Duration(minutes: 20));
 
       final firstResults = state.firstTestResults;
       final secondResults = event.results;

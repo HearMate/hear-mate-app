@@ -156,6 +156,7 @@
     "headphones_calibration_no_target_headphones": "Keine Zielkopfhörer verfügbar",
     "headphones_calibration_empty_state_hint": "Versuche, deine Suchbegriffe anzupassen",
     "headphones_calibration_missing_selection": "Um neue Kopfhörer zu kalibrieren, musst du sowohl Referenz- als auch Zielkopfhörer auswählen.",
+    "headphones_calibration_cooldown_info": "Du musst eine längere Pause zwischen den Tests einlegen, damit die Ergebnisse aussagekräftig sind.",
     "headphones_calibration_ready_prefix": "Super, wir können starten! Vergiss nicht, ",
     "headphones_calibration_ready_suffix": " anzuschließen!",
     "headphones_calibration_start_button": "Kalibrierung starten",

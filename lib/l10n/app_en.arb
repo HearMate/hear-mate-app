@@ -442,6 +442,7 @@
     "headphones_calibration_no_target_headphones": "No target headphones available",
     "headphones_calibration_empty_state_hint": "Try adjusting your search terms",
     "headphones_calibration_missing_selection": "In order to calibrate new headphones you need to have both reference & target headphones.",
+    "headphones_calibration_cooldown_info": "You need to take a longer break between tests for the results to be reliable.",
     "headphones_calibration_ready_prefix": "Great, we can start! Remember to connect ",
     "headphones_calibration_ready_suffix": "!",
     "headphones_calibration_start_button": "Start Calibration",

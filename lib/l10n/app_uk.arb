@@ -156,6 +156,7 @@
 	"headphones_calibration_no_target_headphones": "Немає доступних цільових навушників",
 	"headphones_calibration_empty_state_hint": "Спробуйте змінити пошуковий запит",
 	"headphones_calibration_missing_selection": "Щоб відкалібрувати нові навушники, необхідно вибрати як еталонні, так і цільові навушники.",
+	"headphones_calibration_cooldown_info": "Потрібно зробити довшу перерву між тестами, щоб результати були достовірними.",
 	"headphones_calibration_ready_prefix": "Чудово, можемо починати! Не забудьте підключити ",
 	"headphones_calibration_ready_suffix": "!",
 	"headphones_calibration_start_button": "Почати калібрування",
