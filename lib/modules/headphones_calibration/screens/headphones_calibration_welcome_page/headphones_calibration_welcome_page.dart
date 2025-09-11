@@ -4,7 +4,6 @@ import 'package:hear_mate_app/features/headphones_search/cubits/headphones_searc
 import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
 import 'package:hear_mate_app/features/headphones_search/screens/headphones_search_bar.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_calibration_module/headphones_calibration_module_bloc.dart';
-import 'package:hear_mate_app/features/headphones_search_bar/repositories/headphones_searcher_repository.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

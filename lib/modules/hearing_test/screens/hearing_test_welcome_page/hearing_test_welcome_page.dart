@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/headphones_search/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
 import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/utils/headphones_calibration_constants.dart'
-    as HeadphonesCalibrationConstants;
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/features/headphones_search/screens/headphones_search_bar.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
@@ -133,10 +131,6 @@ class HearingTestWelcomePage extends StatelessWidget {
       );
     }
 
-    final isCalibrated =
-        model.grade >=
-        HeadphonesCalibrationConstants.HEADPHONES_GRADE_THRESHOLD;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: ConstrainedBox(
@@ -146,20 +140,8 @@ class HearingTestWelcomePage extends StatelessWidget {
           TextSpan(
             children: [
               TextSpan(
-                text:
-                    isCalibrated
-                        ? l10n.hearing_test_welcome_page_calibrated_part1
-                        : l10n.hearing_test_welcome_page_not_calibrated_part1,
-              ),
-              TextSpan(
                 text: model.name,
                 style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(
-                text:
-                    isCalibrated
-                        ? l10n.hearing_test_welcome_page_calibrated_part2
-                        : l10n.hearing_test_welcome_page_not_calibrated_part2,
               ),
             ],
           ),
