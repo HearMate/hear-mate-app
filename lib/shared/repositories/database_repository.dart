@@ -22,7 +22,6 @@ class DatabaseRepository {
     required double hz2000Correction,
     required double hz4000Correction,
     required double hz8000Correction,
-    required HeadphonesModel referenceHeadphone,
   }) async {
     try {
       // 3. Insert new headphone with grade 0
@@ -37,11 +36,12 @@ class DatabaseRepository {
         hz8000Correction: hz8000Correction,
       );
 
-      Map<String, dynamic> newHeadphoneData = await newHeadphone.toInsertMap(
-        referenceHeadphone,
-      );
+      Map<String, dynamic> newHeadphoneData = await newHeadphone.toInsertMap();
       final insertedList =
-          await _client.from('allRecords').insert(newHeadphoneData).select();
+          await _client
+              .from('all_records')
+              .upsert(newHeadphoneData, onConflict: 'owner,name')
+              .select();
 
       if (insertedList.isEmpty) {
         HMLogger.print('Failed to insert headphone: No rows returned');

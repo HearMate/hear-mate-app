@@ -60,8 +60,6 @@
     "hearing_test_welcome_page_find_headphones": "Proszę znajdź swoje słuchawki przed rozpoczęciem testu",
     "hearing_test_welcome_page_not_calibrated_part1": "Niestety, nie możemy zagwarantować jakości tego testu – twoje słuchawki ",
     "hearing_test_welcome_page_not_calibrated_part2": " nie są jeszcze odpowiednio skalibrowane!",
-    "hearing_test_welcome_page_calibrated_part1": "Twoje słuchawki ",
-    "hearing_test_welcome_page_calibrated_part2": " są prawidłowo skalibrowane! Możesz rozpocząć test!",
 
     "hearing_test_test_page_title": "Test słuchu",
     "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",

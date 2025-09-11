@@ -59,8 +59,6 @@
     "hearing_test_welcome_page_find_headphones": "Будь ласка, знайдіть ваші навушники перед початком тесту",
     "hearing_test_welcome_page_not_calibrated_part1": "На жаль, ми не можемо гарантувати якість цього тесту — ваші навушники ",
     "hearing_test_welcome_page_not_calibrated_part2": " ще не відкалібровані!",
-    "hearing_test_welcome_page_calibrated_part1": "Ваші навушники ",
-    "hearing_test_welcome_page_calibrated_part2": " відкалібровані! Можете розпочати тест!",
 
 	"hearing_test_test_page_title": "Тест слуху",
 	"hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",

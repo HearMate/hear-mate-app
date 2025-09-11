@@ -148,8 +148,6 @@
     "hearing_test_welcome_page_find_headphones": "Please find your headphones before attempting a test",
     "hearing_test_welcome_page_not_calibrated_part1": "Unfortunately, we can't guarantee quality of this test - your headphones ",
     "hearing_test_welcome_page_not_calibrated_part2": " are not properly calibrated yet!",
-    "hearing_test_welcome_page_calibrated_part1": "Your headphones ",
-    "hearing_test_welcome_page_calibrated_part2": " are properly calibrated! You are good to go!",
 
     "hearing_test_test_page_title": "Hearing Test",
     "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",

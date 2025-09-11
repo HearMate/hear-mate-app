@@ -5,8 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
 import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/utils/headphones_calibration_constants.dart'
-    as HeadphonesCalibrationConstants;
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -113,23 +111,9 @@ class HeadphonesCalibrationModuleBloc
     }
 
     // Split based on grade threshold
-    final availableReferences =
-        allHeadphones
-            .where(
-              (h) =>
-                  h.grade >
-                  HeadphonesCalibrationConstants.HEADPHONES_GRADE_THRESHOLD,
-            )
-            .toList();
+    final availableReferences = allHeadphones.toList();
 
-    final availableTargets =
-        allHeadphones
-            .where(
-              (h) =>
-                  h.grade <=
-                  HeadphonesCalibrationConstants.HEADPHONES_GRADE_THRESHOLD,
-            )
-            .toList();
+    final availableTargets = allHeadphones.toList();
 
     emit(
       state.copyWith(
@@ -278,9 +262,7 @@ class HeadphonesCalibrationModuleBloc
     );
 
     // If they are new or are not reference headphones.
-    if (headphones == null ||
-        headphones.grade <
-            HeadphonesCalibrationConstants.HEADPHONES_GRADE_THRESHOLD) {
+    if (headphones == null) {
       final alreadyExists = state.availableTargetHeadphones.any(
         (h) => h.name.toLowerCase() == event.headphone.name.toLowerCase(),
       );
@@ -386,7 +368,6 @@ class HeadphonesCalibrationModuleBloc
         hz2000Correction: corrections[2000] ?? 0,
         hz4000Correction: corrections[4000] ?? 0,
         hz8000Correction: corrections[8000] ?? 0,
-        referenceHeadphone: state.selectedReferenceHeadphone!,
       );
     }
   }
