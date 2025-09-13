@@ -7,57 +7,134 @@ on:
 jobs:
   build_web:
     runs-on: ubuntu-latest
+    env:
+      DOTENV_KEY: ${{ secrets.DOTENV_KEY }}
+      DOTENV_ME: ${{ secrets.DOTENV_ME }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Node (for npx)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.0'
           channel: stable
+
+      - name: Pull environment variables from dotenv-vault
+        if: ${{ env.DOTENV_KEY != '' && env.DOTENV_ME != '' }}
+        working-directory: assets/env
+        run: npx -y dotenv-vault@latest pull --yes -m "${{ env.DOTENV_ME }}"
+        env:
+          DOTENV_KEY: ${{ env.DOTENV_KEY }}
+          DOTENV_ME: ${{ env.DOTENV_ME }}
+
+      - name: List env files
+        run: ls -la assets/env
+
       - run: flutter pub get
       - run: flutter build web
 
   build_android:
     runs-on: ubuntu-latest
+    env:
+      DOTENV_KEY: ${{ secrets.DOTENV_KEY }}
+      DOTENV_ME: ${{ secrets.DOTENV_ME }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.0'
           channel: stable
+      - name: Pull environment variables from dotenv-vault
+        if: ${{ env.DOTENV_KEY != '' && env.DOTENV_ME != '' }}
+        working-directory: assets/env
+        run: npx -y dotenv-vault@latest pull --yes -m "${{ env.DOTENV_ME }}"
+        env:
+          DOTENV_KEY: ${{ env.DOTENV_KEY }}
+          DOTENV_ME: ${{ env.DOTENV_ME }}
       - run: flutter pub get
       - run: flutter build apk
 
   build_windows:
     runs-on: windows-latest
+    env:
+      DOTENV_KEY: ${{ secrets.DOTENV_KEY }}
+      DOTENV_ME: ${{ secrets.DOTENV_ME }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.0'
           channel: stable
+      - name: Pull environment variables from dotenv-vault
+        if: ${{ env.DOTENV_KEY != '' && env.DOTENV_ME != '' }}
+        working-directory: assets/env
+        run: npx -y dotenv-vault@latest pull --yes -m "${{ env.DOTENV_ME }}"
+        env:
+          DOTENV_KEY: ${{ env.DOTENV_KEY }}
+          DOTENV_ME: ${{ env.DOTENV_ME }}
       - run: flutter config --enable-windows-desktop
       - run: flutter pub get
       - run: flutter build windows
 
   build_macos:
     runs-on: macos-latest
+    env:
+      DOTENV_KEY: ${{ secrets.DOTENV_KEY }}
+      DOTENV_ME: ${{ secrets.DOTENV_ME }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.0'
           channel: stable
+      - name: Pull environment variables from dotenv-vault
+        if: ${{ env.DOTENV_KEY != '' && env.DOTENV_ME != '' }}
+        working-directory: assets/env
+        run: npx -y dotenv-vault@latest pull --yes -m "${{ env.DOTENV_ME }}"
+        env:
+          DOTENV_KEY: ${{ env.DOTENV_KEY }}
+          DOTENV_ME: ${{ env.DOTENV_ME }}
       - run: flutter config --enable-macos-desktop
       - run: flutter pub get
       - run: flutter build macos
 
   build_ios:
     runs-on: macos-latest
+    env:
+      DOTENV_KEY: ${{ secrets.DOTENV_KEY }}
+      DOTENV_ME: ${{ secrets.DOTENV_ME }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.0'
           channel: stable
+      - name: Pull environment variables from dotenv-vault
+        if: ${{ env.DOTENV_KEY != '' && env.DOTENV_ME != '' }}
+        working-directory: assets/env
+        run: npx -y dotenv-vault@latest pull --yes -m "${{ env.DOTENV_ME }}"
+        env:
+          DOTENV_KEY: ${{ env.DOTENV_KEY }}
+          DOTENV_ME: ${{ env.DOTENV_ME }}
       - run: flutter pub get
       - run: flutter build ios --no-codesign

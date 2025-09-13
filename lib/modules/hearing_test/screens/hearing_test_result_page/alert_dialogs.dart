@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 
 class BackAlertDialog extends StatelessWidget {
   const BackAlertDialog({super.key});
@@ -42,8 +42,13 @@ class BackAlertDialog extends StatelessWidget {
         SizedBox(width: 4.0),
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pop(true);
-            context.read<HearingTestBloc>().add(HearingTestSaveResult());
+            context.read<HearingTestModuleBloc>().add(
+              HearingTestModuleSaveTestResults(),
+            );
+            Navigator.pop(context);
+            context.read<HearingTestModuleBloc>().add(
+              HearingTestModuleNavigateToWelcome(),
+            );
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8.0),
@@ -89,8 +94,10 @@ class MissingValuesAlertDialog extends StatelessWidget {
         SizedBox(width: 4.0),
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pop(true);
-            context.read<HearingTestBloc>().add(HearingTestSaveResult());
+            context.read<HearingTestModuleBloc>().add(
+              HearingTestModuleSaveTestResults(),
+            );
+            Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -128,7 +135,9 @@ class SavedDialog extends StatelessWidget {
       actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: Text(l10n.ok),
         ),
       ],
@@ -161,7 +170,9 @@ class AlreadySavedDialog extends StatelessWidget {
       actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: Text(l10n.ok),
         ),
       ],
