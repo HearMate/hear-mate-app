@@ -1,4 +1,4 @@
-import 'package:hear_mate_app/features/headphones_search/models/ebay_item.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/models/ebay_item.dart';
 
 class HeadphonesSearchResult {
   final List<EbayItem> items;

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/features/headphones_search/repositories/headphones_searcher_repository.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/repositories/headphones_searcher_repository.dart';
 
 part 'headphones_search_bar_state.dart';
 

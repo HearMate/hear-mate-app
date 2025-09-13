@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/features/headphones_search/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
-import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
-import 'package:hear_mate_app/features/headphones_search/screens/headphones_search_bar.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/screens/headphones_search_bar.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_calibration_module/headphones_calibration_module_bloc.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
