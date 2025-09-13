@@ -11,6 +11,9 @@ class HeadphonesCalibrationModuleNavigateToExit
 class HeadphonesCalibrationModuleNavigateToWelcome
     extends HeadphonesCalibrationModuleEvent {}
 
+class HeadphonesCalibrationModuleNavigateToInformationBeforeTests
+    extends HeadphonesCalibrationModuleEvent {}
+
 class HeadphonesCalibrationModuleNavigateToFirstTest
     extends HeadphonesCalibrationModuleEvent {}
 

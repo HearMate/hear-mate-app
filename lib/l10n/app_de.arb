@@ -163,7 +163,9 @@
 
     "headphones_calibration_information_between_tests_page_title": "Kopfhörer-Kalibrierung",
     "headphones_calibration_step_progress": "Schritt {current} von {total}",
+    "headphones_calibration_great_title_first": "Los geht's!",
     "headphones_calibration_great_title": "Super!",
+    "headphones_calibration_before_tests_description_prefix": "Setze die Kopfhörer auf ",
     "headphones_calibration_between_tests_description_prefix": "Du hast den ersten Test mit den Referenzkopfhörern abgeschlossen. Wechsle jetzt zu ",
     "headphones_calibration_between_tests_description_suffix": " und mach weiter!",
     "headphones_calibration_continue_button": "Weiter",

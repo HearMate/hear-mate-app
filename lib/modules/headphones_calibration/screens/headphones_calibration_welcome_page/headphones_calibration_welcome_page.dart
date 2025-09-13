@@ -504,7 +504,7 @@ class _ActionButtons extends StatelessWidget {
       HeadphonesCalibrationModuleState
     >(
       builder: (context, state) {
-        final canStartCalibration =
+        final headphonesSelected =
             state.selectedReferenceHeadphone != null &&
             state.selectedTargetHeadphone != null;
         final isCooldownActive = state.isCooldownActive;
@@ -518,7 +518,7 @@ class _ActionButtons extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               )
-            else if (!canStartCalibration)
+            else if (!headphonesSelected)
               Text(
                 l10n.headphones_calibration_missing_selection,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -544,10 +544,10 @@ class _ActionButtons extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed:
-                    canStartCalibration && !isCooldownActive
+                    headphonesSelected && !isCooldownActive
                         ? () {
                           context.read<HeadphonesCalibrationModuleBloc>().add(
-                            HeadphonesCalibrationModuleNavigateToFirstTest(),
+                            HeadphonesCalibrationModuleNavigateToInformationBeforeTests(),
                           );
                         }
                         : null,

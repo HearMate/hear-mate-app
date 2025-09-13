@@ -163,7 +163,9 @@
 
 	"headphones_calibration_information_between_tests_page_title": "Калібрування навушників",
 	"headphones_calibration_step_progress": "Крок {current} з {total}",
+	"headphones_calibration_great_title_first": "Починаємо!",
 	"headphones_calibration_great_title": "Чудово!",
+	"headphones_calibration_before_tests_description_prefix": "Одягніть навушники ",
 	"headphones_calibration_between_tests_description_prefix": "Ви завершили перший тест з еталонними навушниками. Тепер переключіться на ",
 	"headphones_calibration_between_tests_description_suffix": " і продовжуйте!",
 	"headphones_calibration_continue_button": "Продовжити",
