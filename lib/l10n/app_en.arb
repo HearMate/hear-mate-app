@@ -457,6 +457,10 @@
     "headphones_calibration_between_tests_description_suffix": " and continue!",
     "headphones_calibration_continue_button": "Continue",
     
+    "headphones_calibration_abort_title": "Unfortunately...",
+    "headphones_calibration_abort_label": "Calibration aborted",
+    "headphones_calibration_abort_message": "The test results are too low. If you are sure your hearing is normal, find a quieter place and try again.",
+    
     "headphones_calibration_end_page_title": "Calibration Complete",
     "headphones_calibration_congratulations_title": "Congratulations!",
     "headphones_calibration_complete_label": "Calibration Complete",

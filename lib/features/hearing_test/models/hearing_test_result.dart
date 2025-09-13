@@ -44,6 +44,11 @@ class HearingTestResult {
     );
   }
 
+  bool isGoodEnoughForCalibration() {
+    return !(hearingLossRight.any((element) => element!.value > 10) &&
+        hearingLossLeft.any((element) => element!.value > 10));
+  }
+
   Map<String, dynamic> toJson() => {
     'hearingLossLeft':
         hearingLossLeft

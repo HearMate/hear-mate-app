@@ -333,12 +333,21 @@ class HeadphonesCalibrationModuleBloc
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) async {
     if (state.currentStep == HeadphonesCalibrationStep.firstTest) {
-      emit(
-        state.copyWith(
-          firstTestResults: event.results.copy(),
-          currentStep: HeadphonesCalibrationStep.informationBetweenTests,
-        ),
-      );
+      if (event.results.isGoodEnoughForCalibration()) {
+        emit(
+          state.copyWith(
+            firstTestResults: event.results.copy(),
+            currentStep: HeadphonesCalibrationStep.informationBetweenTests,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            firstTestResults: event.results.copy(),
+            currentStep: HeadphonesCalibrationStep.abortCalibration,
+          ),
+        );
+      }
     } else if (state.currentStep == HeadphonesCalibrationStep.secondTest) {
       emit(
         state.copyWith(

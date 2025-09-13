@@ -182,6 +182,10 @@
     "headphones_calibration_between_tests_description_suffix": " i kontynuuj!",
     "headphones_calibration_continue_button": "Kontynuuj",
 
+    "headphones_calibration_abort_title": "Niestety...",
+    "headphones_calibration_abort_label": "Kalibracja przerwana",
+    "headphones_calibration_abort_message": "Wyniki testu są zbyt niskie. Jeśli jesteś pewien, że twój słuch jest w normie, znajdź cichsze miejsce i spróbuj ponownie.",
+
     "headphones_calibration_end_page_title": "Kalibracja zakończona",
     "headphones_calibration_congratulations_title": "Gratulacje!",
     "headphones_calibration_complete_label": "Kalibracja zakończona",

@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_calibration_module/headphones_calibration_module_bloc.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_end_page/headphones_calibration_end_page.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_abort_page/headphones_calibration_abort_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_information_between_tests_page/headphones_calibration_information_between_tests_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_information_before_tests_page/headphones_calibration_information_before_tests_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_welcome_page/headphones_calibration_welcome_page.dart';
@@ -76,6 +77,12 @@ class HeadphonesCalibrationModuleView extends StatelessWidget {
               const MaterialPage(
                 key: ValueKey('InformationBetweenTestsPage'),
                 child: HeadphonesCalibrationInformationBetweenTestsPage(),
+              )
+            else if (state.currentStep ==
+                HeadphonesCalibrationStep.abortCalibration)
+              const MaterialPage(
+                key: ValueKey('AbortCalibrationPage'),
+                child: HeadphonesCalibrationAbortCalibrationPage(),
               )
             else if (state.currentStep == HeadphonesCalibrationStep.secondTest)
               MaterialPage(
