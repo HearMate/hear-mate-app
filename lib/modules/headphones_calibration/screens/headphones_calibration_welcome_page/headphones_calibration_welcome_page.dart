@@ -6,6 +6,8 @@ import 'package:hear_mate_app/features/headphones_search_ebay/screens/headphones
 import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_calibration_module/headphones_calibration_module_bloc.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/features/headphones_search_db/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
+import 'package:hear_mate_app/features/headphones_search_db/screens/headphones_search_bar.dart';
 
 class HeadphonesCalibrationWelcomePage extends StatelessWidget {
   const HeadphonesCalibrationWelcomePage({super.key});
@@ -24,33 +26,35 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const _WelcomeSection(),
+
               const SizedBox(height: 24),
-              const _SelectionStatusSection(),
-              const SizedBox(height: 24),
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 480),
-                child: BlocProvider(
-                  create: (context) => HeadphonesSearchBarCubit(),
-                  child: HeadphonesSearchBarWidget(
-                    selectedButtonLabel: l10n.headphones_calibration_add_button,
-                    onSelectedButtonPress: (searchedResult) {
-                      context.read<HeadphonesCalibrationModuleBloc>().add(
-                        HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                          HeadphonesModel.empty(name: searchedResult),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
               const SizedBox(height: 24),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
+                height: MediaQuery.of(context).size.height * 0.8,
                 child: Column(
                   children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 480),
+                      child: BlocProvider(
+                        create: (context) => HeadphonesSearchBarSupabaseCubit(),
+                        child: HeadphonesSearchBarSupabaseWidget(
+                          selectedButtonLabel:
+                              l10n.headphones_calibration_add_button,
+                          onSelectedButtonPress: (searchedResult) {
+                            context.read<HeadphonesCalibrationModuleBloc>().add(
+                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                HeadphonesModel.empty(name: searchedResult),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
                     Expanded(
                       child: _HeadphonesTable(
                         title:
@@ -60,7 +64,26 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 480),
+                      child: BlocProvider(
+                        create: (context) => HeadphonesSearchBarCubit(),
+                        child: HeadphonesSearchBarWidget(
+                          selectedButtonLabel:
+                              l10n.headphones_calibration_add_button,
+                          onSelectedButtonPress: (searchedResult) {
+                            context.read<HeadphonesCalibrationModuleBloc>().add(
+                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                HeadphonesModel.empty(name: searchedResult),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
                     Expanded(
                       child: _HeadphonesTable(
                         title:
