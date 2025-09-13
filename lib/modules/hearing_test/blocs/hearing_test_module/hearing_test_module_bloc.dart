@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
-import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';

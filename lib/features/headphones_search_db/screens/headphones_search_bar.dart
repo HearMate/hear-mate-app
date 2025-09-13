@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/features/headphones_search/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
+import 'package:hear_mate_app/features/headphones_search_db/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HeadphonesSearchBarWidget extends StatelessWidget {
+class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
   final String selectedButtonLabel;
   final ValueChanged<String> onSelectedButtonPress;
 
-  const HeadphonesSearchBarWidget({
+  const HeadphonesSearchBarSupabaseWidget({
     super.key,
     required this.selectedButtonLabel,
     required this.onSelectedButtonPress,
@@ -22,11 +22,13 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
     final borderColor = theme.dividerColor;
     final surfaceColor = colors.surface;
 
-    return BlocBuilder<HeadphonesSearchBarCubit, HeadphonesSearchBarState>(
+    return BlocBuilder<
+      HeadphonesSearchBarSupabaseCubit,
+      HeadphonesSearchBarSupabaseState
+    >(
       builder: (context, state) {
-        final cubit = context.read<HeadphonesSearchBarCubit>();
-        final resultsVisible =
-            state.query.isNotEmpty && state.result.isNotEmpty;
+        final cubit = context.read<HeadphonesSearchBarSupabaseCubit>();
+        final resultsVisible = state.results.isNotEmpty;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,6 +36,7 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
             // Search Input
             SearchBar(
               controller: cubit.controller,
+              focusNode: cubit.focusNode,
               hintText: l10n.common_headphones_search_bar_search_hint,
               onChanged: cubit.updateQuery,
               leading:
@@ -71,21 +74,30 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
                   border: Border.all(color: borderColor),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: ListTile(
-                  leading: Icon(Icons.headphones, color: colors.primary),
-                  title: Text(
-                    state.result,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      onSelectedButtonPress(state.result);
-                      cubit.clearQuery();
-                    },
-                    child: Text(selectedButtonLabel),
-                  ),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: state.results.length,
+                  separatorBuilder:
+                      (_, __) => Divider(height: 1, color: borderColor),
+                  itemBuilder: (context, index) {
+                    final item = state.results[index];
+                    return ListTile(
+                      leading: Icon(Icons.headphones, color: colors.primary),
+                      title: Text(
+                        item,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          onSelectedButtonPress(item);
+                          cubit.clearQuery();
+                        },
+                        child: Text(selectedButtonLabel),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

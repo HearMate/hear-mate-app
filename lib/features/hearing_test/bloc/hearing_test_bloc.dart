@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_loss.dart';
-import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
 import 'package:hear_mate_app/features/hearing_test/repositories/hearing_test_classification_repository.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_ear.dart';
 import 'dart:math';

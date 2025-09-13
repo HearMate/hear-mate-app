@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
-import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 import 'package:hear_mate_app/shared/utils/cooldown.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hear_mate_app/features/headphones_search/models/headphones_model.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
 import 'package:hear_mate_app/shared/utils/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
