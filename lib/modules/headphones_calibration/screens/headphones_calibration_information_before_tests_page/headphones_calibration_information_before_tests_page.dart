@@ -4,8 +4,8 @@ import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_ca
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
-  const HeadphonesCalibrationInformationBetweenTestsPage({super.key});
+class HeadphonesCalibrationInformationBeforeTestsPage extends StatelessWidget {
+  const HeadphonesCalibrationInformationBeforeTestsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        l10n.headphones_calibration_step_progress("2", "2"),
+                        l10n.headphones_calibration_step_progress("1", "2"),
                         style: textTheme.bodyMedium?.copyWith(
                           color: colorScheme.primary,
                           fontWeight: FontWeight.bold,
@@ -66,7 +66,7 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
 
                     // Title
                     Text(
-                      l10n.headphones_calibration_great_title,
+                      l10n.headphones_calibration_great_title_first,
                       style: textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: colorScheme.onSurface,
@@ -81,14 +81,14 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                         children: [
                           TextSpan(
                             text:
-                                l10n.headphones_calibration_between_tests_description_prefix,
+                                l10n.headphones_calibration_before_tests_description_prefix,
                           ),
                           TextSpan(
                             text:
                                 context
                                     .read<HeadphonesCalibrationModuleBloc>()
                                     .state
-                                    .selectedTargetHeadphone
+                                    .selectedReferenceHeadphone
                                     ?.name ??
                                 "",
                             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -115,7 +115,7 @@ class HeadphonesCalibrationInformationBetweenTestsPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     context.read<HeadphonesCalibrationModuleBloc>().add(
-                      HeadphonesCalibrationModuleNavigateToSecondTest(),
+                      HeadphonesCalibrationModuleNavigateToFirstTest(),
                     );
                   },
                   style: ElevatedButton.styleFrom(

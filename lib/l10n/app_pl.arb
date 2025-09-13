@@ -175,7 +175,9 @@
 
     "headphones_calibration_information_between_tests_page_title": "Kalibracja słuchawek",
     "headphones_calibration_step_progress": "Krok {current} z {total}",
+    "headphones_calibration_great_title_first": "Zaczynamy!",
     "headphones_calibration_great_title": "Świetnie!",
+    "headphones_calibration_before_tests_description_prefix": "Załóż na głowę słuchawki ",
     "headphones_calibration_between_tests_description_prefix": "Ukończyłeś pierwszy test na słuchawkach referencyjnych. Teraz przełącz się na ",
     "headphones_calibration_between_tests_description_suffix": " i kontynuuj!",
     "headphones_calibration_continue_button": "Kontynuuj",

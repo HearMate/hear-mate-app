@@ -2,6 +2,7 @@ part of 'headphones_calibration_module_bloc.dart';
 
 enum HeadphonesCalibrationStep {
   welcome,
+  informationBeforeTests,
   firstTest,
   informationBetweenTests,
   secondTest,

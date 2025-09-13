@@ -32,6 +32,9 @@ class HeadphonesCalibrationModuleBloc
        super(HeadphonesCalibrationModuleState()) {
     on<HeadphonesCalibrationModuleStart>(_onStart);
     on<HeadphonesCalibrationModuleNavigateToWelcome>(_onNavigateToWelcome);
+    on<HeadphonesCalibrationModuleNavigateToInformationBeforeTests>(
+      _onNavigateToInformationBeforeTests,
+    );
     on<HeadphonesCalibrationModuleNavigateToFirstTest>(_onNavigateToFirstTest);
     on<HeadphonesCalibrationModuleNavigateToInformationBetweenTests>(
       _onNavigateToInformationBetweenTests,
@@ -173,6 +176,18 @@ class HeadphonesCalibrationModuleBloc
     emit(
       state.copyWith(
         currentStep: HeadphonesCalibrationStep.informationBetweenTests,
+      ),
+    );
+    hearingTestBloc.add(HearingTestInitialize());
+  }
+
+  void _onNavigateToInformationBeforeTests(
+    HeadphonesCalibrationModuleNavigateToInformationBeforeTests event,
+    Emitter<HeadphonesCalibrationModuleState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        currentStep: HeadphonesCalibrationStep.informationBeforeTests,
       ),
     );
     hearingTestBloc.add(HearingTestInitialize());

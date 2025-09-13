@@ -5,6 +5,7 @@ import 'package:hear_mate_app/features/hearing_test/screens/hearing_test_page/he
 import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_calibration_module/headphones_calibration_module_bloc.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_end_page/headphones_calibration_end_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_information_between_tests_page/headphones_calibration_information_between_tests_page.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_information_before_tests_page/headphones_calibration_information_before_tests_page.dart';
 import 'package:hear_mate_app/modules/headphones_calibration/screens/headphones_calibration_welcome_page/headphones_calibration_welcome_page.dart';
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 
@@ -53,7 +54,13 @@ class HeadphonesCalibrationModuleView extends StatelessWidget {
               key: ValueKey('WelcomePage'),
               child: HeadphonesCalibrationWelcomePage(),
             ),
-            if (state.currentStep == HeadphonesCalibrationStep.firstTest)
+            if (state.currentStep ==
+                HeadphonesCalibrationStep.informationBeforeTests)
+              const MaterialPage(
+                key: ValueKey('InformationBeforeTestsPage'),
+                child: HeadphonesCalibrationInformationBeforeTestsPage(),
+              )
+            else if (state.currentStep == HeadphonesCalibrationStep.firstTest)
               MaterialPage(
                 key: const ValueKey('FirstTestPage'),
                 child: BlocProvider.value(
