@@ -170,6 +170,10 @@
 	"headphones_calibration_between_tests_description_suffix": " і продовжуйте!",
 	"headphones_calibration_continue_button": "Продовжити",
 
+	"headphones_calibration_abort_title": "На жаль...",
+	"headphones_calibration_abort_label": "Калібрування перервано",
+	"headphones_calibration_abort_message": "Результати тесту занадто низькі. Якщо ви впевнені, що ваш слух у нормі, знайдіть тихіше місце та спробуйте ще раз.",
+
 	"headphones_calibration_end_page_title": "Калібрування завершено",
 	"headphones_calibration_congratulations_title": "Вітаємо!",
 	"headphones_calibration_complete_label": "Калібрування завершено",

@@ -524,20 +524,6 @@ class _ActionButtons extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-              )
-            else
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(text: l10n.headphones_calibration_ready_prefix),
-                    TextSpan(
-                      text: state.selectedReferenceHeadphone?.name ?? "",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(text: l10n.headphones_calibration_ready_suffix),
-                  ],
-                ),
-                style: Theme.of(context).textTheme.bodyLarge,
               ),
             const SizedBox(height: 16),
             SizedBox(

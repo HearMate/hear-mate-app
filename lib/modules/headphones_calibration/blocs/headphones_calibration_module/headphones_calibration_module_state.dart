@@ -5,6 +5,7 @@ enum HeadphonesCalibrationStep {
   informationBeforeTests,
   firstTest,
   informationBetweenTests,
+  abortCalibration,
   secondTest,
   end,
   exit,

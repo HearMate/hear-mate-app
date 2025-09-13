@@ -170,6 +170,10 @@
     "headphones_calibration_between_tests_description_suffix": " und mach weiter!",
     "headphones_calibration_continue_button": "Weiter",
 
+    "headphones_calibration_abort_title": "Leider...",
+    "headphones_calibration_abort_label": "Kalibrierung abgebrochen",
+    "headphones_calibration_abort_message": "Die Testergebnisse sind zu niedrig. Wenn du sicher bist, dass dein Gehör normal ist, suche einen ruhigeren Ort und versuche es erneut.",
+
     "headphones_calibration_end_page_title": "Kalibrierung abgeschlossen",
     "headphones_calibration_congratulations_title": "Glückwunsch!",
     "headphones_calibration_complete_label": "Kalibrierung abgeschlossen",
