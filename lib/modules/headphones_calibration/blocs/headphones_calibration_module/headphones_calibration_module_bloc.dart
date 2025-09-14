@@ -224,6 +224,10 @@ class HeadphonesCalibrationModuleBloc
             event.headphone == state.selectedReferenceHeadphone
                 ? null
                 : event.headphone,
+        headphonesDifferent:
+            state.selectedTargetHeadphone != null
+                ? event.headphone.name != state.selectedTargetHeadphone!.name
+                : true,
       ),
     );
   }
@@ -238,6 +242,10 @@ class HeadphonesCalibrationModuleBloc
             event.headphone == state.selectedTargetHeadphone
                 ? null
                 : event.headphone,
+        headphonesDifferent:
+            state.selectedReferenceHeadphone != null
+                ? event.headphone.name != state.selectedReferenceHeadphone!.name
+                : true,
       ),
     );
   }
