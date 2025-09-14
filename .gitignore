@@ -126,9 +126,8 @@ celerybeat.pid
 # Environments
 .env
 .venv
-env/
+env/*
 venv/
-ENV/
 env.bak/
 venv.bak/
 
@@ -184,3 +183,7 @@ pyrightconfig.json
 
 .vscode/
 .DS_Store
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

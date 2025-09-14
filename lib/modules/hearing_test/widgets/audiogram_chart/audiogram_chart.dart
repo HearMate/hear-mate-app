@@ -1,19 +1,15 @@
-import 'dart:ui';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/hearing_test_utils.dart';
-import 'package:hear_mate_app/modules/hearing_test/utils/constants.dart'
+import 'package:hear_mate_app/features/hearing_test/models/hearing_loss.dart';
+import 'package:hear_mate_app/features/hearing_test/utils/hearing_test_constants.dart'
     as HearingTestConstants;
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_point.dart';
-import 'package:hear_mate_app/utils/fl_dot_triangle_painter.dart';
+import 'package:hear_mate_app/shared/utils/fl_dot_triangle_painter.dart';
 
 class AudiogramChart extends StatelessWidget {
-  final List<double?> leftEarData;
-  final List<double?> rightEarData;
-  final List<double?>? leftEarMaskedData;
-  final List<double?>? rightEarMaskedData;
+  final List<HearingLoss?> hearingLossLeft;
+  final List<HearingLoss?> hearingLossRight;
 
   final List<String> frequencyLabels = const [
     '125',
@@ -27,63 +23,48 @@ class AudiogramChart extends StatelessWidget {
 
   AudiogramChart({
     super.key,
-    required this.leftEarData,
-    required this.rightEarData,
-    this.leftEarMaskedData,
-    this.rightEarMaskedData,
+    required this.hearingLossLeft,
+    required this.hearingLossRight,
   });
 
-  final int maxYValue = 100;
+  final int maxYValue = HearingTestConstants.MAX_DB_LEVEL;
   final int minYValue = HearingTestConstants.MIN_DB_LEVEL;
 
-  List<AudiogramPoint> buildAudiogramPoints(
-    List<double?> values,
-    List<double?>? maskedValues,
-  ) {
-    if (values.length != frequencyLabels.length + 1) return [];
+  double mapDbToY(double db) {
+    final y = maxYValue - (db - minYValue);
+    // Clamp in case input db is outside [-10, 110]
+    return y.clamp(minYValue.toDouble(), maxYValue.toDouble());
+  }
 
-    final mapping = getFrequencyMapping(values);
-    final List<AudiogramPoint> points = [];
-
-    for (final entry in mapping) {
-      final int index = entry.key;
-      final double? unmaskedValue = values[index];
-      final double? maskedValue =
-          maskedValues != null ? maskedValues[index] : null;
-
-      final bool isMasked = maskedValue != null;
-      final double? dbValue = isMasked ? maskedValue : unmaskedValue;
-
-      if (dbValue == null) {
-        continue;
-      }
-
-      points.add(
-        AudiogramPoint(
-          FlSpot(entry.value.toDouble(), maxYValue - (dbValue - minYValue)),
-          isMasked,
-        ),
-      );
-    }
-
-    return points;
+  List<AudiogramPoint> buildAudiogramPoints(List<HearingLoss?> values) {
+    return values.asMap().entries.where((e) => e.value != null).map((entry) {
+      final i = entry.key.toDouble(); // index 0..6
+      final hl = entry.value!;
+      return AudiogramPoint(FlSpot(i, mapDbToY(hl.value)), hl.isMasked);
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final leftEarPoints = buildAudiogramPoints(leftEarData, leftEarMaskedData);
+    final l10n = AppLocalizations.of(context)!;
+
+    final leftEarPoints = buildAudiogramPoints(hearingLossLeft);
     final leftEarSpots = leftEarPoints.map((p) => p.spot).toList();
 
-    final rightEarPoints = buildAudiogramPoints(
-      rightEarData,
-      rightEarMaskedData,
-    );
+    final rightEarPoints = buildAudiogramPoints(hearingLossRight);
     final rightEarSpots = rightEarPoints.map((p) => p.spot).toList();
+
+    final bool isLeftMasking = hearingLossLeft.any(
+      (element) => element?.isMasked ?? false,
+    );
+    final bool isRightMasking = hearingLossRight.any(
+      (element) => element?.isMasked ?? false,
+    );
 
     return Column(
       children: [
         ConstrainedBox(
-          constraints: BoxConstraints(minHeight: 150, maxHeight: 500),
+          constraints: const BoxConstraints(minHeight: 150, maxHeight: 500),
           child: LineChart(
             LineChartData(
               gridData: FlGridData(
@@ -95,16 +76,14 @@ class AudiogramChart extends StatelessWidget {
               titlesData: FlTitlesData(
                 bottomTitles: AxisTitles(
                   axisNameWidget: Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.hearing_test_audiogram_chart_frequency,
-                    style: TextStyle(fontSize: 12),
+                    l10n.hearing_test_audiogram_chart_frequency,
+                    style: const TextStyle(fontSize: 12),
                   ),
                   sideTitles: SideTitles(
                     showTitles: true,
                     interval: 1,
                     getTitlesWidget: (value, meta) {
-                      int index = value.round();
+                      final index = value.round();
                       if (index < 0 || index >= frequencyLabels.length) {
                         return const SizedBox.shrink();
                       }
@@ -119,14 +98,18 @@ class AudiogramChart extends StatelessWidget {
                   ),
                 ),
                 leftTitles: AxisTitles(
-                  axisNameWidget: Text('dB HL', style: TextStyle(fontSize: 12)),
+                  axisNameWidget: const Text(
+                    'dB HL',
+                    style: TextStyle(fontSize: 12),
+                  ),
                   sideTitles: SideTitles(
                     showTitles: true,
                     interval: 10,
                     reservedSize: 30,
                     getTitlesWidget: (value, meta) {
-                      int displayValue =
-                          (maxYValue - (value - minYValue)).toInt();
+                      // Convert chart Y back to dB for labeling
+                      final displayValue =
+                          (maxYValue - (value - minYValue)).round();
                       if (displayValue < minYValue ||
                           displayValue > maxYValue) {
                         return const SizedBox.shrink();
@@ -138,10 +121,10 @@ class AudiogramChart extends StatelessWidget {
                     },
                   ),
                 ),
-                rightTitles: AxisTitles(
+                rightTitles: const AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
-                topTitles: AxisTitles(
+                topTitles: const AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
               ),
@@ -151,8 +134,8 @@ class AudiogramChart extends StatelessWidget {
               ),
               minX: -0.5,
               maxX: 6.5,
-              minY: minYValue - 5,
-              maxY: maxYValue + 5,
+              minY: minYValue.toDouble() - 10,
+              maxY: maxYValue.toDouble() + 10,
               lineBarsData: [
                 LineChartBarData(
                   spots: leftEarSpots,
@@ -163,7 +146,9 @@ class AudiogramChart extends StatelessWidget {
                   dotData: FlDotData(
                     show: true,
                     getDotPainter: (spot, percent, barData, index) {
-                      final isMasked = leftEarPoints[index].masked;
+                      final isMasked =
+                          index < leftEarPoints.length &&
+                          leftEarPoints[index].masked;
                       if (isMasked) {
                         return FlDotSquarePainter(
                           color: Colors.transparent,
@@ -191,7 +176,9 @@ class AudiogramChart extends StatelessWidget {
                   dotData: FlDotData(
                     show: true,
                     getDotPainter: (spot, percent, barData, index) {
-                      final isMasked = rightEarPoints[index].masked;
+                      final isMasked =
+                          index < rightEarPoints.length &&
+                          rightEarPoints[index].masked;
                       if (isMasked) {
                         return FlDotTrianglePainter(
                           color: Colors.transparent,
@@ -212,7 +199,7 @@ class AudiogramChart extends StatelessWidget {
                   belowBarData: BarAreaData(show: false),
                 ),
               ],
-              lineTouchData: LineTouchData(enabled: false),
+              lineTouchData: const LineTouchData(enabled: false),
               extraLinesData: ExtraLinesData(
                 horizontalLines: [
                   HorizontalLine(
@@ -227,9 +214,7 @@ class AudiogramChart extends StatelessWidget {
                       style: const TextStyle(fontSize: 9, color: Colors.red),
                       labelResolver:
                           (line) =>
-                              AppLocalizations.of(
-                                context,
-                              )!.hearing_test_audiogram_chart_severe_loss,
+                              l10n.hearing_test_audiogram_chart_severe_loss,
                     ),
                   ),
                   HorizontalLine(
@@ -247,9 +232,7 @@ class AudiogramChart extends StatelessWidget {
                       ),
                       labelResolver:
                           (line) =>
-                              AppLocalizations.of(
-                                context,
-                              )!.hearing_test_audiogram_chart_moderate_loss,
+                              l10n.hearing_test_audiogram_chart_moderate_loss,
                     ),
                   ),
                   HorizontalLine(
@@ -266,14 +249,12 @@ class AudiogramChart extends StatelessWidget {
                         color: Color.fromARGB(255, 138, 124, 0),
                       ),
                       labelResolver:
-                          (line) =>
-                              AppLocalizations.of(
-                                context,
-                              )!.hearing_test_audiogram_chart_mild_loss,
+                          (line) => l10n.hearing_test_audiogram_chart_mild_loss,
                     ),
                   ),
                 ],
               ),
+              // Ensure nothing renders outside the bounds
               clipData: FlClipData.all(),
             ),
           ),
@@ -287,9 +268,7 @@ class AudiogramChart extends StatelessWidget {
           children: [
             _legendItem(
               FlDotCrossPainter(size: 12, color: Colors.blue, width: 2),
-              AppLocalizations.of(
-                context,
-              )!.hearing_test_audiogram_chart_left_ear,
+              l10n.hearing_test_audiogram_chart_left_ear,
             ),
             _legendItem(
               FlDotCirclePainter(
@@ -298,11 +277,9 @@ class AudiogramChart extends StatelessWidget {
                 strokeWidth: 2,
                 strokeColor: Colors.red,
               ),
-              AppLocalizations.of(
-                context,
-              )!.hearing_test_audiogram_chart_right_ear,
+              l10n.hearing_test_audiogram_chart_right_ear,
             ),
-            if (leftEarMaskedData != null)
+            if (isLeftMasking)
               _legendItem(
                 FlDotSquarePainter(
                   color: Colors.transparent,
@@ -310,11 +287,9 @@ class AudiogramChart extends StatelessWidget {
                   strokeColor: Colors.blue,
                   size: 12.0,
                 ),
-                AppLocalizations.of(
-                  context,
-                )!.hearing_test_audiogram_chart_left_ear_masked,
+                l10n.hearing_test_audiogram_chart_left_ear_masked,
               ),
-            if (rightEarMaskedData != null)
+            if (isRightMasking)
               _legendItem(
                 FlDotTrianglePainter(
                   color: Colors.transparent,
@@ -322,19 +297,15 @@ class AudiogramChart extends StatelessWidget {
                   strokeColor: Colors.red,
                   size: 12.0,
                 ),
-                AppLocalizations.of(
-                  context,
-                )!.hearing_test_audiogram_chart_right_ear_masked,
+                l10n.hearing_test_audiogram_chart_right_ear_masked,
               ),
           ],
         ),
-        if (leftEarMaskedData != null || rightEarMaskedData != null)
+        if (isLeftMasking || isRightMasking)
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Text(
-              AppLocalizations.of(
-                context,
-              )!.hearing_test_audiogram_chart_masking_explanation,
+              l10n.hearing_test_audiogram_chart_masking_explanation,
               style: const TextStyle(fontSize: 12),
               textAlign: TextAlign.center,
             ),
@@ -351,9 +322,8 @@ class _LegendShapePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Center the shape in the canvas
     final Offset center = Offset(size.width / 2, size.height / 2);
-    painter.draw(canvas, FlSpot(0, 0), center);
+    painter.draw(canvas, const FlSpot(0, 0), center);
   }
 
   @override

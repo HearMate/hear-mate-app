@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -41,26 +42,32 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              // Echo Parse button
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/echo_parse/welcome');
-                },
-                child: Text(
-                  'Echo Parse',
+              // Headphones Calibration button
+              if (!kIsWeb)
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/headphones_calibration/welcome',
+                    );
+                  },
+                  child: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.homepage_button_headphonesCalibration,
+                  ),
                 ),
-              ),
 
               const SizedBox(height: 40),
 
-              // Placeholder for future modules
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.homepage_button_moreModules,
-                  style: TextStyle(fontSize: 15, color: Colors.grey),
-                ),
-              ),
+              // // Placeholder for future modules
+              // Padding(
+              //   padding: EdgeInsets.all(8.0),
+              //   child: Text(
+              //     AppLocalizations.of(context)!.homepage_button_moreModules,
+              //     style: TextStyle(fontSize: 15, color: Colors.grey),
+              //   ),
+              // ),
             ],
           ),
         ),

@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:hear_mate_app/utils/logger.dart';
+import 'package:hear_mate_app/shared/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 
-
 class EchoParseApiRepository {
-  static const String uploadUrl = "https://audiogram-reader-1.onrender.com/upload-image";
+  static const String uploadUrl =
+      "https://audiogram-reader-1.onrender.com/upload-image";
 
   Future<FilePickerResult?> chooseAudiogramFileForUpload() async {
     return await FilePicker.platform.pickFiles(
@@ -15,7 +15,10 @@ class EchoParseApiRepository {
     );
   }
 
-  Future<Map<String, dynamic>> postAudiogramFileToServer(Uint8List image, String fileName) async {
+  Future<Map<String, dynamic>> postAudiogramFileToServer(
+    Uint8List image,
+    String fileName,
+  ) async {
     var uri = Uri.parse(uploadUrl);
 
     var request = http.MultipartRequest('POST', uri)
