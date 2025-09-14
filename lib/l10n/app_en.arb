@@ -26,7 +26,6 @@
     "homepage_button_helper": "Please select a module to continue:",
     "homepage_button_audioTest": "Audio Test Module",
     "homepage_button_headphonesCalibration": "Headphones Calibration",
-    "homepage_button_headphonesCalibration_web_info": "Headphones calibration feature not available on the web version",
     "homepage_button_echoParse": "Echo Parse",
     "homepage_button_moreModules": "More Modules Coming Soon...",
     "@homepage_button_helper": {
