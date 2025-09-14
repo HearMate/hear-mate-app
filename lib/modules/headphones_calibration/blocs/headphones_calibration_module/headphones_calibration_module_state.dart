@@ -21,6 +21,7 @@ class HeadphonesCalibrationModuleState {
   final HearingTestResult? firstTestResults;
   final HearingTestResult? secondTestResults;
   final bool isCooldownActive;
+  final bool headphonesDifferent;
 
   HeadphonesCalibrationModuleState({
     this.currentStep = HeadphonesCalibrationStep.welcome,
@@ -32,6 +33,7 @@ class HeadphonesCalibrationModuleState {
     this.firstTestResults,
     this.secondTestResults,
     this.isCooldownActive = false,
+    this.headphonesDifferent = false,
   });
 
   HeadphonesCalibrationModuleState copyWith({
@@ -44,6 +46,7 @@ class HeadphonesCalibrationModuleState {
     HearingTestResult? firstTestResults,
     HearingTestResult? secondTestResults,
     bool? isCooldownActive,
+    bool? headphonesDifferent,
   }) {
     return HeadphonesCalibrationModuleState(
       currentStep: currentStep ?? this.currentStep,
@@ -59,6 +62,7 @@ class HeadphonesCalibrationModuleState {
       firstTestResults: firstTestResults ?? this.firstTestResults,
       secondTestResults: secondTestResults ?? this.secondTestResults,
       isCooldownActive: isCooldownActive ?? this.isCooldownActive,
+      headphonesDifferent: headphonesDifferent ?? this.headphonesDifferent,
     );
   }
 }

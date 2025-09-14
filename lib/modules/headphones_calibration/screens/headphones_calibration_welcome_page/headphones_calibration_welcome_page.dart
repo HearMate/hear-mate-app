@@ -154,108 +154,6 @@ class _WelcomeSection extends StatelessWidget {
   }
 }
 
-class _SelectionStatusSection extends StatelessWidget {
-  const _SelectionStatusSection();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return BlocBuilder<
-      HeadphonesCalibrationModuleBloc,
-      HeadphonesCalibrationModuleState
-    >(
-      builder: (context, state) {
-        return Card(
-          elevation: 1,
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.check_circle_outline,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      l10n.headphones_calibration_your_selection_title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                _SelectionItem(
-                  label: l10n.headphones_calibration_reference_headphone_label,
-                  selection: state.selectedReferenceHeadphone,
-                  icon: Icons.star,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(height: 8),
-                _SelectionItem(
-                  label: l10n.headphones_calibration_target_headphone_label,
-                  selection: state.selectedTargetHeadphone,
-                  icon: Icons.tune,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _SelectionItem extends StatelessWidget {
-  final String label;
-  final HeadphonesModel? selection;
-  final IconData icon;
-  final Color color;
-
-  const _SelectionItem({
-    required this.label,
-    required this.selection,
-    required this.icon,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: color),
-        const SizedBox(width: 8),
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            selection != null
-                ? '${selection!.name}'
-                : AppLocalizations.of(
-                  context,
-                )!.headphones_calibration_not_selected,
-            style: TextStyle(
-              color:
-                  selection != null
-                      ? Theme.of(context).colorScheme.onSurface
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
-              fontStyle:
-                  selection != null ? FontStyle.normal : FontStyle.italic,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _HeadphonesTable extends StatelessWidget {
   final String title;
   final bool isReference;
@@ -531,6 +429,7 @@ class _ActionButtons extends StatelessWidget {
             state.selectedReferenceHeadphone != null &&
             state.selectedTargetHeadphone != null;
         final isCooldownActive = state.isCooldownActive;
+        final headphonesDifferent = state.headphonesDifferent;
 
         return Column(
           children: [
@@ -544,6 +443,13 @@ class _ActionButtons extends StatelessWidget {
             else if (!headphonesSelected)
               Text(
                 l10n.headphones_calibration_missing_selection,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              )
+            else if (!headphonesDifferent)
+              Text(
+                l10n.headphones_calibration_different_selection,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),

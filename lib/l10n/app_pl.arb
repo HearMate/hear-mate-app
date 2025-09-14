@@ -168,6 +168,7 @@
     "headphones_calibration_no_target_headphones": "Brak dostępnych słuchawek docelowych",
     "headphones_calibration_empty_state_hint": "Spróbuj zmienić kryteria wyszukiwania",
     "headphones_calibration_missing_selection": "Aby skalibrować nowe słuchawki, musisz wybrać zarówno referencyjne, jak i docelowe.",
+    "headphones_calibration_different_selection": "Słuchawki docelowe muszą być inne niż referencyjne.",
     "headphones_calibration_cooldown_info": "Musisz zrobić dłuższą przerwę między testami aby były miarodajne",
     "headphones_calibration_ready_prefix": "Świetnie, możemy zaczynać! Pamiętaj, aby podłączyć ",
     "headphones_calibration_ready_suffix": "!",
