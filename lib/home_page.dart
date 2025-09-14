@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -43,25 +43,20 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 10),
 
               // Headphones Calibration button
-              kIsWeb
-                  ? Text(
+              if (!kIsWeb)
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/headphones_calibration/welcome',
+                    );
+                  },
+                  child: Text(
                     AppLocalizations.of(
                       context,
-                    )!.homepage_button_headphonesCalibration_web_info,
-                  )
-                  : OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/headphones_calibration/welcome',
-                      );
-                    },
-                    child: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.homepage_button_headphonesCalibration,
-                    ),
+                    )!.homepage_button_headphonesCalibration,
                   ),
+                ),
 
               const SizedBox(height: 40),
 
