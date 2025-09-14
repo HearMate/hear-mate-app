@@ -23,6 +23,7 @@ class HearingTestState {
   final HearingTestResult results;
 
   final double step;
+  final bool endEarly;
 
   HearingTestState({
     this.isButtonPressed = false,
@@ -42,6 +43,7 @@ class HearingTestState {
     List<double?>? rightEarResultsMasked,
     HearingTestResult? results,
     this.step = 5,
+    this.endEarly = false,
   }) : leftEarResults =
            leftEarResults ??
            List<double?>.filled(
@@ -90,6 +92,7 @@ class HearingTestState {
     List<double?>? rightEarResultsMasked,
     HearingTestResult? results,
     double? step,
+    bool? endEarly,
   }) {
     return HearingTestState(
       isButtonPressed: isButtonPressed ?? this.isButtonPressed,
@@ -114,6 +117,7 @@ class HearingTestState {
       rightEarResultsMasked:
           rightEarResultsMasked ?? this.rightEarResultsMasked,
       step: step ?? this.step,
+      endEarly: endEarly ?? this.endEarly,
     );
   }
 }

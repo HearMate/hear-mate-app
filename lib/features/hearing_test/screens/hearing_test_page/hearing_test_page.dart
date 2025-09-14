@@ -169,7 +169,7 @@ class HearingTestPage extends StatelessWidget {
                   child: TextButton.icon(
                     onPressed: () {
                       context.read<HearingTestBloc>().add(
-                        HearingTestCompleted(),
+                        HearingTestCompletedEarly(),
                       );
                     },
                     icon: Icon(

@@ -34,6 +34,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     on<HearingTestNextFrequency>(_onNextFrequency);
     on<HearingTestChangeEar>(_onChangeEar);
     on<HearingTestCompleted>(_onTestCompleted);
+    on<HearingTestCompletedEarly>(_onTestCompletedEarly);
     on<HearingTestStartMaskedTest>(_onStartMaskedTest);
     on<HearingTestPlayingMaskedSound>(_onPlayingMaskedSound);
     on<HearingTestNextMaskedFrequency>(_onNextMaskedFrequency);
@@ -229,6 +230,14 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       ),
     );
     add(HearingTestPlayingSound());
+  }
+
+  void _onTestCompletedEarly(
+    HearingTestCompletedEarly event,
+    Emitter<HearingTestState> emit,
+  ) {
+    emit(state.copyWith(endEarly: true));
+    return add(HearingTestCompleted());
   }
 
   void _onTestCompleted(
