@@ -63,11 +63,15 @@ class HeadphonesCalibrationModuleBloc
 
     hearingTestBloc.stream.listen((hearingTestState) {
       if (hearingTestState.isTestCompleted) {
-        add(
-          HeadphonesCalibrationModuleTestCompleted(
-            results: hearingTestState.results,
-          ),
-        );
+        if (hearingTestState.endEarly) {
+          add(HeadphonesCalibrationModuleNavigateToExit());
+        } else {
+          add(
+            HeadphonesCalibrationModuleTestCompleted(
+              results: hearingTestState.results,
+            ),
+          );
+        }
       }
     });
 

@@ -24,6 +24,8 @@ class HearingTestChangeEar extends HearingTestEvent {}
 
 class HearingTestCompleted extends HearingTestEvent {}
 
+class HearingTestCompletedEarly extends HearingTestEvent {}
+
 class HearingTestPlayingMaskedSound extends HearingTestEvent {}
 
 class HearingTestNextMaskedFrequency extends HearingTestEvent {}
