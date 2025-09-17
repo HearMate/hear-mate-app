@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
@@ -42,7 +44,7 @@ class AudiogramSection extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                "Twój audiogram",
+                loc.audiogram_section_yours_audiogram,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.primary,

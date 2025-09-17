@@ -18,13 +18,13 @@ class _SavedFilesSection extends StatelessWidget {
         ),
         const SizedBox(height: 48),
         _SavedFileItem(
-          name: "Krystyna Pawłowicz",
-          savedDate: "10:30, 18 maja 2025",
+          name: langLoc.debug_saved_file_name_one,
+          savedDate: langLoc.debug_saved_file_date_one,
         ),
         const SizedBox(height: 16),
         _SavedFileItem(
-          name: "Jarosław Jakimowicz",
-          savedDate: "12:48, 12 grudnia 2025",
+          name: langLoc.debug_saved_file_name_two,
+          savedDate: langLoc.debug_saved_file_date_two,
         ),
       ],
     );

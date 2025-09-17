@@ -36,10 +36,9 @@ class SaveButtonSection extends StatelessWidget {
                 return FilledButton(
                   onPressed: () => _handleSaveButtonPressed(context, state),
                   style: FilledButton.styleFrom(
-                    backgroundColor:
-                        state.resultSaved
-                            ? Colors.green.shade600
-                            : theme.colorScheme.primary,
+                    backgroundColor: state.resultSaved
+                        ? Colors.green.shade600
+                        : theme.colorScheme.primary,
                     foregroundColor: theme.colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -73,7 +72,7 @@ class SaveButtonSection extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            "Zapisz wyniki aby móc je później przeglądać",
+            loc.save_button_section_save_results_to_desc,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.7),
             ),
@@ -88,30 +87,27 @@ class SaveButtonSection extends StatelessWidget {
     if (state.resultSaved) {
       showDialog(
         context: context,
-        builder:
-            (dialogContext) => BlocProvider.value(
-              value: context.read<HearingTestBloc>(),
-              child: CustomAlertDialog(type: AlertType.alreadySaved),
-            ),
+        builder: (dialogContext) => BlocProvider.value(
+          value: context.read<HearingTestBloc>(),
+          child: CustomAlertDialog(type: AlertType.alreadySaved),
+        ),
       );
     } else if (state.results.hasMissingValues()) {
       showDialog(
         context: context,
-        builder:
-            (dialogContext) => BlocProvider.value(
-              value: context.read<HearingTestBloc>(),
-              child: CustomAlertDialog(type: AlertType.missingValues),
-            ),
+        builder: (dialogContext) => BlocProvider.value(
+          value: context.read<HearingTestBloc>(),
+          child: CustomAlertDialog(type: AlertType.missingValues),
+        ),
       );
     } else {
       context.read<HearingTestBloc>().add(HearingTestSaveResult());
       showDialog(
         context: context,
-        builder:
-            (dialogContext) => BlocProvider.value(
-              value: context.read<HearingTestBloc>(),
-              child: CustomAlertDialog(type: AlertType.saved),
-            ),
+        builder: (dialogContext) => BlocProvider.value(
+          value: context.read<HearingTestBloc>(),
+          child: CustomAlertDialog(type: AlertType.saved),
+        ),
       );
     }
   }

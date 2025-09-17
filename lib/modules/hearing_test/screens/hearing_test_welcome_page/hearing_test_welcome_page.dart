@@ -26,11 +26,10 @@ class HearingTestWelcomePage extends StatelessWidget {
     return RepositoryProvider<HearingTestSoundsPlayerRepository>(
       create: (_) => HearingTestSoundsPlayerRepository(),
       child: BlocProvider<HearingTestBloc>(
-        create:
-            (context) => HearingTestBloc(
-              hearingTestSoundsPlayerRepository:
-                  context.read<HearingTestSoundsPlayerRepository>(),
-            ),
+        create: (context) => HearingTestBloc(
+          hearingTestSoundsPlayerRepository:
+              context.read<HearingTestSoundsPlayerRepository>(),
+        ),
         child: const HearingTestWelcomePageView(),
       ),
     );
@@ -53,22 +52,21 @@ class HearingTestWelcomePageView extends StatelessWidget {
           return Scaffold(
             appBar: HMAppBar(
               route: ModalRoute.of(context)?.settings.name ?? "",
-              title: "Jakis tytul page'a",
+              title: l10n.hearing_test_welcome_page_title,
             ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: currentIndex,
-              onTap:
-                  (index) =>
-                      context.read<TabNavigationCubit>().changeTab(index),
+              onTap: (index) =>
+                  context.read<TabNavigationCubit>().changeTab(index),
               type: BottomNavigationBarType.fixed,
               items: [
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.headphones),
-                  label: "Test",
+                  label: l10n.hearing_test_welcome_page_test,
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.file_copy),
-                  label: "Saved",
+                  label: l10n.hearing_test_welcome_page_saved,
                 ),
               ],
             ),

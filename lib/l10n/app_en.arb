@@ -363,5 +363,16 @@
     "hearing_test_result_history_page": "Result history",
     "@hearing_test_result_history_page": {
         "description": "Label for the button to see hearing test results."
-    }
+    },
+
+    "debug_saved_file_name_one": "Anna Nowak",
+    "debug_saved_file_name_two": "Jan Kowalski",
+    "debug_saved_file_date_one": "10:30, May 18, 2025",
+    "debug_saved_file_date_two": "12:48, December 12, 2025",
+    "hearing_test_page_end_test_early": "End test early",
+    "audiogram_section_yours_audiogram": "Your audiogram",
+    "results_header_test_ended_successfully": "Test completed successfully",
+    "save_button_section_save_results_to_desc": "Save results to view them later",
+    "hearing_test_welcome_page_test": "Test",
+    "hearing_test_welcome_page_saved": "Saved"
 }

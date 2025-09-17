@@ -120,7 +120,7 @@ class CustomAlertDialog extends StatelessWidget {
             backgroundColor: theme.colorScheme.primary,
           ),
           child: Text(
-            "Zapisz",
+            l10n.save,
             style: TextStyle(color: theme.colorScheme.onPrimary),
           ),
         ),

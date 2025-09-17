@@ -41,7 +41,7 @@ class ResultsHeader extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            "Test ukończony pomyślnie",
+            loc.results_header_test_ended_successfully,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.primary.withValues(alpha: 0.8),
               fontWeight: FontWeight.w500,
