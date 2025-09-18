@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TipSection extends StatelessWidget {
   final ThemeData theme;
@@ -7,6 +8,8 @@ class TipSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -24,7 +27,7 @@ class TipSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Wskazówka",
+                  l10n.tip_section_tip,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.amber.shade800,
@@ -32,7 +35,7 @@ class TipSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Nie martw się jeśli nie usłyszysz niektórych dźwięków - to normalne!",
+                  l10n.tip_section_tip_desc,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.amber.shade700,
                   ),

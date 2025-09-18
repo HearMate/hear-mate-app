@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResultsHeader extends StatelessWidget {
   final ThemeData theme;
@@ -12,6 +13,8 @@ class ResultsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -51,7 +54,7 @@ class ResultsHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Zapisane wyniki",
+                  l10n.results_header_saved_results,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.primary,
@@ -59,7 +62,7 @@ class ResultsHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "$resultsCount ${resultsCount == 1 ? 'wynik' : 'wyników'} w historii",
+                  l10n.results_header_results_count(resultsCount),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.primary.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w500,

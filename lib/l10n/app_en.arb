@@ -1,25 +1,19 @@
 {
     "@@locale": "en",
-
-
     "comment_homepage1": "=====================================",
     "comment_homepage2": "============== HomePage =============",
     "comment_homepage3": "=====================================",
-
     "menu_about": "About",
     "menu_settings": "Settings",
-
     "@menu_about": {
         "description": "Label for the menu item that navigates to the About section."
     },
     "@menu_settings": {
         "description": "Label for the menu item that navigates to the Settings section."
     },
-
     "about_hearmate": "HearMate is an application that supports preliminary hearing analysis, enabling users to obtain initial results and assess whether there is a\u00a0need for consultation with a specialist. Its goal is to prevent situations in which hearing loss is detected too late, hindering effective treatment or negatively affecting quality of life. The application leverages artificial intelligence mechanisms to analyze audiograms and support the initial diagnostic process.",
     "about_echoparse": "EchoParse is a dedicated module responsible for converting traditional audiograms—both in paper and graphical formats—into CSV files suitable for further data analysis. This module leverages solutions based on classical element detection methods, enabling the automatic recognition and processing of audiometric test results. EchoParse was developed in collaboration with the Institute of Physiology and Pathology of Hearing, providing essential support in the digitization and analysis of diagnostic outcomes.",
     "about_projectTeam": "The Project Team:",
-    
     "@about_hearmate": {
         "description": "Description of the HearMate application and its purpose."
     },
@@ -29,12 +23,10 @@
     "@about_echoparse": {
         "description": "Description of the EchoParse module and its functionality."
     },
-
     "homepage_button_helper": "Please select a module to continue:",
     "homepage_button_audioTest": "Audio Test Module",
     "homepage_button_echoParse": "Echo Parse",
     "homepage_button_moreModules": "More Modules Coming Soon...",
-
     "@homepage_button_helper": {
         "description": "Helper text prompting the user to select a module on the homepage."
     },
@@ -47,25 +39,19 @@
     "@homepage_button_moreModules": {
         "description": "Label for the button indicating more modules will be available in the future."
     },
-
-
     "comment_echo_parse1": "=====================================",
     "comment_echo_parse2": "============= Echo Parse ============",
     "comment_echo_parse3": "=====================================",
-
     "echo_parse_saved_file_saved_label": "Saved",
-
     "@echo_parse_saved_file_saved_label": {
         "description": "Label for a date of the saved file"
     },
-
     "echoparse_upload_appbarTitle": "Upload",
     "echoparse_upload_headerUpload": "Load your audiogram",
     "echoparse_upload_buttonHelper": "Accepted formats: png, jpg",
     "echoparse_upload_buttonPick": "Pick file",
     "echoparse_upload_savedFilesHeader": "Saved files",
     "echoparse_upload_buttonUpload": "Upload",
-    
     "@echoparse_upload_appbarTitle": {
         "description": "Title displayed in the app bar on the upload screen."
     },
@@ -84,13 +70,11 @@
     "@echoparse_upload_buttonUpload": {
         "description": "Label for the button to upload the audiogram."
     },
-
     "echoparse_welcome_appbar_title": "EchoParse",
     "echoparse_welcome_header": "EchoParse",
     "echoparse_welcome_heading": "Your audiogram in CSV!",
     "echoparse_welcome_body": "Convert your audiogram photos and files into easy to use, modern CSV documents.",
     "echoparse_welcome_mainButton": "Let's go!",
-
     "@echoparse_welcome_header": {
         "description": "Header text displayed on the welcome screen."
     },
@@ -106,24 +90,19 @@
     "@echoparse_welcome_mainButton": {
         "description": "Text displayed on the button to start the process."
     },
-
     "echoparse_settings_appbar_title": "Settings",
     "echoparse_settings_language_title": "Language",
-
     "@echoparse_settings_appbar_title": {
         "description": "Title displayed in the app bar on the settings screen."
     },
     "@echoparse_settings_language_title": {
         "description": "Label for the language selection option in the settings."
     },
-
     "echo_parse_conversion_results_title": "Conversion complete",
     "echo_parse_conversion_results_heading": "The audiogram has been converted to CSV.",
     "echo_parse_conversion_results_preview": "Preview",
     "echo_parse_conversion_results_save_file": "Save file",
     "echo_parse_conversion_results_next_file": "Next file",
-    
-
     "@echo_parse_conversion_results_title": {
         "description": "Title displayed when data is successfully converted."
     },
@@ -139,13 +118,11 @@
     "@echo_parse_conversion_results_next_file": {
         "description": "Title for the new file conversion."
     },
-
     "echoparse_collection_thanks_title": "Thank you for using",
     "echoparse_collection_module_name": "Echo Parse!",
     "echoparse_collection_choose_title": "Choose your way.",
     "echoparse_collection_parse_title": "Parse new file.",
     "echoparse_collection_modules_title": "Go back to modules",
-
     "@echoparse_collection_thanks_title": {
         "description": "Title displayed to thank the user for using the application."
     },
@@ -161,19 +138,14 @@
     "@echoparse_collection_modules_title": {
         "description": "Label for the option to navigate back to the modules screen."
     },
-
-
     "comment_hearing_test1": "=====================================",
     "comment_hearing_test2": "============ Hearing Test ===========",
     "comment_hearing_test3": "=====================================",
-
-
     "hearing_test_test_page_title": "Hearing Test",
     "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",
     "hearing_test_test_page_release": "Release the button now.",
     "hearing_test_test_page_end": "End Test Early",
     "hearing_test_test_page_button_label": "PRESS",
-
     "@hearing_test_test_page_title": {
         "description": "Title displayed on the hearing test page."
     },
@@ -189,7 +161,6 @@
     "@hearing_test_test_page_button_label": {
         "description": "Label for the hearing test main button."
     },
-
     "hearing_test_audiogram_chart_frequency": "Frequency (Hz)",
     "hearing_test_audiogram_chart_mild_loss": "Mild loss",
     "hearing_test_audiogram_chart_moderate_loss": "Moderate loss",
@@ -199,7 +170,6 @@
     "hearing_test_audiogram_chart_left_ear_masked": "Left ear (masked)",
     "hearing_test_audiogram_chart_right_ear_masked": "Right ear (masked)",
     "hearing_test_audiogram_chart_masking_explanation": "Masking was detected in your hearing test result. It isolates the test ear by playing noise in the other ear to ensure accurate results.",
-
     "@hearing_test_audiogram_chart_frequency": {
         "description": "Label for the frequency axis on the audiogram chart."
     },
@@ -227,8 +197,6 @@
     "@hearing_test_audiogram_chart_masking_explanation": {
         "description": "Label for explaining what is masking."
     },
-
-
     "hearing_test_result_page_title": "HearMate",
     "hearing_test_result_page_your_results": "Your Hearing Test Results",
     "hearing_test_result_page_instruction": "Below is your audiogram showing hearing thresholds across different frequencies.",
@@ -236,7 +204,6 @@
     "hearing_test_result_page_note_description": "This generated audiogram and hearing test results are not precise and should be interpreted with caution. For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.",
     "hearing_test_result_page_save_results": "Save results",
     "hearing_test_result_page_home": "Back to home",
-
     "@hearing_test_result_page_title": {
         "description": "Title displayed on the hearing test results page."
     },
@@ -258,11 +225,9 @@
     "@hearing_test_result_page_home": {
         "description": "Label for the button to navigate back to the home page."
     },
-
     "hearing_test_result_page_save_results_missing_values_title": "Incomplete Test",
     "hearing_test_result_page_save_results_missing_values_prompt": "Some test results are missing. Are you sure you want to save anyway?",
     "hearing_test_result_page_save_results_missing_values_save_anyway": "Save Anyway",
-
     "@hearing_test_result_page_save_results_missing_values_title": {
         "description": "Title for the alert dialog when trying to save results with missing values."
     },
@@ -272,7 +237,6 @@
     "@hearing_test_result_page_save_results_missing_values_save_anyway": {
         "description": "Label for the button to confirm saving the results despite missing values."
     },
-
     "hearing_test_result_page_save_results_success_message": "Your results have been successfully saved.",
     "hearing_test_result_page_save_results_on_exit_prompt": "Do you want to save your hearing test results before exiting?",
     "@hearing_test_result_page_save_results_success_message": {
@@ -289,13 +253,10 @@
     "@hearing_test_result_page_already_saved_message": {
         "description": "Dialog message that the results already have been saved."
     },
-
-
     "hearing_test_welcome_page_title": "Hear Mate",
     "hearing_test_welcome_page_welcome": "Welcome to Hearing Test",
     "hearing_test_welcome_page_description": "This module will test your hearing ability across different frequencies.",
     "hearing_test_welcome_page_start_hearing_test": "Start Test",
-
     "@hearing_test_welcome_page_title": {
         "description": "Title displayed on the welcome page of the hearing test module."
     },
@@ -308,17 +269,14 @@
     "@hearing_test_welcome_page_start_hearing_test": {
         "description": "Label for the button to start the hearing test."
     },
-
     "hearing_test_delete_alert_title": "Delete Result",
     "hearing_test_delete_alert_message": "Are you sure you want to permanently delete this result? This action cannot be undone.",
-    
     "@hearing_test_delete_alert_title": {
         "description": "Title for the alert dialog that confirms deletion of a hearing test result."
     },
     "@hearing_test_delete_alert_message": {
         "description": "Message in the deletion confirmation alert dialog."
     },
-    
     "cancel": "Cancel",
     "delete": "Delete",
     "save": "Save",
@@ -350,7 +308,6 @@
             "error": {}
         }
     },
-
     "hearing_test_history_page_result_info": "Left: {left}\nRight: {right}",
     "@hearing_test_history_page_result_info": {
         "description": "Shows left and right ear results in history.",
@@ -359,12 +316,10 @@
             "right": {}
         }
     },
-    
     "hearing_test_result_history_page": "Result history",
     "@hearing_test_result_history_page": {
         "description": "Label for the button to see hearing test results."
     },
-
     "debug_saved_file_name_one": "Anna Nowak",
     "debug_saved_file_name_two": "Jan Kowalski",
     "debug_saved_file_date_one": "10:30, May 18, 2025",
@@ -374,5 +329,38 @@
     "results_header_test_ended_successfully": "Test completed successfully",
     "save_button_section_save_results_to_desc": "Save results to view them later",
     "hearing_test_welcome_page_test": "Test",
-    "hearing_test_welcome_page_saved": "Saved"
+    "hearing_test_welcome_page_saved": "Saved",
+    "test_tab_header_title": "Hearing Test",
+    "test_tab_header_subtitle": "Check your hearing in just 10 minutes",
+    "test_tab_test_time_value": "10 minutes",
+    "test_tab_test_time_info": "Test duration",
+    "test_tab_headphones": "Headphones",
+    "test_tab_headphones_info": "Recommended for best results",
+    "test_tab_quiet": "Quiet",
+    "test_tab_quiet_desc": "Find a quiet room",
+    "test_tab_how_it_works": "How it works",
+    "test_tab_how_it_works_desc_1": "Click the screen when you hear a sound",
+    "test_tab_how_it_works_desc_2": "The test will first check your right ear",
+    "test_tab_how_it_works_desc_3": "Then it will move to your left ear",
+    "test_tab_how_it_works_desc_4": "Sounds can be very quiet",
+    "test_tab_how_it_works_desc_5": "The test will end automatically",
+    "test_tab_ready": "Ready? Start the test now",
+    "audiogram_section_audiogram_chart": "Wykres słuchu",
+    "results_header_saved_results": "Zapisane wyniki",
+
+    "results_header_results_count": "{count, plural, =0{Zero results saved} =1{One result saved} other{{count} results saved}}",
+    "@results_header_results_count": {
+        "description": "Shows the count of saved results with proper pluralization.",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+
+    "empty_state_no_results": "Brak zapisanych wyników",
+    "empty_state_do_test_to_see_results": "Wykonaj pierwszy test słuchu, aby zobaczyć tutaj wyniki",
+
+    "tip_section_tip": "Wskazówka",
+    "tip_section_tip_desc": "Nie martw się jeśli nie usłyszysz niektórych dźwięków - to normalne!"
 }

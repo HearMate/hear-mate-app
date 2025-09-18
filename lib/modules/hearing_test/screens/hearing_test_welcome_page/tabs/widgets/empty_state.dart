@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EmptyState extends StatelessWidget {
   final ThemeData theme;
@@ -7,6 +8,7 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -27,7 +29,7 @@ class EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              "Brak zapisanych wyników",
+              l10n.empty_state_no_results,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: Colors.grey.shade700,
@@ -36,7 +38,7 @@ class EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              "Wykonaj pierwszy test słuchu, aby zobaczyć tutaj wyniki",
+              l10n.empty_state_do_test_to_see_results,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: Colors.grey.shade600,
               ),

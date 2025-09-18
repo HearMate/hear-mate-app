@@ -105,7 +105,7 @@ class AudiogramSection extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "Wykres słuchu",
+                      loc.audiogram_section_audiogram_chart,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.primary,

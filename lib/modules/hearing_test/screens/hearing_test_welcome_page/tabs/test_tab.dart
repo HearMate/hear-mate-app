@@ -12,8 +12,8 @@ class _TestTab extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            _buildHeader(theme),
-            _buildContent(theme),
+            _buildHeader(theme, l10n),
+            _buildContent(theme, l10n),
             _buildStartButton(context, l10n, theme),
           ],
         ),
@@ -21,7 +21,7 @@ class _TestTab extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(ThemeData theme) {
+  Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -57,7 +57,7 @@ class _TestTab extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            "Test słuchu",
+            l10n.test_tab_header_title,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.primary,
@@ -66,7 +66,7 @@ class _TestTab extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            "Sprawdź swój słuch w zaledwie 10 minut",
+            l10n.test_tab_header_subtitle,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.primary.withValues(alpha: 0.8),
               fontWeight: FontWeight.w500,
@@ -78,15 +78,15 @@ class _TestTab extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(ThemeData theme) {
+  Widget _buildContent(ThemeData theme, AppLocalizations l10n) {
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 8),
-            _buildQuickInfoCards(theme),
+            _buildQuickInfoCards(theme, l10n),
             const SizedBox(height: 16),
-            _buildInstructions(theme),
+            _buildInstructions(theme, l10n),
             const SizedBox(height: 16),
             TipSection(theme: theme),
             const SizedBox(height: 32),
@@ -96,66 +96,66 @@ class _TestTab extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickInfoCards(ThemeData theme) {
+  Widget _buildQuickInfoCards(ThemeData theme, AppLocalizations l10n) {
     return Column(
       children: [
         QuickInfoCard(
           icon: Icons.schedule,
-          title: "10 minut",
-          subtitle: "Czas trwania testu",
+          title: l10n.test_tab_test_time_value,
+          subtitle: l10n.test_tab_test_time_info,
           theme: theme,
         ),
         const Divider(height: 1),
         QuickInfoCard(
           icon: Icons.headphones,
-          title: "Słuchawki",
-          subtitle: "Zalecane do najlepszych wyników",
+          title: l10n.test_tab_headphones,
+          subtitle: l10n.test_tab_headphones_info,
           theme: theme,
         ),
         const Divider(height: 1),
         QuickInfoCard(
           icon: Icons.volume_off,
-          title: "Cisza",
-          subtitle: "Znajdź ciche pomieszczenie",
+          title: l10n.test_tab_quiet,
+          subtitle: l10n.test_tab_quiet_desc,
           theme: theme,
         ),
       ],
     );
   }
 
-  Widget _buildInstructions(ThemeData theme) {
+  Widget _buildInstructions(ThemeData theme, AppLocalizations l10n) {
     return Column(
       children: [
         SectionHeader(
           icon: Icons.list_alt,
-          title: "Jak to działa",
+          title: l10n.test_tab_how_it_works,
           theme: theme,
         ),
         StepItem(
           stepNumber: "1",
-          text: "Kliknij ekran gdy usłyszysz dźwięk",
+          text: l10n.test_tab_how_it_works_desc_1,
           theme: theme,
         ),
         const Divider(height: 1),
         StepItem(
           stepNumber: "2",
-          text: "Test sprawdzi najpierw prawe ucho",
+          text: l10n.test_tab_how_it_works_desc_2,
           theme: theme,
         ),
         const Divider(height: 1),
         StepItem(
           stepNumber: "3",
-          text: "Następnie przejdzie do lewego ucha",
+          text: l10n.test_tab_how_it_works_desc_3,
           theme: theme,
         ),
         const Divider(height: 1),
         StepItem(
           stepNumber: "4",
-          text: "Dźwięki mogą być bardzo ciche",
+          text: l10n.test_tab_how_it_works_desc_4,
           theme: theme,
         ),
         const Divider(height: 1),
-        StepItem(stepNumber: "5", text: "Test zakończy się sam", theme: theme),
+        StepItem(stepNumber: "5", text: l10n.test_tab_how_it_works_desc_5, theme: theme),
       ],
     );
   }
@@ -224,7 +224,7 @@ class _TestTab extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            "Gotowy? Rozpocznij test już teraz",
+            : l10n.test_tab_ready,
             style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.grey.shade600,
             ),
