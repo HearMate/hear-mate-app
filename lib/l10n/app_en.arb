@@ -345,8 +345,9 @@
     "test_tab_how_it_works_desc_4": "Sounds can be very quiet",
     "test_tab_how_it_works_desc_5": "The test will end automatically",
     "test_tab_ready": "Ready? Start the test now",
-    "audiogram_section_audiogram_chart": "Wykres słuchu",
-    "results_header_saved_results": "Zapisane wyniki",
+    
+    "audiogram_section_audiogram_chart": "Audiogram Chart",
+    "results_header_saved_results": "Saved Results",
 
     "results_header_results_count": "{count, plural, =0{Zero results saved} =1{One result saved} other{{count} results saved}}",
     "@results_header_results_count": {
@@ -358,9 +359,22 @@
         }
     },
 
-    "empty_state_no_results": "Brak zapisanych wyników",
-    "empty_state_do_test_to_see_results": "Wykonaj pierwszy test słuchu, aby zobaczyć tutaj wyniki",
+    "empty_state_no_results": "No saved results",
+    "empty_state_do_test_to_see_results": "Take your first hearing test to see results here",
 
-    "tip_section_tip": "Wskazówka",
-    "tip_section_tip_desc": "Nie martw się jeśli nie usłyszysz niektórych dźwięków - to normalne!"
+    "tip_section_tip": "Tip",
+    "tip_section_tip_desc": "Don't worry if you can't hear some sounds - that's normal!",
+
+    "@empty_state_no_results": {
+        "description": "Message displayed when there are no saved hearing test results."
+    },
+    "@empty_state_do_test_to_see_results": {
+        "description": "Instructions for users with no saved results to take their first test."
+    },
+    "@tip_section_tip": {
+        "description": "Label for the tip section."
+    },
+    "@tip_section_tip_desc": {
+        "description": "Tip message reassuring users about not hearing all sounds during the test."
+    }
 }
