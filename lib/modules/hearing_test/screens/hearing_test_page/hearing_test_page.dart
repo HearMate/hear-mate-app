@@ -18,10 +18,11 @@ class HearingTestPage extends StatelessWidget {
         listener: (context, state) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: context.read<HearingTestBloc>(),
-                child: HearingTestResultPage(),
-              ),
+              builder:
+                  (_) => BlocProvider.value(
+                    value: context.read<HearingTestBloc>(),
+                    child: HearingTestResultPage(),
+                  ),
             ),
           );
         },
@@ -39,13 +40,16 @@ class HearingTestPage extends StatelessWidget {
                 // Main Clickable Area with Header positioned in the middle
                 Expanded(
                   child: GestureDetector(
-                    onTapDown: (_) => context.read<HearingTestBloc>().add(
+                    onTapDown:
+                        (_) => context.read<HearingTestBloc>().add(
                           HearingTestButtonPressed(),
                         ),
-                    onTapUp: (_) => context.read<HearingTestBloc>().add(
+                    onTapUp:
+                        (_) => context.read<HearingTestBloc>().add(
                           HearingTestButtonReleased(),
                         ),
-                    onTapCancel: () => context.read<HearingTestBloc>().add(
+                    onTapCancel:
+                        () => context.read<HearingTestBloc>().add(
                           HearingTestButtonReleased(),
                         ),
                     child: Container(
@@ -79,13 +83,14 @@ class HearingTestPage extends StatelessWidget {
                             width: state.isButtonPressed ? 120 : 100,
                             height: state.isButtonPressed ? 120 : 100,
                             decoration: BoxDecoration(
-                              color: state.isButtonPressed
-                                  ? theme.colorScheme.primary.withValues(
-                                      alpha: 0.8,
-                                    )
-                                  : theme.colorScheme.primary.withValues(
-                                      alpha: 0.6,
-                                    ),
+                              color:
+                                  state.isButtonPressed
+                                      ? theme.colorScheme.primary.withValues(
+                                        alpha: 0.8,
+                                      )
+                                      : theme.colorScheme.primary.withValues(
+                                        alpha: 0.6,
+                                      ),
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
@@ -141,30 +146,30 @@ class HearingTestPage extends StatelessWidget {
                           children: [
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () =>
-                                    context.read<HearingTestBloc>().add(
-                                          HearingTestDebugEarLeftPartial(),
-                                        ),
+                                onPressed:
+                                    () => context.read<HearingTestBloc>().add(
+                                      HearingTestDebugEarLeftPartial(),
+                                    ),
                                 child: const Text("L Partial"),
                               ),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () =>
-                                    context.read<HearingTestBloc>().add(
-                                          HearingTestDebugEarRightPartial(),
-                                        ),
+                                onPressed:
+                                    () => context.read<HearingTestBloc>().add(
+                                      HearingTestDebugEarRightPartial(),
+                                    ),
                                 child: const Text("R Partial"),
                               ),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () =>
-                                    context.read<HearingTestBloc>().add(
-                                          HearingTestDebugBothEarsFull(),
-                                        ),
+                                onPressed:
+                                    () => context.read<HearingTestBloc>().add(
+                                      HearingTestDebugBothEarsFull(),
+                                    ),
                                 child: const Text("Both"),
                               ),
                             ),
@@ -183,8 +188,8 @@ class HearingTestPage extends StatelessWidget {
                   child: TextButton.icon(
                     onPressed: () {
                       context.read<HearingTestBloc>().add(
-                            HearingTestEndTestEarly(),
-                          );
+                        HearingTestCompleted(),
+                      );
                     },
                     icon: Icon(
                       Icons.stop,

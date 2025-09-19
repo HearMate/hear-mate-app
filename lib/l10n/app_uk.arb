@@ -83,11 +83,38 @@
 	"hearing_test_result_page_save_results_on_exit_prompt": "Бажаєте зберегти результати слухового тесту перед виходом?",
 	"hearing_test_result_page_already_saved_title": "Вже збережено",
 	"hearing_test_result_page_already_saved_message": "Ви вже зберегли ці результати.",
+	"hearing_test_incomplete": "Ваш тест слуху ще не завершено, тому ми не можемо показати повну підсумкову інформацію.",
+	"hearing_test_summary_intro": "Ось коротке резюме вашого тесту слуху:",
+	"hearing_test_ear_left": "Ліве вухо",
+	"hearing_test_ear_right": "Праве вухо",
+	"hearing_test_ear_line": "{ear}: {classification}.",
+	"@hearing_test_ear_line": {
+		"description": "Однорядковий підсумок для кожного вуха з класифікацією.",
+		"placeholders": {
+		"ear": { "type": "String", "example": "Ліве вухо" },
+		"classification": { "type": "String", "example": "легка втрата слуху" }
+		}
+	},
+	"hearing_test_classification_normal_hearing": "нормальний слух",
+	"hearing_test_classification_mild": "легка втрата слуху",
+	"hearing_test_classification_moderate": "помірна втрата слуху",
+	"hearing_test_classification_severe": "тяжка втрата слуху",
+	"hearing_test_classification_profound": "глибока втрата слуху",
+	"hearing_test_symmetry_symmetrical": "Ваш слух у обох вухах виглядає подібним (симетричний).",
+	"hearing_test_symmetry_asymmetrical": "Між вухами є помітні відмінності (асиметричний).",
+	"hearing_test_high_freq_both": "Втрату слуху на високих частотах виявлено в обох вухах.",
+	"hearing_test_high_freq_left": "Втрату слуху на високих частотах виявлено в лівому вусі.",
+	"hearing_test_high_freq_right": "Втрату слуху на високих частотах виявлено у правому вусі.",
+	"hearing_test_low_freq_both": "Втрату слуху на низьких частотах виявлено в обох вухах.",
+	"hearing_test_low_freq_left": "Втрату слуху на низьких частотах виявлено в лівому вусі.",
+	"hearing_test_low_freq_right": "Втрату слуху на низьких частотах виявлено у правому вусі.",
 
 	"hearing_test_welcome_page_title": "Hear Mate",
 	"hearing_test_welcome_page_welcome": "Ласкаво просимо до тесту слуху",
 	"hearing_test_welcome_page_description": "Цей модуль протестує ваш слух на різних частотах.",
 	"hearing_test_welcome_page_start_hearing_test": "Почати тест",
+	"hearing_test_welcome_page_disclaimer_title": "застереження",
+    "hearing_test_welcome_page_disclaimer": "Це не є медичним виробом. Призначено лише для використання з навушниками Sony WH-1000XM5, з увімкненим шумозаглушенням та максимальною гучністю, без використання еквалайзера.",
 
 	"hearing_test_delete_alert_title": "Видалити результат",
 	"hearing_test_delete_alert_message": "Ви впевнені, що хочете остаточно видалити цей результат? Цю дію не можна скасувати.",

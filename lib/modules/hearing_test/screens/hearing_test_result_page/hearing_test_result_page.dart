@@ -8,6 +8,7 @@ import 'widgets/results_header.dart';
 import 'widgets/audiogram_section.dart';
 import 'widgets/note_section.dart';
 import 'widgets/save_button_section.dart';
+import 'widgets/description.dart';
 
 class HearingTestResultPage extends StatelessWidget {
   const HearingTestResultPage({super.key});
@@ -31,6 +32,10 @@ class HearingTestResultPage extends StatelessWidget {
 
     return BlocBuilder<HearingTestBloc, HearingTestState>(
       builder: (context, state) {
+        if (state.isLoadingAudiogramClassificationResults) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
         return Scaffold(
           appBar: HMAppBar(
             title: loc.hearing_test_result_page_title,
@@ -67,6 +72,8 @@ class HearingTestResultPage extends StatelessWidget {
                                   : state.results.rightEarResultsMasked,
                         ),
                         NoteSection(theme: theme),
+                        const SizedBox(height: 32),
+                        AudiogramDescription(theme: theme),
                         const SizedBox(height: 32),
                       ],
                     ),

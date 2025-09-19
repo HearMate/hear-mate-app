@@ -203,7 +203,33 @@
     "hearing_test_result_page_note": "Note",
     "hearing_test_result_page_note_description": "This generated audiogram and hearing test results are not precise and should be interpreted with caution. For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.",
     "hearing_test_result_page_save_results": "Save results",
-    "hearing_test_result_page_home": "Back to home",
+    "hearing_test_result_page_home": "Back to home",  
+    "hearing_test_incomplete": "Your hearing test isn’t complete, so we can’t show a full summary.",
+    "hearing_test_summary_intro": "Here’s a quick summary of your hearing test:",
+    "hearing_test_ear_left": "Left ear",
+    "hearing_test_ear_right": "Right ear",
+    "hearing_test_ear_line": "{ear}: {classification}.",
+    "@hearing_test_ear_line": {
+        "description": "One-line summary per ear with the classification.",
+        "placeholders": {
+        "ear": { "type": "String", "example": "Left ear" },
+        "classification": { "type": "String", "example": "mild hearing loss" }
+        }
+    },
+    "hearing_test_classification_normal_hearing": "normal hearing",
+    "hearing_test_classification_mild": "mild hearing loss",
+    "hearing_test_classification_moderate": "moderate hearing loss",
+    "hearing_test_classification_severe": "severe hearing loss",
+    "hearing_test_classification_profound": "profound hearing loss",
+    "hearing_test_symmetry_symmetrical": "Hearing looks similar in both ears (symmetrical).",
+    "hearing_test_symmetry_asymmetrical": "There are noticeable differences between your ears (asymmetrical).",
+    "hearing_test_high_freq_both": "High‑frequency hearing loss is present in both ears.",
+    "hearing_test_high_freq_left": "High‑frequency hearing loss is present in the left ear.",
+    "hearing_test_high_freq_right": "High‑frequency hearing loss is present in the right ear.",
+    "hearing_test_low_freq_both": "Low‑frequency hearing loss is present in both ears.",
+    "hearing_test_low_freq_left": "Low‑frequency hearing loss is present in the left ear.",
+    "hearing_test_low_freq_right": "Low‑frequency hearing loss is present in the right ear.",
+
     "@hearing_test_result_page_title": {
         "description": "Title displayed on the hearing test results page."
     },
@@ -257,6 +283,10 @@
     "hearing_test_welcome_page_welcome": "Welcome to Hearing Test",
     "hearing_test_welcome_page_description": "This module will test your hearing ability across different frequencies.",
     "hearing_test_welcome_page_start_hearing_test": "Start Test",
+    "hearing_test_welcome_page_disclaimer_title": "Disclaimer",
+    "hearing_test_welcome_page_disclaimer": "This is not a medical grade product. It is intended to be used only with Sony WH-1000XM5 headphones, with noise cancelling turned on and volume set to maximum, equalizer shall not be used.",
+
+
     "@hearing_test_welcome_page_title": {
         "description": "Title displayed on the welcome page of the hearing test module."
     },
@@ -269,6 +299,14 @@
     "@hearing_test_welcome_page_start_hearing_test": {
         "description": "Label for the button to start the hearing test."
     },
+     "@hearing_test_welcome_page_disclaimer_title": {
+        "description": "Title for the disclaimer section on the hearing test welcome page."
+    },
+    "@hearing_test_welcome_page_disclaimer": {
+        "description": "Disclaimer text explaining the limitations and intended use of the hearing test module."
+    },
+
+
     "hearing_test_delete_alert_title": "Delete Result",
     "hearing_test_delete_alert_message": "Are you sure you want to permanently delete this result? This action cannot be undone.",
     "@hearing_test_delete_alert_title": {

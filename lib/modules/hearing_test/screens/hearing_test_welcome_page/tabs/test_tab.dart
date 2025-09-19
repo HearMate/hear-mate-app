@@ -10,12 +10,26 @@ class _TestTab extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(theme, l10n),
-            _buildContent(theme, l10n),
-            _buildStartButton(context, l10n, theme),
-          ],
+        child: BlocListener<HearingTestBloc, HearingTestState>(
+          listenWhen:
+              (previous, current) =>
+                  !previous.disclaimerShown && current.disclaimerShown == false,
+          listener: (context, state) {
+            if (!state.disclaimerShown) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.read<HearingTestBloc>().add(
+                  HearingTestDisclaimerShown(),
+                );
+              });
+            }
+          },
+          child: Column(
+            children: [
+              _buildHeader(theme, l10n),
+              _buildContent(theme, l10n),
+              _buildStartButton(context, l10n, theme),
+            ],
+          ),
         ),
       ),
     );
@@ -155,7 +169,11 @@ class _TestTab extends StatelessWidget {
           theme: theme,
         ),
         const Divider(height: 1),
-        StepItem(stepNumber: "5", text: l10n.test_tab_how_it_works_desc_5, theme: theme),
+        StepItem(
+          stepNumber: "5",
+          text: l10n.test_tab_how_it_works_desc_5,
+          theme: theme,
+        ),
       ],
     );
   }
@@ -224,7 +242,7 @@ class _TestTab extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            : l10n.test_tab_ready,
+            l10n.test_tab_ready,
             style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.grey.shade600,
             ),
@@ -232,6 +250,39 @@ class _TestTab extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void showDisclaimerDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final bloc = context.read<HearingTestBloc>();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder:
+          (context) => AlertDialog(
+            title: Text(l10n.hearing_test_welcome_page_disclaimer_title),
+            content: Text(l10n.hearing_test_welcome_page_disclaimer),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  bloc.add(HearingTestStartTest());
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (_) => BlocProvider.value(
+                            value: bloc,
+                            child: const HearingTestPage(),
+                          ),
+                    ),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
     );
   }
 }
