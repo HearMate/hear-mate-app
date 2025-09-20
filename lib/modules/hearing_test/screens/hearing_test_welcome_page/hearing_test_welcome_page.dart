@@ -1,52 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/modules/echo_parse/blocs/tab_navigation_cubit.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_results/hearing_test_history_results_cubit.dart';
+import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
+import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
+import 'package:hear_mate_app/widgets/hm_app_bar.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
+import 'tabs/widgets/quick_info_card.dart';
+import 'tabs/widgets/section_header.dart';
+import 'tabs/widgets/step_item.dart';
+import 'tabs/widgets/tip_section.dart';
+import 'tabs/widgets/empty_state.dart';
+import 'tabs/widgets/results_header.dart';
+import 'tabs/widgets/result_list_item.dart';
 
-void showDisclaimerDialog(BuildContext context) {
-  final l10n = AppLocalizations.of(context)!;
-  final bloc = context.read<HearingTestBloc>();
-
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => AlertDialog(
-      title: Text(l10n.hearing_test_welcome_page_disclaimer_title),
-      content: Text(
-        l10n.hearing_test_welcome_page_disclaimer
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            bloc.add(HearingTestStartTest());
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: bloc,
-                  child: const HearingTestPage(),
-                ),
-              ),
-            );
-          },
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
+part 'tabs/test_tab.dart';
+part 'tabs/saved_tab.dart';
 
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // If this will return null, we should crash.
     final l10n = AppLocalizations.of(context)!;
 
     return MultiRepositoryProvider(
@@ -80,82 +57,38 @@ class HearingTestWelcomePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocListener<HearingTestBloc, HearingTestState>(
-      listenWhen: (previous, current) => 
-          !previous.disclaimerShown && !current.disclaimerShown,
-      listener: (context, state) {
-        if (!state.disclaimerShown) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.read<HearingTestBloc>().add(HearingTestDisclaimerShown());
-          });
-        }
-      },
-      child: Scaffold(
-        appBar: HMAppBar(
-          title: l10n.hearing_test_welcome_page_title,
-          route: ModalRoute.of(context)?.settings.name ?? "",
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  l10n.hearing_test_welcome_page_welcome,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
+    return BlocProvider(
+      create: (context) => TabNavigationCubit(),
+
+      child: BlocBuilder<TabNavigationCubit, int>(
+        builder: (context, currentIndex) {
+          final List<Widget> pages = [const _TestTab(), const _SavedTab()];
+
+          return Scaffold(
+            appBar: HMAppBar(
+              route: ModalRoute.of(context)?.settings.name ?? "",
+              title: l10n.hearing_test_welcome_page_title,
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: currentIndex,
+              onTap:
+                  (index) =>
+                      context.read<TabNavigationCubit>().changeTab(index),
+              type: BottomNavigationBarType.fixed,
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.headphones),
+                  label: l10n.hearing_test_welcome_page_test,
                 ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  l10n.hearing_test_welcome_page_description,
-                  style: const TextStyle(fontSize: 18, color: Colors.grey),
-                  textAlign: TextAlign.center,
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.file_copy),
+                  label: l10n.hearing_test_welcome_page_saved,
                 ),
-              ),
-              const SizedBox(height: 40),
-              FilledButton(
-                onPressed: () {
-                  if (context.read<HearingTestBloc>().state.disclaimerShown) {
-                    context.read<HearingTestBloc>().add(HearingTestStartTest());
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<HearingTestBloc>(),
-                          child: const HearingTestPage(),
-                        ),
-                      ),
-                    );
-                  } else {
-                    showDisclaimerDialog(context);
-                  }
-                },
-                child: Text(l10n.hearing_test_welcome_page_start_hearing_test),
-              ),
-              const SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder:
-                          (_) => BlocProvider.value(
-                            value: context.read<HearingTestBloc>(),
-                            child: const HearingTestHistoryResultsPage(),
-                          ),
-                    ),
-                  );
-                },
-                child: Text(l10n.hearing_test_result_history_page),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+            body: IndexedStack(index: currentIndex, children: pages),
+          );
+        },
       ),
     );
   }
