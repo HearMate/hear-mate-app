@@ -71,9 +71,9 @@ class HearingTestResultPage extends StatelessWidget {
                                   ? null
                                   : state.results.rightEarResultsMasked,
                         ),
-                        NoteSection(theme: theme),
-                        const SizedBox(height: 32),
                         AudiogramDescription(theme: theme),
+                        const SizedBox(height: 32),
+                        NoteSection(theme: theme),
                         const SizedBox(height: 32),
                       ],
                     ),

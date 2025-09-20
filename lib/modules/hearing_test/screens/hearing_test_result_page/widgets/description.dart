@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hm_theme/hm_theme.dart';
@@ -11,38 +10,27 @@ class AudiogramDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-
     return BlocBuilder<HMThemeBloc, HMThemeState>(
       builder: (context, themeState) {
         final isDark = themeState.isDarkMode;
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: isDark ? Colors.grey.shade800 : Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
-          child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                context.read<HearingTestBloc>().state.audiogramClassification,
-              ),
-              const SizedBox(height: 15),
-              Text(
-                loc.hearing_test_result_page_note,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.titleLarge?.color,
-                ),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                loc.hearing_test_result_page_note_description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).textTheme.bodyMedium?.color,
+              Expanded(
+                // <-- Add this
+                child: Text(
+                  context.read<HearingTestBloc>().state.audiogramClassification,
+                  textAlign: TextAlign.center,
+                  softWrap: true, // optional, true by default
+                  overflow: TextOverflow.visible, // optional
                 ),
               ),
             ],

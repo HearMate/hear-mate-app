@@ -29,24 +29,42 @@ class ResultsHeader extends StatelessWidget {
           ),
         ),
       ),
-      child: Column(
+      child: Row(
         children: [
-          Text(
-            loc.hearing_test_result_page_your_results,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.show_chart,
+              size: 32,
               color: theme.colorScheme.primary,
             ),
-            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          Text(
-            loc.results_header_test_ended_successfully,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.primary.withValues(alpha: 0.8),
-              fontWeight: FontWeight.w500,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  loc.hearing_test_result_page_your_results,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  loc.results_header_test_ended_successfully,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.8),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

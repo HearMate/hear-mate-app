@@ -82,7 +82,7 @@ class HearingTestWelcomePageView extends StatelessWidget {
                 selected: selected,
                 selectedTileColor: Theme.of(
                   context,
-                ).colorScheme.primary.withOpacity(0.1),
+                ).colorScheme.primary.withValues(alpha: .1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -151,9 +151,8 @@ class HearingTestWelcomePageView extends StatelessWidget {
                             decoration: BoxDecoration(
                               color:
                                   currentIndex == 0
-                                      ? Theme.of(
-                                        context,
-                                      ).colorScheme.primary.withOpacity(0.1)
+                                      ? Theme.of(context).colorScheme.primary
+                                          .withValues(alpha: .1)
                                       : Colors.transparent,
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -170,9 +169,8 @@ class HearingTestWelcomePageView extends StatelessWidget {
                             decoration: BoxDecoration(
                               color:
                                   currentIndex == 1
-                                      ? Theme.of(
-                                        context,
-                                      ).colorScheme.primary.withOpacity(0.1)
+                                      ? Theme.of(context).colorScheme.primary
+                                          .withValues(alpha: .1)
                                       : Colors.transparent,
                               borderRadius: BorderRadius.circular(16),
                             ),

@@ -38,7 +38,7 @@ class _TestTab extends StatelessWidget {
   Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -55,37 +55,42 @@ class _TestTab extends StatelessWidget {
           ),
         ),
       ),
-      child: Column(
+      child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary,
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.hearing,
-              size: 48,
-              color: theme.colorScheme.onPrimary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.test_tab_header_title,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+              size: 32,
               color: theme.colorScheme.primary,
             ),
-            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          Text(
-            l10n.test_tab_header_subtitle,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.primary.withValues(alpha: 0.8),
-              fontWeight: FontWeight.w500,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.test_tab_header_title,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.test_tab_header_subtitle,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.8),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),
