@@ -63,30 +63,129 @@ class HearingTestWelcomePageView extends StatelessWidget {
       child: BlocBuilder<TabNavigationCubit, int>(
         builder: (context, currentIndex) {
           final List<Widget> pages = [const _TestTab(), const _SavedTab()];
+          final isWideScreen = MediaQuery.of(context).size.width > 700;
+
+          Widget buildDrawerItem({
+            required IconData icon,
+            required String label,
+            required bool selected,
+            required VoidCallback onTap,
+          }) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 6.0,
+              ),
+              child: ListTile(
+                leading: Icon(icon),
+                title: Text(label),
+                selected: selected,
+                selectedTileColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withOpacity(0.1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                onTap: onTap,
+              ),
+            );
+          }
 
           return Scaffold(
             appBar: HMAppBar(
               route: ModalRoute.of(context)?.settings.name ?? "",
               title: l10n.hearing_test_welcome_page_title,
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: currentIndex,
-              onTap:
-                  (index) =>
-                      context.read<TabNavigationCubit>().changeTab(index),
-              type: BottomNavigationBarType.fixed,
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.headphones),
-                  label: l10n.hearing_test_welcome_page_test,
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.file_copy),
-                  label: l10n.hearing_test_welcome_page_saved,
-                ),
-              ],
-            ),
-            body: IndexedStack(index: currentIndex, children: pages),
+            body:
+                isWideScreen
+                    ? Row(
+                      children: [
+                        SizedBox(
+                          width: 280,
+                          child: Column(
+                            children: [
+                              buildDrawerItem(
+                                icon: Icons.headphones,
+                                label: l10n.hearing_test_welcome_page_test,
+                                selected: currentIndex == 0,
+                                onTap:
+                                    () => context
+                                        .read<TabNavigationCubit>()
+                                        .changeTab(0),
+                              ),
+                              buildDrawerItem(
+                                icon: Icons.file_copy,
+                                label: l10n.hearing_test_welcome_page_saved,
+                                selected: currentIndex == 1,
+                                onTap:
+                                    () => context
+                                        .read<TabNavigationCubit>()
+                                        .changeTab(1),
+                              ),
+                              const Spacer(),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: IndexedStack(
+                            index: currentIndex,
+                            children: pages,
+                          ),
+                        ),
+                      ],
+                    )
+                    : IndexedStack(index: currentIndex, children: pages),
+            bottomNavigationBar:
+                isWideScreen
+                    ? null
+                    : BottomNavigationBar(
+                      currentIndex: currentIndex,
+                      onTap:
+                          (index) => context
+                              .read<TabNavigationCubit>()
+                              .changeTab(index),
+                      type: BottomNavigationBarType.fixed,
+                      items: [
+                        BottomNavigationBarItem(
+                          icon: Container(
+                            decoration: BoxDecoration(
+                              color:
+                                  currentIndex == 0
+                                      ? Theme.of(
+                                        context,
+                                      ).colorScheme.primary.withOpacity(0.1)
+                                      : Colors.transparent,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            child: const Icon(Icons.headphones),
+                          ),
+                          label: l10n.hearing_test_welcome_page_test,
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Container(
+                            decoration: BoxDecoration(
+                              color:
+                                  currentIndex == 1
+                                      ? Theme.of(
+                                        context,
+                                      ).colorScheme.primary.withOpacity(0.1)
+                                      : Colors.transparent,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            child: const Icon(Icons.file_copy),
+                          ),
+                          label: l10n.hearing_test_welcome_page_saved,
+                        ),
+                      ],
+                    ),
           );
         },
       ),
