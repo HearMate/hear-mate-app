@@ -57,8 +57,21 @@ class HearingTestWelcomePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocProvider(
-      create: (context) => TabNavigationCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            final navigationCubit = TabNavigationCubit();
+            return navigationCubit;
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            final historyCubit = HearingTestHistoryResultsCubit();
+            return historyCubit;
+          },
+        ),
+      ],
 
       child: BlocBuilder<TabNavigationCubit, int>(
         builder: (context, currentIndex) {
@@ -117,10 +130,14 @@ class HearingTestWelcomePageView extends StatelessWidget {
                                 icon: Icons.file_copy,
                                 label: l10n.hearing_test_welcome_page_saved,
                                 selected: currentIndex == 1,
-                                onTap:
-                                    () => context
-                                        .read<TabNavigationCubit>()
-                                        .changeTab(1),
+                                onTap: () {
+                                  context.read<TabNavigationCubit>().changeTab(
+                                    1,
+                                  );
+                                  context
+                                      .read<HearingTestHistoryResultsCubit>()
+                                      .loadResults();
+                                },
                               ),
                               const Spacer(),
                             ],
@@ -140,10 +157,12 @@ class HearingTestWelcomePageView extends StatelessWidget {
                     ? null
                     : BottomNavigationBar(
                       currentIndex: currentIndex,
-                      onTap:
-                          (index) => context
-                              .read<TabNavigationCubit>()
-                              .changeTab(index),
+                      onTap: (index) {
+                        context.read<TabNavigationCubit>().changeTab(index);
+                        context
+                            .read<HearingTestHistoryResultsCubit>()
+                            .loadResults();
+                      },
                       type: BottomNavigationBarType.fixed,
                       items: [
                         BottomNavigationBarItem(
