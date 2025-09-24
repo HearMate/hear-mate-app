@@ -25,6 +25,7 @@
     },
     "homepage_button_helper": "Please select a module to continue:",
     "homepage_button_audioTest": "Audio Test Module",
+    "homepage_button_headphonesCalibration": "Headphones Calibration",
     "homepage_button_echoParse": "Echo Parse",
     "homepage_button_moreModules": "More Modules Coming Soon...",
     "@homepage_button_helper": {
@@ -141,6 +142,12 @@
     "comment_hearing_test1": "=====================================",
     "comment_hearing_test2": "============ Hearing Test ===========",
     "comment_hearing_test3": "=====================================",
+    
+    "hearing_test_welcome_page_select_button_label": "Select",
+    "hearing_test_welcome_page_find_headphones": "Please find your headphones before attempting a test",
+    "hearing_test_welcome_page_not_calibrated_part1": "Unfortunately, we can't guarantee quality of this test - your headphones ",
+    "hearing_test_welcome_page_not_calibrated_part2": " are not properly calibrated yet!",
+
     "hearing_test_test_page_title": "Hearing Test",
     "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",
     "hearing_test_test_page_release": "Release the button now.",
@@ -203,6 +210,7 @@
     "hearing_test_result_page_note": "Note",
     "hearing_test_result_page_note_description": "This generated audiogram and hearing test results are not precise and should be interpreted with caution. For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.",
     "hearing_test_result_page_save_results": "Save results",
+    "hearing_test_result_page_results_saved": "Results saved",
     "hearing_test_result_page_home": "Back to home",  
     "hearing_test_incomplete": "Your hearing test isn’t complete, so we can’t show a full summary.",
     "hearing_test_summary_intro": "Here’s a quick summary of your hearing test:",
@@ -355,6 +363,7 @@
         }
     },
     "hearing_test_result_history_page": "Result history",
+    "hearing_test_result_history_page_audiogram_name": "Audiogram",
     "@hearing_test_result_history_page": {
         "description": "Label for the button to see hearing test results."
     },
@@ -414,5 +423,55 @@
     },
     "@tip_section_tip_desc": {
         "description": "Tip message reassuring users about not hearing all sounds during the test."
-    }
+    },
+
+    "comment_headphones_calibration1": "=================================================",
+    "comment_headphones_calibration2": "============= Headphones Calibration ============",
+    "comment_headphones_calibration3": "=================================================",
+
+    "headphones_calibration_page_title": "Headphones Calibration",
+    "headphones_calibration_add_button": "Add",
+    "headphones_calibration_reference_headphones_title": "Reference Headphones",
+    "headphones_calibration_target_headphones_title": "Headphones to Calibrate",
+    "headphones_calibration_welcome_title": "Welcome to Headphones Calibration",
+    "headphones_calibration_welcome_description": "This module is for people who want to improve our app and make hearing tests more accessible! Search up all of your headphones, if even one of them is a reference one, they can be used to calibrate all others! First you do the hearing test with reference pair. Then the second with one you wish to calibrate. After that we are done - you just helped others!",
+    "headphones_calibration_your_selection_title": "Your Selection",
+    "headphones_calibration_reference_headphone_label": "Reference Headphone:",
+    "headphones_calibration_target_headphone_label": "Target Headphone:",
+    "headphones_calibration_not_selected": "Not selected",
+    "headphones_calibration_no_reference_headphones": "No reference headphones available",
+    "headphones_calibration_no_target_headphones": "No target headphones available",
+    "headphones_calibration_empty_state_hint": "Try adjusting your search terms",
+    "headphones_calibration_missing_selection": "In order to calibrate new headphones you need to have both reference & target headphones.",
+    "headphones_calibration_different_selection": "The target headphones must be different from the reference headphones.",
+    "headphones_calibration_cooldown_info": "You need to take a longer break between tests for the results to be reliable.",
+    "headphones_calibration_ready_prefix": "Great, we can start! Remember to connect ",
+    "headphones_calibration_ready_suffix": "!",
+    "headphones_calibration_start_button": "Start Calibration",
+
+    
+    "headphones_calibration_information_between_tests_page_title": "Headphones Calibration",
+    "headphones_calibration_step_progress": "Step {current} of {total}",
+    "headphones_calibration_great_title_first": "Let's get started!",
+    "headphones_calibration_great_title": "Great!",
+    "headphones_calibration_before_tests_description_prefix": "Put on the headphones ",
+    "headphones_calibration_between_tests_description_prefix": "You have completed the first test with reference headphones. Now switch to ",
+    "headphones_calibration_between_tests_description_suffix": " and continue!",
+    "headphones_calibration_continue_button": "Continue",
+    
+    "headphones_calibration_abort_title": "Unfortunately...",
+    "headphones_calibration_abort_label": "Calibration aborted",
+    "headphones_calibration_abort_message": "The test results are too low. If you are sure your hearing is normal, find a quieter place and try again.",
+    
+    "headphones_calibration_end_page_title": "Calibration Complete",
+    "headphones_calibration_congratulations_title": "Congratulations!",
+    "headphones_calibration_complete_label": "Calibration Complete",
+    "headphones_calibration_thank_you_message": "Thank you for your cooperation! You have just made our app more accessible!",
+    "headphones_calibration_go_home_button": "Go Home",
+    
+    "comment_common_headphones_search_bar1": "=================================================",
+    "comment_common_headphones_search_bar2": "======= Common Headphones Search Bar ========",
+    "comment_common_headphones_search_bar3": "=================================================",
+    "common_headphones_search_bar_search_hint": "Search for headphones...",
+    "common_headphones_search_bar_add_button": "Add"
 }

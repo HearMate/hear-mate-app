@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hear_mate_app/features/headphones_search_db/cubits/headphones_search_bar_db/headphones_search_bar_supabase_cubit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
+  final String selectedButtonLabel;
+  final ValueChanged<String> onSelectedButtonPress;
+
+  const HeadphonesSearchBarSupabaseWidget({
+    super.key,
+    required this.selectedButtonLabel,
+    required this.onSelectedButtonPress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final iconColor = theme.iconTheme.color;
+    final borderColor = theme.dividerColor;
+    final surfaceColor = colors.surface;
+
+    return BlocBuilder<
+      HeadphonesSearchBarSupabaseCubit,
+      HeadphonesSearchBarSupabaseState
+    >(
+      builder: (context, state) {
+        final cubit = context.read<HeadphonesSearchBarSupabaseCubit>();
+        final resultsVisible = state.results.isNotEmpty;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Search Input
+            SearchBar(
+              controller: cubit.controller,
+              focusNode: cubit.focusNode,
+              hintText: l10n.common_headphones_search_bar_search_hint,
+              onChanged: cubit.updateQuery,
+              leading:
+                  state.isSearching
+                      ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: colors.primary,
+                        ),
+                      )
+                      : Icon(Icons.search, color: iconColor ?? Colors.grey),
+              trailing:
+                  state.query.isNotEmpty
+                      ? [
+                        IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: iconColor ?? Colors.grey,
+                          ),
+                          onPressed: cubit.clearQuery,
+                        ),
+                      ]
+                      : null,
+            ),
+
+            // Search Results
+            if (resultsVisible) ...[
+              const SizedBox(height: 4),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: surfaceColor,
+                  border: Border.all(color: borderColor),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: state.results.length,
+                  separatorBuilder:
+                      (_, __) => Divider(height: 1, color: borderColor),
+                  itemBuilder: (context, index) {
+                    final item = state.results[index];
+                    return ListTile(
+                      leading: Icon(Icons.headphones, color: colors.primary),
+                      title: Text(
+                        item,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          onSelectedButtonPress(item);
+                          cubit.clearQuery();
+                        },
+                        child: Text(selectedButtonLabel),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+}

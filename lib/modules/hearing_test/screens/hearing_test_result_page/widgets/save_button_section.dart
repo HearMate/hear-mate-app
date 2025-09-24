@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
-import '../alert_dialogs.dart';
+import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
+import 'alert_dialogs.dart';
 
 class SaveButtonSection extends StatelessWidget {
   final ThemeData theme;
@@ -31,14 +31,15 @@ class SaveButtonSection extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 56,
-            child: BlocBuilder<HearingTestBloc, HearingTestState>(
+            child: BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
               builder: (context, state) {
                 return FilledButton(
                   onPressed: () => _handleSaveButtonPressed(context, state),
                   style: FilledButton.styleFrom(
-                    backgroundColor: state.resultSaved
-                        ? Colors.green.shade600
-                        : theme.colorScheme.primary,
+                    backgroundColor:
+                        state.resultsSaved
+                            ? Colors.green.shade600
+                            : theme.colorScheme.primary,
                     foregroundColor: theme.colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -49,14 +50,14 @@ class SaveButtonSection extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        state.resultSaved ? Icons.check : Icons.save,
+                        state.resultsSaved ? Icons.check : Icons.save,
                         size: 24,
                         color: theme.colorScheme.onPrimary,
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        state.resultSaved
-                            ? "Wyniki zapisane"
+                        state.resultsSaved
+                            ? loc.hearing_test_result_page_results_saved
                             : loc.hearing_test_result_page_save_results,
                         style: TextStyle(
                           fontSize: 18,
@@ -83,31 +84,39 @@ class SaveButtonSection extends StatelessWidget {
     );
   }
 
-  void _handleSaveButtonPressed(BuildContext context, HearingTestState state) {
-    if (state.resultSaved) {
+  void _handleSaveButtonPressed(
+    BuildContext context,
+    HearingTestModuleState state,
+  ) {
+    if (state.resultsSaved) {
       showDialog(
         context: context,
-        builder: (dialogContext) => BlocProvider.value(
-          value: context.read<HearingTestBloc>(),
-          child: CustomAlertDialog(type: AlertType.alreadySaved),
-        ),
+        builder:
+            (dialogContext) => BlocProvider.value(
+              value: context.read<HearingTestModuleBloc>(),
+              child: CustomAlertDialog(type: AlertType.alreadySaved),
+            ),
       );
-    } else if (state.results.hasMissingValues()) {
+    } else if (state.results?.hasMissingValues() ?? true) {
       showDialog(
         context: context,
-        builder: (dialogContext) => BlocProvider.value(
-          value: context.read<HearingTestBloc>(),
-          child: CustomAlertDialog(type: AlertType.missingValues),
-        ),
+        builder:
+            (dialogContext) => BlocProvider.value(
+              value: context.read<HearingTestModuleBloc>(),
+              child: CustomAlertDialog(type: AlertType.missingValues),
+            ),
       );
     } else {
-      context.read<HearingTestBloc>().add(HearingTestSaveResult());
+      context.read<HearingTestModuleBloc>().add(
+        HearingTestModuleSaveTestResults(),
+      );
       showDialog(
         context: context,
-        builder: (dialogContext) => BlocProvider.value(
-          value: context.read<HearingTestBloc>(),
-          child: CustomAlertDialog(type: AlertType.saved),
-        ),
+        builder:
+            (dialogContext) => BlocProvider.value(
+              value: context.read<HearingTestModuleBloc>(),
+              child: CustomAlertDialog(type: AlertType.saved),
+            ),
       );
     }
   }

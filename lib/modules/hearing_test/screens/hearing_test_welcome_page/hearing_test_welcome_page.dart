@@ -1,23 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/tab_navigation_cubit.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
+import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_results/hearing_test_history_results_cubit.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_sounds_player_repository.dart';
-import 'package:hear_mate_app/modules/hearing_test/repositories/hearing_test_classification_repository.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
-import 'tabs/widgets/quick_info_card.dart';
-import 'tabs/widgets/section_header.dart';
-import 'tabs/widgets/step_item.dart';
-import 'tabs/widgets/tip_section.dart';
-import 'tabs/widgets/empty_state.dart';
-import 'tabs/widgets/results_header.dart';
-import 'tabs/widgets/result_list_item.dart';
-
-part 'tabs/test_tab.dart';
-part 'tabs/saved_tab.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/hearing_test_module_bottom_tab_bar.dart/hearing_test_module_bottom_tab_bar.dart';
+import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
+import 'widgets/quick_info_card.dart';
+import 'widgets/section_header.dart';
+import 'widgets/step_item.dart';
+import 'widgets/tip_section.dart';
 
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
@@ -25,186 +19,250 @@ class HearingTestWelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final moduleBloc = context.read<HearingTestModuleBloc>();
 
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<HearingTestSoundsPlayerRepository>(
-          create: (_) => HearingTestSoundsPlayerRepository(),
+    return Scaffold(
+      appBar: HMAppBar(
+        title: "",
+        route: ModalRoute.of(context)?.settings.name ?? "",
+        onBackPressed: () async {
+          Navigator.of(context, rootNavigator: true).pop();
+          return false;
+        },
+      ),
+      bottomNavigationBar: HearingTestModuleBottomTabBar(
+        currentTab: ModuleTab.welcome,
+        onTabSelected: (tab) {
+          switch (tab) {
+            case ModuleTab.welcome:
+              // Do nothing if already on test
+              break;
+            case ModuleTab.history:
+              moduleBloc.add(HearingTestModuleNavigateToHistory());
+              break;
+          }
+        },
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildHeader(theme, l10n),
+            _buildContent(theme, l10n),
+            _buildStartButton(context, l10n, theme),
+          ],
         ),
-        RepositoryProvider<HearingTestAudiogramClassificationRepository>(
-          create: (_) => HearingTestAudiogramClassificationRepository(),
-        ),
-      ],
-      child: BlocProvider<HearingTestBloc>(
-        create:
-            (context) => HearingTestBloc(
-              l10n: l10n,
-              hearingTestSoundsPlayerRepository:
-                  context.read<HearingTestSoundsPlayerRepository>(),
-              audiogramClassificationRepository:
-                  context.read<HearingTestAudiogramClassificationRepository>(),
-            ),
-        child: const HearingTestWelcomePageView(),
       ),
     );
   }
-}
 
-class HearingTestWelcomePageView extends StatelessWidget {
-  const HearingTestWelcomePageView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) {
-            final navigationCubit = TabNavigationCubit();
-            return navigationCubit;
-          },
+  Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            theme.colorScheme.primary.withValues(alpha: 0.08),
+            theme.colorScheme.primary.withValues(alpha: 0.02),
+          ],
         ),
-        BlocProvider(
-          create: (context) {
-            final historyCubit = HearingTestHistoryResultsCubit();
-            return historyCubit;
-          },
+        border: Border(
+          bottom: BorderSide(
+            color: theme.primaryColor.withValues(alpha: 0.1),
+            width: 1,
+          ),
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.hearing,
+              size: 48,
+              color: theme.colorScheme.onPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            l10n.test_tab_header_title,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.primary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.test_tab_header_subtitle,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.primary.withValues(alpha: 0.8),
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContent(ThemeData theme, AppLocalizations l10n) {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            _buildQuickInfoCards(theme, l10n),
+            const SizedBox(height: 16),
+            _buildInstructions(theme, l10n),
+            const SizedBox(height: 16),
+            TipSection(theme: theme),
+            const SizedBox(height: 32),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickInfoCards(ThemeData theme, AppLocalizations l10n) {
+    return Column(
+      children: [
+        QuickInfoCard(
+          icon: Icons.schedule,
+          title: l10n.test_tab_test_time_value,
+          subtitle: l10n.test_tab_test_time_info,
+          theme: theme,
+        ),
+        const Divider(height: 1),
+        QuickInfoCard(
+          icon: Icons.headphones,
+          title: l10n.test_tab_headphones,
+          subtitle: l10n.test_tab_headphones_info,
+          theme: theme,
+        ),
+        const Divider(height: 1),
+        QuickInfoCard(
+          icon: Icons.volume_off,
+          title: l10n.test_tab_quiet,
+          subtitle: l10n.test_tab_quiet_desc,
+          theme: theme,
         ),
       ],
+    );
+  }
 
-      child: BlocBuilder<TabNavigationCubit, int>(
-        builder: (context, currentIndex) {
-          final List<Widget> pages = [const _TestTab(), const _SavedTab()];
-          final isWideScreen = MediaQuery.of(context).size.width > 700;
+  Widget _buildInstructions(ThemeData theme, AppLocalizations l10n) {
+    return Column(
+      children: [
+        SectionHeader(
+          icon: Icons.list_alt,
+          title: l10n.test_tab_how_it_works,
+          theme: theme,
+        ),
+        StepItem(
+          stepNumber: "1",
+          text: l10n.test_tab_how_it_works_desc_1,
+          theme: theme,
+        ),
+        const Divider(height: 1),
+        StepItem(
+          stepNumber: "2",
+          text: l10n.test_tab_how_it_works_desc_2,
+          theme: theme,
+        ),
+        const Divider(height: 1),
+        StepItem(
+          stepNumber: "3",
+          text: l10n.test_tab_how_it_works_desc_3,
+          theme: theme,
+        ),
+        const Divider(height: 1),
+        StepItem(
+          stepNumber: "4",
+          text: l10n.test_tab_how_it_works_desc_4,
+          theme: theme,
+        ),
+        const Divider(height: 1),
+        StepItem(
+          stepNumber: "5",
+          text: l10n.test_tab_how_it_works_desc_5,
+          theme: theme,
+        ),
+      ],
+    );
+  }
 
-          Widget buildDrawerItem({
-            required IconData icon,
-            required String label,
-            required bool selected,
-            required VoidCallback onTap,
-          }) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 6.0,
-              ),
-              child: ListTile(
-                leading: Icon(icon),
-                title: Text(label),
-                selected: selected,
-                selectedTileColor: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: .1),
+  Widget _buildStartButton(
+    BuildContext context,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: theme.primaryColor.withValues(alpha: 0.1),
+            width: 1,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: FilledButton(
+              onPressed: () {
+                context.read<HearingTestModuleBloc>().add(
+                  HearingTestModuleNavigateToTest(),
+                );
+              },
+              style: FilledButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                onTap: onTap,
+                elevation: 2,
               ),
-            );
-          }
-
-          return Scaffold(
-            appBar: HMAppBar(
-              route: ModalRoute.of(context)?.settings.name ?? "",
-              title: l10n.hearing_test_welcome_page_title,
-            ),
-            body:
-                isWideScreen
-                    ? Row(
-                      children: [
-                        SizedBox(
-                          width: 280,
-                          child: Column(
-                            children: [
-                              buildDrawerItem(
-                                icon: Icons.headphones,
-                                label: l10n.hearing_test_welcome_page_test,
-                                selected: currentIndex == 0,
-                                onTap:
-                                    () => context
-                                        .read<TabNavigationCubit>()
-                                        .changeTab(0),
-                              ),
-                              buildDrawerItem(
-                                icon: Icons.file_copy,
-                                label: l10n.hearing_test_welcome_page_saved,
-                                selected: currentIndex == 1,
-                                onTap: () {
-                                  context.read<TabNavigationCubit>().changeTab(
-                                    1,
-                                  );
-                                  context
-                                      .read<HearingTestHistoryResultsCubit>()
-                                      .loadResults();
-                                },
-                              ),
-                              const Spacer(),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: IndexedStack(
-                            index: currentIndex,
-                            children: pages,
-                          ),
-                        ),
-                      ],
-                    )
-                    : IndexedStack(index: currentIndex, children: pages),
-            bottomNavigationBar:
-                isWideScreen
-                    ? null
-                    : BottomNavigationBar(
-                      currentIndex: currentIndex,
-                      onTap: (index) {
-                        context.read<TabNavigationCubit>().changeTab(index);
-                        context
-                            .read<HearingTestHistoryResultsCubit>()
-                            .loadResults();
-                      },
-                      type: BottomNavigationBarType.fixed,
-                      items: [
-                        BottomNavigationBarItem(
-                          icon: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  currentIndex == 0
-                                      ? Theme.of(context).colorScheme.primary
-                                          .withValues(alpha: .1)
-                                      : Colors.transparent,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            child: const Icon(Icons.headphones),
-                          ),
-                          label: l10n.hearing_test_welcome_page_test,
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  currentIndex == 1
-                                      ? Theme.of(context).colorScheme.primary
-                                          .withValues(alpha: .1)
-                                      : Colors.transparent,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            child: const Icon(Icons.file_copy),
-                          ),
-                          label: l10n.hearing_test_welcome_page_saved,
-                        ),
-                      ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.play_arrow, size: 24),
+                  const SizedBox(width: 12),
+                  Text(
+                    l10n.hearing_test_welcome_page_start_hearing_test,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
-          );
-        },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.test_tab_ready,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: Colors.grey.shade600,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

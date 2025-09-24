@@ -14,6 +14,7 @@
 	
 	"homepage_button_helper": "Виберіть модуль, щоб продовжити:",
 	"homepage_button_audioTest": "Тест слуху",
+	"homepage_button_headphonesCalibration": "Калібрування навушників",
 	"homepage_button_echoParse": "Echo Parse",
 	"homepage_button_moreModules": "Більше модулів скоро...",
 
@@ -52,6 +53,11 @@
 	"comment_hearing_test1": "=====================================",
 	"comment_hearing_test2": "============ Hearing Test ===========",
 	"comment_hearing_test3": "=====================================",
+
+ 	"hearing_test_welcome_page_select_button_label": "Вибрати",
+    "hearing_test_welcome_page_find_headphones": "Будь ласка, знайдіть ваші навушники перед початком тесту",
+    "hearing_test_welcome_page_not_calibrated_part1": "На жаль, ми не можемо гарантувати якість цього тесту — ваші навушники ",
+    "hearing_test_welcome_page_not_calibrated_part2": " ще не відкалібровані!",
 
 	"hearing_test_test_page_title": "Тест слуху",
 	"hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",
@@ -128,5 +134,55 @@
 	"error_message": "Помилка: {error}",
 	
 	"hearing_test_history_page_result_info": "Ліве: {left}\nПраве: {right}",
-	"hearing_test_result_history_page": "Історія результатів"
+	"hearing_test_result_history_page": "Історія результатів",
+
+	
+	"comment_headphones_calibration1": "=================================================",
+	"comment_headphones_calibration2": "============= Калібрування навушників ============",
+	"comment_headphones_calibration3": "=================================================",
+
+	"headphones_calibration_page_title": "Калібрування навушників",
+	"headphones_calibration_add_button": "Додати",
+	"headphones_calibration_reference_headphones_title": "Еталонні навушники",
+	"headphones_calibration_target_headphones_title": "Навушники для калібрування",
+	"headphones_calibration_welcome_title": "Ласкаво просимо до калібрування навушників",
+	"headphones_calibration_welcome_description": "Цей модуль для тих, хто хоче покращити наш застосунок і зробити тести слуху більш доступними! Знайдіть усі свої навушники — якщо хоча б одна пара є еталонною, їх можна використати для калібрування інших! Спочатку ви проходите тест зі стандартною парою. Потім другий — з тією, яку хочете відкалібрувати. І все — ви допомогли іншим!",
+	"headphones_calibration_your_selection_title": "Ваш вибір",
+	"headphones_calibration_reference_headphone_label": "Еталонні навушники:",
+	"headphones_calibration_target_headphone_label": "Цільові навушники:",
+	"headphones_calibration_not_selected": "Не вибрано",
+	"headphones_calibration_no_reference_headphones": "Немає доступних еталонних навушників",
+	"headphones_calibration_no_target_headphones": "Немає доступних цільових навушників",
+	"headphones_calibration_empty_state_hint": "Спробуйте змінити пошуковий запит",
+	"headphones_calibration_missing_selection": "Щоб відкалібрувати нові навушники, необхідно вибрати як еталонні, так і цільові навушники.",
+	"headphones_calibration_different_selection": "Цільові навушники повинні відрізнятися від референсних.",
+	"headphones_calibration_cooldown_info": "Потрібно зробити довшу перерву між тестами, щоб результати були достовірними.",
+	"headphones_calibration_ready_prefix": "Чудово, можемо починати! Не забудьте підключити ",
+	"headphones_calibration_ready_suffix": "!",
+	"headphones_calibration_start_button": "Почати калібрування",
+
+	"headphones_calibration_information_between_tests_page_title": "Калібрування навушників",
+	"headphones_calibration_step_progress": "Крок {current} з {total}",
+	"headphones_calibration_great_title_first": "Починаємо!",
+	"headphones_calibration_great_title": "Чудово!",
+	"headphones_calibration_before_tests_description_prefix": "Одягніть навушники ",
+	"headphones_calibration_between_tests_description_prefix": "Ви завершили перший тест з еталонними навушниками. Тепер переключіться на ",
+	"headphones_calibration_between_tests_description_suffix": " і продовжуйте!",
+	"headphones_calibration_continue_button": "Продовжити",
+
+	"headphones_calibration_abort_title": "На жаль...",
+	"headphones_calibration_abort_label": "Калібрування перервано",
+	"headphones_calibration_abort_message": "Результати тесту занадто низькі. Якщо ви впевнені, що ваш слух у нормі, знайдіть тихіше місце та спробуйте ще раз.",
+
+	"headphones_calibration_end_page_title": "Калібрування завершено",
+	"headphones_calibration_congratulations_title": "Вітаємо!",
+	"headphones_calibration_complete_label": "Калібрування завершено",
+	"headphones_calibration_thank_you_message": "Дякуємо за вашу допомогу! Ви щойно зробили наш застосунок більш доступним!",
+	"headphones_calibration_go_home_button": "На головну",
+
+	"comment_common_headphones_search_bar1": "=================================================",
+	"comment_common_headphones_search_bar2": "======= Пошук навушників (спільний) ========",
+	"comment_common_headphones_search_bar3": "=================================================",
+	"common_headphones_search_bar_search_hint": "Пошук навушників...",
+	"common_headphones_search_bar_add_button": "Додати"
 }

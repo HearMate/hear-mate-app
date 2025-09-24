@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/widgets/hm_app_bar.dart';
-import 'alert_dialogs.dart';
+import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
+import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
+import 'widgets/alert_dialogs.dart';
 import 'widgets/results_header.dart';
 import 'widgets/audiogram_section.dart';
 import 'widgets/note_section.dart';
@@ -18,7 +18,7 @@ class HearingTestResultPage extends StatelessWidget {
       context: context,
       builder:
           (dialogContext) => BlocProvider.value(
-            value: context.read<HearingTestBloc>(),
+            value: context.read<HearingTestModuleBloc>(),
             child: const CustomAlertDialog(type: AlertType.back),
           ),
     );
@@ -30,19 +30,15 @@ class HearingTestResultPage extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return BlocBuilder<HearingTestBloc, HearingTestState>(
+    return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
-        if (state.isLoadingAudiogramClassificationResults) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         return Scaffold(
           appBar: HMAppBar(
             title: loc.hearing_test_result_page_title,
             route: ModalRoute.of(context)?.settings.name ?? "",
             customBackRoute: '/hearing_test/welcome',
             onBackPressed:
-                state.resultSaved ? null : () => _backDialog(context),
+                state.resultsSaved ? null : () => _backDialog(context),
           ),
           body: SafeArea(
             child: Column(
@@ -55,23 +51,22 @@ class HearingTestResultPage extends StatelessWidget {
                     child: Column(
                       children: [
                         AudiogramSection(
-                          theme: theme,
-                          leftEarData: state.results.leftEarResults,
-                          rightEarData: state.results.rightEarResults,
-                          leftEarMaskedData:
-                              state.results.leftEarResultsMasked.every(
-                                    (elem) => elem == null,
-                                  )
-                                  ? null
-                                  : state.results.leftEarResultsMasked,
-                          rightEarMaskedData:
-                              state.results.rightEarResultsMasked.every(
-                                    (elem) => elem == null,
-                                  )
-                                  ? null
-                                  : state.results.rightEarResultsMasked,
+                          theme: Theme.of(context),
+                          leftEarData:
+                              state.results?.hearingLossLeft ??
+                              [], // List<HearingLoss?>
+                          rightEarData:
+                              state.results?.hearingLossRight ??
+                              [], // List<HearingLoss?>
                         ),
-                        AudiogramDescription(theme: theme),
+
+                        NoteSection(theme: theme),
+                        const SizedBox(height: 32),
+                        AudiogramDescription(
+                          theme: theme,
+                          audiogramDescription:
+                              state.results?.audiogramDescription ?? "",
+                        ),
                         const SizedBox(height: 32),
                         NoteSection(theme: theme),
                         const SizedBox(height: 32),
