@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:hear_mate_app/utils/logger.dart';
+import 'package:hear_mate_app/shared/utils/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fpdart/fpdart.dart';
@@ -26,9 +26,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
     EchoParsePrepareForTheNewFileUpload event,
     Emitter<EchoParseState> emit,
   ) async {
-    emit(
-      state.resetState()
-    );
+    emit(state.resetState());
   }
 
   Future<void> _onChooseAudiogramFile(
@@ -42,7 +40,7 @@ class EchoParseBloc extends Bloc<EchoParseEvent, EchoParseState> {
         state.copyWith(
           fileName: result.files.single.name,
           image: result.files.single.bytes,
-          nextFile: false
+          nextFile: false,
         ),
       );
     } else {
