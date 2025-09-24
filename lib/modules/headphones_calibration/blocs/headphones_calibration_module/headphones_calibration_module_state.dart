@@ -38,8 +38,8 @@ class HeadphonesCalibrationModuleState {
 
   HeadphonesCalibrationModuleState copyWith({
     HeadphonesCalibrationStep? currentStep,
-    HeadphonesModel? selectedReferenceHeadphone,
-    HeadphonesModel? selectedTargetHeadphone,
+    Object? selectedReferenceHeadphone = _notProvided,
+    Object? selectedTargetHeadphone = _notProvided,
     List<HeadphonesModel>? availableReferenceHeadphones,
     List<HeadphonesModel>? availableTargetHeadphones,
     String? searchResult,
@@ -51,9 +51,13 @@ class HeadphonesCalibrationModuleState {
     return HeadphonesCalibrationModuleState(
       currentStep: currentStep ?? this.currentStep,
       selectedReferenceHeadphone:
-          selectedReferenceHeadphone ?? this.selectedReferenceHeadphone,
+          selectedReferenceHeadphone == _notProvided
+              ? this.selectedReferenceHeadphone
+              : selectedReferenceHeadphone as HeadphonesModel?,
       selectedTargetHeadphone:
-          selectedTargetHeadphone ?? this.selectedTargetHeadphone,
+          selectedTargetHeadphone == _notProvided
+              ? this.selectedTargetHeadphone
+              : selectedTargetHeadphone as HeadphonesModel?,
       availableReferenceHeadphones:
           availableReferenceHeadphones ?? this.availableReferenceHeadphones,
       availableTargetHeadphones:
@@ -65,4 +69,6 @@ class HeadphonesCalibrationModuleState {
       headphonesDifferent: headphonesDifferent ?? this.headphonesDifferent,
     );
   }
+
+  static const Object _notProvided = Object();
 }

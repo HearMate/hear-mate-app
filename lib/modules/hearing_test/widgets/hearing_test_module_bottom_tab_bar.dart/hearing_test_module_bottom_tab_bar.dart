@@ -11,10 +11,10 @@ class HearingTestModuleBottomTabBar extends StatelessWidget {
   final ValueChanged<ModuleTab> onTabSelected;
 
   const HearingTestModuleBottomTabBar({
-    Key? key,
+    super.key,
     required this.currentTab,
     required this.onTabSelected,
-  }) : super(key: key);
+  });
 
   int _tabToIndex(ModuleTab tab) {
     switch (tab) {

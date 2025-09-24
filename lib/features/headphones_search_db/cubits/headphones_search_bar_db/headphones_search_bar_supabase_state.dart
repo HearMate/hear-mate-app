@@ -1,4 +1,4 @@
-part of 'headphones_search_bar_cubit.dart';
+part of 'headphones_search_bar_supabase_cubit.dart';
 
 class HeadphonesSearchBarSupabaseState extends Equatable {
   final String query;

@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-part 'headphones_search_bar_state.dart';
+part 'headphones_search_bar_supabase_state.dart';
 
 class HeadphonesSearchBarSupabaseCubit
     extends Cubit<HeadphonesSearchBarSupabaseState> {
@@ -35,8 +35,6 @@ class HeadphonesSearchBarSupabaseCubit
         Future.delayed(const Duration(milliseconds: 100), () {
           emit(state.copyWith(results: []));
         });
-      } else if (focusNode.hasFocus && controller.text.isEmpty) {
-        fetchAllRecords();
       }
     });
   }
@@ -44,16 +42,13 @@ class HeadphonesSearchBarSupabaseCubit
   void updateQuery(String query) {
     emit(state.copyWith(query: query, isSearching: true, results: const []));
 
-    if (query.isEmpty) {
-      _debounce?.cancel();
-      _debounce = Timer(_debounceDuration, () {
-        fetchAllRecords();
-      });
-    } else {
+    if (query.isNotEmpty) {
       _debounce?.cancel();
       _debounce = Timer(_debounceDuration, () {
         _performSearch(query);
       });
+    } else {
+      emit(state.copyWith(isSearching: false));
     }
   }
 

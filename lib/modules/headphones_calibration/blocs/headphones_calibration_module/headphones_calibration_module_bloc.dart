@@ -110,18 +110,22 @@ class HeadphonesCalibrationModuleBloc
     // Wait for all async results
     final allHeadphonesWithNulls = await Future.wait(futures);
 
-    // Replace nulls with HeadphonesModel using cached name
-    final List<HeadphonesModel> allHeadphones = [];
+    // Separate based on database availability
+    final List<HeadphonesModel> availableReferences = [];
+    final List<HeadphonesModel> availableTargets = [];
+
     for (int i = 0; i < allNames.length; i++) {
-      final headphone =
-          allHeadphonesWithNulls[i] ?? HeadphonesModel.empty(name: allNames[i]);
-      allHeadphones.add(headphone);
+      final headphoneFromDb = allHeadphonesWithNulls[i];
+      final name = allNames[i];
+
+      if (headphoneFromDb != null) {
+        // Found in database = reference headphone
+        availableReferences.add(headphoneFromDb);
+      } else {
+        // Not found in database = target headphone (create empty model)
+        availableTargets.add(HeadphonesModel.empty(name: name));
+      }
     }
-
-    // Split based on grade threshold
-    final availableReferences = allHeadphones.toList();
-
-    final availableTargets = allHeadphones.toList();
 
     emit(
       state.copyWith(
