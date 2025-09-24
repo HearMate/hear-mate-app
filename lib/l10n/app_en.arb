@@ -210,6 +210,7 @@
     "hearing_test_result_page_note": "Note",
     "hearing_test_result_page_note_description": "This generated audiogram and hearing test results are not precise and should be interpreted with caution. For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.",
     "hearing_test_result_page_save_results": "Save results",
+    "hearing_test_result_page_results_saved": "Results saved",
     "hearing_test_result_page_home": "Back to home",  
     "hearing_test_incomplete": "Your hearing test isn’t complete, so we can’t show a full summary.",
     "hearing_test_summary_intro": "Here’s a quick summary of your hearing test:",
@@ -362,6 +363,7 @@
         }
     },
     "hearing_test_result_history_page": "Result history",
+    "hearing_test_result_history_page_audiogram_name": "Audiogram",
     "@hearing_test_result_history_page": {
         "description": "Label for the button to see hearing test results."
     },
@@ -421,9 +423,9 @@
     },
     "@tip_section_tip_desc": {
         "description": "Tip message reassuring users about not hearing all sounds during the test."
-    }
+    },
 
-     "comment_headphones_calibration1": "=================================================",
+    "comment_headphones_calibration1": "=================================================",
     "comment_headphones_calibration2": "============= Headphones Calibration ============",
     "comment_headphones_calibration3": "=================================================",
 

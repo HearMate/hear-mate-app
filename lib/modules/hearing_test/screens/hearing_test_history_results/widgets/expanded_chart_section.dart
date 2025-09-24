@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExpandedChartSection extends StatelessWidget {
-  final dynamic result; // Używamy dynamic ponieważ nie znamy dokładnego typu
+  final HearingTestResult result;
   final ThemeData theme;
 
   const ExpandedChartSection({
@@ -13,6 +17,8 @@ class ExpandedChartSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -42,7 +48,7 @@ class ExpandedChartSection extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  "Audiogram",
+                  l10n.hearing_test_result_history_page_audiogram_name,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.primary,
@@ -54,16 +60,15 @@ class ExpandedChartSection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
             child: AudiogramChart(
-              leftEarData: result.leftEarResults,
-              rightEarData: result.rightEarResults,
-              leftEarMaskedData:
-                  result.leftEarResultsMasked.every((elem) => elem == null)
-                      ? null
-                      : result.leftEarResultsMasked,
-              rightEarMaskedData:
-                  result.rightEarResultsMasked.every((elem) => elem == null)
-                      ? null
-                      : result.rightEarResultsMasked,
+              hearingLossLeft: result.hearingLossLeft,
+              hearingLossRight: result.hearingLossRight,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              result.audiogramDescription,
+              textAlign: TextAlign.center,
             ),
           ),
         ],

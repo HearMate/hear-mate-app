@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test/hearing_test_bloc.dart';
 import 'package:hm_theme/hm_theme.dart';
 
 class AudiogramDescription extends StatelessWidget {
   final ThemeData theme;
+  final String audiogramDescription;
 
-  const AudiogramDescription({super.key, required this.theme});
+  const AudiogramDescription({
+    super.key,
+    required this.theme,
+    required this.audiogramDescription,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +30,7 @@ class AudiogramDescription extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                context.read<HearingTestBloc>().state.audiogramClassification,
-              ),
+              Text(audiogramDescription),
               const SizedBox(height: 15),
               Text(
                 loc.hearing_test_result_page_note,

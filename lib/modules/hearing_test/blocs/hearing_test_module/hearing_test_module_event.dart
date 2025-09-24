@@ -9,8 +9,6 @@ class HearingTestModuleNavigateToHistory extends HearingTestModuleBlocEvent {}
 
 class HearingTestModuleNavigateToTest extends HearingTestModuleBlocEvent {}
 
-class HearingTestModuleNavigateToExit extends HearingTestModuleBlocEvent {}
-
 class HearingTestModuleTestCompleted extends HearingTestModuleBlocEvent {
   final HearingTestResult results;
 

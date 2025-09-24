@@ -7,7 +7,7 @@ class DeleteAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return AlertDialog(
       titlePadding: const EdgeInsets.fromLTRB(24, 24, 16, 0),
       title: Row(
@@ -24,9 +24,7 @@ class DeleteAlertDialog extends StatelessWidget {
       ),
       content: Padding(
         padding: const EdgeInsets.only(top: 12.0, bottom: 4),
-        child: Text(
-          l10n.hearing_test_delete_alert_message,
-        ),
+        child: Text(l10n.hearing_test_delete_alert_message),
       ),
       actionsAlignment: MainAxisAlignment.center,
       actions: [

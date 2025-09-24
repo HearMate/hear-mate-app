@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
 import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_results/hearing_test_history_results_cubit.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/widgets/alert_dialogs.dart';
-import 'db_values_mapper.dart';
-import 'expanded_chart_section.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/widgets/delete_alert_dialog.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/widgets/expanded_chart_section.dart';
 
 class ResultListItem extends StatelessWidget {
-  final dynamic result; // Używamy dynamic ponieważ nie znamy dokładnego typu
+  final HearingTestResult result;
   final bool isSelected;
   final int index;
   final ThemeData theme;
@@ -53,14 +53,12 @@ class ResultListItem extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               l10n.hearing_test_history_page_result_info(
-                remapDbValues(
-                  result.leftEarResults,
-                  result.leftEarResultsMasked,
-                ),
-                remapDbValues(
-                  result.rightEarResults,
-                  result.rightEarResultsMasked,
-                ),
+                result.hearingLossLeft
+                    .map((e) => e == null ? '-' : e.toString())
+                    .toList(),
+                result.hearingLossRight
+                    .map((e) => e == null ? '-' : e.toString())
+                    .toList(),
               ),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: Colors.grey.shade600,

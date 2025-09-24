@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/features/hearing_test/screens/hearing_test_page/hearing_test_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results.dart';
+import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/hearing_test_history_results_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_result_page/hearing_test_result_page.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_welcome_page/hearing_test_welcome_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,8 +36,8 @@ class HearingTestModulePageView extends StatelessWidget {
       builder: (context, state) {
         return Navigator(
           pages: [
-            const MaterialPage(
-              key: ValueKey('WelcomePage'),
+            const _NoAnimationPage(
+              customKey: ValueKey('WelcomePage'),
               child: HearingTestWelcomePage(),
             ),
             if (state.currentStep == HearingTestPageStep.test)
@@ -54,8 +54,8 @@ class HearingTestModulePageView extends StatelessWidget {
                 child: HearingTestResultPage(),
               )
             else if (state.currentStep == HearingTestPageStep.history)
-              const MaterialPage(
-                key: ValueKey('HistoryPage'),
+              _NoAnimationPage(
+                customKey: const ValueKey('HistoryPage'),
                 child: HearingTestHistoryResultsPage(),
               ),
           ],
@@ -76,6 +76,24 @@ class HearingTestModulePageView extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _NoAnimationPage extends Page {
+  final Widget child;
+  final LocalKey? customKey;
+
+  const _NoAnimationPage({required this.child, this.customKey})
+    : super(key: customKey);
+
+  @override
+  Route createRoute(BuildContext context) {
+    return PageRouteBuilder(
+      settings: this,
+      pageBuilder: (_, __, ___) => child,
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
     );
   }
 }

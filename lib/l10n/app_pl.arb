@@ -82,6 +82,7 @@
     "hearing_test_result_page_note": "Uwaga",
     "hearing_test_result_page_note_description": "Wygenerowany audiogram i wyniki testu mają charakter orientacyjny i nie są dokładne. Skonsultuj się z wykwalifikowanym specjalistą, aby uzyskać rzetelną diagnozę.",
     "hearing_test_result_page_save_results": "Zapisz wyniki",
+    "hearing_test_result_page_results_saved": "Wyniki zapisane",
     "hearing_test_result_page_home": "Powrót do strony głównej",
     "hearing_test_result_page_save_results_missing_values_title": "Niepełny test",
     "hearing_test_result_page_save_results_missing_values_prompt": "Brakuje części wyników testu. Czy na pewno chcesz zapisać mimo to?",
@@ -146,7 +147,7 @@
     "results_header_test_ended_successfully": "Test ukończony pomyślnie",
     "save_button_section_save_results_to_desc": "Zapisz wyniki aby móc je później przeglądać",
     "hearing_test_welcome_page_test": "Test",
-    "hearing_test_welcome_page_saved": "Zapisane"
+    "hearing_test_welcome_page_saved": "Zapisane",
 
      
     "comment_headphones_calibration1": "=================================================",

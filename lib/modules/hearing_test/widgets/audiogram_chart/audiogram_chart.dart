@@ -1,10 +1,7 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_loss.dart';
-import 'package:hear_mate_app/features/hearing_test/utils/hearing_test_constants.dart'
-    as HearingTestConstants;
-import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_point.dart';
 import 'package:hear_mate_app/shared/utils/fl_dot_triangle_painter.dart';
 
 class AudiogramChart extends StatelessWidget {
@@ -27,38 +24,35 @@ class AudiogramChart extends StatelessWidget {
     required this.hearingLossRight,
   });
 
-  final int maxYValue = HearingTestConstants.MAX_DB_LEVEL;
-  final int minYValue = HearingTestConstants.MIN_DB_LEVEL;
+  // Adjust these to your actual constants!
+  final int maxYValue = 110;
+  final int minYValue = -10;
 
   double mapDbToY(double db) {
     final y = maxYValue - (db - minYValue);
-    // Clamp in case input db is outside [-10, 110]
     return y.clamp(minYValue.toDouble(), maxYValue.toDouble());
   }
 
-  List<AudiogramPoint> buildAudiogramPoints(List<HearingLoss?> values) {
+  List<_AudiogramPoint> buildAudiogramPoints(List<HearingLoss?> values) {
     return values.asMap().entries.where((e) => e.value != null).map((entry) {
-      final i = entry.key.toDouble(); // index 0..6
+      final i = entry.key.toDouble();
       final hl = entry.value!;
-      return AudiogramPoint(FlSpot(i, mapDbToY(hl.value)), hl.isMasked);
+      return _AudiogramPoint(FlSpot(i, mapDbToY(hl.value)), hl.isMasked);
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     final leftEarPoints = buildAudiogramPoints(hearingLossLeft);
     final leftEarSpots = leftEarPoints.map((p) => p.spot).toList();
 
     final rightEarPoints = buildAudiogramPoints(hearingLossRight);
     final rightEarSpots = rightEarPoints.map((p) => p.spot).toList();
 
-    final bool isLeftMasking = hearingLossLeft.any(
-      (element) => element?.isMasked ?? false,
-    );
+    final bool isLeftMasking = hearingLossLeft.any((e) => e?.isMasked ?? false);
     final bool isRightMasking = hearingLossRight.any(
-      (element) => element?.isMasked ?? false,
+      (e) => e?.isMasked ?? false,
     );
 
     return Column(
@@ -107,7 +101,6 @@ class AudiogramChart extends StatelessWidget {
                     interval: 10,
                     reservedSize: 30,
                     getTitlesWidget: (value, meta) {
-                      // Convert chart Y back to dB for labeling
                       final displayValue =
                           (maxYValue - (value - minYValue)).round();
                       if (displayValue < minYValue ||
@@ -254,61 +247,78 @@ class AudiogramChart extends StatelessWidget {
                   ),
                 ],
               ),
-              // Ensure nothing renders outside the bounds
               clipData: FlClipData.all(),
             ),
           ),
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 12,
-          runSpacing: 8,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.center,
-          children: [
-            _legendItem(
-              FlDotCrossPainter(size: 12, color: Colors.blue, width: 2),
-              l10n.hearing_test_audiogram_chart_left_ear,
-            ),
-            _legendItem(
-              FlDotCirclePainter(
-                radius: 6,
-                color: Colors.transparent,
-                strokeWidth: 2,
-                strokeColor: Colors.red,
-              ),
-              l10n.hearing_test_audiogram_chart_right_ear,
-            ),
-            if (isLeftMasking)
-              _legendItem(
-                FlDotSquarePainter(
-                  color: Colors.transparent,
-                  strokeWidth: 2,
-                  strokeColor: Colors.blue,
-                  size: 12.0,
-                ),
-                l10n.hearing_test_audiogram_chart_left_ear_masked,
-              ),
-            if (isRightMasking)
-              _legendItem(
-                FlDotTrianglePainter(
-                  color: Colors.transparent,
-                  strokeWidth: 2,
-                  strokeColor: Colors.red,
-                  size: 12.0,
-                ),
-                l10n.hearing_test_audiogram_chart_right_ear_masked,
-              ),
-          ],
+        _AudiogramLegend(
+          isLeftMasking: isLeftMasking,
+          isRightMasking: isRightMasking,
         ),
-        if (isLeftMasking || isRightMasking)
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Text(
-              l10n.hearing_test_audiogram_chart_masking_explanation,
-              style: const TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
+      ],
+    );
+  }
+}
+
+class _AudiogramPoint {
+  final FlSpot spot;
+  final bool masked;
+  _AudiogramPoint(this.spot, this.masked);
+}
+
+class _AudiogramLegend extends StatelessWidget {
+  final bool isLeftMasking;
+  final bool isRightMasking;
+
+  const _AudiogramLegend({
+    Key? key,
+    required this.isLeftMasking,
+    required this.isRightMasking,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      alignment: WrapAlignment.center,
+      children: [
+        _legendItem(
+          FlDotCrossPainter(size: 12, color: Colors.blue, width: 2),
+          l10n.hearing_test_audiogram_chart_left_ear,
+        ),
+        _legendItem(
+          FlDotCirclePainter(
+            radius: 6,
+            color: Colors.transparent,
+            strokeWidth: 2,
+            strokeColor: Colors.red,
+          ),
+          l10n.hearing_test_audiogram_chart_right_ear,
+        ),
+        if (isLeftMasking)
+          _legendItem(
+            FlDotSquarePainter(
+              color: Colors.transparent,
+              strokeWidth: 2,
+              strokeColor: Colors.blue,
+              size: 12.0,
             ),
+            l10n.hearing_test_audiogram_chart_left_ear_masked,
+          ),
+        if (isRightMasking)
+          _legendItem(
+            FlDotTrianglePainter(
+              color: Colors.transparent,
+              strokeWidth: 2,
+              strokeColor: Colors.red,
+              size: 12.0,
+            ),
+            l10n.hearing_test_audiogram_chart_right_ear_masked,
           ),
       ],
     );
