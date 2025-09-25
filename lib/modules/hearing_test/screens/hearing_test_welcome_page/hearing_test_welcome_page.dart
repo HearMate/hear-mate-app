@@ -1,12 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
-import 'package:hear_mate_app/modules/echo_parse/blocs/tab_navigation_cubit.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
-import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_results/hearing_test_history_results_cubit.dart';
-import 'package:hear_mate_app/modules/hearing_test/widgets/hearing_test_module_bottom_tab_bar.dart/hearing_test_module_bottom_tab_bar.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_bottom_tab_bar.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_side_tab_bar.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/tabs.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'widgets/quick_info_card.dart';
 import 'widgets/section_header.dart';
@@ -21,6 +19,7 @@ class HearingTestWelcomePage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final moduleBloc = context.read<HearingTestModuleBloc>();
+    final isWideScreen = MediaQuery.of(context).size.width > 700;
 
     return Scaffold(
       appBar: HMAppBar(
@@ -31,25 +30,49 @@ class HearingTestWelcomePage extends StatelessWidget {
           return false;
         },
       ),
-      bottomNavigationBar: HearingTestModuleBottomTabBar(
-        currentTab: ModuleTab.welcome,
-        onTabSelected: (tab) {
-          switch (tab) {
-            case ModuleTab.welcome:
-              // Do nothing if already on test
-              break;
-            case ModuleTab.history:
-              moduleBloc.add(HearingTestModuleNavigateToHistory());
-              break;
-          }
-        },
-      ),
+      bottomNavigationBar:
+          isWideScreen
+              ? null
+              : HearingTestModuleBottomTabBar(
+                currentTab: ModuleTab.welcome,
+                onTabSelected: (tab) {
+                  switch (tab) {
+                    case ModuleTab.welcome:
+                      // Do nothing if already on test
+                      break;
+                    case ModuleTab.history:
+                      moduleBloc.add(HearingTestModuleNavigateToHistory());
+                      break;
+                  }
+                },
+              ),
       body: SafeArea(
-        child: Column(
+        child: Row(
           children: [
-            _buildHeader(theme, l10n),
-            _buildContent(theme, l10n),
-            _buildStartButton(context, l10n, theme),
+            if (isWideScreen)
+              HearingTestModuleSideTabBar(
+                currentTab: ModuleTab.welcome, // or your current tab variable
+                onTabSelected: (tab) {
+                  switch (tab) {
+                    case ModuleTab.welcome:
+                      // Do nothing if already on test
+                      break;
+                    case ModuleTab.history:
+                      moduleBloc.add(HearingTestModuleNavigateToHistory());
+                      break;
+                  }
+                },
+              ),
+            const VerticalDivider(width: 1, thickness: .3),
+            Expanded(
+              child: Column(
+                children: [
+                  _buildHeader(theme, l10n),
+                  _buildContent(theme, l10n),
+                  _buildStartButton(context, l10n, theme),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -59,7 +82,7 @@ class HearingTestWelcomePage extends StatelessWidget {
   Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -76,37 +99,42 @@ class HearingTestWelcomePage extends StatelessWidget {
           ),
         ),
       ),
-      child: Column(
+      child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary,
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.hearing,
-              size: 48,
-              color: theme.colorScheme.onPrimary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.test_tab_header_title,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+              size: 32,
               color: theme.colorScheme.primary,
             ),
-            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          Text(
-            l10n.test_tab_header_subtitle,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.primary.withValues(alpha: 0.8),
-              fontWeight: FontWeight.w500,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.test_tab_header_title,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.test_tab_header_subtitle,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.8),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

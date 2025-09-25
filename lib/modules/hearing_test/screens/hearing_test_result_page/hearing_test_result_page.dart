@@ -60,8 +60,6 @@ class HearingTestResultPage extends StatelessWidget {
                               [], // List<HearingLoss?>
                         ),
 
-                        NoteSection(theme: theme),
-                        const SizedBox(height: 32),
                         AudiogramDescription(
                           theme: theme,
                           audiogramDescription:
