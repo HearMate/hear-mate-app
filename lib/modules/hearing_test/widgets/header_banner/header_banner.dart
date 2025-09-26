@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ResultsHeader extends StatelessWidget {
-  final ThemeData theme;
-  final int resultsCount;
+class HeaderBanner extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
 
-  const ResultsHeader({
+  HeaderBanner({
     super.key,
-    required this.theme,
-    required this.resultsCount,
+    required this.title,
+    required this.subtitle,
+    required this.icon
   });
+
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Container(
       width: double.infinity,
@@ -29,7 +31,7 @@ class ResultsHeader extends StatelessWidget {
         ),
         border: Border(
           bottom: BorderSide(
-            color: theme.colorScheme.primary.withValues(alpha: 0.1),
+            color: theme.primaryColor.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -43,7 +45,7 @@ class ResultsHeader extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.history,
+              icon,
               size: 32,
               color: theme.colorScheme.primary,
             ),
@@ -54,7 +56,7 @@ class ResultsHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.results_header_saved_results,
+                  title,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.primary,
@@ -62,7 +64,7 @@ class ResultsHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  l10n.results_header_results_count(resultsCount),
+                  subtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.primary.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w500,

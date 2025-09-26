@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'widgets/alert_dialogs.dart';
-import 'widgets/results_header.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/header_banner/header_banner.dart';
 import 'widgets/audiogram_section.dart';
 import 'widgets/note_section.dart';
 import 'widgets/save_button_section.dart';
@@ -43,7 +43,11 @@ class HearingTestResultPage extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                ResultsHeader(theme: theme),
+                HeaderBanner(
+                  title: loc.hearing_test_result_page_your_results,
+                  subtitle: loc.results_header_test_ended_successfully,
+                  icon: Icons.show_chart,
+                ),
 
                 // Content
                 Expanded(
@@ -59,13 +63,14 @@ class HearingTestResultPage extends StatelessWidget {
                               state.results?.hearingLossRight ??
                               [], // List<HearingLoss?>
                         ),
-                        NoteSection(theme: theme),
-                        const SizedBox(height: 32),
+
                         AudiogramDescription(
                           theme: theme,
                           audiogramDescription:
                               state.results?.audiogramDescription ?? "",
                         ),
+                        const SizedBox(height: 32),
+                        NoteSection(theme: theme),
                         const SizedBox(height: 32),
                       ],
                     ),

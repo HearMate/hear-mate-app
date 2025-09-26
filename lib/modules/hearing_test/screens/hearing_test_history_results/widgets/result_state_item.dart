@@ -113,7 +113,14 @@ class ResultListItem extends StatelessWidget {
         ),
 
         // Expanded chart section
-        if (isSelected) ExpandedChartSection(result: result, theme: theme),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeInOut,
+          child:
+              isSelected
+                  ? ExpandedChartSection(result: result, theme: theme)
+                  : const SizedBox.shrink(),
+        ),
       ],
     );
   }

@@ -1,0 +1,1 @@
+enum ModuleTab { welcome, history }
