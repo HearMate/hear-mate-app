@@ -5,11 +5,12 @@ import 'package:hear_mate_app/modules/hearing_test/cubits/hearing_test_history_r
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/widgets/empty_state.dart';
 import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/widgets/result_state_item.dart';
-import 'package:hear_mate_app/modules/hearing_test/screens/hearing_test_history_results/widgets/results_header.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/header_banner/header_banner.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_side_tab_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_bottom_tab_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/tabs.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
+import 'package:hear_mate_app/shared/utils/media_query_helper.dart';
 
 class HearingTestHistoryResultsPage extends StatelessWidget {
   const HearingTestHistoryResultsPage({super.key});
@@ -19,7 +20,7 @@ class HearingTestHistoryResultsPage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final moduleBloc = context.read<HearingTestModuleBloc>();
-    final isWideScreen = MediaQuery.of(context).size.width > 700;
+    final isWideScreen = MediaQueryHelper.isWideScreen(context);
 
     return BlocProvider(
       create: (_) => HearingTestHistoryResultsCubit(),
@@ -108,9 +109,12 @@ class HearingTestHistoryResultsPage extends StatelessWidget {
 
                     return Column(
                       children: [
-                        ResultsHeader(
-                          theme: theme,
-                          resultsCount: state.results.length,
+                        HeaderBanner(
+                          title: l10n.results_header_saved_results,
+                          subtitle: l10n.results_header_results_count(
+                            state.results.length,
+                          ),
+                          icon: Icons.history,
                         ),
                         Expanded(
                           child: ListView.separated(

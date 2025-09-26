@@ -121,7 +121,6 @@ class ResultListItem extends StatelessWidget {
                   ? ExpandedChartSection(result: result, theme: theme)
                   : const SizedBox.shrink(),
         ),
-        //if (isSelected) ExpandedChartSection(result: result, theme: theme),
       ],
     );
   }

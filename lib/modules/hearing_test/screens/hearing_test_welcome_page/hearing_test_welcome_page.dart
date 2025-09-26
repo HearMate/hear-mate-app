@@ -6,6 +6,8 @@ import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_te
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_side_tab_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/tabs.dart';
 import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
+import 'package:hear_mate_app/shared/utils/media_query_helper.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/header_banner/header_banner.dart';
 import 'widgets/quick_info_card.dart';
 import 'widgets/section_header.dart';
 import 'widgets/step_item.dart';
@@ -19,7 +21,7 @@ class HearingTestWelcomePage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final moduleBloc = context.read<HearingTestModuleBloc>();
-    final isWideScreen = MediaQuery.of(context).size.width > 700;
+    final isWideScreen = MediaQueryHelper.isWideScreen(context);
 
     return Scaffold(
       appBar: HMAppBar(
@@ -67,7 +69,11 @@ class HearingTestWelcomePage extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  _buildHeader(theme, l10n),
+                  HeaderBanner(
+                    title: l10n.test_tab_header_title,
+                    subtitle: l10n.test_tab_header_subtitle,
+                    icon: Icons.hearing,
+                  ),
                   _buildContent(theme, l10n),
                   _buildStartButton(context, l10n, theme),
                 ],
@@ -75,68 +81,6 @@ class HearingTestWelcomePage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            theme.colorScheme.primary.withValues(alpha: 0.08),
-            theme.colorScheme.primary.withValues(alpha: 0.02),
-          ],
-        ),
-        border: Border(
-          bottom: BorderSide(
-            color: theme.primaryColor.withValues(alpha: 0.1),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.hearing,
-              size: 32,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.test_tab_header_title,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.test_tab_header_subtitle,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

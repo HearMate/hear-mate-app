@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'tabs.dart';
 import 'hearing_test_module_tab_bar_interface.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -10,19 +9,10 @@ class HearingTestModuleBottomTabBar extends NavigationTabBar {
     required super.onTabSelected,
   });
 
-  int _tabToIndex(ModuleTab tab) {
-    switch (tab) {
-      case ModuleTab.welcome:
-        return 0;
-      case ModuleTab.history:
-        return 1;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final currentIndex = _tabToIndex(currentTab);
+    final currentIndex = tabToIndex(currentTab);
     return BottomNavigationBar(
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,

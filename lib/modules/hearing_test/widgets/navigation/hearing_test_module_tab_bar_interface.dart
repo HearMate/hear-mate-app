@@ -11,6 +11,15 @@ abstract class NavigationTabBar extends StatelessWidget {
     required this.onTabSelected,
   });
 
+  int tabToIndex(ModuleTab tab) {
+    switch (tab) {
+      case ModuleTab.welcome:
+        return 0;
+      case ModuleTab.history:
+        return 1;
+    }
+  }
+
   ModuleTab indexToTab(int index) {
     switch (index) {
       case 0:
