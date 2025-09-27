@@ -32,22 +32,10 @@ class HeadphonesCalibrationModuleSelectReferenceHeadphone
   HeadphonesCalibrationModuleSelectReferenceHeadphone(this.headphone);
 }
 
-class HeadphonesCalibrationModuleRemoveReferenceHeadphone
-    extends HeadphonesCalibrationModuleEvent {
-  final HeadphonesModel headphone;
-  HeadphonesCalibrationModuleRemoveReferenceHeadphone(this.headphone);
-}
-
 class HeadphonesCalibrationModuleSelectTargetHeadphone
     extends HeadphonesCalibrationModuleEvent {
   final HeadphonesModel headphone;
   HeadphonesCalibrationModuleSelectTargetHeadphone(this.headphone);
-}
-
-class HeadphonesCalibrationModuleRemoveTargetHeadphone
-    extends HeadphonesCalibrationModuleEvent {
-  final HeadphonesModel headphone;
-  HeadphonesCalibrationModuleRemoveTargetHeadphone(this.headphone);
 }
 
 class HeadphonesCalibrationModuleAddHeadphoneFromSearch

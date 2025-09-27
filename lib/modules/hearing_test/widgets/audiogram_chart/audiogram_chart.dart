@@ -57,197 +57,227 @@ class AudiogramChart extends StatelessWidget {
 
     return Column(
       children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          child: Row(
+            children: [
+              Icon(
+                Icons.show_chart,
+                color: Theme.of(context).colorScheme.primary,
+                size: 18,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                l10n.hearing_test_result_history_page_audiogram_name,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
         ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 150, maxHeight: 500),
-          child: LineChart(
-            LineChartData(
-              gridData: FlGridData(
-                show: true,
-                drawVerticalLine: true,
-                drawHorizontalLine: true,
-                horizontalInterval: 10,
-              ),
-              titlesData: FlTitlesData(
-                bottomTitles: AxisTitles(
-                  axisNameWidget: Text(
-                    l10n.hearing_test_audiogram_chart_frequency,
-                    style: const TextStyle(fontSize: 12),
+          child: Padding(
+            padding: const EdgeInsets.only(right: 40),
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: true,
+                  drawHorizontalLine: true,
+                  horizontalInterval: 10,
+                ),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    axisNameWidget: Text(
+                      l10n.hearing_test_audiogram_chart_frequency,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 1,
+                      getTitlesWidget: (value, meta) {
+                        final index = value.round();
+                        if (index < 0 || index >= frequencyLabels.length) {
+                          return const SizedBox.shrink();
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            frequencyLabels[index],
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    interval: 1,
-                    getTitlesWidget: (value, meta) {
-                      final index = value.round();
-                      if (index < 0 || index >= frequencyLabels.length) {
-                        return const SizedBox.shrink();
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          frequencyLabels[index],
+                  leftTitles: AxisTitles(
+                    axisNameWidget: const Text(
+                      'dB HL',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 10,
+                      reservedSize: 30,
+                      getTitlesWidget: (value, meta) {
+                        final displayValue =
+                            (maxYValue - (value - minYValue)).round();
+                        if (displayValue < minYValue ||
+                            displayValue > maxYValue) {
+                          return const SizedBox.shrink();
+                        }
+                        return Text(
+                          displayValue.toString(),
                           style: const TextStyle(fontSize: 10),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                leftTitles: AxisTitles(
-                  axisNameWidget: const Text(
-                    'dB HL',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    interval: 10,
-                    reservedSize: 30,
-                    getTitlesWidget: (value, meta) {
-                      final displayValue =
-                          (maxYValue - (value - minYValue)).round();
-                      if (displayValue < minYValue ||
-                          displayValue > maxYValue) {
-                        return const SizedBox.shrink();
-                      }
-                      return Text(
-                        displayValue.toString(),
-                        style: const TextStyle(fontSize: 10),
-                      );
-                    },
-                  ),
-                ),
-                rightTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-                topTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-              ),
-              borderData: FlBorderData(
-                show: true,
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              minX: -0.5,
-              maxX: 6.5,
-              minY: minYValue.toDouble() - 10,
-              maxY: maxYValue.toDouble() + 10,
-              lineBarsData: [
-                LineChartBarData(
-                  spots: leftEarSpots,
-                  isCurved: false,
-                  color: Colors.blue,
-                  barWidth: 2,
-                  isStrokeCapRound: true,
-                  dotData: FlDotData(
-                    show: true,
-                    getDotPainter: (spot, percent, barData, index) {
-                      final isMasked =
-                          index < leftEarPoints.length &&
-                          leftEarPoints[index].masked;
-                      if (isMasked) {
-                        return FlDotSquarePainter(
-                          color: Colors.transparent,
-                          strokeWidth: 2,
-                          strokeColor: Colors.blue,
-                          size: 12.0,
                         );
-                      } else {
-                        return FlDotCrossPainter(
-                          size: 12,
-                          color: Colors.blue,
-                          width: 2,
-                        );
-                      }
-                    },
-                  ),
-                  belowBarData: BarAreaData(show: false),
-                ),
-                LineChartBarData(
-                  spots: rightEarSpots,
-                  isCurved: false,
-                  color: Colors.red,
-                  barWidth: 2,
-                  isStrokeCapRound: true,
-                  dotData: FlDotData(
-                    show: true,
-                    getDotPainter: (spot, percent, barData, index) {
-                      final isMasked =
-                          index < rightEarPoints.length &&
-                          rightEarPoints[index].masked;
-                      if (isMasked) {
-                        return FlDotTrianglePainter(
-                          color: Colors.transparent,
-                          strokeWidth: 2.0,
-                          strokeColor: Colors.red,
-                          size: 12.0,
-                        );
-                      } else {
-                        return FlDotCirclePainter(
-                          radius: 6.0,
-                          color: Colors.transparent,
-                          strokeColor: Colors.red,
-                          strokeWidth: 2.0,
-                        );
-                      }
-                    },
-                  ),
-                  belowBarData: BarAreaData(show: false),
-                ),
-              ],
-              lineTouchData: const LineTouchData(enabled: false),
-              extraLinesData: ExtraLinesData(
-                horizontalLines: [
-                  HorizontalLine(
-                    y: 20,
-                    color: Colors.red.withAlpha(80),
-                    strokeWidth: 1,
-                    dashArray: [5, 5],
-                    label: HorizontalLineLabel(
-                      show: true,
-                      alignment: Alignment.topRight,
-                      padding: const EdgeInsets.only(right: 5, bottom: 5),
-                      style: const TextStyle(fontSize: 9, color: Colors.red),
-                      labelResolver:
-                          (line) =>
-                              l10n.hearing_test_audiogram_chart_severe_loss,
+                      },
                     ),
                   ),
-                  HorizontalLine(
-                    y: 50,
-                    color: Colors.deepOrange.withAlpha(80),
-                    strokeWidth: 1,
-                    dashArray: [5, 5],
-                    label: HorizontalLineLabel(
-                      show: true,
-                      alignment: Alignment.topRight,
-                      padding: const EdgeInsets.only(right: 5, bottom: 5),
-                      style: const TextStyle(
-                        fontSize: 9,
-                        color: Colors.deepOrange,
-                      ),
-                      labelResolver:
-                          (line) =>
-                              l10n.hearing_test_audiogram_chart_moderate_loss,
-                    ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
                   ),
-                  HorizontalLine(
-                    y: 70,
-                    color: const Color.fromARGB(255, 138, 124, 0).withAlpha(80),
-                    strokeWidth: 1,
-                    dashArray: [5, 5],
-                    label: HorizontalLineLabel(
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                minX: -0.5,
+                maxX: 6.5,
+                minY: minYValue.toDouble() - 10,
+                maxY: maxYValue.toDouble() + 10,
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: leftEarSpots,
+                    isCurved: false,
+                    color: Colors.blue,
+                    barWidth: 2,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(
                       show: true,
-                      alignment: Alignment.topRight,
-                      padding: const EdgeInsets.only(right: 5, bottom: 5),
-                      style: const TextStyle(
-                        fontSize: 9,
-                        color: Color.fromARGB(255, 138, 124, 0),
-                      ),
-                      labelResolver:
-                          (line) => l10n.hearing_test_audiogram_chart_mild_loss,
+                      getDotPainter: (spot, percent, barData, index) {
+                        final isMasked =
+                            index < leftEarPoints.length &&
+                            leftEarPoints[index].masked;
+                        if (isMasked) {
+                          return FlDotSquarePainter(
+                            color: Colors.transparent,
+                            strokeWidth: 2,
+                            strokeColor: Colors.blue,
+                            size: 12.0,
+                          );
+                        } else {
+                          return FlDotCrossPainter(
+                            size: 12,
+                            color: Colors.blue,
+                            width: 2,
+                          );
+                        }
+                      },
                     ),
+                    belowBarData: BarAreaData(show: false),
+                  ),
+                  LineChartBarData(
+                    spots: rightEarSpots,
+                    isCurved: false,
+                    color: Colors.red,
+                    barWidth: 2,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(
+                      show: true,
+                      getDotPainter: (spot, percent, barData, index) {
+                        final isMasked =
+                            index < rightEarPoints.length &&
+                            rightEarPoints[index].masked;
+                        if (isMasked) {
+                          return FlDotTrianglePainter(
+                            color: Colors.transparent,
+                            strokeWidth: 2.0,
+                            strokeColor: Colors.red,
+                            size: 12.0,
+                          );
+                        } else {
+                          return FlDotCirclePainter(
+                            radius: 6.0,
+                            color: Colors.transparent,
+                            strokeColor: Colors.red,
+                            strokeWidth: 2.0,
+                          );
+                        }
+                      },
+                    ),
+                    belowBarData: BarAreaData(show: false),
                   ),
                 ],
+                lineTouchData: const LineTouchData(enabled: false),
+                extraLinesData: ExtraLinesData(
+                  horizontalLines: [
+                    HorizontalLine(
+                      y: 30,
+                      color: Colors.red.withAlpha(80),
+                      strokeWidth: 1,
+                      dashArray: [5, 5],
+                      label: HorizontalLineLabel(
+                        show: true,
+                        alignment: Alignment.topRight,
+                        padding: const EdgeInsets.only(right: 5, bottom: 5),
+                        style: const TextStyle(fontSize: 9, color: Colors.red),
+                        labelResolver:
+                            (line) =>
+                                l10n.hearing_test_audiogram_chart_severe_loss,
+                      ),
+                    ),
+                    HorizontalLine(
+                      y: 60,
+                      color: Colors.deepOrange.withAlpha(80),
+                      strokeWidth: 1,
+                      dashArray: [5, 5],
+                      label: HorizontalLineLabel(
+                        show: true,
+                        alignment: Alignment.topRight,
+                        padding: const EdgeInsets.only(right: 5, bottom: 5),
+                        style: const TextStyle(
+                          fontSize: 9,
+                          color: Colors.deepOrange,
+                        ),
+                        labelResolver:
+                            (line) =>
+                                l10n.hearing_test_audiogram_chart_moderate_loss,
+                      ),
+                    ),
+                    HorizontalLine(
+                      y: 80,
+                      color: const Color.fromARGB(
+                        255,
+                        138,
+                        124,
+                        0,
+                      ).withAlpha(80),
+                      strokeWidth: 1,
+                      dashArray: [5, 5],
+                      label: HorizontalLineLabel(
+                        show: true,
+                        alignment: Alignment.topRight,
+                        padding: const EdgeInsets.only(right: 5, bottom: 5),
+                        style: const TextStyle(
+                          fontSize: 9,
+                          color: Color.fromARGB(255, 138, 124, 0),
+                        ),
+                        labelResolver:
+                            (line) =>
+                                l10n.hearing_test_audiogram_chart_mild_loss,
+                      ),
+                    ),
+                  ],
+                ),
+                clipData: FlClipData.all(),
               ),
-              clipData: FlClipData.all(),
             ),
           ),
         ),

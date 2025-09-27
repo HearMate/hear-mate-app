@@ -15,8 +15,6 @@ class HeadphonesCalibrationModuleState {
   final HeadphonesCalibrationStep currentStep;
   final HeadphonesModel? selectedReferenceHeadphone;
   final HeadphonesModel? selectedTargetHeadphone;
-  final List<HeadphonesModel> availableReferenceHeadphones;
-  final List<HeadphonesModel> availableTargetHeadphones;
   final String? searchResult;
   final HearingTestResult? firstTestResults;
   final HearingTestResult? secondTestResults;
@@ -27,8 +25,6 @@ class HeadphonesCalibrationModuleState {
     this.currentStep = HeadphonesCalibrationStep.welcome,
     this.selectedReferenceHeadphone,
     this.selectedTargetHeadphone,
-    this.availableReferenceHeadphones = const [],
-    this.availableTargetHeadphones = const [],
     this.searchResult,
     this.firstTestResults,
     this.secondTestResults,
@@ -40,8 +36,6 @@ class HeadphonesCalibrationModuleState {
     HeadphonesCalibrationStep? currentStep,
     Object? selectedReferenceHeadphone = _notProvided,
     Object? selectedTargetHeadphone = _notProvided,
-    List<HeadphonesModel>? availableReferenceHeadphones,
-    List<HeadphonesModel>? availableTargetHeadphones,
     String? searchResult,
     HearingTestResult? firstTestResults,
     HearingTestResult? secondTestResults,
@@ -58,10 +52,6 @@ class HeadphonesCalibrationModuleState {
           selectedTargetHeadphone == _notProvided
               ? this.selectedTargetHeadphone
               : selectedTargetHeadphone as HeadphonesModel?,
-      availableReferenceHeadphones:
-          availableReferenceHeadphones ?? this.availableReferenceHeadphones,
-      availableTargetHeadphones:
-          availableTargetHeadphones ?? this.availableTargetHeadphones,
       searchResult: searchResult ?? this.searchResult,
       firstTestResults: firstTestResults ?? this.firstTestResults,
       secondTestResults: secondTestResults ?? this.secondTestResults,
