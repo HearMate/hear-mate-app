@@ -35,6 +35,8 @@ class HeadphonesSearchBarSupabaseCubit
         Future.delayed(const Duration(milliseconds: 100), () {
           emit(state.copyWith(results: []));
         });
+      } else if (focusNode.hasFocus && controller.text.isEmpty) {
+        fetchAllRecords();
       }
     });
   }
@@ -48,7 +50,10 @@ class HeadphonesSearchBarSupabaseCubit
         _performSearch(query);
       });
     } else {
-      emit(state.copyWith(isSearching: false));
+      _debounce?.cancel();
+      _debounce = Timer(_debounceDuration, () {
+        fetchAllRecords();
+      });
     }
   }
 
@@ -85,18 +90,18 @@ class HeadphonesSearchBarSupabaseCubit
   Future<void> fetchAllRecords() async {
     emit(state.copyWith(isSearching: true, results: const []));
     try {
-      final response = await _client
-          .from('headphones')
-          .select()
-          .limit(50); // or any reasonable limit
+      final response = await _client.from('headphones').select().limit(50);
 
       final names =
           (response as List)
               .map((item) => item['name']?.toString() ?? '')
               .where((name) => name.isNotEmpty)
               .toList();
-
-      emit(state.copyWith(results: names, isSearching: false));
+      if (focusNode.hasFocus) {
+        emit(state.copyWith(results: names, isSearching: false));
+      } else {
+        emit(state.copyWith(isSearching: false, results: const []));
+      }
     } catch (_) {
       emit(state.copyWith(isSearching: false, results: const []));
     }
