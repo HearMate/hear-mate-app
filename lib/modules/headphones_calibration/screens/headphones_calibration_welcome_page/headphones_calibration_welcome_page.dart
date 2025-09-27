@@ -50,23 +50,27 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
             SizedBox(
               child: Column(
                 children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 480),
-                    child: BlocProvider(
-                      create: (context) => HeadphonesSearchBarSupabaseCubit(),
-                      child: HeadphonesSearchBarSupabaseWidget(
-                        selectedButtonLabel:
-                            l10n.headphones_calibration_add_button,
-                        onSelectedButtonPress: (searchedResult) {
-                          context.read<HeadphonesCalibrationModuleBloc>().add(
-                            HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                              HeadphonesModel.empty(name: searchedResult),
-                            ),
-                          );
-                        },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 480),
+                      child: BlocProvider(
+                        create: (context) => HeadphonesSearchBarSupabaseCubit(),
+                        child: HeadphonesSearchBarSupabaseWidget(
+                          selectedButtonLabel:
+                              l10n.headphones_calibration_add_button,
+                          onSelectedButtonPress: (searchedResult) {
+                            context.read<HeadphonesCalibrationModuleBloc>().add(
+                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                HeadphonesModel.empty(name: searchedResult),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
+
                   _HeadphonesTable(
                     title:
                         l10n.headphones_calibration_reference_headphones_title,
@@ -75,25 +79,27 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primary,
                   ),
 
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 480),
-                    child: BlocProvider(
-                      create: (context) => HeadphonesSearchBarCubit(),
-                      child: HeadphonesSearchBarWidget(
-                        selectedButtonLabel:
-                            l10n.headphones_calibration_add_button,
-                        onSelectedButtonPress: (searchedResult) {
-                          context.read<HeadphonesCalibrationModuleBloc>().add(
-                            HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                              HeadphonesModel.empty(name: searchedResult),
-                            ),
-                          );
-                        },
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 480),
+                      child: BlocProvider(
+                        create: (context) => HeadphonesSearchBarCubit(),
+                        child: HeadphonesSearchBarWidget(
+                          selectedButtonLabel:
+                              l10n.headphones_calibration_add_button,
+                          onSelectedButtonPress: (searchedResult) {
+                            context.read<HeadphonesCalibrationModuleBloc>().add(
+                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                HeadphonesModel.empty(name: searchedResult),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 24),
                   _HeadphonesTable(
                     title: l10n.headphones_calibration_target_headphones_title,
                     isReference: false,
@@ -149,8 +155,11 @@ class _HeadphonesTable extends StatelessWidget {
     required this.icon,
     required this.color,
   });
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<
       HeadphonesCalibrationModuleBloc,
       HeadphonesCalibrationModuleState
@@ -163,45 +172,60 @@ class _HeadphonesTable extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-              border: Border.all(color: color.withOpacity(0.15), width: 1),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(icon, size: 28, color: color),
-                  const SizedBox(width: 16),
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: color,
-                    ),
+
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 600,
+            ), // Set your desired max width
+
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
+                ],
+                border: Border.all(color: color.withOpacity(0.15), width: 1),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(icon, size: 28, color: color),
+                        const SizedBox(width: 12),
+                        Text(
+                          title,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
                       selectedHeadphone != null
                           ? selectedHeadphone.name
-                          : 'not selected',
+                          : l10n.headphones_calibration_not_selected,
                       style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

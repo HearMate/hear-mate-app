@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/audiogram_chart/audiogram_chart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExpandedChartSection extends StatelessWidget {
   final HearingTestResult result;
@@ -15,8 +14,6 @@ class ExpandedChartSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
