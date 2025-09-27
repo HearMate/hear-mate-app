@@ -110,20 +110,29 @@ class HeadphonesCalibrationEndPage extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton.icon(
+                    height: 56,
+                    child: FilledButton.icon(
                       onPressed: () {
                         context.read<HeadphonesCalibrationModuleBloc>().add(
                           HeadphonesCalibrationModuleNavigateToExit(),
                         );
                       },
                       icon: const Icon(Icons.home),
-                      label: Text(l10n.headphones_calibration_go_home_button),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        textStyle: textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: colorScheme.onPrimary,
+                      label: Text(
+                        l10n.headphones_calibration_go_home_button,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
+                      ),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
                       ),
                     ),
                   ),

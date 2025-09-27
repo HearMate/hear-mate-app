@@ -112,23 +112,27 @@ class HeadphonesCalibrationInformationBeforeTestsPage extends StatelessWidget {
               // Action button
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                height: 56,
+                child: FilledButton(
                   onPressed: () {
                     context.read<HeadphonesCalibrationModuleBloc>().add(
                       HeadphonesCalibrationModuleNavigateToFirstTest(),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    elevation: 2,
                   ),
                   child: Text(
                     l10n.headphones_calibration_continue_button,
-                    style: textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

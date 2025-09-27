@@ -34,27 +34,6 @@ class ExpandedChartSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.show_chart,
-                  color: theme.colorScheme.primary,
-                  size: 18,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  l10n.hearing_test_result_history_page_audiogram_name,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
             child: AudiogramChart(
