@@ -8,6 +8,7 @@ import 'package:hear_mate_app/shared/widgets/hm_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/headphones_search_db/cubits/headphones_search_bar_db/headphones_search_bar_supabase_cubit.dart';
 import 'package:hear_mate_app/features/headphones_search_db/screens/headphones_search_bar_supabase.dart';
+import 'package:hear_mate_app/modules/hearing_test/widgets/header_banner/header_banner.dart';
 
 class HeadphonesCalibrationWelcomePage extends StatelessWidget {
   const HeadphonesCalibrationWelcomePage({super.key});
@@ -18,88 +19,100 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: HMAppBar(
-        title: l10n.headphones_calibration_page_title,
+        title: "",
         route: ModalRoute.of(context)?.settings.name ?? "",
         customBackRoute: "/",
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const _WelcomeSection(),
+        child: Column(
+          children: [
+            HeaderBanner(
+              title: l10n.headphones_calibration_page_title,
+              subtitle: l10n.headphones_calibration_welcome_title,
+              icon: Icons.headphones,
+            ),
+            _buildContent(context, l10n),
 
-              const SizedBox(height: 24),
-              const SizedBox(height: 24),
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  children: [
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 480),
-                      child: BlocProvider(
-                        create: (context) => HeadphonesSearchBarSupabaseCubit(),
-                        child: HeadphonesSearchBarSupabaseWidget(
-                          selectedButtonLabel:
-                              l10n.headphones_calibration_add_button,
-                          onSelectedButtonPress: (searchedResult) {
-                            context.read<HeadphonesCalibrationModuleBloc>().add(
-                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                                HeadphonesModel.empty(name: searchedResult),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
+            const _ActionButtons(),
+          ],
+        ),
+      ),
+    );
+  }
 
-                    const SizedBox(height: 24),
-                    Expanded(
-                      child: _HeadphonesTable(
-                        title:
-                            l10n.headphones_calibration_reference_headphones_title,
-                        isReference: true,
-                        icon: Icons.star_border,
-                        color: Theme.of(context).colorScheme.primary,
+  Widget _buildContent(BuildContext context, AppLocalizations l10n) {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const _WelcomeSection(),
+            const SizedBox(height: 24),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 480),
+                    child: BlocProvider(
+                      create: (context) => HeadphonesSearchBarSupabaseCubit(),
+                      child: HeadphonesSearchBarSupabaseWidget(
+                        selectedButtonLabel:
+                            l10n.headphones_calibration_add_button,
+                        onSelectedButtonPress: (searchedResult) {
+                          context.read<HeadphonesCalibrationModuleBloc>().add(
+                            HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                              HeadphonesModel.empty(name: searchedResult),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 480),
-                      child: BlocProvider(
-                        create: (context) => HeadphonesSearchBarCubit(),
-                        child: HeadphonesSearchBarWidget(
-                          selectedButtonLabel:
-                              l10n.headphones_calibration_add_button,
-                          onSelectedButtonPress: (searchedResult) {
-                            context.read<HeadphonesCalibrationModuleBloc>().add(
-                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                                HeadphonesModel.empty(name: searchedResult),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
+                  ),
 
-                    const SizedBox(height: 24),
-                    Expanded(
-                      child: _HeadphonesTable(
-                        title:
-                            l10n.headphones_calibration_target_headphones_title,
-                        isReference: false,
-                        icon: Icons.tune,
-                        color: Theme.of(context).colorScheme.secondary,
+                  const SizedBox(height: 24),
+                  Expanded(
+                    child: _HeadphonesTable(
+                      title:
+                          l10n.headphones_calibration_reference_headphones_title,
+                      isReference: true,
+                      icon: Icons.star_border,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 480),
+                    child: BlocProvider(
+                      create: (context) => HeadphonesSearchBarCubit(),
+                      child: HeadphonesSearchBarWidget(
+                        selectedButtonLabel:
+                            l10n.headphones_calibration_add_button,
+                        onSelectedButtonPress: (searchedResult) {
+                          context.read<HeadphonesCalibrationModuleBloc>().add(
+                            HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                              HeadphonesModel.empty(name: searchedResult),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+
+                  const SizedBox(height: 24),
+                  Expanded(
+                    child: _HeadphonesTable(
+                      title:
+                          l10n.headphones_calibration_target_headphones_title,
+                      isReference: false,
+                      icon: Icons.tune,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 24),
-              const _ActionButtons(),
-            ],
-          ),
+            ),
+            const SizedBox(height: 24),
+          ],
         ),
       ),
     );
@@ -121,31 +134,13 @@ class _WelcomeSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.headphones,
-                  size: 32,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    l10n.headphones_calibration_welcome_title,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
             Text(
               l10n.headphones_calibration_welcome_description,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 height: 1.4,
               ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -430,53 +425,96 @@ class _ActionButtons extends StatelessWidget {
             state.selectedTargetHeadphone != null;
         final isCooldownActive = state.isCooldownActive;
         final headphonesDifferent = state.headphonesDifferent;
+        final canBePressed = headphonesSelected && !isCooldownActive;
 
-        return Column(
-          children: [
-            if (isCooldownActive)
-              Text(
-                l10n.headphones_calibration_cooldown_info,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              )
-            else if (!headphonesSelected)
-              Text(
-                l10n.headphones_calibration_missing_selection,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              )
-            else if (!headphonesDifferent)
-              Text(
-                l10n.headphones_calibration_different_selection,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed:
-                    headphonesSelected && !isCooldownActive
-                        ? () {
-                          context.read<HeadphonesCalibrationModuleBloc>().add(
-                            HeadphonesCalibrationModuleNavigateToInformationBeforeTests(),
-                          );
-                        }
-                        : null,
-                icon: const Icon(Icons.play_arrow),
-                label: Text(l10n.headphones_calibration_start_button),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  disabledBackgroundColor: Theme.of(context).disabledColor,
-                  disabledForegroundColor:
-                      Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                width: 1,
               ),
             ),
-          ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 12,
+                offset: const Offset(0, -4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: FilledButton(
+                  onPressed: () {
+                    canBePressed
+                        ? context.read<HeadphonesCalibrationModuleBloc>().add(
+                          HeadphonesCalibrationModuleNavigateToInformationBeforeTests(),
+                        )
+                        : null;
+                  },
+                  style: FilledButton.styleFrom(
+                    backgroundColor:
+                        canBePressed
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).disabledColor,
+                    foregroundColor:
+                        canBePressed
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.play_arrow, size: 24),
+                      const SizedBox(width: 12),
+                      Text(
+                        l10n.headphones_calibration_start_button,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              if (isCooldownActive)
+                Text(
+                  l10n.headphones_calibration_cooldown_info,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+                  textAlign: TextAlign.center,
+                )
+              else if (!headphonesSelected)
+                Text(
+                  l10n.headphones_calibration_missing_selection,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+                  textAlign: TextAlign.center,
+                )
+              else if (!headphonesDifferent)
+                Text(
+                  l10n.headphones_calibration_different_selection,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+                  textAlign: TextAlign.center,
+                ),
+            ],
+          ),
         );
       },
     );
