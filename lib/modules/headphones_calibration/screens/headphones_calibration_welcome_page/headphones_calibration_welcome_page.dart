@@ -29,7 +29,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
           onTap: () {
             FocusScope.of(context).unfocus();
           },
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             height: double.infinity,
             child: Column(
