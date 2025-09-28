@@ -193,12 +193,15 @@ class _HeadphonesTable extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
+                    color: Colors.black.withValues(alpha: 0.04),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
                 ],
-                border: Border.all(color: color.withOpacity(0.15), width: 1),
+                border: Border.all(
+                  color: color.withValues(alpha: 0.15),
+                  width: 1,
+                ),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
