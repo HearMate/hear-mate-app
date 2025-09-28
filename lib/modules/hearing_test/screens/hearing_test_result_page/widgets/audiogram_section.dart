@@ -25,11 +25,9 @@ class AudiogramSection extends StatelessWidget {
 
     return Column(
       children: [
-        const SizedBox(height: 5),
-
         // Audiogram Chart Section
         Container(
-          margin: const EdgeInsets.only(bottom: 32.0, top: 12.0),
+          margin: const EdgeInsets.only(bottom: 32.0),
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
             boxShadow: [
@@ -52,10 +50,7 @@ class AudiogramSection extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 32,
-                  ),
+                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 32),
                   child: AudiogramChart(
                     hearingLossLeft: leftEarData,
                     hearingLossRight: rightEarData,

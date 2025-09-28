@@ -48,7 +48,6 @@ class HearingTestResultPage extends StatelessWidget {
                   subtitle: loc.results_header_test_ended_successfully,
                   icon: Icons.show_chart,
                 ),
-
                 // Content
                 Expanded(
                   child: SingleChildScrollView(

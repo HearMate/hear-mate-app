@@ -11,7 +11,8 @@ class HeadphonesSearchBarSupabaseCubit
     extends Cubit<HeadphonesSearchBarSupabaseState> {
   late final SupabaseClient _client;
   final TextEditingController controller = TextEditingController();
-  final FocusNode focusNode = FocusNode();
+  final FocusNode focusNodeSearchBar = FocusNode();
+  final FocusNode focusNodeList = FocusNode();
 
   Timer? _debounce;
   static const Duration _debounceDuration = Duration(milliseconds: 500);
@@ -30,8 +31,20 @@ class HeadphonesSearchBarSupabaseCubit
       }
     });
 
-    focusNode.addListener(() {
-      if (!focusNode.hasFocus) {
+    focusNodeSearchBar.addListener(() {
+      if (!focusNodeSearchBar.hasFocus && !focusNodeList.hasFocus) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (!focusNodeList.hasFocus) {
+            emit(state.copyWith(results: []));
+          }
+        });
+      } else if (focusNodeSearchBar.hasFocus && controller.text.isEmpty) {
+        fetchAllRecords();
+      }
+    });
+
+    focusNodeList.addListener(() {
+      if (!focusNodeList.hasFocus) {
         Future.delayed(const Duration(milliseconds: 100), () {
           emit(state.copyWith(results: []));
         });
@@ -48,7 +61,10 @@ class HeadphonesSearchBarSupabaseCubit
         _performSearch(query);
       });
     } else {
-      emit(state.copyWith(isSearching: false));
+      _debounce?.cancel();
+      _debounce = Timer(_debounceDuration, () {
+        fetchAllRecords();
+      });
     }
   }
 
@@ -85,18 +101,18 @@ class HeadphonesSearchBarSupabaseCubit
   Future<void> fetchAllRecords() async {
     emit(state.copyWith(isSearching: true, results: const []));
     try {
-      final response = await _client
-          .from('headphones')
-          .select()
-          .limit(50); // or any reasonable limit
+      final response = await _client.from('headphones').select().limit(50);
 
       final names =
           (response as List)
               .map((item) => item['name']?.toString() ?? '')
               .where((name) => name.isNotEmpty)
               .toList();
-
-      emit(state.copyWith(results: names, isSearching: false));
+      if (focusNodeSearchBar.hasFocus) {
+        emit(state.copyWith(results: names, isSearching: false));
+      } else {
+        emit(state.copyWith(isSearching: false, results: const []));
+      }
     } catch (_) {
       emit(state.copyWith(isSearching: false, results: const []));
     }
@@ -105,7 +121,8 @@ class HeadphonesSearchBarSupabaseCubit
   @override
   Future<void> close() {
     controller.dispose();
-    focusNode.dispose();
+    focusNodeSearchBar.dispose();
+    focusNodeList.dispose();
     _debounce?.cancel();
     return super.close();
   }

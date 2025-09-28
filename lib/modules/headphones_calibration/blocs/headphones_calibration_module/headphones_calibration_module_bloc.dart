@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/hearing_test/bloc/hearing_test_bloc.dart';
@@ -12,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'headphones_calibration_module_event.dart';
 part 'headphones_calibration_module_state.dart';
 
+final LOCAL_STORAGE_REFERENCE_HEADPHONES = "available_reference_headphones";
+
 class HeadphonesCalibrationModuleBloc
     extends
         Bloc<
@@ -21,9 +21,6 @@ class HeadphonesCalibrationModuleBloc
   final DatabaseRepository databaseRepository;
   final AppLocalizations l10n;
   final HearingTestBloc hearingTestBloc;
-
-  final LOCAL_STORAGE_REFERENCE_HEADPHONES = "available_reference_headphones";
-  final LOCAL_STORAGE_TARGET_HEADPHONES = "available_target_headphones";
 
   HeadphonesCalibrationModuleBloc({
     required this.l10n,
@@ -50,12 +47,6 @@ class HeadphonesCalibrationModuleBloc
     on<HeadphonesCalibrationModuleSelectTargetHeadphone>(
       _onSelectTargetHeadphone,
     );
-    on<HeadphonesCalibrationModuleRemoveReferenceHeadphone>(
-      _onRemoveReferenceHeadphone,
-    );
-    on<HeadphonesCalibrationModuleRemoveTargetHeadphone>(
-      _onRemoveTargetHeadphone,
-    );
     on<HeadphonesCalibrationModuleAddHeadphoneFromSearch>(
       _onAddHeadphoneFromSearch,
     );
@@ -78,70 +69,13 @@ class HeadphonesCalibrationModuleBloc
     add(HeadphonesCalibrationModuleStart());
   }
 
-  Future<void> _saveHeadphonesToLocalStorage() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    prefs.setStringList(
-      LOCAL_STORAGE_REFERENCE_HEADPHONES,
-      state.availableReferenceHeadphones.map((h) => h.name).toList(),
-    );
-    prefs.setStringList(
-      LOCAL_STORAGE_TARGET_HEADPHONES,
-      state.availableTargetHeadphones.map((h) => h.name).toList(),
-    );
-  }
-
-  Future<void> _loadHeadphonesFromLocalStorage(
-    Emitter<HeadphonesCalibrationModuleState> emit,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final storedReferenceNames =
-        prefs.getStringList(LOCAL_STORAGE_REFERENCE_HEADPHONES) ?? [];
-    final storedTargetNames =
-        prefs.getStringList(LOCAL_STORAGE_TARGET_HEADPHONES) ?? [];
-
-    final allNames = {...storedReferenceNames, ...storedTargetNames}.toList();
-    final futures =
-        allNames
-            .map((name) => databaseRepository.searchHeadphone(name: name))
-            .toList();
-
-    // Wait for all async results
-    final allHeadphonesWithNulls = await Future.wait(futures);
-
-    // Separate based on database availability
-    final List<HeadphonesModel> availableReferences = [];
-    final List<HeadphonesModel> availableTargets = [];
-
-    for (int i = 0; i < allNames.length; i++) {
-      final headphoneFromDb = allHeadphonesWithNulls[i];
-      final name = allNames[i];
-
-      if (headphoneFromDb != null) {
-        // Found in database = reference headphone
-        availableReferences.add(headphoneFromDb);
-      } else {
-        // Not found in database = target headphone (create empty model)
-        availableTargets.add(HeadphonesModel.empty(name: name));
-      }
-    }
-
-    emit(
-      state.copyWith(
-        availableReferenceHeadphones: availableReferences,
-        availableTargetHeadphones: availableTargets,
-      ),
-    );
-  }
-
   void _onStart(
     HeadphonesCalibrationModuleStart event,
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) async {
     emit(HeadphonesCalibrationModuleState());
-
     await _loadHeadphonesFromLocalStorage(emit);
+
     final isCooldownActive = await Cooldown.isCooldownActive();
     emit(state.copyWith(isCooldownActive: isCooldownActive));
   }
@@ -258,34 +192,29 @@ class HeadphonesCalibrationModuleBloc
     );
   }
 
-  void _onRemoveReferenceHeadphone(
-    HeadphonesCalibrationModuleRemoveReferenceHeadphone event,
-    Emitter<HeadphonesCalibrationModuleState> emit,
-  ) {
-    final updated = List.of(state.availableReferenceHeadphones)
-      ..remove(event.headphone);
-    emit(
-      state.copyWith(
-        availableReferenceHeadphones: updated,
-        selectedReferenceHeadphone: null,
-      ),
+  Future<void> _saveHeadphonesToLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setString(
+      LOCAL_STORAGE_REFERENCE_HEADPHONES,
+      state.selectedReferenceHeadphone!.name,
     );
-    _saveHeadphonesToLocalStorage();
   }
 
-  void _onRemoveTargetHeadphone(
-    HeadphonesCalibrationModuleRemoveTargetHeadphone event,
+  Future<void> _loadHeadphonesFromLocalStorage(
     Emitter<HeadphonesCalibrationModuleState> emit,
-  ) {
-    final updated = List.of(state.availableTargetHeadphones)
-      ..remove(event.headphone);
-    emit(
-      state.copyWith(
-        availableTargetHeadphones: updated,
-        selectedTargetHeadphone: null,
-      ),
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final storedReferenceNames =
+        prefs.getString(LOCAL_STORAGE_REFERENCE_HEADPHONES) ?? "";
+
+    final headphones = await databaseRepository.searchHeadphone(
+      name: storedReferenceNames,
     );
-    _saveHeadphonesToLocalStorage();
+    final HeadphonesModel? availableReferences = headphones;
+
+    emit(state.copyWith(selectedReferenceHeadphone: availableReferences));
   }
 
   void _onAddHeadphoneFromSearch(
@@ -299,48 +228,21 @@ class HeadphonesCalibrationModuleBloc
 
     // If they are new or are not reference headphones.
     if (headphones == null) {
-      final alreadyExists = state.availableTargetHeadphones.any(
-        (h) => h.name.toLowerCase() == event.headphone.name.toLowerCase(),
-      );
-
-      if (!alreadyExists) {
-        final updatedTargetHeadphones = [
-          ...state.availableTargetHeadphones,
-          event.headphone,
-        ];
-
-        emit(
-          state.copyWith(
-            availableTargetHeadphones: updatedTargetHeadphones,
-            searchResult: '',
-          ),
-        );
-      }
-
-      _saveHeadphonesToLocalStorage();
-
-      return;
-    }
-
-    // They are reference headphones
-    final alreadyExists = state.availableReferenceHeadphones.any(
-      (h) => h.name.toLowerCase() == event.headphone.name.toLowerCase(),
-    );
-
-    if (!alreadyExists) {
-      final updatedReferenceHeadphones = [
-        ...state.availableReferenceHeadphones,
-        event.headphone,
-      ];
-
       emit(
         state.copyWith(
-          availableReferenceHeadphones: updatedReferenceHeadphones,
+          selectedTargetHeadphone: event.headphone,
           searchResult: '',
         ),
       );
+      return;
     }
 
+    emit(
+      state.copyWith(
+        selectedReferenceHeadphone: event.headphone,
+        searchResult: '',
+      ),
+    );
     _saveHeadphonesToLocalStorage();
   }
 

@@ -4,13 +4,11 @@ class HeadphonesSearchBarSupabaseState extends Equatable {
   final String query;
   final bool isSearching;
   final List<String> results;
-  final String result;
 
   const HeadphonesSearchBarSupabaseState({
     this.query = '',
     this.isSearching = false,
     this.results = const [],
-    this.result = '',
   });
 
   HeadphonesSearchBarSupabaseState copyWith({
