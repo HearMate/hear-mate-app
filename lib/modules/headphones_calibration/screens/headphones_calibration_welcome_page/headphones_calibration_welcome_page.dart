@@ -24,17 +24,26 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
         customBackRoute: "/",
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            HeaderBanner(
-              title: l10n.headphones_calibration_page_title,
-              subtitle: l10n.headphones_calibration_welcome_title,
-              icon: Icons.headphones,
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              children: [
+                HeaderBanner(
+                  title: l10n.headphones_calibration_page_title,
+                  subtitle: l10n.headphones_calibration_welcome_title,
+                  icon: Icons.headphones,
+                ),
+                _buildContent(context, l10n),
+                const _ActionButtons(),
+              ],
             ),
-            _buildContent(context, l10n),
-
-            const _ActionButtons(),
-          ],
+          ),
         ),
       ),
     );

@@ -11,7 +11,8 @@ class HeadphonesSearchBarSupabaseCubit
     extends Cubit<HeadphonesSearchBarSupabaseState> {
   late final SupabaseClient _client;
   final TextEditingController controller = TextEditingController();
-  final FocusNode focusNode = FocusNode();
+  final FocusNode focusNodeSearchBar = FocusNode();
+  final FocusNode focusNodeList = FocusNode();
 
   Timer? _debounce;
   static const Duration _debounceDuration = Duration(milliseconds: 500);
@@ -30,13 +31,23 @@ class HeadphonesSearchBarSupabaseCubit
       }
     });
 
-    focusNode.addListener(() {
-      if (!focusNode.hasFocus) {
+    focusNodeSearchBar.addListener(() {
+      if (!focusNodeSearchBar.hasFocus && !focusNodeList.hasFocus) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (!focusNodeList.hasFocus) {
+            emit(state.copyWith(results: []));
+          }
+        });
+      } else if (focusNodeSearchBar.hasFocus && controller.text.isEmpty) {
+        fetchAllRecords();
+      }
+    });
+
+    focusNodeList.addListener(() {
+      if (!focusNodeList.hasFocus) {
         Future.delayed(const Duration(milliseconds: 100), () {
           emit(state.copyWith(results: []));
         });
-      } else if (focusNode.hasFocus && controller.text.isEmpty) {
-        fetchAllRecords();
       }
     });
   }
@@ -97,7 +108,7 @@ class HeadphonesSearchBarSupabaseCubit
               .map((item) => item['name']?.toString() ?? '')
               .where((name) => name.isNotEmpty)
               .toList();
-      if (focusNode.hasFocus) {
+      if (focusNodeSearchBar.hasFocus) {
         emit(state.copyWith(results: names, isSearching: false));
       } else {
         emit(state.copyWith(isSearching: false, results: const []));
@@ -110,7 +121,7 @@ class HeadphonesSearchBarSupabaseCubit
   @override
   Future<void> close() {
     controller.dispose();
-    focusNode.dispose();
+    focusNodeSearchBar.dispose();
     _debounce?.cancel();
     return super.close();
   }

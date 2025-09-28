@@ -33,10 +33,9 @@ class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Search Input
             SearchBar(
               controller: cubit.controller,
-              focusNode: cubit.focusNode,
+              focusNode: cubit.focusNodeSearchBar,
               hintText: l10n.common_headphones_search_bar_search_hint,
               onChanged: cubit.updateQuery,
               leading:
@@ -63,8 +62,6 @@ class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
                       ]
                       : null,
             ),
-
-            // Search Results
             if (resultsVisible) ...[
               const SizedBox(height: 4),
               Container(
@@ -74,30 +71,61 @@ class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
                   border: Border.all(color: borderColor),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: state.results.length,
-                  separatorBuilder:
-                      (_, __) => Divider(height: 1, color: borderColor),
-                  itemBuilder: (context, index) {
-                    final item = state.results[index];
-                    return ListTile(
-                      leading: Icon(Icons.headphones, color: colors.primary),
-                      title: Text(
-                        item,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: surfaceColor,
+                    border: Border.all(color: borderColor),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Focus(
+                    focusNode: cubit.focusNodeList,
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (notification) {
+                        FocusScope.of(
+                          context,
+                        ).requestFocus(cubit.focusNodeList);
+                        return false;
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          12,
+                        ), // Match container radius
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxHeight: 130),
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            itemCount: state.results.length,
+                            separatorBuilder:
+                                (_, __) =>
+                                    Divider(height: 1, color: borderColor),
+                            itemBuilder: (context, index) {
+                              final item = state.results[index];
+                              return ListTile(
+                                leading: Icon(
+                                  Icons.headphones,
+                                  color: colors.primary,
+                                ),
+                                title: Text(
+                                  item,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                trailing: ElevatedButton(
+                                  onPressed: () {
+                                    onSelectedButtonPress(item);
+                                    cubit.clearQuery();
+                                  },
+                                  child: Text(selectedButtonLabel),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                      trailing: ElevatedButton(
-                        onPressed: () {
-                          onSelectedButtonPress(item);
-                          cubit.clearQuery();
-                        },
-                        child: Text(selectedButtonLabel),
-                      ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
               ),
             ],
