@@ -122,6 +122,7 @@ class HeadphonesSearchBarSupabaseCubit
   Future<void> close() {
     controller.dispose();
     focusNodeSearchBar.dispose();
+    focusNodeList.dispose();
     _debounce?.cancel();
     return super.close();
   }

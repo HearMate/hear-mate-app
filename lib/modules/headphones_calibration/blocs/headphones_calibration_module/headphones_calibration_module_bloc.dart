@@ -5,9 +5,12 @@ import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.d
 import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 import 'package:hear_mate_app/shared/utils/cooldown.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'headphones_calibration_module_event.dart';
 part 'headphones_calibration_module_state.dart';
+
+final LOCAL_STORAGE_REFERENCE_HEADPHONES = "available_reference_headphones";
 
 class HeadphonesCalibrationModuleBloc
     extends
@@ -71,6 +74,7 @@ class HeadphonesCalibrationModuleBloc
     Emitter<HeadphonesCalibrationModuleState> emit,
   ) async {
     emit(HeadphonesCalibrationModuleState());
+    await _loadHeadphonesFromLocalStorage(emit);
 
     final isCooldownActive = await Cooldown.isCooldownActive();
     emit(state.copyWith(isCooldownActive: isCooldownActive));
@@ -188,6 +192,31 @@ class HeadphonesCalibrationModuleBloc
     );
   }
 
+  Future<void> _saveHeadphonesToLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setString(
+      LOCAL_STORAGE_REFERENCE_HEADPHONES,
+      state.selectedReferenceHeadphone!.name,
+    );
+  }
+
+  Future<void> _loadHeadphonesFromLocalStorage(
+    Emitter<HeadphonesCalibrationModuleState> emit,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final storedReferenceNames =
+        prefs.getString(LOCAL_STORAGE_REFERENCE_HEADPHONES) ?? "";
+
+    final headphones = await databaseRepository.searchHeadphone(
+      name: storedReferenceNames,
+    );
+    final HeadphonesModel? availableReferences = headphones;
+
+    emit(state.copyWith(selectedReferenceHeadphone: availableReferences));
+  }
+
   void _onAddHeadphoneFromSearch(
     HeadphonesCalibrationModuleAddHeadphoneFromSearch event,
     Emitter<HeadphonesCalibrationModuleState> emit,
@@ -214,6 +243,7 @@ class HeadphonesCalibrationModuleBloc
         searchResult: '',
       ),
     );
+    _saveHeadphonesToLocalStorage();
   }
 
   void _onHearingTestCompleted(
