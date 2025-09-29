@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/features/headphones_search_db/cubits/headphones_search_bar_db/headphones_search_bar_supabase_cubit.dart';
+import 'package:hear_mate_app/features/headphones_search_db/screens/headphones_search_bar_supabase.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
+import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_calibration_module/headphones_calibration_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_bottom_tab_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_side_tab_bar.dart';
@@ -49,48 +53,60 @@ class HearingTestWelcomePage extends StatelessWidget {
                 },
               ),
       body: SafeArea(
-        child: Row(
-          children: [
-            if (isWideScreen)
-              HearingTestModuleSideTabBar(
-                currentTab: ModuleTab.welcome, // or your current tab variable
-                onTabSelected: (tab) {
-                  switch (tab) {
-                    case ModuleTab.welcome:
-                      // Do nothing if already on test
-                      break;
-                    case ModuleTab.history:
-                      moduleBloc.add(HearingTestModuleNavigateToHistory());
-                      break;
-                  }
-                },
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Row(
+            children: [
+              if (isWideScreen)
+                HearingTestModuleSideTabBar(
+                  currentTab: ModuleTab.welcome, // or your current tab variable
+                  onTabSelected: (tab) {
+                    switch (tab) {
+                      case ModuleTab.welcome:
+                        // Do nothing if already on test
+                        break;
+                      case ModuleTab.history:
+                        moduleBloc.add(HearingTestModuleNavigateToHistory());
+                        break;
+                    }
+                  },
+                ),
+              const VerticalDivider(width: 1, thickness: .3),
+              Expanded(
+                child: Column(
+                  children: [
+                    HeaderBanner(
+                      title: l10n.test_tab_header_title,
+                      subtitle: l10n.test_tab_header_subtitle,
+                      icon: Icons.hearing,
+                    ),
+                    _buildContent(context, theme, l10n),
+                    _buildStartButton(context, l10n, theme),
+                  ],
+                ),
               ),
-            const VerticalDivider(width: 1, thickness: .3),
-            Expanded(
-              child: Column(
-                children: [
-                  HeaderBanner(
-                    title: l10n.test_tab_header_title,
-                    subtitle: l10n.test_tab_header_subtitle,
-                    icon: Icons.hearing,
-                  ),
-                  _buildContent(theme, l10n),
-                  _buildStartButton(context, l10n, theme),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildContent(ThemeData theme, AppLocalizations l10n) {
+  Widget _buildContent(
+    BuildContext context,
+    ThemeData theme,
+    AppLocalizations l10n,
+  ) {
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 8),
+            _buildHeadphonesBar(context, l10n),
+            const SizedBox(height: 16),
             _buildQuickInfoCards(theme, l10n),
             const SizedBox(height: 16),
             _buildInstructions(theme, l10n),
@@ -100,6 +116,33 @@ class HearingTestWelcomePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildHeadphonesBar(BuildContext context, AppLocalizations l10n) {
+    return Column(
+      children: [
+        BlocProvider(
+          create: (context) => HeadphonesSearchBarSupabaseCubit(),
+          child: HeadphonesSearchBarSupabaseWidget(
+            selectedButtonLabel: l10n.headphones_calibration_add_button,
+            onSelectedButtonPress: (searchedResult) {
+              context.read<HeadphonesCalibrationModuleBloc>().add(
+                HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                  HeadphonesModel.empty(name: searchedResult),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
+        _HeadphonesTable(
+          title: l10n.headphones_calibration_reference_headphones_title,
+          isReference: true,
+          icon: Icons.star_border,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ],
     );
   }
 
@@ -236,6 +279,101 @@ class HearingTestWelcomePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _HeadphonesTable extends StatelessWidget {
+  final String title;
+  final bool isReference;
+  final IconData icon;
+  final Color color;
+
+  const _HeadphonesTable({
+    required this.title,
+    required this.isReference,
+    required this.icon,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocBuilder<
+      HeadphonesCalibrationModuleBloc,
+      HeadphonesCalibrationModuleState
+    >(
+      builder: (context, state) {
+        final selectedHeadphone =
+            isReference
+                ? state.selectedReferenceHeadphone
+                : state.selectedTargetHeadphone;
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 600,
+            ), // Set your desired max width
+
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+                border: Border.all(
+                  color: color.withValues(alpha: 0.15),
+                  width: 1,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(icon, size: 28, color: color),
+                        const SizedBox(width: 12),
+                        Text(
+                          title,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      selectedHeadphone != null
+                          ? selectedHeadphone.name
+                          : l10n.headphones_calibration_not_selected,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
