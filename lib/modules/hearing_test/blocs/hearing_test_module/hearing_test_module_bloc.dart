@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'hearing_test_module_event.dart';
 part 'hearing_test_module_state.dart';
+
+final LOCAL_STORAGE_REFERENCE_HEADPHONES = "available_reference_headphones";
 
 class HearingTestModuleBloc
     extends Bloc<HearingTestModuleBlocEvent, HearingTestModuleState> {
@@ -28,6 +31,7 @@ class HearingTestModuleBloc
     on<HearingTestModuleTestCompleted>(_onTestCompleted);
     on<HearingTestModuleSaveTestResults>(_onSaveTestResult);
     on<HearingTestModuleSelectHeadphoneFromSearch>(_onSelectHeadphones);
+    on<HearingTestModuleAddHeadphonesFromSearch>(_onAddHeadphoneFromSearch);
 
     hearingTestBloc.stream.listen((hearingTestState) {
       if (hearingTestState.isTestCompleted) {
@@ -116,5 +120,43 @@ class HearingTestModuleBloc
         HeadphonesModel.empty(name: event.headphone.name);
 
     emit(state.copyWith(headphonesModel: headphonesModel));
+  }
+
+  void _onAddHeadphoneFromSearch(
+    HearingTestModuleAddHeadphonesFromSearch event,
+    Emitter<HearingTestModuleState> emit,
+  ) async {
+    // Check in what place there should go
+    HeadphonesModel? headphones = await databaseRepository.searchHeadphone(
+      name: event.headphone.name,
+    );
+
+    // If they are new or are not reference headphones.
+    if (headphones == null) {
+      emit(
+        state.copyWith(
+          selectedTargetHeadphone: event.headphone,
+          searchResult: '',
+        ),
+      );
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        selectedReferenceHeadphone: event.headphone,
+        searchResult: '',
+      ),
+    );
+    _saveHeadphonesToLocalStorage();
+  }
+
+  Future<void> _saveHeadphonesToLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setString(
+      LOCAL_STORAGE_REFERENCE_HEADPHONES,
+      state.selectedReferenceHeadphone!.name,
+    );
   }
 }

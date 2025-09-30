@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hear_mate_app/features/headphones_search_db/cubits/headphones_search_bar_db/headphones_search_bar_supabase_cubit.dart';
 import 'package:hear_mate_app/features/headphones_search_db/screens/headphones_search_bar_supabase.dart';
 import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
-import 'package:hear_mate_app/modules/headphones_calibration/blocs/headphones_calibration_module/headphones_calibration_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_bottom_tab_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_side_tab_bar.dart';
@@ -107,6 +106,9 @@ class HearingTestWelcomePage extends StatelessWidget {
             const SizedBox(height: 8),
             _buildHeadphonesBar(context, l10n),
             const SizedBox(height: 16),
+            _buildNoHeadphonesButton(context, l10n),
+
+            const SizedBox(height: 16),
             _buildQuickInfoCards(theme, l10n),
             const SizedBox(height: 16),
             _buildInstructions(theme, l10n),
@@ -127,8 +129,8 @@ class HearingTestWelcomePage extends StatelessWidget {
           child: HeadphonesSearchBarSupabaseWidget(
             selectedButtonLabel: l10n.headphones_calibration_add_button,
             onSelectedButtonPress: (searchedResult) {
-              context.read<HeadphonesCalibrationModuleBloc>().add(
-                HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+              context.read<HearingTestModuleBloc>().add(
+                HearingTestModuleAddHeadphonesFromSearch(
                   HeadphonesModel.empty(name: searchedResult),
                 ),
               );
@@ -137,9 +139,9 @@ class HearingTestWelcomePage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         _HeadphonesTable(
-          title: l10n.headphones_calibration_reference_headphones_title,
+          title: l10n.hearing_test_welcome_page_your_headphones_title,
           isReference: true,
-          icon: Icons.star_border,
+          icon: Icons.headphones,
           color: Theme.of(context).colorScheme.primary,
         ),
       ],
@@ -241,32 +243,45 @@ class HearingTestWelcomePage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 56,
-            child: FilledButton(
-              onPressed: () {
-                context.read<HearingTestModuleBloc>().add(
-                  HearingTestModuleNavigateToTest(),
+            child: BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
+              builder: (context, state) {
+                final hasSelectedHeadphones =
+                    state.selectedReferenceHeadphone != null;
+
+                return FilledButton(
+                  onPressed: () {
+                    if (hasSelectedHeadphones) {
+                      // User has selected headphones, proceed directly
+                      context.read<HearingTestModuleBloc>().add(
+                        HearingTestModuleNavigateToTest(),
+                      );
+                    } else {
+                      // No headphones selected, show warning dialog
+                      _showNoHeadphonesSelectedDialog(context, l10n);
+                    }
+                  },
+                  style: FilledButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.play_arrow, size: 24),
+                      const SizedBox(width: 12),
+                      Text(
+                        l10n.hearing_test_welcome_page_start_hearing_test,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               },
-              style: FilledButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 2,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.play_arrow, size: 24),
-                  const SizedBox(width: 12),
-                  Text(
-                    l10n.hearing_test_welcome_page_start_hearing_test,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -300,10 +315,7 @@ class _HeadphonesTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocBuilder<
-      HeadphonesCalibrationModuleBloc,
-      HeadphonesCalibrationModuleState
-    >(
+    return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
         final selectedHeadphone =
             isReference
@@ -376,4 +388,120 @@ class _HeadphonesTable extends StatelessWidget {
       },
     );
   }
+}
+
+void _showHeadphonesNotCalibratedDialog(
+  BuildContext context,
+  AppLocalizations l10n,
+) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                l10n.hearing_test_welcome_page_uncalibrated_headphones_title,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          l10n.hearing_test_welcome_page_no_headphones_in_database_popup,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).pushReplacementNamed('/headphones_calibration/welcome');
+            },
+            child: Text(
+              l10n.hearing_test_welcome_page_uncalibrated_headphones_popup_calibrate_button,
+            ),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // Continue with test anyway
+              context.read<HearingTestModuleBloc>().add(
+                HearingTestModuleNavigateToTest(),
+              );
+            },
+            child: Text(
+              l10n.hearing_test_welcome_page_uncalibrated_headphones_popup_continue_button,
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Widget _buildNoHeadphonesButton(BuildContext context, AppLocalizations l10n) {
+  return Center(
+    child: OutlinedButton(
+      onPressed: () => _showHeadphonesNotCalibratedDialog(context, l10n),
+      child: Text(
+        style: const TextStyle(fontSize: 14.0),
+        l10n.hearing_test_welcome_page_no_headphones_in_database_button,
+      ),
+    ),
+  );
+}
+
+void _showNoHeadphonesSelectedDialog(
+  BuildContext context,
+  AppLocalizations l10n,
+) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.info_outline, color: Colors.blue, size: 28),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                l10n.hearing_test_welcome_page_no_headphones_selected_title,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          l10n.hearing_test_welcome_page_no_headphones_selected_message,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              l10n.hearing_test_welcome_page_no_headphones_selected_go_back,
+            ),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // Continue with test without headphones
+              context.read<HearingTestModuleBloc>().add(
+                HearingTestModuleNavigateToTest(),
+              );
+            },
+            child: Text(
+              l10n.hearing_test_welcome_page_no_headphones_selected_continue,
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }
