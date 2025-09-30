@@ -106,8 +106,7 @@ class HearingTestWelcomePage extends StatelessWidget {
             const SizedBox(height: 8),
             _buildHeadphonesBar(context, l10n),
             const SizedBox(height: 16),
-            _buildNoHeadphonesButton(context, l10n),
-
+            _buildNoHeadphonesInDatabaseButton(context, l10n),
             const SizedBox(height: 16),
             _buildQuickInfoCards(theme, l10n),
             const SizedBox(height: 16),
@@ -446,7 +445,10 @@ void _showHeadphonesNotCalibratedDialog(
   );
 }
 
-Widget _buildNoHeadphonesButton(BuildContext context, AppLocalizations l10n) {
+Widget _buildNoHeadphonesInDatabaseButton(
+  BuildContext context,
+  AppLocalizations l10n,
+) {
   return Center(
     child: OutlinedButton(
       onPressed: () => _showHeadphonesNotCalibratedDialog(context, l10n),

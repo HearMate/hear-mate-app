@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'hearing_test_module_event.dart';
 part 'hearing_test_module_state.dart';
 
-final LOCAL_STORAGE_REFERENCE_HEADPHONES = "available_reference_headphones";
+const localStorageReferenceHeadphones = "available_reference_headphones";
 
 class HearingTestModuleBloc
     extends Bloc<HearingTestModuleBlocEvent, HearingTestModuleState> {
@@ -155,7 +155,7 @@ class HearingTestModuleBloc
     final prefs = await SharedPreferences.getInstance();
 
     prefs.setString(
-      LOCAL_STORAGE_REFERENCE_HEADPHONES,
+      localStorageReferenceHeadphones,
       state.selectedReferenceHeadphone!.name,
     );
   }
