@@ -23,10 +23,3 @@ class HearingTestModuleSelectHeadphoneFromSearch
 
   HearingTestModuleSelectHeadphoneFromSearch(this.headphone);
 }
-
-class HearingTestModuleAddHeadphonesFromSearch
-    extends HearingTestModuleBlocEvent {
-  final HeadphonesModel headphone;
-
-  HearingTestModuleAddHeadphonesFromSearch(this.headphone);
-}

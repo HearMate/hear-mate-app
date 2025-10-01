@@ -61,7 +61,7 @@ class HearingTestWelcomePage extends StatelessWidget {
             children: [
               if (isWideScreen)
                 HearingTestModuleSideTabBar(
-                  currentTab: ModuleTab.welcome, // or your current tab variable
+                  currentTab: ModuleTab.welcome,
                   onTabSelected: (tab) {
                     switch (tab) {
                       case ModuleTab.welcome:
@@ -129,7 +129,7 @@ class HearingTestWelcomePage extends StatelessWidget {
             selectedButtonLabel: l10n.headphones_calibration_add_button,
             onSelectedButtonPress: (searchedResult) {
               context.read<HearingTestModuleBloc>().add(
-                HearingTestModuleAddHeadphonesFromSearch(
+                HearingTestModuleSelectHeadphoneFromSearch(
                   HeadphonesModel.empty(name: searchedResult),
                 ),
               );
@@ -244,18 +244,24 @@ class HearingTestWelcomePage extends StatelessWidget {
             height: 56,
             child: BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
               builder: (context, state) {
-                final hasSelectedHeadphones =
-                    state.selectedReferenceHeadphone != null;
+                final hasSelectedHeadphones = state.selectedHeadphone != null;
+                final isCalibrated =
+                    state.selectedHeadphone?.isCalibrated ?? false;
 
                 return FilledButton(
                   onPressed: () {
                     if (hasSelectedHeadphones) {
-                      // User has selected headphones, proceed directly
-                      context.read<HearingTestModuleBloc>().add(
-                        HearingTestModuleNavigateToTest(),
-                      );
+                      if (isCalibrated) {
+                        // Calibrated headphones - proceed directly
+                        context.read<HearingTestModuleBloc>().add(
+                          HearingTestModuleNavigateToTest(),
+                        );
+                      } else {
+                        // Uncalibrated headphones - show warning
+                        _showHeadphonesNotCalibratedDialog(context, l10n);
+                      }
                     } else {
-                      // No headphones selected, show warning dialog
+                      // No headphones selected - show selection warning
                       _showNoHeadphonesSelectedDialog(context, l10n);
                     }
                   },
@@ -316,19 +322,13 @@ class _HeadphonesTable extends StatelessWidget {
 
     return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
-        final selectedHeadphone =
-            isReference
-                ? state.selectedReferenceHeadphone
-                : state.selectedTargetHeadphone;
+        final selectedHeadphone = state.selectedHeadphone;
+        final isCalibrated = selectedHeadphone?.isCalibrated ?? false;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: 600,
-            ), // Set your desired max width
-
+            constraints: const BoxConstraints(maxWidth: 600),
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
@@ -378,6 +378,48 @@ class _HeadphonesTable extends StatelessWidget {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    if (selectedHeadphone != null) ...[
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color:
+                              isCalibrated
+                                    ? Colors.green.withValues(alpha: .1)
+                                    : Colors.orange
+                                ..withValues(alpha: .1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isCalibrated ? Colors.green : Colors.orange,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              isCalibrated ? Icons.check_circle : Icons.warning,
+                              size: 16,
+                              color:
+                                  isCalibrated ? Colors.green : Colors.orange,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              isCalibrated ? "Calibrated" : "Not Calibrated",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color:
+                                    isCalibrated ? Colors.green : Colors.orange,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

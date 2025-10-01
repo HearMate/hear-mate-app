@@ -8,9 +8,7 @@ class HearingTestModuleState {
   final HearingTestResult? results;
   final bool resultsSaved;
   final HeadphonesModel? headphonesModel;
-  final String? searchResult;
-  final HeadphonesModel? selectedReferenceHeadphone;
-  final HeadphonesModel? selectedTargetHeadphone;
+  final HeadphonesModel? selectedHeadphone;
 
   HearingTestModuleState({
     this.currentStep = HearingTestPageStep.welcome,
@@ -18,9 +16,7 @@ class HearingTestModuleState {
     this.results,
     this.resultsSaved = false,
     this.headphonesModel,
-    this.searchResult,
-    this.selectedReferenceHeadphone,
-    this.selectedTargetHeadphone,
+    this.selectedHeadphone,
   });
 
   HearingTestModuleState copyWith({
@@ -29,9 +25,7 @@ class HearingTestModuleState {
     HearingTestResult? results,
     bool? resultsSaved,
     HeadphonesModel? headphonesModel,
-    String? searchResult,
-    HeadphonesModel? selectedReferenceHeadphone,
-    HeadphonesModel? selectedTargetHeadphone,
+    HeadphonesModel? selectedHeadphone,
   }) {
     return HearingTestModuleState(
       currentStep: currentStep ?? this.currentStep,
@@ -39,11 +33,7 @@ class HearingTestModuleState {
       results: results ?? this.results,
       resultsSaved: resultsSaved ?? this.resultsSaved,
       headphonesModel: headphonesModel ?? this.headphonesModel,
-      searchResult: searchResult ?? this.searchResult,
-      selectedReferenceHeadphone:
-          selectedReferenceHeadphone ?? this.selectedReferenceHeadphone,
-      selectedTargetHeadphone:
-          selectedTargetHeadphone ?? this.selectedTargetHeadphone,
+      selectedHeadphone: selectedHeadphone ?? this.selectedHeadphone,
     );
   }
 }

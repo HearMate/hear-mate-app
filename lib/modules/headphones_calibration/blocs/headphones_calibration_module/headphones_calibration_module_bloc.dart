@@ -228,21 +228,11 @@ class HeadphonesCalibrationModuleBloc
 
     // If they are new or are not reference headphones.
     if (headphones == null) {
-      emit(
-        state.copyWith(
-          selectedTargetHeadphone: event.headphone,
-          searchResult: '',
-        ),
-      );
+      emit(state.copyWith(selectedTargetHeadphone: event.headphone));
       return;
     }
 
-    emit(
-      state.copyWith(
-        selectedReferenceHeadphone: event.headphone,
-        searchResult: '',
-      ),
-    );
+    emit(state.copyWith(selectedReferenceHeadphone: event.headphone));
     _saveHeadphonesToLocalStorage();
   }
 

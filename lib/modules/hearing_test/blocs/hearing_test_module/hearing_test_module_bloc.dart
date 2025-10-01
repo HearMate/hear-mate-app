@@ -14,13 +14,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'hearing_test_module_event.dart';
 part 'hearing_test_module_state.dart';
 
-const localStorageReferenceHeadphones = "available_reference_headphones";
-
 class HearingTestModuleBloc
     extends Bloc<HearingTestModuleBlocEvent, HearingTestModuleState> {
   final HearingTestBloc hearingTestBloc;
   final AppLocalizations l10n;
   final DatabaseRepository databaseRepository;
+  final localStorageReferenceHeadphones = "available_reference_headphones";
 
   HearingTestModuleBloc({required this.l10n, required this.databaseRepository})
     : hearingTestBloc = HearingTestBloc(l10n: l10n),
@@ -31,7 +30,6 @@ class HearingTestModuleBloc
     on<HearingTestModuleTestCompleted>(_onTestCompleted);
     on<HearingTestModuleSaveTestResults>(_onSaveTestResult);
     on<HearingTestModuleSelectHeadphoneFromSearch>(_onSelectHeadphones);
-    on<HearingTestModuleAddHeadphonesFromSearch>(_onAddHeadphoneFromSearch);
 
     hearingTestBloc.stream.listen((hearingTestState) {
       if (hearingTestState.isTestCompleted) {
@@ -115,48 +113,21 @@ class HearingTestModuleBloc
     HearingTestModuleSelectHeadphoneFromSearch event,
     Emitter<HearingTestModuleState> emit,
   ) async {
-    final headphonesModel =
-        await databaseRepository.searchHeadphone(name: event.headphone.name) ??
-        HeadphonesModel.empty(name: event.headphone.name);
-
-    emit(state.copyWith(headphonesModel: headphonesModel));
-  }
-
-  void _onAddHeadphoneFromSearch(
-    HearingTestModuleAddHeadphonesFromSearch event,
-    Emitter<HearingTestModuleState> emit,
-  ) async {
-    // Check in what place there should go
     HeadphonesModel? headphones = await databaseRepository.searchHeadphone(
       name: event.headphone.name,
     );
 
-    // If they are new or are not reference headphones.
+    HeadphonesModel selectedHeadphone;
+
     if (headphones == null) {
-      emit(
-        state.copyWith(
-          selectedTargetHeadphone: event.headphone,
-          searchResult: '',
-        ),
-      );
-      return;
+      selectedHeadphone = event.headphone.copyWith(isCalibrated: false);
+    } else {
+      selectedHeadphone = headphones.copyWith(isCalibrated: true);
     }
 
-    emit(
-      state.copyWith(
-        selectedReferenceHeadphone: event.headphone,
-        searchResult: '',
-      ),
-    );
-    _saveHeadphonesToLocalStorage();
-  }
+    emit(state.copyWith(selectedHeadphone: selectedHeadphone));
 
-  Future<void> _saveHeadphonesToLocalStorage() async {
     final prefs = await SharedPreferences.getInstance();
-
-    prefs.setString(
-      localStorageReferenceHeadphones,
-      state.selectedReferenceHeadphone!.name,
-    );
+    prefs.setString(localStorageReferenceHeadphones, selectedHeadphone.name);
   }
 }
