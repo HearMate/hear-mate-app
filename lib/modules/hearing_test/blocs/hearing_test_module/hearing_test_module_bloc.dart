@@ -113,21 +113,10 @@ class HearingTestModuleBloc
     HearingTestModuleSelectHeadphoneFromSearch event,
     Emitter<HearingTestModuleState> emit,
   ) async {
-    HeadphonesModel? headphones = await databaseRepository.searchHeadphone(
-      name: event.headphone.name,
-    );
-
-    HeadphonesModel selectedHeadphone;
-
-    if (headphones == null) {
-      selectedHeadphone = event.headphone.copyWith(isCalibrated: false);
-    } else {
-      selectedHeadphone = headphones.copyWith(isCalibrated: true);
-    }
-
-    emit(state.copyWith(selectedHeadphone: selectedHeadphone));
+    // Event już zawiera informację o kalibracji, więc po prostu używamy tego
+    emit(state.copyWith(selectedHeadphone: event.headphone));
 
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(localStorageReferenceHeadphones, selectedHeadphone.name);
+    prefs.setString(localStorageReferenceHeadphones, event.headphone.name);
   }
 }

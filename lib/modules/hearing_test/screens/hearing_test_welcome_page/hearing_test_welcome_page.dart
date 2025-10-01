@@ -15,6 +15,7 @@ import 'widgets/quick_info_card.dart';
 import 'widgets/section_header.dart';
 import 'widgets/step_item.dart';
 import 'widgets/tip_section.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/cubits/headphones_search_bar/headphones_search_bar_cubit.dart';
 
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
@@ -123,17 +124,26 @@ class HearingTestWelcomePage extends StatelessWidget {
   Widget _buildHeadphonesBar(BuildContext context, AppLocalizations l10n) {
     return Column(
       children: [
-        BlocProvider(
-          create: (context) => HeadphonesSearchBarSupabaseCubit(),
-          child: HeadphonesSearchBarSupabaseWidget(
-            selectedButtonLabel: l10n.headphones_calibration_add_button,
-            onSelectedButtonPress: (searchedResult) {
-              context.read<HearingTestModuleBloc>().add(
-                HearingTestModuleSelectHeadphoneFromSearch(
-                  HeadphonesModel.empty(name: searchedResult),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 480),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => HeadphonesSearchBarSupabaseCubit(),
                 ),
-              );
-            },
+                BlocProvider(create: (context) => HeadphonesSearchBarCubit()),
+              ],
+              child: _CombinedHeadphonesSearchBar(
+                selectedButtonLabel: l10n.headphones_calibration_add_button,
+                onSelectedButtonPress: (headphone) {
+                  context.read<HearingTestModuleBloc>().add(
+                    HearingTestModuleSelectHeadphoneFromSearch(headphone),
+                  );
+                },
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -548,4 +558,291 @@ void _showNoHeadphonesSelectedDialog(
       );
     },
   );
+}
+
+class _CombinedHeadphonesSearchBar extends StatefulWidget {
+  final String selectedButtonLabel;
+  final ValueChanged<HeadphonesModel> onSelectedButtonPress;
+
+  const _CombinedHeadphonesSearchBar({
+    required this.selectedButtonLabel,
+    required this.onSelectedButtonPress,
+  });
+
+  @override
+  State<_CombinedHeadphonesSearchBar> createState() =>
+      _CombinedHeadphonesSearchBarState();
+}
+
+class _CombinedHeadphonesSearchBarState
+    extends State<_CombinedHeadphonesSearchBar> {
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  bool _showResults = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        setState(() {
+          _showResults = true;
+        });
+        // Load initial results when focused
+        if (_controller.text.isEmpty) {
+          context.read<HeadphonesSearchBarSupabaseCubit>().fetchAllRecords();
+        }
+      } else {
+        setState(() {
+          _showResults = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Search Input
+        TextField(
+          controller: _controller,
+          focusNode: _focusNode,
+          decoration: InputDecoration(
+            hintText: l10n.common_headphones_search_bar_search_hint,
+            prefixIcon:
+                BlocBuilder<HeadphonesSearchBarCubit, HeadphonesSearchBarState>(
+                  builder: (context, ebayState) {
+                    return BlocBuilder<
+                      HeadphonesSearchBarSupabaseCubit,
+                      HeadphonesSearchBarSupabaseState
+                    >(
+                      builder: (context, supabaseState) {
+                        final isLoading =
+                            ebayState.isSearching || supabaseState.isSearching;
+                        return isLoading
+                            ? const Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            )
+                            : const Icon(Icons.search);
+                      },
+                    );
+                  },
+                ),
+            suffixIcon:
+                _controller.text.isNotEmpty
+                    ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _controller.clear();
+                        context
+                            .read<HeadphonesSearchBarSupabaseCubit>()
+                            .clearQuery();
+                        context.read<HeadphonesSearchBarCubit>().clearQuery();
+                        setState(() {});
+                      },
+                    )
+                    : null,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          onChanged: (query) {
+            setState(() {}); // Update UI for clear button
+
+            if (query.isNotEmpty) {
+              context.read<HeadphonesSearchBarSupabaseCubit>().updateQuery(
+                query,
+              );
+              context.read<HeadphonesSearchBarCubit>().updateQuery(query);
+            } else {
+              context
+                  .read<HeadphonesSearchBarSupabaseCubit>()
+                  .fetchAllRecords();
+              context.read<HeadphonesSearchBarCubit>().clearQuery();
+            }
+          },
+        ),
+
+        // Search Results
+        if (_showResults) ...[
+          const SizedBox(height: 4),
+          Container(
+            constraints: const BoxConstraints(maxHeight: 300),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              border: Border.all(color: theme.dividerColor),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: BlocBuilder<
+              HeadphonesSearchBarSupabaseCubit,
+              HeadphonesSearchBarSupabaseState
+            >(
+              builder: (context, supabaseState) {
+                return BlocBuilder<
+                  HeadphonesSearchBarCubit,
+                  HeadphonesSearchBarState
+                >(
+                  builder: (context, ebayState) {
+                    final allResults = <_SearchResult>[];
+
+                    // Add Supabase results (calibrated)
+                    for (final headphoneName in supabaseState.results) {
+                      allResults.add(
+                        _SearchResult(
+                          name: headphoneName,
+                          isCalibrated: true,
+                          headphone: HeadphonesModel.empty(
+                            name: headphoneName,
+                          ).copyWith(isCalibrated: true),
+                        ),
+                      );
+                    }
+
+                    // Add eBay result (uncalibrated) if available and not already in Supabase
+                    if (ebayState.result.isNotEmpty) {
+                      final alreadyExists = allResults.any(
+                        (result) =>
+                            result.name.toLowerCase() ==
+                            ebayState.result.toLowerCase(),
+                      );
+                      if (!alreadyExists) {
+                        allResults.add(
+                          _SearchResult(
+                            name: ebayState.result,
+                            isCalibrated: false,
+                            headphone: HeadphonesModel.empty(
+                              name: ebayState.result,
+                            ),
+                          ),
+                        );
+                      }
+                    }
+
+                    if (allResults.isEmpty) {
+                      return Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          _controller.text.isEmpty
+                              ? "Start typing to search for headphones"
+                              : "No results found",
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: allResults.length,
+                      itemBuilder: (context, index) {
+                        final result = allResults[index];
+                        return ListTile(
+                          leading: Icon(
+                            Icons.headphones,
+                            color: theme.colorScheme.primary,
+                          ),
+                          title: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  result.name,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color:
+                                      result.isCalibrated
+                                          ? Colors.green.withValues(alpha: 0.1)
+                                          : Colors.orange.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color:
+                                        result.isCalibrated
+                                            ? Colors.green
+                                            : Colors.orange,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Text(
+                                  result.isCalibrated
+                                      ? "Calibrated"
+                                      : "Not Calibrated",
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color:
+                                        result.isCalibrated
+                                            ? Colors.green
+                                            : Colors.orange,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: ElevatedButton(
+                            onPressed: () {
+                              widget.onSelectedButtonPress(result.headphone);
+                              _controller.clear();
+                              context
+                                  .read<HeadphonesSearchBarSupabaseCubit>()
+                                  .clearQuery();
+                              context
+                                  .read<HeadphonesSearchBarCubit>()
+                                  .clearQuery();
+                              _focusNode.unfocus();
+                            },
+                            child: Text(widget.selectedButtonLabel),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _SearchResult {
+  final String name;
+  final bool isCalibrated;
+  final HeadphonesModel headphone;
+
+  _SearchResult({
+    required this.name,
+    required this.isCalibrated,
+    required this.headphone,
+  });
 }
