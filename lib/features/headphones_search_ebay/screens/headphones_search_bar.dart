@@ -4,14 +4,7 @@ import 'package:hear_mate_app/features/headphones_search_ebay/cubits/headphones_
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HeadphonesSearchBarWidget extends StatelessWidget {
-  final String selectedButtonLabel;
-  final ValueChanged<String> onSelectedButtonPress;
-
-  const HeadphonesSearchBarWidget({
-    super.key,
-    required this.selectedButtonLabel,
-    required this.onSelectedButtonPress,
-  });
+  const HeadphonesSearchBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +12,10 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final iconColor = theme.iconTheme.color;
-    final borderColor = theme.dividerColor;
-    final surfaceColor = colors.surface;
 
     return BlocBuilder<HeadphonesSearchBarCubit, HeadphonesSearchBarState>(
       builder: (context, state) {
         final cubit = context.read<HeadphonesSearchBarCubit>();
-        final resultsVisible =
-            state.query.isNotEmpty && state.result.isNotEmpty;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,33 +51,6 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
             ),
 
             // Search Results
-            if (resultsVisible) ...[
-              const SizedBox(height: 4),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: surfaceColor,
-                  border: Border.all(color: borderColor),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.headphones, color: colors.primary),
-                  title: Text(
-                    state.result,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      onSelectedButtonPress(state.result);
-                      cubit.clearQuery();
-                    },
-                    child: Text(selectedButtonLabel),
-                  ),
-                ),
-              ),
-            ],
           ],
         );
       },
