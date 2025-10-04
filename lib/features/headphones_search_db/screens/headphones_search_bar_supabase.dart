@@ -20,7 +20,8 @@ class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<HeadphonesSearchBarSupabaseCubit>();
 
-        return Padding(
+        return Container(
+          constraints: BoxConstraints(maxWidth: 600),
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

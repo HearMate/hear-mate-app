@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -185,57 +183,66 @@ class HearingTestWelcomePage extends StatelessWidget {
     if (resultsVisible) {
       return Positioned(
         top: positionTop,
-        left: 0.0,
-        right: 0.0,
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: surfaceColor,
-            border: Border.all(color: borderColor),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Focus(
-            focusNode: cubit.focusNodeList,
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                FocusScope.of(context).requestFocus(cubit.focusNodeList);
-                return false;
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 300),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: state.results.length,
-                    separatorBuilder:
-                        (_, __) => Divider(height: 1, color: borderColor),
-                    itemBuilder: (context, index) {
-                      final item = state.results[index];
-                      return ListTile(
-                        leading: Icon(Icons.headphones, color: colors.primary),
-                        title: Text(
-                          item,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
+        left: 0,
+        right: 0,
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 600),
+            decoration: BoxDecoration(
+              color: surfaceColor,
+              border: Border.all(color: borderColor),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Focus(
+              focusNode: cubit.focusNodeList,
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  FocusScope.of(context).requestFocus(cubit.focusNodeList);
+                  return false;
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: 300),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: state.results.length,
+                      separatorBuilder:
+                          (_, __) => Divider(height: 1, color: borderColor),
+                      itemBuilder: (context, index) {
+                        final item = state.results[index];
+                        return ListTile(
+                          leading: Icon(
+                            Icons.headphones,
+                            color: colors.primary,
                           ),
-                        ),
-                        trailing: ElevatedButton(
-                          onPressed: () {
+                          title: Text(
+                            item,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          trailing: ElevatedButton(
+                            onPressed: () {
+                              onSelectedButtonPress(item);
+                              cubit.clearQuery();
+                            },
+                            child: Text(selectedButtonLabel),
+                          ),
+                          onTap: () {
                             onSelectedButtonPress(item);
                             cubit.clearQuery();
                           },
-                          child: Text(selectedButtonLabel),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -248,44 +255,47 @@ class HearingTestWelcomePage extends StatelessWidget {
         top: positionTop,
         left: 0,
         right: 0,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            color: colors.surface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: borderColor.withValues(alpha: 0.3)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              Icon(
-                Icons.search_off_rounded,
-                size: 48,
-                color: colors.onSurface.withValues(alpha: 0.4),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                "No results found",
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: colors.onSurface.withValues(alpha: 0.7),
-                  fontWeight: FontWeight.w500,
+        child: Center(
+          child: Container(
+            width: double.infinity,
+            constraints: BoxConstraints(maxWidth: 600),
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: colors.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: borderColor.withValues(alpha: 0.3)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                "Try different keywords",
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: colors.onSurface.withValues(alpha: 0.5),
+              ],
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.search_off_rounded,
+                  size: 48,
+                  color: colors.onSurface.withValues(alpha: 0.4),
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                Text(
+                  "No results found",
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: colors.onSurface.withValues(alpha: 0.7),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "Try different keywords",
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colors.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
