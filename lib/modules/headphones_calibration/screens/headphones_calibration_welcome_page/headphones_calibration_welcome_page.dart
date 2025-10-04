@@ -100,12 +100,8 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
 
                                 const SizedBox(height: 24),
 
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24.0,
-                                  ),
-                                  child: HeadphonesSearchBarWidget(),
-                                ),
+                                HeadphonesSearchBarWidget(),
+
                                 const SizedBox(height: 16),
 
                                 _HeadphonesTable(
@@ -187,60 +183,94 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
 
     return Positioned(
       top: positionTop,
-      left: 24.0,
-      right: 24.0,
-      child: Container(
-        decoration: BoxDecoration(
-          color: surfaceColor,
-          border: Border.all(color: borderColor),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.15),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+      left: 0,
+      right: 0,
+      child: Center(
         child:
             resultsVisible
-                ? ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 200),
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: state.results.length,
-                      separatorBuilder:
-                          (_, __) => Divider(height: 1, color: borderColor),
-                      itemBuilder: (context, index) {
-                        final item = state.results[index];
-                        return ListTile(
-                          leading: Icon(
-                            Icons.headphones,
-                            color: colors.primary,
-                          ),
-                          title: Text(
-                            item,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          trailing: ElevatedButton(
-                            onPressed: () {
-                              onSelectedButtonPress(item);
-                              cubit.clearQuery();
-                            },
-                            child: Text(selectedButtonLabel),
-                          ),
-                        );
+                ? Container(
+                  constraints: BoxConstraints(maxWidth: 600),
+                  decoration: BoxDecoration(
+                    color: surfaceColor,
+                    border: Border.all(color: borderColor),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Focus(
+                    focusNode: cubit.focusNodeList,
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (notification) {
+                        FocusScope.of(
+                          context,
+                        ).requestFocus(cubit.focusNodeList);
+                        return false;
                       },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxHeight: 300),
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            itemCount: state.results.length,
+                            separatorBuilder:
+                                (_, __) =>
+                                    Divider(height: 1, color: borderColor),
+                            itemBuilder: (context, index) {
+                              final item = state.results[index];
+                              return ListTile(
+                                leading: Icon(
+                                  Icons.headphones,
+                                  color: colors.primary,
+                                ),
+                                title: Text(
+                                  item,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                trailing: ElevatedButton(
+                                  onPressed: () {
+                                    onSelectedButtonPress(item);
+                                    cubit.clearQuery();
+                                  },
+                                  child: Text(selectedButtonLabel),
+                                ),
+                                onTap: () {
+                                  onSelectedButtonPress(item);
+                                  cubit.clearQuery();
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 )
                 : Container(
                   width: double.infinity,
+                  constraints: BoxConstraints(maxWidth: 600),
                   padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: colors.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: borderColor.withValues(alpha: 0.3),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
                   child: Column(
                     children: [
                       Icon(
@@ -250,10 +280,17 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        "No results found in database",
+                        "No results found",
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: colors.onSurface.withValues(alpha: 0.7),
                           fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Try different keywords",
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colors.onSurface.withValues(alpha: 0.5),
                         ),
                       ),
                     ],
@@ -262,31 +299,34 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildEBayResults(
-    BuildContext context,
-    bool resultsVisible,
-    bool showNoResults,
-    HeadphonesSearchBarState state,
-    ValueChanged<String> onSelectedButtonPress,
-    String selectedButtonLabel,
-    double positionTop,
-  ) {
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    final borderColor = theme.dividerColor;
-    final surfaceColor = colors.surface;
-    final cubit = context.read<HeadphonesSearchBarCubit>();
+Widget _buildEBayResults(
+  BuildContext context,
+  bool resultsVisible,
+  bool showNoResults,
+  HeadphonesSearchBarState state,
+  ValueChanged<String> onSelectedButtonPress,
+  String selectedButtonLabel,
+  double positionTop,
+) {
+  final theme = Theme.of(context);
+  final colors = theme.colorScheme;
+  final borderColor = theme.dividerColor;
+  final surfaceColor = colors.surface;
+  final cubit = context.read<HeadphonesSearchBarCubit>();
 
-    if (!resultsVisible && !showNoResults) {
-      return const SizedBox.shrink();
-    }
+  if (!resultsVisible && !showNoResults) {
+    return const SizedBox.shrink();
+  }
 
-    return Positioned(
-      top: positionTop,
-      left: 24.0,
-      right: 24.0,
+  return Positioned(
+    top: positionTop,
+    left: 0,
+    right: 0,
+    child: Center(
       child: Container(
+        constraints: BoxConstraints(maxWidth: 600),
         decoration: BoxDecoration(
           color: surfaceColor,
           border: Border.all(color: borderColor),
@@ -339,8 +379,8 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                   ),
                 ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 class _WelcomeSection extends StatelessWidget {
@@ -350,8 +390,9 @@ class _WelcomeSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      constraints: BoxConstraints(maxWidth: 800),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -484,6 +525,7 @@ class _ActionButtons extends StatelessWidget {
         final canBePressed = headphonesSelected && !isCooldownActive;
 
         return Container(
+          constraints: BoxConstraints(maxWidth: 400),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             border: Border(

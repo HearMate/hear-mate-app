@@ -17,41 +17,39 @@ class HeadphonesSearchBarWidget extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<HeadphonesSearchBarCubit>();
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Search Input
-            SearchBar(
-              controller: cubit.controller,
-              hintText: l10n.common_headphones_search_bar_search_hint,
-              onChanged: cubit.updateQuery,
-              leading:
-                  state.isSearching
-                      ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: colors.primary,
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          constraints: BoxConstraints(maxWidth: 600),
+          child:
+          // Search Input
+          SearchBar(
+            controller: cubit.controller,
+            hintText: l10n.common_headphones_search_bar_search_hint,
+            onChanged: cubit.updateQuery,
+            leading:
+                state.isSearching
+                    ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: colors.primary,
+                      ),
+                    )
+                    : Icon(Icons.search, color: iconColor ?? Colors.grey),
+            trailing:
+                state.query.isNotEmpty
+                    ? [
+                      IconButton(
+                        icon: Icon(
+                          Icons.clear,
+                          color: iconColor ?? Colors.grey,
                         ),
-                      )
-                      : Icon(Icons.search, color: iconColor ?? Colors.grey),
-              trailing:
-                  state.query.isNotEmpty
-                      ? [
-                        IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            color: iconColor ?? Colors.grey,
-                          ),
-                          onPressed: cubit.clearQuery,
-                        ),
-                      ]
-                      : null,
-            ),
-
-            // Search Results
-          ],
+                        onPressed: cubit.clearQuery,
+                      ),
+                    ]
+                    : null,
+          ),
         );
       },
     );
