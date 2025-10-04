@@ -117,7 +117,9 @@ class HearingTestSoundsPlayerRepository {
   double _dBEMToVolume(double dBEM, int frequency) {
     dBEM = dBEM.clamp(0, 120.0);
 
-    double dBSPL = _EMToSPL(dBEM, frequency);
+    double dBHL = _EMCorrection(dBEM, frequency);
+    double dBSPL = _HLToSPL(dBHL, frequency);
+
     dBSPL = dBSPL.clamp(0, 115); // upper limit according to ANSI
 
     double soundPressure = _SPLToSoundPressure(dBSPL);
@@ -127,7 +129,7 @@ class HearingTestSoundsPlayerRepository {
     return normalizedSoundPressure;
   }
 
-  double _EMToSPL(double dBEM, int frequency) {
+  double _EMCorrection(double dBEM, int frequency) {
     const Map<int, double> oneThirdOctiveCorrection = {
       125: 4,
       250: 4,
@@ -144,30 +146,12 @@ class HearingTestSoundsPlayerRepository {
     dBHL = dBHL.clamp(-10.0, 120.0);
 
     double dBSPL = _HLToSPL(dBHL, frequency);
-    dBSPL = _headphoneCorrection(dBSPL, frequency);
-    // later we might want to merge both mappings to one because the HL to SPL will change after testing
 
     double soundPressure = _SPLToSoundPressure(dBSPL);
     double normalizedSoundPressure = _normalizeSoundPressure(soundPressure);
 
     // the volume is in linear scale from 0 to 1 therefore we use normalized sound pressure
     return normalizedSoundPressure;
-  }
-
-  double _HLToSPL(double dBHL, int frequency) {
-    // thresholds for Sennheiser HDA200 / RadioEar DD450 according to ANSI/ASA S3.6-2018 and ISO 289-8:2004
-    const Map<int, double> retspl = {
-      125: 30.5,
-      250: 18.0,
-      500: 11.0,
-      1000: 5.5,
-      2000: 4.5,
-      4000: 9.5,
-      8000: 17.5,
-    };
-    double reference = retspl[frequency]!;
-    double dBSPL = dBHL + reference;
-    return dBSPL;
   }
 
   double _SPLToSoundPressure(double dBSPL) {
@@ -180,14 +164,13 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _normalizeSoundPressure(double soundPressure) {
-    double maxDeviceDBSPL = 105;
+    double maxDeviceDBSPL = 100; // it aint perfect but there is no other way
     double normalizedSoundPressure =
         soundPressure / _SPLToSoundPressure(maxDeviceDBSPL);
     return normalizedSoundPressure;
   }
 
-  double _headphoneCorrection(double dBSPL, int frequency) {
-    // headphone characteristic flattening
+  double _HLToSPL(double dBSPL, int frequency) {
     Map<int, double> correctionReference = {
       125: headphonesModel.hz125Correction,
       250: headphonesModel.hz250Correction,
