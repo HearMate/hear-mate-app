@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hear_mate_app/features/headphones_search_db/cubits/headphones_search_bar_db/headphones_search_bar_supabase_cubit.dart';
+import 'package:hear_mate_app/features/headphones_search_db/screens/headphones_search_bar_supabase.dart';
+import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_model.dart';
 import 'package:hear_mate_app/modules/hearing_test/blocs/hearing_test_module/hearing_test_module_bloc.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_bottom_tab_bar.dart';
 import 'package:hear_mate_app/modules/hearing_test/widgets/navigation/hearing_test_module_side_tab_bar.dart';
@@ -12,6 +15,8 @@ import 'widgets/quick_info_card.dart';
 import 'widgets/section_header.dart';
 import 'widgets/step_item.dart';
 import 'widgets/tip_section.dart';
+
+part 'widgets/headphones_table.dart';
 
 class HearingTestWelcomePage extends StatelessWidget {
   const HearingTestWelcomePage({super.key});
@@ -49,55 +54,266 @@ class HearingTestWelcomePage extends StatelessWidget {
                 },
               ),
       body: SafeArea(
-        child: Row(
-          children: [
-            if (isWideScreen)
-              HearingTestModuleSideTabBar(
-                currentTab: ModuleTab.welcome, // or your current tab variable
-                onTabSelected: (tab) {
-                  switch (tab) {
-                    case ModuleTab.welcome:
-                      // Do nothing if already on test
-                      break;
-                    case ModuleTab.history:
-                      moduleBloc.add(HearingTestModuleNavigateToHistory());
-                      break;
-                  }
-                },
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Row(
+            children: [
+              if (isWideScreen)
+                HearingTestModuleSideTabBar(
+                  currentTab: ModuleTab.welcome,
+                  onTabSelected: (tab) {
+                    switch (tab) {
+                      case ModuleTab.welcome:
+                        // Do nothing if already on test
+                        break;
+                      case ModuleTab.history:
+                        moduleBloc.add(HearingTestModuleNavigateToHistory());
+                        break;
+                    }
+                  },
+                ),
+              const VerticalDivider(width: 1, thickness: .3),
+              Expanded(
+                child: Column(
+                  children: [
+                    HeaderBanner(
+                      title: l10n.test_tab_header_title,
+                      subtitle: l10n.test_tab_header_subtitle,
+                      icon: Icons.hearing,
+                    ),
+                    _buildContent(context, theme, l10n),
+                    _buildStartTestButton(context, l10n, theme),
+                  ],
+                ),
               ),
-            const VerticalDivider(width: 1, thickness: .3),
-            Expanded(
-              child: Column(
-                children: [
-                  HeaderBanner(
-                    title: l10n.test_tab_header_title,
-                    subtitle: l10n.test_tab_header_subtitle,
-                    icon: Icons.hearing,
-                  ),
-                  _buildContent(theme, l10n),
-                  _buildStartButton(context, l10n, theme),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildContent(ThemeData theme, AppLocalizations l10n) {
+  Widget _buildContent(
+    BuildContext context,
+    ThemeData theme,
+    AppLocalizations l10n,
+  ) {
     return Expanded(
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            _buildQuickInfoCards(theme, l10n),
-            const SizedBox(height: 16),
-            _buildInstructions(theme, l10n),
-            const SizedBox(height: 16),
-            TipSection(theme: theme),
-            const SizedBox(height: 32),
-          ],
+        child: BlocProvider(
+          create: (context) => HeadphonesSearchBarSupabaseCubit(),
+          child: BlocBuilder<
+            HeadphonesSearchBarSupabaseCubit,
+            HeadphonesSearchBarSupabaseState
+          >(
+            builder: (context, state) {
+              final resultsVisible = state.results.isNotEmpty;
+              final showNoResults =
+                  state.results.isEmpty &&
+                  state.query.isNotEmpty &&
+                  !state.isSearching;
+
+              return Stack(
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      HeadphonesSearchBarSupabaseWidget(),
+                      const SizedBox(height: 16),
+                      _HeadphonesTable(
+                        title:
+                            l10n.headphones_calibration_reference_headphones_title,
+                        isReference: true,
+                        icon: Icons.star_border,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(height: 16),
+                      _buildNoHeadphonesInDatabaseButton(context, l10n),
+                      const SizedBox(height: 16),
+                      _buildQuickInfoCards(theme, l10n),
+                      const SizedBox(height: 16),
+                      _buildInstructions(theme, l10n),
+                      const SizedBox(height: 16),
+                      TipSection(theme: theme),
+                      const SizedBox(height: 32),
+                    ],
+                  ),
+                  _buildResults(
+                    context,
+                    resultsVisible,
+                    showNoResults,
+                    state,
+                    (searchedResult) {
+                      context.read<HearingTestModuleBloc>().add(
+                        HearingTestModuleSelectHeadphoneFromSearch(
+                          HeadphonesModel.empty(name: searchedResult),
+                        ),
+                      );
+                    },
+                    l10n.headphones_calibration_add_button,
+                    88.0,
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildResults(
+    BuildContext context,
+    bool resultsVisible,
+    bool showNoResults,
+    HeadphonesSearchBarSupabaseState state,
+    ValueChanged<String> onSelectedButtonPress,
+    String selectedButtonLabel,
+    double positionTop,
+  ) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final borderColor = theme.dividerColor;
+    final surfaceColor = colors.surface;
+    final cubit = context.read<HeadphonesSearchBarSupabaseCubit>();
+
+    if (resultsVisible) {
+      return Positioned(
+        top: positionTop,
+        left: 0,
+        right: 0,
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 600),
+            decoration: BoxDecoration(
+              color: surfaceColor,
+              border: Border.all(color: borderColor),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Focus(
+              focusNode: cubit.focusNodeList,
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  FocusScope.of(context).requestFocus(cubit.focusNodeList);
+                  return false;
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: 300),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: state.results.length,
+                      separatorBuilder:
+                          (_, __) => Divider(height: 1, color: borderColor),
+                      itemBuilder: (context, index) {
+                        final item = state.results[index];
+                        return ListTile(
+                          leading: Icon(
+                            Icons.headphones,
+                            color: colors.primary,
+                          ),
+                          title: Text(
+                            item,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          trailing: ElevatedButton(
+                            onPressed: () {
+                              onSelectedButtonPress(item);
+                              cubit.clearQuery();
+                            },
+                            child: Text(selectedButtonLabel),
+                          ),
+                          onTap: () {
+                            onSelectedButtonPress(item);
+                            cubit.clearQuery();
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else if (showNoResults) {
+      return Positioned(
+        top: positionTop,
+        left: 0,
+        right: 0,
+        child: Center(
+          child: Container(
+            width: double.infinity,
+            constraints: BoxConstraints(maxWidth: 600),
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: colors.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: borderColor.withValues(alpha: 0.3)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.search_off_rounded,
+                  size: 48,
+                  color: colors.onSurface.withValues(alpha: 0.4),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "No results found",
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: colors.onSurface.withValues(alpha: 0.7),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "Try different keywords",
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colors.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
+  Widget _buildNoHeadphonesInDatabaseButton(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    return Center(
+      child: OutlinedButton(
+        onPressed: () => _headphonesNotCalibratedDialog(context, l10n),
+        child: Text(
+          style: const TextStyle(fontSize: 14.0),
+          l10n.hearing_test_welcome_page_no_headphones_in_database_button,
         ),
       ),
     );
@@ -171,7 +387,7 @@ class HearingTestWelcomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildStartButton(
+  Widget _buildStartTestButton(
     BuildContext context,
     AppLocalizations l10n,
     ThemeData theme,
@@ -198,32 +414,51 @@ class HearingTestWelcomePage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 56,
-            child: FilledButton(
-              onPressed: () {
-                context.read<HearingTestModuleBloc>().add(
-                  HearingTestModuleNavigateToTest(),
+            child: BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
+              builder: (context, state) {
+                final hasSelectedHeadphones = state.selectedHeadphone != null;
+                final isCalibrated =
+                    state.selectedHeadphone?.isCalibrated ?? false;
+
+                return FilledButton(
+                  onPressed: () {
+                    if (hasSelectedHeadphones) {
+                      if (isCalibrated) {
+                        // Calibrated headphones - proceed directly
+                        context.read<HearingTestModuleBloc>().add(
+                          HearingTestModuleNavigateToTest(),
+                        );
+                      } else {
+                        // Uncalibrated headphones - show warning
+                        _headphonesNotCalibratedDialog(context, l10n);
+                      }
+                    } else {
+                      // No headphones selected - show selection warning
+                      _showNoHeadphonesSelectedDialog(context, l10n);
+                    }
+                  },
+                  style: FilledButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.play_arrow, size: 24),
+                      const SizedBox(width: 12),
+                      Text(
+                        l10n.hearing_test_welcome_page_start_hearing_test,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               },
-              style: FilledButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 2,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.play_arrow, size: 24),
-                  const SizedBox(width: 12),
-                  Text(
-                    l10n.hearing_test_welcome_page_start_hearing_test,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -238,4 +473,108 @@ class HearingTestWelcomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showNoHeadphonesSelectedDialog(
+  BuildContext context,
+  AppLocalizations l10n,
+) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.info_outline, color: Colors.blue, size: 28),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                l10n.hearing_test_welcome_page_no_headphones_selected_title,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          l10n.hearing_test_welcome_page_no_headphones_selected_message,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              l10n.hearing_test_welcome_page_no_headphones_selected_go_back,
+            ),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // Continue with test without headphones
+              context.read<HearingTestModuleBloc>().add(
+                HearingTestModuleNavigateToTest(),
+              );
+            },
+            child: Text(
+              l10n.hearing_test_welcome_page_no_headphones_selected_continue,
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _headphonesNotCalibratedDialog(
+  BuildContext context,
+  AppLocalizations l10n,
+) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                l10n.hearing_test_welcome_page_uncalibrated_headphones_title,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          l10n.hearing_test_welcome_page_no_headphones_in_database_popup,
+          style: const TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).pushReplacementNamed('/headphones_calibration/welcome');
+            },
+            child: Text(
+              l10n.hearing_test_welcome_page_uncalibrated_headphones_popup_calibrate_button,
+            ),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // Continue with test anyway
+              context.read<HearingTestModuleBloc>().add(
+                HearingTestModuleNavigateToTest(),
+              );
+            },
+            child: Text(
+              l10n.hearing_test_welcome_page_uncalibrated_headphones_popup_continue_button,
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }

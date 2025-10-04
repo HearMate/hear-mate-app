@@ -8,6 +8,7 @@ class HearingTestModuleState {
   final HearingTestResult? results;
   final bool resultsSaved;
   final HeadphonesModel? headphonesModel;
+  final HeadphonesModel? selectedHeadphone;
 
   HearingTestModuleState({
     this.currentStep = HearingTestPageStep.welcome,
@@ -15,6 +16,7 @@ class HearingTestModuleState {
     this.results,
     this.resultsSaved = false,
     this.headphonesModel,
+    this.selectedHeadphone,
   });
 
   HearingTestModuleState copyWith({
@@ -23,6 +25,7 @@ class HearingTestModuleState {
     HearingTestResult? results,
     bool? resultsSaved,
     HeadphonesModel? headphonesModel,
+    HeadphonesModel? selectedHeadphone,
   }) {
     return HearingTestModuleState(
       currentStep: currentStep ?? this.currentStep,
@@ -30,6 +33,7 @@ class HearingTestModuleState {
       results: results ?? this.results,
       resultsSaved: resultsSaved ?? this.resultsSaved,
       headphonesModel: headphonesModel ?? this.headphonesModel,
+      selectedHeadphone: selectedHeadphone ?? this.selectedHeadphone,
     );
   }
 }

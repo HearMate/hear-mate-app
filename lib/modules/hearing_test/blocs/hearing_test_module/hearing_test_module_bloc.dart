@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'hearing_test_module_event.dart';
 part 'hearing_test_module_state.dart';
@@ -18,6 +19,7 @@ class HearingTestModuleBloc
   final HearingTestBloc hearingTestBloc;
   final AppLocalizations l10n;
   final DatabaseRepository databaseRepository;
+  final localStorageReferenceHeadphones = "available_reference_headphones";
 
   HearingTestModuleBloc({required this.l10n, required this.databaseRepository})
     : hearingTestBloc = HearingTestBloc(l10n: l10n),
@@ -111,10 +113,21 @@ class HearingTestModuleBloc
     HearingTestModuleSelectHeadphoneFromSearch event,
     Emitter<HearingTestModuleState> emit,
   ) async {
-    final headphonesModel =
-        await databaseRepository.searchHeadphone(name: event.headphone.name) ??
-        HeadphonesModel.empty(name: event.headphone.name);
+    HeadphonesModel? headphones = await databaseRepository.searchHeadphone(
+      name: event.headphone.name,
+    );
 
-    emit(state.copyWith(headphonesModel: headphonesModel));
+    HeadphonesModel selectedHeadphone;
+
+    if (headphones == null) {
+      selectedHeadphone = event.headphone.copyWith(isCalibrated: false);
+    } else {
+      selectedHeadphone = headphones.copyWith(isCalibrated: true);
+    }
+
+    emit(state.copyWith(selectedHeadphone: selectedHeadphone));
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(localStorageReferenceHeadphones, selectedHeadphone.name);
   }
 }
