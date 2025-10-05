@@ -33,7 +33,7 @@ class HearingTestState {
     this.isMaskingStarted = false,
     this.currentFrequencyIndex = 0,
     this.currentMaskingDBLevel = 0,
-    this.currentDBLevel = 20,
+    this.currentDBLevel = 30,
     this.dbLevelToHearCountMap = const {},
     this.frequenciesThatRequireMasking,
     this.maskedHeardCount = 0,

@@ -118,32 +118,32 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     }
 
     if (state.wasSoundHeard) {
+      // if sound was heard second time on the same volume go to next freq
+      if (state.dbLevelToHearCountMap[state.currentDBLevel] == 1) {
+        return add(HearingTestNextFrequency());
+      }
+
       emit(
         state.copyWith(
-          currentDBLevel: state.currentDBLevel - state.step,
+          currentDBLevel: state.currentDBLevel - 2 * state.step,
           wasSoundHeard: false,
+          dbLevelToHearCountMap: Map.from(state.dbLevelToHearCountMap)..update(
+            state.currentDBLevel,
+            (value) => value + 1,
+            ifAbsent: () => 1,
+          ),
         ),
       );
       return add(HearingTestPlayingSound());
     }
 
-    // if user didn't hear the sound 2 times, switch frequencies
-    if (state.dbLevelToHearCountMap[state.currentDBLevel] == 0) {
+    if (state.dbLevelToHearCountMap.isEmpty) {
+      emit(
+        state.copyWith(currentDBLevel: state.currentDBLevel + 2 * state.step),
+      );
+    } else {
       emit(state.copyWith(currentDBLevel: state.currentDBLevel + state.step));
-      return add(HearingTestNextFrequency());
     }
-
-    // else give him one more chance to hear the sound
-    emit(
-      state.copyWith(
-        currentDBLevel: state.currentDBLevel + state.step,
-        dbLevelToHearCountMap: Map.from(state.dbLevelToHearCountMap)..update(
-          state.currentDBLevel,
-          (value) => value - 1,
-          ifAbsent: () => 0,
-        ),
-      ),
-    );
 
     add(HearingTestPlayingSound());
   }
@@ -174,6 +174,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         if (_getFrequenciesThatRequireMasking(state).contains(true)) {
           emit(
             state.copyWith(
+              wasSoundHeard: false,
               leftEarResults: updatedLeft,
               rightEarResults: updatedRight,
               isMaskingStarted: true,
@@ -193,6 +194,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       // Otherwise switch to RIGHT ear
       emit(
         state.copyWith(
+          wasSoundHeard: false,
           leftEarResults: updatedLeft,
           rightEarResults: updatedRight,
         ),
@@ -203,6 +205,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     // Proceed to next frequency on the current ear
     emit(
       state.copyWith(
+        wasSoundHeard: false,
         leftEarResults: updatedLeft,
         rightEarResults: updatedRight,
         currentFrequencyIndex: state.currentFrequencyIndex + 1,
