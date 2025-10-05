@@ -79,78 +79,90 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                         ebayState.query.isNotEmpty &&
                         !ebayState.isSearching;
 
-                    return Column(
-                      children: [
-                        const _WelcomeSection(),
-                        const SizedBox(height: 24),
-                        Stack(
-                          children: [
-                            Column(
-                              children: [
-                                HeadphonesSearchBarSupabaseWidget(),
-                                const SizedBox(height: 16),
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          const _WelcomeSection(),
+                          Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  HeadphonesSearchBarSupabaseWidget(),
+                                  const SizedBox(height: 16),
 
-                                _HeadphonesTable(
-                                  title:
-                                      l10n.headphones_calibration_reference_headphones_title,
-                                  isReference: true,
-                                  icon: Icons.star_border,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-
-                                const SizedBox(height: 24),
-
-                                HeadphonesSearchBarWidget(),
-
-                                const SizedBox(height: 16),
-
-                                _HeadphonesTable(
-                                  title:
-                                      l10n.headphones_calibration_target_headphones_title,
-                                  isReference: false,
-                                  icon: Icons.tune,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                SizedBox(height: 24.0),
-                              ],
-                            ),
-
-                            _buildSupabaseResults(
-                              context,
-                              supaResultsVisible,
-                              supaShowNoResults,
-                              supaState,
-                              (searchedResult) {
-                                context.read<HeadphonesCalibrationModuleBloc>().add(
-                                  HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                                    HeadphonesModel.empty(name: searchedResult),
+                                  _HeadphonesTable(
+                                    title:
+                                        l10n.headphones_calibration_reference_headphones_title,
+                                    isReference: true,
+                                    icon: Icons.star_border,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
-                                );
-                              },
-                              l10n.headphones_calibration_add_button,
-                              72.0,
-                              // TODO: Make it dynamic ^^^^^
-                            ),
 
-                            _buildEBayResults(
-                              context,
-                              ebayResultsVisible,
-                              ebayShowNoResults,
-                              ebayState,
-                              (searchedResult) {
-                                context.read<HeadphonesCalibrationModuleBloc>().add(
-                                  HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                                    HeadphonesModel.empty(name: searchedResult),
+                                  const SizedBox(height: 24),
+
+                                  HeadphonesSearchBarWidget(),
+
+                                  const SizedBox(height: 16),
+
+                                  _HeadphonesTable(
+                                    title:
+                                        l10n.headphones_calibration_target_headphones_title,
+                                    isReference: false,
+                                    icon: Icons.tune,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
-                                );
-                              },
-                              l10n.headphones_calibration_add_button,
-                              290.0, // Position after reference table + second search bar
-                              // TODO: Make it dynamic ^^^^^
-                            ),
-                          ],
-                        ),
-                      ],
+                                  SizedBox(height: 24.0),
+                                ],
+                              ),
+
+                              _buildSupabaseResults(
+                                context,
+                                supaResultsVisible,
+                                supaShowNoResults,
+                                supaState,
+                                (searchedResult) {
+                                  context
+                                      .read<HeadphonesCalibrationModuleBloc>()
+                                      .add(
+                                        HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                          HeadphonesModel.empty(
+                                            name: searchedResult,
+                                          ),
+                                        ),
+                                      );
+                                },
+                                l10n.headphones_calibration_add_button,
+                                72.0,
+                                // TODO: Make it dynamic ^^^^^
+                              ),
+
+                              _buildEBayResults(
+                                context,
+                                ebayResultsVisible,
+                                ebayShowNoResults,
+                                ebayState,
+                                (searchedResult) {
+                                  context
+                                      .read<HeadphonesCalibrationModuleBloc>()
+                                      .add(
+                                        HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                          HeadphonesModel.empty(
+                                            name: searchedResult,
+                                          ),
+                                        ),
+                                      );
+                                },
+                                l10n.headphones_calibration_add_button,
+                                290.0, // Position after reference table + second search bar
+                                // TODO: Make it dynamic ^^^^^
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -389,23 +401,159 @@ class _WelcomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isDesktop = MediaQuery.of(context).size.width > 768;
+
+    if (isDesktop) {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        constraints: const BoxConstraints(maxWidth: 800),
+        child: Card(
+          elevation: 0,
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.15),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 35, 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'About this module',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.headphones_calibration_welcome_description,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      constraints: BoxConstraints(maxWidth: 800),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            l10n.headphones_calibration_welcome_description,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              height: 1.4,
+          TextButton(
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all(
+                const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),
+              ),
             ),
-            textAlign: TextAlign.center,
+            onPressed: () => _showInfoDialog(context, l10n),
+            child: Text(
+              "About the module",
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () => _showInfoDialog(context, l10n),
+            icon: Icon(
+              Icons.info_outline,
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+            ),
+            tooltip: 'Information',
           ),
         ],
       ),
+    );
+  }
+
+  void _showInfoDialog(BuildContext context, AppLocalizations l10n) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header with close button
+                Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 28,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Information',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close),
+                      iconSize: 24,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(
+                        minWidth: 32,
+                        minHeight: 32,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Content
+                Text(
+                  l10n.headphones_calibration_welcome_description,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -525,8 +673,8 @@ class _ActionButtons extends StatelessWidget {
         final canBePressed = headphonesSelected && !isCooldownActive;
 
         return Container(
-          constraints: BoxConstraints(maxWidth: 400),
           padding: const EdgeInsets.all(20),
+          width: double.infinity,
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(
@@ -544,9 +692,9 @@ class _ActionButtons extends StatelessWidget {
           ),
           child: Column(
             children: [
-              SizedBox(
-                width: double.infinity,
+              Container(
                 height: 56,
+                constraints: BoxConstraints(maxWidth: 400),
                 child: FilledButton(
                   onPressed: () {
                     canBePressed
@@ -585,6 +733,7 @@ class _ActionButtons extends StatelessWidget {
                   ),
                 ),
               ),
+
               const SizedBox(height: 8),
 
               if (isCooldownActive)

@@ -444,7 +444,7 @@
     "headphones_calibration_add_button": "Select",
     "headphones_calibration_reference_headphones_title": "Reference Headphones",
     "headphones_calibration_target_headphones_title": "Headphones to Calibrate",
-    "headphones_calibration_welcome_title": "Welcome to Headphones Calibration",
+    "headphones_calibration_welcome_title": "Welcome to the Headphones Calibration module",
     "headphones_calibration_welcome_description": "This module is for people who want to improve our app and make hearing tests more accessible! Search up all of your headphones, if even one of them is a reference one, they can be used to calibrate all others! First you do the hearing test with reference pair. Then the second with one you wish to calibrate. After that we are done - you just helped others!",
     "headphones_calibration_your_selection_title": "Your Selection",
     "headphones_calibration_reference_headphone_label": "Reference Headphone:",
