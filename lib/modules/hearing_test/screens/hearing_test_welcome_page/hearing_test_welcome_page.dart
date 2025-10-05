@@ -277,46 +277,49 @@ class HearingTestWelcomePage extends StatelessWidget {
         top: positionTop,
         left: 0,
         right: 0,
-        child: Center(
-          child: Container(
-            width: double.infinity,
-            constraints: BoxConstraints(maxWidth: 600),
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: colors.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: borderColor.withValues(alpha: 0.3)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Icon(
-                  Icons.search_off_rounded,
-                  size: 48,
-                  color: colors.onSurface.withValues(alpha: 0.4),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  "No results found",
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: colors.onSurface.withValues(alpha: 0.7),
-                    fontWeight: FontWeight.w500,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Center(
+            child: Container(
+              width: double.infinity,
+              constraints: BoxConstraints(maxWidth: 600),
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: colors.surface,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: borderColor.withValues(alpha: 0.3)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "Try different keywords",
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: colors.onSurface.withValues(alpha: 0.5),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.search_off_rounded,
+                    size: 48,
+                    color: colors.onSurface.withValues(alpha: 0.4),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  Text(
+                    "No results found",
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: colors.onSurface.withValues(alpha: 0.7),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Try different keywords",
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colors.onSurface.withValues(alpha: 0.5),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -344,7 +347,12 @@ class HearingTestWelcomePage extends StatelessWidget {
   ) {
     return Center(
       child: OutlinedButton(
-        onPressed: () => _headphonesNotCalibratedDialog(context, l10n),
+        onPressed:
+            () => {
+              _headphonesNotCalibratedDialog(context, l10n),
+              //? We may or not add the removeHeadphonesFromState functionality
+              //? but in my opinion this should not be done implicitly.
+            },
         child: Text(
           style: const TextStyle(fontSize: 14.0),
           l10n.hearing_test_welcome_page_no_headphones_in_database_button,
@@ -521,43 +529,68 @@ void _showNoHeadphonesSelectedDialog(
 ) {
   showDialog(
     context: context,
+    barrierDismissible: true,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Row(
-          children: [
-            Icon(Icons.info_outline, color: Colors.blue, size: 28),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                l10n.hearing_test_welcome_page_no_headphones_selected_title,
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header
+              Row(
+                children: [
+                  Icon(Icons.info_outline, color: Colors.blue, size: 28),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      l10n.hearing_test_welcome_page_no_headphones_selected_title,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-        content: Text(
-          l10n.hearing_test_welcome_page_no_headphones_selected_message,
-          style: const TextStyle(fontSize: 16),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              l10n.hearing_test_welcome_page_no_headphones_selected_go_back,
-            ),
+              const SizedBox(height: 16),
+              // Content
+              Text(
+                l10n.hearing_test_welcome_page_no_headphones_selected_message,
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 24),
+              // Actions
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(
+                        l10n.hearing_test_welcome_page_no_headphones_selected_go_back,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        context.read<HearingTestModuleBloc>().add(
+                          HearingTestModuleNavigateToTest(),
+                        );
+                      },
+                      child: Text(
+                        l10n.hearing_test_welcome_page_no_headphones_selected_continue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Continue with test without headphones
-              context.read<HearingTestModuleBloc>().add(
-                HearingTestModuleNavigateToTest(),
-              );
-            },
-            child: Text(
-              l10n.hearing_test_welcome_page_no_headphones_selected_continue,
-            ),
-          ),
-        ],
+        ),
       );
     },
   );
