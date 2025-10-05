@@ -61,7 +61,7 @@ class HearingTestModuleBloc
   ) {
     hearingTestBloc.add(
       HearingTestStartTest(
-        headphonesModel: state.headphonesModel ?? HeadphonesModel.empty(),
+        headphonesModel: state.selectedHeadphone ?? HeadphonesModel.empty(),
         step: 5.0,
       ),
     );

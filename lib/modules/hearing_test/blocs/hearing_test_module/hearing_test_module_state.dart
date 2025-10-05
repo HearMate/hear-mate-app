@@ -7,7 +7,6 @@ class HearingTestModuleState {
   final bool disclaimerShown;
   final HearingTestResult? results;
   final bool resultsSaved;
-  final HeadphonesModel? headphonesModel;
   final HeadphonesModel? selectedHeadphone;
 
   HearingTestModuleState({
@@ -15,7 +14,6 @@ class HearingTestModuleState {
     this.disclaimerShown = false,
     this.results,
     this.resultsSaved = false,
-    this.headphonesModel,
     this.selectedHeadphone,
   });
 
@@ -24,7 +22,6 @@ class HearingTestModuleState {
     bool? disclaimerShown,
     HearingTestResult? results,
     bool? resultsSaved,
-    HeadphonesModel? headphonesModel,
     HeadphonesModel? selectedHeadphone,
     bool clearSelectedHeadphone = false,
   }) {
@@ -33,7 +30,6 @@ class HearingTestModuleState {
       disclaimerShown: disclaimerShown ?? this.disclaimerShown,
       results: results ?? this.results,
       resultsSaved: resultsSaved ?? this.resultsSaved,
-      headphonesModel: headphonesModel ?? this.headphonesModel,
       selectedHeadphone:
           clearSelectedHeadphone
               ? null

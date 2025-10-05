@@ -465,23 +465,14 @@ class HearingTestWelcomePage extends StatelessWidget {
             child: BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
               builder: (context, state) {
                 final hasSelectedHeadphones = state.selectedHeadphone != null;
-                final isCalibrated =
-                    state.selectedHeadphone?.isCalibrated ?? false;
 
                 return FilledButton(
                   onPressed: () {
                     if (hasSelectedHeadphones) {
-                      if (isCalibrated) {
-                        // Calibrated headphones - proceed directly
-                        context.read<HearingTestModuleBloc>().add(
-                          HearingTestModuleNavigateToTest(),
-                        );
-                      } else {
-                        // Uncalibrated headphones - show warning
-                        _headphonesNotCalibratedDialog(context, l10n);
-                      }
+                      context.read<HearingTestModuleBloc>().add(
+                        HearingTestModuleNavigateToTest(),
+                      );
                     } else {
-                      // No headphones selected - show selection warning
                       _showNoHeadphonesSelectedDialog(context, l10n);
                     }
                   },
@@ -527,6 +518,8 @@ void _showNoHeadphonesSelectedDialog(
   BuildContext context,
   AppLocalizations l10n,
 ) {
+  final hearingTestModuleBloc = context.read<HearingTestModuleBloc>();
+
   showDialog(
     context: context,
     barrierDismissible: true,
@@ -539,7 +532,6 @@ void _showNoHeadphonesSelectedDialog(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Header
               Row(
                 children: [
                   Icon(Icons.info_outline, color: Colors.blue, size: 28),
@@ -555,13 +547,11 @@ void _showNoHeadphonesSelectedDialog(
                 ],
               ),
               const SizedBox(height: 16),
-              // Content
               Text(
                 l10n.hearing_test_welcome_page_no_headphones_selected_message,
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 24),
-              // Actions
               Row(
                 children: [
                   Expanded(
@@ -577,7 +567,7 @@ void _showNoHeadphonesSelectedDialog(
                     child: FilledButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        context.read<HearingTestModuleBloc>().add(
+                        hearingTestModuleBloc.add(
                           HearingTestModuleNavigateToTest(),
                         );
                       },
