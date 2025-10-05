@@ -20,7 +20,6 @@ class _HeadphonesTable extends StatelessWidget {
     return BlocBuilder<HearingTestModuleBloc, HearingTestModuleState>(
       builder: (context, state) {
         final selectedHeadphone = state.selectedHeadphone;
-        final isCalibrated = selectedHeadphone?.isCalibrated ?? false;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -85,41 +84,24 @@ class _HeadphonesTable extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color:
-                                  isCalibrated
-                                      ? Colors.green.withValues(alpha: 0.1)
-                                      : Colors.orange.withValues(alpha: 0.1),
+                              color: Colors.green.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color:
-                                    isCalibrated ? Colors.green : Colors.orange,
-                                width: 1,
-                              ),
+                              border: Border.all(color: Colors.green, width: 1),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(
-                                  isCalibrated
-                                      ? Icons.check_circle
-                                      : Icons.warning,
+                                  Icons.check_circle,
                                   size: 16,
-                                  color:
-                                      isCalibrated
-                                          ? Colors.green
-                                          : Colors.orange,
+                                  color: Colors.green,
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  isCalibrated
-                                      ? "Calibrated"
-                                      : "Not Calibrated",
+                                  "Calibrated",
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color:
-                                        isCalibrated
-                                            ? Colors.green
-                                            : Colors.orange,
+                                    color: Colors.green,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),

@@ -121,9 +121,9 @@ class HearingTestModuleBloc
     HeadphonesModel selectedHeadphone;
 
     if (headphones == null) {
-      selectedHeadphone = event.headphone.copyWith(isCalibrated: false);
+      selectedHeadphone = event.headphone.copyWith();
     } else {
-      selectedHeadphone = headphones.copyWith(isCalibrated: true);
+      selectedHeadphone = headphones.copyWith();
     }
 
     emit(state.copyWith(selectedHeadphone: selectedHeadphone));
