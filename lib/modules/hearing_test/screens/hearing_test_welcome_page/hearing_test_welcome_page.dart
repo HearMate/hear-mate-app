@@ -132,7 +132,7 @@ class HearingTestWelcomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       _buildNoHeadphonesInDatabaseButton(context, l10n),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
                       _buildQuickInfoCards(theme, l10n),
                       const SizedBox(height: 16),
                       _buildInstructions(theme, l10n),
@@ -356,6 +356,11 @@ class HearingTestWelcomePage extends StatelessWidget {
   Widget _buildQuickInfoCards(ThemeData theme, AppLocalizations l10n) {
     return Column(
       children: [
+        SectionHeader(
+          icon: Icons.info_outline,
+          title: "Quick info",
+          theme: theme,
+        ),
         QuickInfoCard(
           icon: Icons.schedule,
           title: l10n.test_tab_test_time_value,
