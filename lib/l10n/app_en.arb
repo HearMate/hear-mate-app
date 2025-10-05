@@ -150,7 +150,7 @@
     "hearing_test_welcome_page_search_bar_search_hint": "Search for headphones...",
     "hearing_test_welcome_page_your_headphones_title": "Headphones selected",
     "hearing_test_welcome_page_no_headphones_in_database_button": "I don't see my headphones.",
-    "hearing_test_welcome_page_no_headphones_in_database_popup": "Your headphones may not be calibrated. You can still test your hearing, but for the best results use the calibration module.",
+    "hearing_test_welcome_page_no_headphones_in_database_popup": "Your headphones may not be calibrated. You can still test your hearing, but for the best results use the calibrated ones.",
     "hearing_test_welcome_page_uncalibrated_headphones_title": "Uncalibrated Headphones",
     "hearing_test_welcome_page_uncalibrated_headphones_popup_calibrate_button": "Calibrate Headphones",
     "hearing_test_welcome_page_uncalibrated_headphones_popup_continue_button": "Continue Anyway",

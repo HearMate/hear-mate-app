@@ -186,62 +186,84 @@ class HearingTestWelcomePage extends StatelessWidget {
         left: 0,
         right: 0,
         child: Center(
-          child: Container(
-            constraints: BoxConstraints(maxWidth: 600),
-            decoration: BoxDecoration(
-              color: surfaceColor,
-              border: Border.all(color: borderColor),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Focus(
-              focusNode: cubit.focusNodeList,
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  FocusScope.of(context).requestFocus(cubit.focusNodeList);
-                  return false;
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 300),
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: state.results.length,
-                      separatorBuilder:
-                          (_, __) => Divider(height: 1, color: borderColor),
-                      itemBuilder: (context, index) {
-                        final item = state.results[index];
-                        return ListTile(
-                          leading: Icon(
-                            Icons.headphones,
-                            color: colors.primary,
-                          ),
-                          title: Text(
-                            item,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 600, maxHeight: 250),
+              decoration: BoxDecoration(
+                color: surfaceColor,
+                border: Border.all(color: borderColor),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Focus(
+                focusNode: cubit.focusNodeList,
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    FocusScope.of(context).requestFocus(cubit.focusNodeList);
+                    return false;
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 300),
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: state.results.length,
+                        separatorBuilder:
+                            (_, __) => Divider(height: 1, color: borderColor),
+                        itemBuilder: (context, index) {
+                          final item = state.results[index];
+                          return ListTile(
+                            leading: Icon(
+                              Icons.headphones,
+                              color: colors.primary,
                             ),
-                          ),
-                          trailing: ElevatedButton(
-                            onPressed: () {
-                              onSelectedButtonPress(item);
-                              cubit.clearQuery();
+                            title: Text(
+                              item,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            trailing: OutlinedButton(
+                              onPressed: () {
+                                _selectHeadphonesAction(
+                                  context,
+                                  onSelectedButtonPress,
+                                  cubit,
+                                  item,
+                                );
+                              },
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: Text(
+                                selectedButtonLabel,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                            onTap: () {
+                              _selectHeadphonesAction(
+                                context,
+                                onSelectedButtonPress,
+                                cubit,
+                                item,
+                              );
                             },
-                            child: Text(selectedButtonLabel),
-                          ),
-                          onTap: () {
-                            onSelectedButtonPress(item);
-                            cubit.clearQuery();
-                          },
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -302,6 +324,18 @@ class HearingTestWelcomePage extends StatelessWidget {
     } else {
       return SizedBox();
     }
+  }
+
+  void _selectHeadphonesAction(
+    BuildContext context,
+    ValueChanged<String> onSelectedButtonPress,
+    HeadphonesSearchBarSupabaseCubit cubit,
+    String item,
+  ) {
+    onSelectedButtonPress(item);
+    cubit.clearQuery();
+    //? Maybe we should try to add the searchbar focus state to the cubit
+    FocusScope.of(context).unfocus();
   }
 
   Widget _buildNoHeadphonesInDatabaseButton(
@@ -529,51 +563,55 @@ void _headphonesNotCalibratedDialog(
 ) {
   showDialog(
     context: context,
+    barrierDismissible: true, // Allow dismissing by tapping outside
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Row(
-          children: [
-            Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                l10n.hearing_test_welcome_page_uncalibrated_headphones_title,
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with close button
+              Row(
+                children: [
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    color: Colors.orange,
+                    size: 28,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      l10n.hearing_test_welcome_page_uncalibrated_headphones_title,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.close),
+                    iconSize: 24,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 32,
+                      minHeight: 32,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              // Content
+              Text(
+                l10n.hearing_test_welcome_page_no_headphones_in_database_popup,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
         ),
-        content: Text(
-          l10n.hearing_test_welcome_page_no_headphones_in_database_popup,
-          style: const TextStyle(fontSize: 16),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).pushReplacementNamed('/headphones_calibration/welcome');
-            },
-            child: Text(
-              l10n.hearing_test_welcome_page_uncalibrated_headphones_popup_calibrate_button,
-            ),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Continue with test anyway
-              context.read<HearingTestModuleBloc>().add(
-                HearingTestModuleNavigateToTest(),
-              );
-            },
-            child: Text(
-              l10n.hearing_test_welcome_page_uncalibrated_headphones_popup_continue_button,
-            ),
-          ),
-        ],
       );
     },
   );
