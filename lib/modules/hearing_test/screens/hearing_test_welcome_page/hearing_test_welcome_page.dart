@@ -120,7 +120,7 @@ class HearingTestWelcomePage extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
                       HeadphonesSearchBarSupabaseWidget(),
                       const SizedBox(height: 16),
                       _HeadphonesTable(
