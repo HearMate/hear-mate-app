@@ -42,85 +42,112 @@ class _HeadphonesTable extends StatelessWidget {
                   width: 1,
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(icon, size: 28, color: color),
-                        const SizedBox(width: 12),
-                        Text(
-                          title,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: color,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      selectedHeadphone != null
-                          ? selectedHeadphone.name
-                          : l10n.headphones_calibration_not_selected,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    if (selectedHeadphone != null) ...[
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              isCalibrated
-                                    ? Colors.green.withValues(alpha: .1)
-                                    : Colors.orange
-                                ..withValues(alpha: .1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: isCalibrated ? Colors.green : Colors.orange,
-                            width: 1,
-                          ),
-                        ),
-
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              isCalibrated ? Icons.check_circle : Icons.warning,
-                              size: 16,
-                              color:
-                                  isCalibrated ? Colors.green : Colors.orange,
-                            ),
-                            const SizedBox(width: 4),
+                            Icon(icon, size: 28, color: color),
+                            const SizedBox(width: 12),
                             Text(
-                              isCalibrated ? "Calibrated" : "Not Calibrated",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color:
-                                    isCalibrated ? Colors.green : Colors.orange,
-                                fontWeight: FontWeight.w500,
+                              title,
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: color,
                               ),
                             ),
                           ],
                         ),
+                        const SizedBox(height: 12),
+                        Text(
+                          selectedHeadphone != null
+                              ? selectedHeadphone.name
+                              : l10n.headphones_calibration_not_selected,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (selectedHeadphone != null) ...[
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  isCalibrated
+                                      ? Colors.green.withValues(alpha: 0.1)
+                                      : Colors.orange.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color:
+                                    isCalibrated ? Colors.green : Colors.orange,
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  isCalibrated
+                                      ? Icons.check_circle
+                                      : Icons.warning,
+                                  size: 16,
+                                  color:
+                                      isCalibrated
+                                          ? Colors.green
+                                          : Colors.orange,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  isCalibrated
+                                      ? "Calibrated"
+                                      : "Not Calibrated",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color:
+                                        isCalibrated
+                                            ? Colors.green
+                                            : Colors.orange,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  if (selectedHeadphone != null)
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: GestureDetector(
+                        onTap: () {
+                          context.read<HearingTestModuleBloc>().add(
+                            HearingTestModuleRemoveSelectedHeadphone(),
+                          );
+                        },
+                        child: const Icon(
+                          Icons.close,
+                          size: 20,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ],
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
           ),

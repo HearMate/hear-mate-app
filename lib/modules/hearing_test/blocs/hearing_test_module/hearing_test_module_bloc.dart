@@ -30,6 +30,7 @@ class HearingTestModuleBloc
     on<HearingTestModuleTestCompleted>(_onTestCompleted);
     on<HearingTestModuleSaveTestResults>(_onSaveTestResult);
     on<HearingTestModuleSelectHeadphoneFromSearch>(_onSelectHeadphones);
+    on<HearingTestModuleRemoveSelectedHeadphone>(_onRemoveSelectedHeadphone);
 
     hearingTestBloc.stream.listen((hearingTestState) {
       if (hearingTestState.isTestCompleted) {
@@ -129,5 +130,14 @@ class HearingTestModuleBloc
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(localStorageReferenceHeadphones, selectedHeadphone.name);
+  }
+
+  void _onRemoveSelectedHeadphone(
+    HearingTestModuleRemoveSelectedHeadphone event,
+    Emitter<HearingTestModuleState> emit,
+  ) async {
+    emit(state.copyWith(clearSelectedHeadphone: true));
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(localStorageReferenceHeadphones);
   }
 }

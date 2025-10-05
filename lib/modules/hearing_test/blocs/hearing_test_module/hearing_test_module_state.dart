@@ -26,6 +26,7 @@ class HearingTestModuleState {
     bool? resultsSaved,
     HeadphonesModel? headphonesModel,
     HeadphonesModel? selectedHeadphone,
+    bool clearSelectedHeadphone = false,
   }) {
     return HearingTestModuleState(
       currentStep: currentStep ?? this.currentStep,
@@ -33,7 +34,10 @@ class HearingTestModuleState {
       results: results ?? this.results,
       resultsSaved: resultsSaved ?? this.resultsSaved,
       headphonesModel: headphonesModel ?? this.headphonesModel,
-      selectedHeadphone: selectedHeadphone ?? this.selectedHeadphone,
+      selectedHeadphone:
+          clearSelectedHeadphone
+              ? null
+              : (selectedHeadphone ?? this.selectedHeadphone),
     );
   }
 }

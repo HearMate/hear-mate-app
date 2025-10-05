@@ -427,6 +427,7 @@ class HearingTestWelcomePage extends StatelessWidget {
     ThemeData theme,
   ) {
     return Container(
+      constraints: BoxConstraints(maxWidth: 400),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         border: Border(
