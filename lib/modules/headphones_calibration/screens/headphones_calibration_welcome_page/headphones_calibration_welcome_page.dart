@@ -38,6 +38,10 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                   title: l10n.headphones_calibration_page_title,
                   subtitle: l10n.headphones_calibration_welcome_title,
                   icon: Icons.headphones,
+                  alignment:
+                      _isDesktop(context)
+                          ? HeaderBannerAlignment.centered
+                          : HeaderBannerAlignment.start,
                 ),
 
                 _buildContent(context, l10n),
@@ -401,9 +405,8 @@ class _WelcomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isDesktop = MediaQuery.of(context).size.width > 768;
 
-    if (isDesktop) {
+    if (_isDesktop(context)) {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 40),
         constraints: const BoxConstraints(maxWidth: 800),
@@ -766,4 +769,8 @@ class _ActionButtons extends StatelessWidget {
       },
     );
   }
+}
+
+bool _isDesktop(BuildContext context) {
+  return MediaQuery.of(context).size.width > 768;
 }
