@@ -38,7 +38,12 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                   title: l10n.headphones_calibration_page_title,
                   subtitle: l10n.headphones_calibration_welcome_title,
                   icon: Icons.headphones,
+                  alignment:
+                      _isDesktop(context)
+                          ? HeaderBannerAlignment.centered
+                          : HeaderBannerAlignment.start,
                 ),
+
                 _buildContent(context, l10n),
                 const _ActionButtons(),
               ],
@@ -52,74 +57,390 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
   Widget _buildContent(BuildContext context, AppLocalizations l10n) {
     return Expanded(
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const _WelcomeSection(),
-            const SizedBox(height: 24),
-            SizedBox(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 480),
-                      child: BlocProvider(
-                        create: (context) => HeadphonesSearchBarSupabaseCubit(),
-                        child: HeadphonesSearchBarSupabaseWidget(
-                          selectedButtonLabel:
-                              l10n.headphones_calibration_add_button,
-                          onSelectedButtonPress: (searchedResult) {
-                            context.read<HeadphonesCalibrationModuleBloc>().add(
-                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                                HeadphonesModel.empty(name: searchedResult),
+        child: BlocProvider(
+          create: (context) => HeadphonesSearchBarSupabaseCubit(),
+          child: BlocBuilder<
+            HeadphonesSearchBarSupabaseCubit,
+            HeadphonesSearchBarSupabaseState
+          >(
+            builder: (context, supaState) {
+              final supaResultsVisible = supaState.results.isNotEmpty;
+              final supaShowNoResults =
+                  supaState.results.isEmpty &&
+                  supaState.query.isNotEmpty &&
+                  !supaState.isSearching;
+
+              return BlocProvider(
+                create: (context) => HeadphonesSearchBarCubit(),
+                child: BlocBuilder<
+                  HeadphonesSearchBarCubit,
+                  HeadphonesSearchBarState
+                >(
+                  builder: (context, ebayState) {
+                    final ebayResultsVisible = ebayState.result.isNotEmpty;
+                    final ebayShowNoResults =
+                        ebayState.result.isEmpty &&
+                        ebayState.query.isNotEmpty &&
+                        !ebayState.isSearching;
+
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          const _WelcomeSection(),
+                          Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  HeadphonesSearchBarSupabaseWidget(),
+                                  const SizedBox(height: 16),
+
+                                  _HeadphonesTable(
+                                    title:
+                                        l10n.headphones_calibration_reference_headphones_title,
+                                    isReference: true,
+                                    icon: Icons.star_border,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+
+                                  const SizedBox(height: 24),
+
+                                  HeadphonesSearchBarWidget(),
+
+                                  const SizedBox(height: 16),
+
+                                  _HeadphonesTable(
+                                    title:
+                                        l10n.headphones_calibration_target_headphones_title,
+                                    isReference: false,
+                                    icon: Icons.tune,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                  SizedBox(height: 24.0),
+                                ],
                               ),
-                            );
-                          },
+
+                              _buildSupabaseResults(
+                                context,
+                                l10n,
+                                supaResultsVisible,
+                                supaShowNoResults,
+                                supaState,
+                                (searchedResult) {
+                                  context
+                                      .read<HeadphonesCalibrationModuleBloc>()
+                                      .add(
+                                        HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                          HeadphonesModel.empty(
+                                            name: searchedResult,
+                                          ),
+                                        ),
+                                      );
+                                },
+                                l10n.headphones_calibration_add_button,
+                                72.0,
+                                // TODO: Make it dynamic ^^^^^
+                              ),
+
+                              _buildEBayResults(
+                                context,
+                                l10n,
+                                ebayResultsVisible,
+                                ebayShowNoResults,
+                                ebayState,
+                                (searchedResult) {
+                                  context
+                                      .read<HeadphonesCalibrationModuleBloc>()
+                                      .add(
+                                        HeadphonesCalibrationModuleAddHeadphoneFromSearch(
+                                          HeadphonesModel.empty(
+                                            name: searchedResult,
+                                          ),
+                                        ),
+                                      );
+                                },
+                                l10n.headphones_calibration_add_button,
+                                290.0, // Position after reference table + second search bar
+                                // TODO: Make it dynamic ^^^^^
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSupabaseResults(
+    BuildContext context,
+    AppLocalizations l10n,
+    bool resultsVisible,
+    bool showNoResults,
+    HeadphonesSearchBarSupabaseState state,
+    ValueChanged<String> onSelectedButtonPress,
+    String selectedButtonLabel,
+    double positionTop,
+  ) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final borderColor = theme.dividerColor;
+    final surfaceColor = colors.surface;
+    final cubit = context.read<HeadphonesSearchBarSupabaseCubit>();
+
+    if (!resultsVisible && !showNoResults) {
+      return const SizedBox.shrink();
+    }
+
+    return Positioned(
+      top: positionTop,
+      left: 0,
+      right: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Center(
+          child:
+              resultsVisible
+                  ? Container(
+                    constraints: const BoxConstraints(
+                      maxWidth: 600,
+                      maxHeight: 250,
+                    ),
+                    decoration: BoxDecoration(
+                      color: surfaceColor,
+                      border: Border.all(color: borderColor),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Focus(
+                      focusNode: cubit.focusNodeList,
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (notification) {
+                          FocusScope.of(
+                            context,
+                          ).requestFocus(cubit.focusNodeList);
+                          return false;
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxHeight: 250),
+                            child: Builder(
+                              builder: (context) {
+                                final scrollController = ScrollController();
+
+                                return Scrollbar(
+                                  controller: scrollController,
+                                  thumbVisibility: true,
+                                  thickness: 4,
+                                  radius: const Radius.circular(2),
+                                  child: ListView.separated(
+                                    controller: scrollController,
+                                    shrinkWrap: true,
+                                    itemCount: state.results.length,
+                                    separatorBuilder:
+                                        (_, __) => Divider(
+                                          height: 1,
+                                          color: borderColor,
+                                        ),
+                                    itemBuilder: (context, index) {
+                                      final item = state.results[index];
+                                      return ListTile(
+                                        leading: Icon(
+                                          Icons.headphones,
+                                          color: colors.primary,
+                                        ),
+                                        title: Text(
+                                          item,
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                        trailing: ElevatedButton(
+                                          onPressed: () {
+                                            _selectHeadphonesAction(
+                                              context,
+                                              onSelectedButtonPress,
+                                              cubit,
+                                              item,
+                                            );
+                                          },
+                                          child: Text(selectedButtonLabel),
+                                        ),
+                                        onTap: () {
+                                          _selectHeadphonesAction(
+                                            context,
+                                            onSelectedButtonPress,
+                                            cubit,
+                                            item,
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-
-                  _HeadphonesTable(
-                    title:
-                        l10n.headphones_calibration_reference_headphones_title,
-                    isReference: true,
-                    icon: Icons.star_border,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-
-                  const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 480),
-                      child: BlocProvider(
-                        create: (context) => HeadphonesSearchBarCubit(),
-                        child: HeadphonesSearchBarWidget(
-                          selectedButtonLabel:
-                              l10n.headphones_calibration_add_button,
-                          onSelectedButtonPress: (searchedResult) {
-                            context.read<HeadphonesCalibrationModuleBloc>().add(
-                              HeadphonesCalibrationModuleAddHeadphoneFromSearch(
-                                HeadphonesModel.empty(name: searchedResult),
-                              ),
-                            );
-                          },
-                        ),
+                  )
+                  : Container(
+                    width: double.infinity,
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: borderColor.withValues(alpha: 0.3),
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.search_off_rounded,
+                          size: 48,
+                          color: colors.onSurface.withValues(alpha: 0.4),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          l10n.headphones_calibration_no_results_found_reference,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: colors.onSurface.withValues(alpha: 0.7),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          l10n.headphones_calibration_try_different_keywords,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colors.onSurface.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  _HeadphonesTable(
-                    title: l10n.headphones_calibration_target_headphones_title,
-                    isReference: false,
-                    icon: Icons.tune,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ],
-              ),
+        ),
+      ),
+    );
+  }
+
+  void _selectHeadphonesAction(
+    BuildContext context,
+    ValueChanged<String> onSelectedButtonPress,
+    HeadphonesSearchBarSupabaseCubit cubit,
+    String item,
+  ) {
+    onSelectedButtonPress(item);
+    cubit.clearQuery();
+    FocusScope.of(context).unfocus();
+  }
+
+  Widget _buildEBayResults(
+    BuildContext context,
+    AppLocalizations l10n,
+    bool resultsVisible,
+    bool showNoResults,
+    HeadphonesSearchBarState state,
+    ValueChanged<String> onSelectedButtonPress,
+    String selectedButtonLabel,
+    double positionTop,
+  ) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final borderColor = theme.dividerColor;
+    final surfaceColor = colors.surface;
+    final cubit = context.read<HeadphonesSearchBarCubit>();
+
+    if (!resultsVisible && !showNoResults) {
+      return const SizedBox.shrink();
+    }
+
+    return Positioned(
+      top: positionTop,
+      left: 0,
+      right: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 600, maxHeight: 250),
+            decoration: BoxDecoration(
+              color: surfaceColor,
+              border: Border.all(color: borderColor),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-            const SizedBox(height: 24),
-          ],
+            child:
+                resultsVisible
+                    ? ListTile(
+                      leading: Icon(Icons.headphones, color: colors.primary),
+                      title: Text(
+                        state.result,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          onSelectedButtonPress(state.result);
+                          cubit.clearQuery();
+                        },
+                        child: Text(selectedButtonLabel),
+                      ),
+                    )
+                    : Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.search_off_rounded,
+                            size: 48,
+                            color: colors.onSurface.withValues(alpha: 0.4),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            l10n.headphones_calibration_no_results_found_ebay,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: colors.onSurface.withValues(alpha: 0.7),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+          ),
         ),
       ),
     );
@@ -133,21 +454,157 @@ class _WelcomeSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.headphones_calibration_welcome_description,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              height: 1.4,
+    if (_isDesktop(context)) {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        constraints: const BoxConstraints(maxWidth: 800),
+        child: Card(
+          elevation: 0,
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.15),
             ),
-            textAlign: TextAlign.center,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 35, 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.headphones_calibration_about_module_title,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.headphones_calibration_welcome_description,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all(
+                const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),
+              ),
+            ),
+            onPressed: () => _showInfoDialog(context, l10n),
+            child: Text(
+              l10n.headphones_calibration_about_module_title,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () => _showInfoDialog(context, l10n),
+            icon: Icon(
+              Icons.info_outline,
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+            ),
+            tooltip: l10n.headphones_calibration_information_tooltip,
           ),
         ],
       ),
+    );
+  }
+
+  void _showInfoDialog(BuildContext context, AppLocalizations l10n) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header with close button
+                Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 28,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        l10n.headphones_calibration_information_tooltip,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close),
+                      iconSize: 24,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(
+                        minWidth: 32,
+                        minHeight: 32,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Content
+                Text(
+                  l10n.headphones_calibration_welcome_description,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -268,6 +725,7 @@ class _ActionButtons extends StatelessWidget {
 
         return Container(
           padding: const EdgeInsets.all(20),
+          width: double.infinity,
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(
@@ -285,9 +743,9 @@ class _ActionButtons extends StatelessWidget {
           ),
           child: Column(
             children: [
-              SizedBox(
-                width: double.infinity,
+              Container(
                 height: 56,
+                constraints: BoxConstraints(maxWidth: 400),
                 child: FilledButton(
                   onPressed: () {
                     canBePressed
@@ -326,6 +784,7 @@ class _ActionButtons extends StatelessWidget {
                   ),
                 ),
               ),
+
               const SizedBox(height: 8),
 
               if (isCooldownActive)
@@ -358,4 +817,8 @@ class _ActionButtons extends StatelessWidget {
       },
     );
   }
+}
+
+bool _isDesktop(BuildContext context) {
+  return MediaQuery.of(context).size.width > 768;
 }

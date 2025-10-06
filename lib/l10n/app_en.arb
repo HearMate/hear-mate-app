@@ -142,11 +142,24 @@
     "comment_hearing_test1": "=====================================",
     "comment_hearing_test2": "============ Hearing Test ===========",
     "comment_hearing_test3": "=====================================",
-    
     "hearing_test_welcome_page_select_button_label": "Select",
     "hearing_test_welcome_page_find_headphones": "Please find your headphones before attempting a test",
     "hearing_test_welcome_page_not_calibrated_part1": "Unfortunately, we can't guarantee quality of this test - your headphones ",
     "hearing_test_welcome_page_not_calibrated_part2": " are not properly calibrated yet!",
+    "hearing_test_welcome_page_search_bar_search_hint": "Search for headphones...",
+    "hearing_test_welcome_page_your_headphones_title": "Headphones selected",
+    "hearing_test_welcome_page_no_headphones_in_database_button": "I don't see my headphones.",
+    "hearing_test_welcome_page_no_headphones_in_database_popup": "Your headphones may not be calibrated. You can still test your hearing, but for the best results use the calibrated ones.",
+    "hearing_test_welcome_page_uncalibrated_headphones_title": "Uncalibrated Headphones",
+    "hearing_test_welcome_page_uncalibrated_headphones_popup_calibrate_button": "Calibrate Headphones",
+    "hearing_test_welcome_page_uncalibrated_headphones_popup_continue_button": "Continue Anyway",
+    "hearing_test_welcome_page_no_headphones_selected_title": "No Headphones Selected",
+    "hearing_test_welcome_page_no_headphones_selected_message": "The following test will not be done using specific calibration because you did not choose the reference headphones.",
+    "hearing_test_welcome_page_no_headphones_selected_go_back": "Go Back",
+    "hearing_test_welcome_page_no_headphones_selected_continue": "Continue",
+    "hearing_test_welcome_no_results_found_reference": "No results found",
+    "hearing_test_welcome_try_different_keywords": "Try different keywords",
+    "hearing_test_welcome_quick_info_title": "Quick info",
 
     "hearing_test_test_page_title": "Hearing Test",
     "hearing_test_test_page_instruction": "Kliknij gdy usłyszysz dźwięk.",
@@ -211,7 +224,7 @@
     "hearing_test_result_page_note_description": "This generated audiogram and hearing test results are not precise and should be interpreted with caution. For an accurate diagnosis, please consult a qualified audiologist or healthcare professional.",
     "hearing_test_result_page_save_results": "Save results",
     "hearing_test_result_page_results_saved": "Results saved",
-    "hearing_test_result_page_home": "Back to home",  
+    "hearing_test_result_page_home": "Back to home",
     "hearing_test_incomplete": "Your hearing test isn’t complete, so we can’t show a full summary.",
     "hearing_test_summary_intro": "Here’s a quick summary of your hearing test:",
     "hearing_test_ear_left": "Left ear",
@@ -220,8 +233,14 @@
     "@hearing_test_ear_line": {
         "description": "One-line summary per ear with the classification.",
         "placeholders": {
-        "ear": { "type": "String", "example": "Left ear" },
-        "classification": { "type": "String", "example": "mild hearing loss" }
+            "ear": {
+                "type": "String",
+                "example": "Left ear"
+            },
+            "classification": {
+                "type": "String",
+                "example": "mild hearing loss"
+            }
         }
     },
     "hearing_test_classification_normal_hearing": "normal hearing",
@@ -237,7 +256,6 @@
     "hearing_test_low_freq_both": "Low‑frequency hearing loss is present in both ears.",
     "hearing_test_low_freq_left": "Low‑frequency hearing loss is present in the left ear.",
     "hearing_test_low_freq_right": "Low‑frequency hearing loss is present in the right ear.",
-
     "@hearing_test_result_page_title": {
         "description": "Title displayed on the hearing test results page."
     },
@@ -293,8 +311,6 @@
     "hearing_test_welcome_page_start_hearing_test": "Start Test",
     "hearing_test_welcome_page_disclaimer_title": "Disclaimer",
     "hearing_test_welcome_page_disclaimer": "This is not a medical grade product. It is intended to be used only with Sony WH-1000XM5 headphones, with noise cancelling turned on and volume set to maximum, equalizer shall not be used.",
-
-
     "@hearing_test_welcome_page_title": {
         "description": "Title displayed on the welcome page of the hearing test module."
     },
@@ -307,14 +323,12 @@
     "@hearing_test_welcome_page_start_hearing_test": {
         "description": "Label for the button to start the hearing test."
     },
-     "@hearing_test_welcome_page_disclaimer_title": {
+    "@hearing_test_welcome_page_disclaimer_title": {
         "description": "Title for the disclaimer section on the hearing test welcome page."
     },
     "@hearing_test_welcome_page_disclaimer": {
         "description": "Disclaimer text explaining the limitations and intended use of the hearing test module."
     },
-
-
     "hearing_test_delete_alert_title": "Delete Result",
     "hearing_test_delete_alert_message": "Are you sure you want to permanently delete this result? This action cannot be undone.",
     "@hearing_test_delete_alert_title": {
@@ -392,10 +406,8 @@
     "test_tab_how_it_works_desc_4": "Sounds can be very quiet",
     "test_tab_how_it_works_desc_5": "The test will end automatically",
     "test_tab_ready": "Ready? Start the test now",
-    
     "audiogram_section_audiogram_chart": "Audiogram Chart",
     "results_header_saved_results": "Saved Results",
-
     "results_header_results_count": "{count, plural, =0{Zero results saved} =1{One result saved} other{{count} results saved}}",
     "@results_header_results_count": {
         "description": "Shows the count of saved results with proper pluralization.",
@@ -405,13 +417,10 @@
             }
         }
     },
-
     "empty_state_no_results": "No saved results",
     "empty_state_do_test_to_see_results": "Take your first hearing test to see results here",
-
     "tip_section_tip": "Tip",
     "tip_section_tip_desc": "Don't worry if you can't hear some sounds - that's normal!",
-
     "@empty_state_no_results": {
         "description": "Message displayed when there are no saved hearing test results."
     },
@@ -424,16 +433,14 @@
     "@tip_section_tip_desc": {
         "description": "Tip message reassuring users about not hearing all sounds during the test."
     },
-
     "comment_headphones_calibration1": "=================================================",
     "comment_headphones_calibration2": "============= Headphones Calibration ============",
     "comment_headphones_calibration3": "=================================================",
-
     "headphones_calibration_page_title": "Headphones Calibration",
-    "headphones_calibration_add_button": "Add",
+    "headphones_calibration_add_button": "Select",
     "headphones_calibration_reference_headphones_title": "Reference Headphones",
     "headphones_calibration_target_headphones_title": "Headphones to Calibrate",
-    "headphones_calibration_welcome_title": "Welcome to Headphones Calibration",
+    "headphones_calibration_welcome_title": "Welcome to the Headphones Calibration module",
     "headphones_calibration_welcome_description": "This module is for people who want to improve our app and make hearing tests more accessible! Search up all of your headphones, if even one of them is a reference one, they can be used to calibrate all others! First you do the hearing test with reference pair. Then the second with one you wish to calibrate. After that we are done - you just helped others!",
     "headphones_calibration_your_selection_title": "Your Selection",
     "headphones_calibration_reference_headphone_label": "Reference Headphone:",
@@ -448,8 +455,11 @@
     "headphones_calibration_ready_prefix": "Great, we can start! Remember to connect ",
     "headphones_calibration_ready_suffix": "!",
     "headphones_calibration_start_button": "Start Calibration",
-
-    
+    "headphones_calibration_no_results_found_reference": "No results found",
+    "headphones_calibration_try_different_keywords": "Try different keywords",
+    "headphones_calibration_no_results_found_ebay": "No results found on eBay",
+    "headphones_calibration_about_module_title": "About this module",
+    "headphones_calibration_information_tooltip": "Information",
     "headphones_calibration_information_between_tests_page_title": "Headphones Calibration",
     "headphones_calibration_step_progress": "Step {current} of {total}",
     "headphones_calibration_great_title_first": "Let's get started!",
@@ -458,20 +468,20 @@
     "headphones_calibration_between_tests_description_prefix": "You have completed the first test with reference headphones. Now switch to ",
     "headphones_calibration_between_tests_description_suffix": " and continue!",
     "headphones_calibration_continue_button": "Continue",
-    
     "headphones_calibration_abort_title": "Unfortunately...",
     "headphones_calibration_abort_label": "Calibration aborted",
     "headphones_calibration_abort_message": "The test results are too low. If you are sure your hearing is normal, find a quieter place and try again.",
-    
     "headphones_calibration_end_page_title": "Calibration Complete",
     "headphones_calibration_congratulations_title": "Congratulations!",
     "headphones_calibration_complete_label": "Calibration Complete",
     "headphones_calibration_thank_you_message": "Thank you for your cooperation! You have just made our app more accessible!",
     "headphones_calibration_go_home_button": "Go Home",
-    
+
     "comment_common_headphones_search_bar1": "=================================================",
     "comment_common_headphones_search_bar2": "======= Common Headphones Search Bar ========",
     "comment_common_headphones_search_bar3": "=================================================",
     "common_headphones_search_bar_search_hint": "Search for headphones...",
-    "common_headphones_search_bar_add_button": "Add"
+    "common_headphones_search_bar_add_button": "Add",
+
+    "headphones_table_calibrated_badge": "Calibrated"
 }

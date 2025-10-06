@@ -7,14 +7,14 @@ class HearingTestModuleState {
   final bool disclaimerShown;
   final HearingTestResult? results;
   final bool resultsSaved;
-  final HeadphonesModel? headphonesModel;
+  final HeadphonesModel? selectedHeadphone;
 
   HearingTestModuleState({
     this.currentStep = HearingTestPageStep.welcome,
     this.disclaimerShown = false,
     this.results,
     this.resultsSaved = false,
-    this.headphonesModel,
+    this.selectedHeadphone,
   });
 
   HearingTestModuleState copyWith({
@@ -22,14 +22,19 @@ class HearingTestModuleState {
     bool? disclaimerShown,
     HearingTestResult? results,
     bool? resultsSaved,
-    HeadphonesModel? headphonesModel,
+    Object? selectedHeadphone = _notProvided,
   }) {
     return HearingTestModuleState(
       currentStep: currentStep ?? this.currentStep,
       disclaimerShown: disclaimerShown ?? this.disclaimerShown,
       results: results ?? this.results,
       resultsSaved: resultsSaved ?? this.resultsSaved,
-      headphonesModel: headphonesModel ?? this.headphonesModel,
+      selectedHeadphone:
+          selectedHeadphone == _notProvided
+              ? this.selectedHeadphone
+              : selectedHeadphone as HeadphonesModel?,
     );
   }
+
+  static const Object _notProvided = Object();
 }

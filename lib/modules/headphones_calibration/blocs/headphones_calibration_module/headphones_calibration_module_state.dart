@@ -15,7 +15,6 @@ class HeadphonesCalibrationModuleState {
   final HeadphonesCalibrationStep currentStep;
   final HeadphonesModel? selectedReferenceHeadphone;
   final HeadphonesModel? selectedTargetHeadphone;
-  final String? searchResult;
   final HearingTestResult? firstTestResults;
   final HearingTestResult? secondTestResults;
   final bool isCooldownActive;
@@ -25,7 +24,6 @@ class HeadphonesCalibrationModuleState {
     this.currentStep = HeadphonesCalibrationStep.welcome,
     this.selectedReferenceHeadphone,
     this.selectedTargetHeadphone,
-    this.searchResult,
     this.firstTestResults,
     this.secondTestResults,
     this.isCooldownActive = false,
@@ -52,7 +50,6 @@ class HeadphonesCalibrationModuleState {
           selectedTargetHeadphone == _notProvided
               ? this.selectedTargetHeadphone
               : selectedTargetHeadphone as HeadphonesModel?,
-      searchResult: searchResult ?? this.searchResult,
       firstTestResults: firstTestResults ?? this.firstTestResults,
       secondTestResults: secondTestResults ?? this.secondTestResults,
       isCooldownActive: isCooldownActive ?? this.isCooldownActive,

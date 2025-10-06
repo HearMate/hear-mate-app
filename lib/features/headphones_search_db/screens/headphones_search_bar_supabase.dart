@@ -4,14 +4,7 @@ import 'package:hear_mate_app/features/headphones_search_db/cubits/headphones_se
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
-  final String selectedButtonLabel;
-  final ValueChanged<String> onSelectedButtonPress;
-
-  const HeadphonesSearchBarSupabaseWidget({
-    super.key,
-    required this.selectedButtonLabel,
-    required this.onSelectedButtonPress,
-  });
+  const HeadphonesSearchBarSupabaseWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +12,6 @@ class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final iconColor = theme.iconTheme.color;
-    final borderColor = theme.dividerColor;
-    final surfaceColor = colors.surface;
 
     return BlocBuilder<
       HeadphonesSearchBarSupabaseCubit,
@@ -28,108 +19,55 @@ class HeadphonesSearchBarSupabaseWidget extends StatelessWidget {
     >(
       builder: (context, state) {
         final cubit = context.read<HeadphonesSearchBarSupabaseCubit>();
-        final resultsVisible = state.results.isNotEmpty;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SearchBar(
-              controller: cubit.controller,
-              focusNode: cubit.focusNodeSearchBar,
-              hintText: l10n.common_headphones_search_bar_search_hint,
-              onChanged: cubit.updateQuery,
-              leading:
-                  state.isSearching
-                      ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: colors.primary,
-                        ),
-                      )
-                      : Icon(Icons.search, color: iconColor ?? Colors.grey),
-              trailing:
-                  state.query.isNotEmpty
-                      ? [
-                        IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            color: iconColor ?? Colors.grey,
-                          ),
-                          onPressed: cubit.clearQuery,
-                        ),
-                      ]
-                      : null,
-            ),
-            if (resultsVisible) ...[
-              const SizedBox(height: 4),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: surfaceColor,
-                  border: Border.all(color: borderColor),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: surfaceColor,
-                    border: Border.all(color: borderColor),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Focus(
-                    focusNode: cubit.focusNodeList,
-                    child: NotificationListener<ScrollNotification>(
-                      onNotification: (notification) {
-                        FocusScope.of(
-                          context,
-                        ).requestFocus(cubit.focusNodeList);
-                        return false;
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          12,
-                        ), // Match container radius
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 130),
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            itemCount: state.results.length,
-                            separatorBuilder:
-                                (_, __) =>
-                                    Divider(height: 1, color: borderColor),
-                            itemBuilder: (context, index) {
-                              final item = state.results[index];
-                              return ListTile(
-                                leading: Icon(
-                                  Icons.headphones,
-                                  color: colors.primary,
-                                ),
-                                title: Text(
-                                  item,
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w600,
+        return Container(
+          constraints: BoxConstraints(maxWidth: 600),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Stack(
+                children: [
+                  Column(
+                    children: [
+                      SearchBar(
+                        controller: cubit.controller,
+                        focusNode: cubit.focusNodeSearchBar,
+                        hintText: l10n.common_headphones_search_bar_search_hint,
+                        onChanged: cubit.updateQuery,
+                        leading:
+                            state.isSearching
+                                ? SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: colors.primary,
                                   ),
+                                )
+                                : Icon(
+                                  Icons.search,
+                                  color: iconColor ?? Colors.grey,
                                 ),
-                                trailing: ElevatedButton(
-                                  onPressed: () {
-                                    onSelectedButtonPress(item);
-                                    cubit.clearQuery();
-                                  },
-                                  child: Text(selectedButtonLabel),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
+                        trailing:
+                            state.query.isNotEmpty
+                                ? [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: iconColor ?? Colors.grey,
+                                    ),
+                                    onPressed: cubit.clearQuery,
+                                  ),
+                                ]
+                                : null,
                       ),
-                    ),
+                    ],
                   ),
-                ),
+                ],
               ),
             ],
-          ],
+          ),
         );
       },
     );

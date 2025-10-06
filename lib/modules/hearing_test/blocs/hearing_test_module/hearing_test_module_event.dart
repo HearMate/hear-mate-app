@@ -23,3 +23,6 @@ class HearingTestModuleSelectHeadphoneFromSearch
 
   HearingTestModuleSelectHeadphoneFromSearch(this.headphone);
 }
+
+class HearingTestModuleRemoveSelectedHeadphone
+    extends HearingTestModuleBlocEvent {}
