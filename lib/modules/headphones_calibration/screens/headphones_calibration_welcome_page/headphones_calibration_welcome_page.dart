@@ -124,6 +124,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
 
                               _buildSupabaseResults(
                                 context,
+                                l10n,
                                 supaResultsVisible,
                                 supaShowNoResults,
                                 supaState,
@@ -145,6 +146,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
 
                               _buildEBayResults(
                                 context,
+                                l10n,
                                 ebayResultsVisible,
                                 ebayShowNoResults,
                                 ebayState,
@@ -180,6 +182,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
 
   Widget _buildSupabaseResults(
     BuildContext context,
+    AppLocalizations l10n,
     bool resultsVisible,
     bool showNoResults,
     HeadphonesSearchBarSupabaseState state,
@@ -325,7 +328,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          "No results found",
+                          l10n.headphones_calibration_no_results_found_reference,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             color: colors.onSurface.withValues(alpha: 0.7),
                             fontWeight: FontWeight.w500,
@@ -333,7 +336,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          "Try different keywords",
+                          l10n.headphones_calibration_try_different_keywords,
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: colors.onSurface.withValues(alpha: 0.5),
                           ),
@@ -359,6 +362,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
 
   Widget _buildEBayResults(
     BuildContext context,
+    AppLocalizations l10n,
     bool resultsVisible,
     bool showNoResults,
     HeadphonesSearchBarState state,
@@ -427,7 +431,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            "No results found on eBay",
+                            l10n.headphones_calibration_no_results_found_ebay,
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: colors.onSurface.withValues(alpha: 0.7),
                               fontWeight: FontWeight.w500,
@@ -481,7 +485,7 @@ class _WelcomeSection extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'About this module',
+                        l10n.headphones_calibration_about_module_title,
                         style: Theme.of(
                           context,
                         ).textTheme.titleMedium?.copyWith(
@@ -520,7 +524,7 @@ class _WelcomeSection extends StatelessWidget {
             ),
             onPressed: () => _showInfoDialog(context, l10n),
             child: Text(
-              "About the module",
+              l10n.headphones_calibration_about_module_title,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w400,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -535,7 +539,7 @@ class _WelcomeSection extends StatelessWidget {
                 context,
               ).colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
             ),
-            tooltip: 'Information',
+            tooltip: l10n.headphones_calibration_information_tooltip,
           ),
         ],
       ),
@@ -569,7 +573,7 @@ class _WelcomeSection extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Information',
+                        l10n.headphones_calibration_information_tooltip,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),

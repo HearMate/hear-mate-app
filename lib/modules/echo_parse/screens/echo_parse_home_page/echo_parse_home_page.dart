@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hear_mate_app/modules/echo_parse/blocs/echo_parse_bloc.dart';
@@ -19,7 +21,7 @@ class EchoParseHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final langLoc = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
     return BlocProvider(
       create: (context) => TabNavigationCubit(),
@@ -32,7 +34,7 @@ class EchoParseHomePage extends StatelessWidget {
 
           return Scaffold(
             appBar: HMAppBar(
-              title: langLoc.echoparse_upload_appbarTitle,
+              title: l10n.echoparse_upload_appbarTitle,
               route: ModalRoute.of(context)?.settings.name ?? "",
             ),
             bottomNavigationBar: BottomNavigationBar(
@@ -44,11 +46,11 @@ class EchoParseHomePage extends StatelessWidget {
               items: [
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.upload_file),
-                  label: 'Upload',
+                  label: l10n.echoparse_upload_appbarTitle,
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.folder),
-                  label: 'Saved',
+                  label: l10n.echo_parse_saved_file_saved_label,
                 ),
               ],
             ),

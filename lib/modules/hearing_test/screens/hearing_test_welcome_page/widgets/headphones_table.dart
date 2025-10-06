@@ -98,7 +98,7 @@ class _HeadphonesTable extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  "Calibrated",
+                                  l10n.headphones_table_calibrated_badge,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.green,

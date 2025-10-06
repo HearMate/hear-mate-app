@@ -143,6 +143,7 @@ class HearingTestWelcomePage extends StatelessWidget {
                   ),
                   _buildResults(
                     context,
+                    l10n,
                     resultsVisible,
                     showNoResults,
                     state,
@@ -167,6 +168,7 @@ class HearingTestWelcomePage extends StatelessWidget {
 
   Widget _buildResults(
     BuildContext context,
+    AppLocalizations l10n,
     bool resultsVisible,
     bool showNoResults,
     HeadphonesSearchBarSupabaseState state,
@@ -319,7 +321,7 @@ class HearingTestWelcomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    "No results found",
+                    l10n.hearing_test_welcome_no_results_found_reference,
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: colors.onSurface.withValues(alpha: 0.7),
                       fontWeight: FontWeight.w500,
@@ -327,7 +329,7 @@ class HearingTestWelcomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "Try different keywords",
+                    l10n.hearing_test_welcome_try_different_keywords,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: colors.onSurface.withValues(alpha: 0.5),
                     ),
@@ -379,7 +381,7 @@ class HearingTestWelcomePage extends StatelessWidget {
       children: [
         SectionHeader(
           icon: Icons.info_outline,
-          title: "Quick info",
+          title: l10n.hearing_test_welcome_quick_info_title,
           theme: theme,
         ),
         QuickInfoCard(
