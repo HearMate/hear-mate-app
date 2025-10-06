@@ -207,7 +207,10 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
           child:
               resultsVisible
                   ? Container(
-                    constraints: BoxConstraints(maxWidth: 600, maxHeight: 250),
+                    constraints: const BoxConstraints(
+                      maxWidth: 600,
+                      maxHeight: 250,
+                    ),
                     decoration: BoxDecoration(
                       color: surfaceColor,
                       border: Border.all(color: borderColor),
@@ -232,36 +235,61 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: ConstrainedBox(
-                            constraints: BoxConstraints(maxHeight: 300),
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              itemCount: state.results.length,
-                              separatorBuilder:
-                                  (_, __) =>
-                                      Divider(height: 1, color: borderColor),
-                              itemBuilder: (context, index) {
-                                final item = state.results[index];
-                                return ListTile(
-                                  leading: Icon(
-                                    Icons.headphones,
-                                    color: colors.primary,
-                                  ),
-                                  title: Text(
-                                    item,
-                                    style: theme.textTheme.titleMedium
-                                        ?.copyWith(fontWeight: FontWeight.w600),
-                                  ),
-                                  trailing: ElevatedButton(
-                                    onPressed: () {
-                                      onSelectedButtonPress(item);
-                                      cubit.clearQuery();
+                            constraints: const BoxConstraints(maxHeight: 250),
+                            child: Builder(
+                              builder: (context) {
+                                final scrollController = ScrollController();
+
+                                return Scrollbar(
+                                  controller: scrollController,
+                                  thumbVisibility: true,
+                                  thickness: 4,
+                                  radius: const Radius.circular(2),
+                                  child: ListView.separated(
+                                    controller: scrollController,
+                                    shrinkWrap: true,
+                                    itemCount: state.results.length,
+                                    separatorBuilder:
+                                        (_, __) => Divider(
+                                          height: 1,
+                                          color: borderColor,
+                                        ),
+                                    itemBuilder: (context, index) {
+                                      final item = state.results[index];
+                                      return ListTile(
+                                        leading: Icon(
+                                          Icons.headphones,
+                                          color: colors.primary,
+                                        ),
+                                        title: Text(
+                                          item,
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                        trailing: ElevatedButton(
+                                          onPressed: () {
+                                            _selectHeadphonesAction(
+                                              context,
+                                              onSelectedButtonPress,
+                                              cubit,
+                                              item,
+                                            );
+                                          },
+                                          child: Text(selectedButtonLabel),
+                                        ),
+                                        onTap: () {
+                                          _selectHeadphonesAction(
+                                            context,
+                                            onSelectedButtonPress,
+                                            cubit,
+                                            item,
+                                          );
+                                        },
+                                      );
                                     },
-                                    child: Text(selectedButtonLabel),
                                   ),
-                                  onTap: () {
-                                    onSelectedButtonPress(item);
-                                    cubit.clearQuery();
-                                  },
                                 );
                               },
                             ),
@@ -272,7 +300,7 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
                   )
                   : Container(
                     width: double.infinity,
-                    constraints: BoxConstraints(maxWidth: 600),
+                    constraints: const BoxConstraints(maxWidth: 600),
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       color: colors.surface,
@@ -317,91 +345,102 @@ class HeadphonesCalibrationWelcomePage extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget _buildEBayResults(
-  BuildContext context,
-  bool resultsVisible,
-  bool showNoResults,
-  HeadphonesSearchBarState state,
-  ValueChanged<String> onSelectedButtonPress,
-  String selectedButtonLabel,
-  double positionTop,
-) {
-  final theme = Theme.of(context);
-  final colors = theme.colorScheme;
-  final borderColor = theme.dividerColor;
-  final surfaceColor = colors.surface;
-  final cubit = context.read<HeadphonesSearchBarCubit>();
-
-  if (!resultsVisible && !showNoResults) {
-    return const SizedBox.shrink();
+  void _selectHeadphonesAction(
+    BuildContext context,
+    ValueChanged<String> onSelectedButtonPress,
+    HeadphonesSearchBarSupabaseCubit cubit,
+    String item,
+  ) {
+    onSelectedButtonPress(item);
+    cubit.clearQuery();
+    FocusScope.of(context).unfocus();
   }
 
-  return Positioned(
-    top: positionTop,
-    left: 0,
-    right: 0,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Center(
-        child: Container(
-          constraints: BoxConstraints(maxWidth: 600, maxHeight: 250),
-          decoration: BoxDecoration(
-            color: surfaceColor,
-            border: Border.all(color: borderColor),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.15),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child:
-              resultsVisible
-                  ? ListTile(
-                    leading: Icon(Icons.headphones, color: colors.primary),
-                    title: Text(
-                      state.result,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
+  Widget _buildEBayResults(
+    BuildContext context,
+    bool resultsVisible,
+    bool showNoResults,
+    HeadphonesSearchBarState state,
+    ValueChanged<String> onSelectedButtonPress,
+    String selectedButtonLabel,
+    double positionTop,
+  ) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final borderColor = theme.dividerColor;
+    final surfaceColor = colors.surface;
+    final cubit = context.read<HeadphonesSearchBarCubit>();
+
+    if (!resultsVisible && !showNoResults) {
+      return const SizedBox.shrink();
+    }
+
+    return Positioned(
+      top: positionTop,
+      left: 0,
+      right: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 600, maxHeight: 250),
+            decoration: BoxDecoration(
+              color: surfaceColor,
+              border: Border.all(color: borderColor),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child:
+                resultsVisible
+                    ? ListTile(
+                      leading: Icon(Icons.headphones, color: colors.primary),
+                      title: Text(
+                        state.result,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          onSelectedButtonPress(state.result);
+                          cubit.clearQuery();
+                        },
+                        child: Text(selectedButtonLabel),
+                      ),
+                    )
+                    : Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.search_off_rounded,
+                            size: 48,
+                            color: colors.onSurface.withValues(alpha: 0.4),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "No results found on eBay",
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: colors.onSurface.withValues(alpha: 0.7),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    trailing: ElevatedButton(
-                      onPressed: () {
-                        onSelectedButtonPress(state.result);
-                        cubit.clearQuery();
-                      },
-                      child: Text(selectedButtonLabel),
-                    ),
-                  )
-                  : Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.search_off_rounded,
-                          size: 48,
-                          color: colors.onSurface.withValues(alpha: 0.4),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          "No results found on eBay",
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: colors.onSurface.withValues(alpha: 0.7),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _WelcomeSection extends StatelessWidget {

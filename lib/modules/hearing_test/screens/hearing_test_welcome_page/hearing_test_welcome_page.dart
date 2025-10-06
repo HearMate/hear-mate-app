@@ -189,7 +189,7 @@ class HearingTestWelcomePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Container(
-              constraints: BoxConstraints(maxWidth: 600, maxHeight: 250),
+              constraints: const BoxConstraints(maxWidth: 600, maxHeight: 250),
               decoration: BoxDecoration(
                 color: surfaceColor,
                 border: Border.all(color: borderColor),
@@ -212,55 +212,69 @@ class HearingTestWelcomePage extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 300),
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: state.results.length,
-                        separatorBuilder:
-                            (_, __) => Divider(height: 1, color: borderColor),
-                        itemBuilder: (context, index) {
-                          final item = state.results[index];
-                          return ListTile(
-                            leading: Icon(
-                              Icons.headphones,
-                              color: colors.primary,
-                            ),
-                            title: Text(
-                              item,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            trailing: OutlinedButton(
-                              onPressed: () {
-                                _selectHeadphonesAction(
-                                  context,
-                                  onSelectedButtonPress,
-                                  cubit,
-                                  item,
+                      constraints: const BoxConstraints(maxHeight: 250),
+                      child: Builder(
+                        builder: (context) {
+                          final scrollController = ScrollController();
+
+                          return Scrollbar(
+                            controller: scrollController,
+                            thumbVisibility: true,
+                            thickness: 4,
+                            radius: const Radius.circular(2),
+                            child: ListView.separated(
+                              controller: scrollController,
+                              shrinkWrap: true,
+                              itemCount: state.results.length,
+                              separatorBuilder:
+                                  (_, __) =>
+                                      Divider(height: 1, color: borderColor),
+                              itemBuilder: (context, index) {
+                                final item = state.results[index];
+                                return ListTile(
+                                  leading: Icon(
+                                    Icons.headphones,
+                                    color: colors.primary,
+                                  ),
+                                  title: Text(
+                                    item,
+                                    style: theme.textTheme.titleMedium
+                                        ?.copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                  trailing: OutlinedButton(
+                                    onPressed: () {
+                                      _selectHeadphonesAction(
+                                        context,
+                                        onSelectedButtonPress,
+                                        cubit,
+                                        item,
+                                      );
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 8,
+                                      ),
+                                      minimumSize: Size.zero,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    child: Text(
+                                      selectedButtonLabel,
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    _selectHeadphonesAction(
+                                      context,
+                                      onSelectedButtonPress,
+                                      cubit,
+                                      item,
+                                    );
+                                  },
                                 );
                               },
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: Text(
-                                selectedButtonLabel,
-                                style: const TextStyle(fontSize: 14),
-                              ),
                             ),
-                            onTap: () {
-                              _selectHeadphonesAction(
-                                context,
-                                onSelectedButtonPress,
-                                cubit,
-                                item,
-                              );
-                            },
                           );
                         },
                       ),
@@ -282,7 +296,7 @@ class HearingTestWelcomePage extends StatelessWidget {
           child: Center(
             child: Container(
               width: double.infinity,
-              constraints: BoxConstraints(maxWidth: 600),
+              constraints: const BoxConstraints(maxWidth: 600),
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: colors.surface,
@@ -325,7 +339,7 @@ class HearingTestWelcomePage extends StatelessWidget {
         ),
       );
     } else {
-      return SizedBox();
+      return const SizedBox();
     }
   }
 
@@ -337,7 +351,6 @@ class HearingTestWelcomePage extends StatelessWidget {
   ) {
     onSelectedButtonPress(item);
     cubit.clearQuery();
-    //? Maybe we should try to add the searchbar focus state to the cubit
     FocusScope.of(context).unfocus();
   }
 
