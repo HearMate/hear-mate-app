@@ -22,8 +22,7 @@ class HearingTestModuleState {
     bool? disclaimerShown,
     HearingTestResult? results,
     bool? resultsSaved,
-    HeadphonesModel? selectedHeadphone,
-    bool clearSelectedHeadphone = false,
+    Object? selectedHeadphone = _notProvided,
   }) {
     return HearingTestModuleState(
       currentStep: currentStep ?? this.currentStep,
@@ -31,9 +30,11 @@ class HearingTestModuleState {
       results: results ?? this.results,
       resultsSaved: resultsSaved ?? this.resultsSaved,
       selectedHeadphone:
-          clearSelectedHeadphone
-              ? null
-              : (selectedHeadphone ?? this.selectedHeadphone),
+          selectedHeadphone == _notProvided
+              ? this.selectedHeadphone
+              : selectedHeadphone as HeadphonesModel?,
     );
   }
+
+  static const Object _notProvided = Object();
 }

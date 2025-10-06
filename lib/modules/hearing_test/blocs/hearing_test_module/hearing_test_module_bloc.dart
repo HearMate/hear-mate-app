@@ -136,7 +136,7 @@ class HearingTestModuleBloc
     HearingTestModuleRemoveSelectedHeadphone event,
     Emitter<HearingTestModuleState> emit,
   ) async {
-    emit(state.copyWith(clearSelectedHeadphone: true));
+    emit(state.copyWith(selectedHeadphone: null));
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(localStorageReferenceHeadphones);
   }
