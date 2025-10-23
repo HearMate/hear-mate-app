@@ -154,7 +154,7 @@
     "hearing_test_welcome_page_uncalibrated_headphones_popup_calibrate_button": "Calibrate Headphones",
     "hearing_test_welcome_page_uncalibrated_headphones_popup_continue_button": "Continue Anyway",
     "hearing_test_welcome_page_no_headphones_selected_title": "No Headphones Selected",
-    "hearing_test_welcome_page_no_headphones_selected_message": "The following test will not be done using specific calibration because you did not choose the reference headphones.",
+    "hearing_test_welcome_page_no_headphones_selected_message": "The following test will be conducted without guarantee of result reliability because you did not select reference headphones.",
     "hearing_test_welcome_page_no_headphones_selected_go_back": "Go Back",
     "hearing_test_welcome_page_no_headphones_selected_continue": "Continue",
     "hearing_test_welcome_no_results_found_reference": "No results found",
