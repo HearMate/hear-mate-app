@@ -179,7 +179,7 @@
     "hearing_test_welcome_page_uncalibrated_headphones_popup_calibrate_button": "Skalibruj słuchawki",
     "hearing_test_welcome_page_uncalibrated_headphones_popup_continue_button": "Kontynuuj mimo to",
     "hearing_test_welcome_page_no_headphones_selected_title": "Nie wybrano słuchawek",
-    "hearing_test_welcome_page_no_headphones_selected_message": "Poniższy test zostanie przeprowadzony bez gwarancji rzetelności wyniku, ponieważ nie wybrałeś słuchawek referencyjnych.",
+    "hearing_test_welcome_page_no_headphones_selected_message": "Poniższy test zostanie przeprowadzony bez gwarancji rzetelności wyniku, ponieważ nie wybrano słuchawek referencyjnych.",
     "hearing_test_welcome_page_no_headphones_selected_go_back": "Wróć",
     "hearing_test_welcome_page_no_headphones_selected_continue": "Kontynuuj",
     "hearing_test_welcome_no_results_found_reference": "Nie znaleziono wyników",
