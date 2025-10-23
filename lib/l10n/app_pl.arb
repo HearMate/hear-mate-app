@@ -165,7 +165,7 @@
     "test_tab_ready": "Gotowy? Rozpocznij test teraz",
     "audiogram_section_audiogram_chart": "Wykres audiogramu",
     "results_header_saved_results": "Zapisane wyniki",
-    "results_header_results_count": "{count, plural, =0{Brak zapisanych wyników} =1{Jeden zapisany wynik} other{{count} zapisanych wyników}}",
+    "results_header_results_count": "{count, plural, =0{Brak zapisanych wyników} one{Jeden zapisany wynik} few{{count} zapisane wyniki} many{{count} zapisanych wyników} other{{count} zapisanych wyników}}",
     "empty_state_no_results": "Brak zapisanych wyników",
     "empty_state_do_test_to_see_results": "Wykonaj swój pierwszy test słuchu, aby zobaczyć tutaj wyniki",
     "tip_section_tip": "Wskazówka",
