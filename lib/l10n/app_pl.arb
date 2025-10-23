@@ -173,7 +173,7 @@
     "hearing_test_result_history_page_audiogram_name": "Audiogram",
     "hearing_test_welcome_page_search_bar_search_hint": "Wyszukaj słuchawki...",
     "hearing_test_welcome_page_your_headphones_title": "Wybrane słuchawki",
-    "hearing_test_welcome_page_no_headphones_in_database_button": "Nie widzę moich słuchawek.",
+    "hearing_test_welcome_page_no_headphones_in_database_button": "Nie widzę moich słuchawek",
     "hearing_test_welcome_page_no_headphones_in_database_popup": "Twoje słuchawki mogą nie być skalibrowane. Nadal możesz przetestować swój słuch, ale dla najlepszych wyników użyj skalibrowanych słuchawek.",
     "hearing_test_welcome_page_uncalibrated_headphones_title": "Nieskalibrowane słuchawki",
     "hearing_test_welcome_page_uncalibrated_headphones_popup_calibrate_button": "Kalibruj słuchawki",
