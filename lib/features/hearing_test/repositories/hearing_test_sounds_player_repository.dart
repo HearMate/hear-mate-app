@@ -15,7 +15,7 @@ class HearingTestSoundsPlayerRepository {
 
   final AudioPlayer _audioPlayer = AudioPlayer();
   final AudioPlayer _maskingPlayer = AudioPlayer();
-  final Map<int, String> _soundAssets =
+  final Map<int, Map<String, String>> _soundAssets =
       {}; // Stores both left and right variants
   final Map<int, String> _noiseAssets = {};
   bool _playCanceled = false;
@@ -24,11 +24,16 @@ class HearingTestSoundsPlayerRepository {
 
   Future<void> initialize() async {
     for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
-      _soundAssets[freq] = 'tones/tone_${freq}Hz.wav';
+      String basePath = 'tones/tone_${freq}Hz';
+      String leftPath = '${basePath}_left.wav';
+      String rightPath = '${basePath}_right.wav';
+
+      _soundAssets[freq] = {'left': leftPath, 'right': rightPath};
     }
 
     for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
-      _noiseAssets[freq] = 'tones/${freq}_3.wav';
+      String path = 'tones/${freq}_3.wav';
+      _noiseAssets[freq] = path;
     }
 
     await _audioPlayer.setReleaseMode(ReleaseMode.stop);
@@ -44,12 +49,16 @@ class HearingTestSoundsPlayerRepository {
       return;
     }
     try {
-      String assetPath = _soundAssets[frequency]!;
+      String assetPath =
+          ear == HearingTestEar.LEFT
+              ? _soundAssets[frequency]!['left']!
+              : _soundAssets[frequency]!['right']!;
 
       double volume = _dBHLToVolume(decibels, frequency);
 
       await _audioPlayer.setSource(AssetSource(assetPath));
       await _audioPlayer.setVolume(volume);
+
       if (ear == HearingTestEar.RIGHT) {
         await _audioPlayer.setBalance(1.0);
       } else {
