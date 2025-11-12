@@ -93,7 +93,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     }
 
     if (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL &&
-        state.step == 5) {
+        state.step == HearingTestConstants.TEST_STEP) {
       return add(HearingTestNextFrequency());
     }
 
@@ -122,7 +122,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       // if sound was heard second time on the same volume go to next freq
       if (state.dbLevelToHearCountMap[state.currentDBLevel] == 1 ||
           (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL &&
-              state.step == 5)) {
+              state.step == HearingTestConstants.TEST_STEP)) {
         return add(HearingTestNextFrequency());
       }
 

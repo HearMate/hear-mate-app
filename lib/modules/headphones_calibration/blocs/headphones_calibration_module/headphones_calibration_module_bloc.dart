@@ -6,6 +6,8 @@ import 'package:hear_mate_app/features/headphones_search_ebay/models/headphones_
 import 'package:hear_mate_app/shared/repositories/database_repository.dart';
 import 'package:hear_mate_app/shared/utils/cooldown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hear_mate_app/features/hearing_test/utils/hearing_test_constants.dart'
+    as HearingTestConstants;
 
 part 'headphones_calibration_module_event.dart';
 part 'headphones_calibration_module_state.dart';
@@ -106,7 +108,7 @@ class HeadphonesCalibrationModuleBloc
       HearingTestStartTest(
         headphonesModel:
             state.selectedReferenceHeadphone ?? HeadphonesModel.empty(),
-        step: 2.5,
+        step: HearingTestConstants.CALIBRATION_STEP,
       ),
     );
   }
@@ -143,7 +145,7 @@ class HeadphonesCalibrationModuleBloc
       HearingTestStartTest(
         headphonesModel:
             state.selectedTargetHeadphone ?? HeadphonesModel.empty(),
-        step: 2.5,
+        step: HearingTestConstants.CALIBRATION_STEP,
       ),
     );
     emit(state.copyWith(currentStep: HeadphonesCalibrationStep.secondTest));

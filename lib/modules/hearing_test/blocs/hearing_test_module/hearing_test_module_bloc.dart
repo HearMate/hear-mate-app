@@ -10,6 +10,8 @@ import 'package:hear_mate_app/features/hearing_test/models/hearing_test_result.d
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hear_mate_app/features/hearing_test/utils/hearing_test_constants.dart'
+    as HearingTestConstants;
 
 part 'hearing_test_module_event.dart';
 part 'hearing_test_module_state.dart';
@@ -62,7 +64,7 @@ class HearingTestModuleBloc
     hearingTestBloc.add(
       HearingTestStartTest(
         headphonesModel: state.selectedHeadphone ?? HeadphonesModel.empty(),
-        step: 5.0,
+        step: HearingTestConstants.TEST_STEP,
       ),
     );
     emit(state.copyWith(currentStep: HearingTestPageStep.test));
