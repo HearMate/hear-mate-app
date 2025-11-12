@@ -33,7 +33,7 @@ class HeadphonesSearchBarSupabaseCubit
 
     focusNodeSearchBar.addListener(() {
       if (!focusNodeSearchBar.hasFocus && !focusNodeList.hasFocus) {
-        Future.delayed(const Duration(milliseconds: 100), () {
+        Future.delayed(const Duration(milliseconds: 1000), () {
           if (!focusNodeList.hasFocus) {
             emit(state.copyWith(results: []));
           }

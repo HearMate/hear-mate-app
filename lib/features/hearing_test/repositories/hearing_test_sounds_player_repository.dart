@@ -15,20 +15,26 @@ class HearingTestSoundsPlayerRepository {
 
   final AudioPlayer _audioPlayer = AudioPlayer();
   final AudioPlayer _maskingPlayer = AudioPlayer();
-  final Map<int, String> _soundAssets =
+  final Map<int, String> _soundAssetsLeft =
       {}; // Stores both left and right variants
-  final Map<int, String> _noiseAssets = {};
+  final Map<int, String> _noiseAssetsLeft = {};
+  final Map<int, String> _soundAssetsRight =
+      {}; // Stores both left and right variants
+  final Map<int, String> _noiseAssetsRight = {};
+
   bool _playCanceled = false;
   // Duration for each tone
   final Duration _soundDuration = Duration(seconds: 2);
 
   Future<void> initialize() async {
     for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
-      _soundAssets[freq] = 'tones/tone_${freq}Hz.wav';
+      _soundAssetsLeft[freq] = 'tones/tone_${freq}Hz_left.wav';
+      _soundAssetsRight[freq] = 'tones/tone_${freq}Hz_right.wav';
     }
 
     for (int freq in HearingTestConstants.TEST_FREQUENCIES) {
-      _noiseAssets[freq] = 'tones/${freq}_3.wav';
+      _noiseAssetsLeft[freq] = 'tones/${freq}_3_left.wav';
+      _noiseAssetsRight[freq] = 'tones/${freq}_3_right.wav';
     }
 
     await _audioPlayer.setReleaseMode(ReleaseMode.stop);
@@ -39,22 +45,21 @@ class HearingTestSoundsPlayerRepository {
     required double decibels,
     required HearingTestEar ear,
   }) async {
-    if (!_soundAssets.containsKey(frequency)) {
+    if (!_soundAssetsLeft.containsKey(frequency) ||
+        !_soundAssetsRight.containsKey(frequency)) {
       HMLogger.print('No sound found for frequency $frequency Hz');
       return;
     }
     try {
-      String assetPath = _soundAssets[frequency]!;
+      String assetPath =
+          ear == HearingTestEar.LEFT
+              ? _soundAssetsLeft[frequency]!
+              : _soundAssetsRight[frequency]!;
 
       double volume = _dBHLToVolume(decibels, frequency);
 
       await _audioPlayer.setSource(AssetSource(assetPath));
       await _audioPlayer.setVolume(volume);
-      if (ear == HearingTestEar.RIGHT) {
-        await _audioPlayer.setBalance(1.0);
-      } else {
-        await _audioPlayer.setBalance(-1.0);
-      }
       await _audioPlayer.resume();
 
       await Future.delayed(_soundDuration, () {
@@ -74,23 +79,22 @@ class HearingTestSoundsPlayerRepository {
     required double decibels,
     required HearingTestEar ear,
   }) async {
-    if (!_noiseAssets.containsKey(frequency)) {
+    if (!_noiseAssetsLeft.containsKey(frequency) ||
+        !_noiseAssetsLeft.containsKey(frequency)) {
       HMLogger.print('No noise sound found for frequency $frequency Hz');
       return;
     }
     try {
-      String assetPathMaskingSound = _noiseAssets[frequency]!;
+      String assetPathMaskingSound =
+          ear == HearingTestEar.LEFT
+              ? _noiseAssetsLeft[frequency]!
+              : _noiseAssetsRight[frequency]!;
 
       double volumeMaskingSound = _dBEMToVolume(decibels, frequency);
 
       await _maskingPlayer.setSource(AssetSource(assetPathMaskingSound));
       await _maskingPlayer.setVolume(volumeMaskingSound);
 
-      if (ear == HearingTestEar.RIGHT) {
-        await _maskingPlayer.setBalance(1.0);
-      } else {
-        await _maskingPlayer.setBalance(-1.0);
-      }
       await _maskingPlayer.resume();
     } catch (e) {
       HMLogger.print("Error loading sound file: $e");
