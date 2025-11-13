@@ -92,12 +92,14 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       return;
     }
 
-    if (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL) {
+    if (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL &&
+        state.step == HearingTestConstants.TEST_STEP) {
       return add(HearingTestNextFrequency());
     }
 
     final random = Random();
     final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
+    _soundsPlayerRepository.playAmbient();
     await Future.delayed(Duration(milliseconds: delayMs));
 
     if (state.isTestCompleted || state.isMaskingStarted) {
@@ -119,7 +121,9 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     if (state.wasSoundHeard) {
       // if sound was heard second time on the same volume go to next freq
-      if (state.dbLevelToHearCountMap[state.currentDBLevel] == 1) {
+      if (state.dbLevelToHearCountMap[state.currentDBLevel] == 1 ||
+          (state.currentDBLevel < HearingTestConstants.MIN_DB_LEVEL &&
+              state.step == HearingTestConstants.TEST_STEP)) {
         return add(HearingTestNextFrequency());
       }
 
@@ -466,6 +470,11 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     // handle double 1k record
     if (state.currentFrequencyIndex == 0 && updatedMaskFlags.length > 4) {
       updatedMaskFlags[4] = false;
+      if (ear == HearingTestEar.LEFT) {
+        updatedLeftMasked[4] = state.currentDBLevel.toDouble();
+      } else {
+        updatedRightMasked[4] = state.currentDBLevel.toDouble();
+      }
     }
 
     if (!updatedMaskFlags.contains(true)) {
@@ -609,7 +618,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     // Left ear full values
     final leftResults = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => i * 1.0,
+      (i) => 0,
     );
     final leftResultsMasked = List<double?>.filled(
       HearingTestConstants.TEST_FREQUENCIES.length,
@@ -619,7 +628,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     // Right ear full values
     final rightResults = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => i * 1.0,
+      (i) => 0,
     );
     final rightResultsMasked = List<double?>.filled(
       HearingTestConstants.TEST_FREQUENCIES.length,
@@ -632,7 +641,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
         leftEarResultsMasked: leftResultsMasked,
         rightEarResults: rightResults,
         rightEarResultsMasked: rightResultsMasked,
-        //isMaskingStarted: true,
+        isMaskingStarted: true,
       ),
     );
 
@@ -658,9 +667,6 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     if (result.length > 4) {
       result[0] = result[4];
-    }
-    if (result.length > 3) {
-      result[3] = false;
     }
 
     return result;
