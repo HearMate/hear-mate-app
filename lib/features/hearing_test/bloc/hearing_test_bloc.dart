@@ -99,6 +99,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
 
     final random = Random();
     final int delayMs = 500 + random.nextInt(1501); // 500ms to 2000ms
+    _soundsPlayerRepository.playAmbient();
     await Future.delayed(Duration(milliseconds: delayMs));
 
     if (state.isTestCompleted || state.isMaskingStarted) {
@@ -617,7 +618,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     // Left ear full values
     final leftResults = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => 50,
+      (i) => 0,
     );
     final leftResultsMasked = List<double?>.filled(
       HearingTestConstants.TEST_FREQUENCIES.length,
@@ -644,8 +645,8 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
       ),
     );
 
-    //add(HearingTestCompleted());
-    return add(HearingTestStartMaskedTest());
+    add(HearingTestCompleted());
+    //return add(HearingTestStartMaskedTest());
   }
 
   List<bool> _getFrequenciesThatRequireMasking(HearingTestState state) {

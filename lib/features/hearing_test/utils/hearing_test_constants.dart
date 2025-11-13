@@ -25,3 +25,5 @@ final List<int> MASKING_THRESHOLDS = [
 final int EAR_COUNT = 2;
 final int MIN_DB_LEVEL = -10;
 final int MAX_DB_LEVEL = 120;
+final double TEST_STEP = 5.0;
+final double CALIBRATION_STEP = 2.5;

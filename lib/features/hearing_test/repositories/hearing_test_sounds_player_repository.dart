@@ -15,6 +15,7 @@ class HearingTestSoundsPlayerRepository {
 
   final AudioPlayer _audioPlayer = AudioPlayer();
   final AudioPlayer _maskingPlayer = AudioPlayer();
+  final AudioPlayer _ambientPlayer = AudioPlayer();
   final Map<int, String> _soundAssetsLeft =
       {}; // Stores both left and right variants
   final Map<int, String> _noiseAssetsLeft = {};
@@ -80,7 +81,7 @@ class HearingTestSoundsPlayerRepository {
     required HearingTestEar ear,
   }) async {
     if (!_noiseAssetsLeft.containsKey(frequency) ||
-        !_noiseAssetsLeft.containsKey(frequency)) {
+        !_noiseAssetsRight.containsKey(frequency)) {
       HMLogger.print('No noise sound found for frequency $frequency Hz');
       return;
     }
@@ -101,6 +102,18 @@ class HearingTestSoundsPlayerRepository {
     }
   }
 
+  Future<void> playAmbient() async {
+    try {
+      String assetPath = 'tones/ambient.wav';
+
+      await _ambientPlayer.setSource(AssetSource(assetPath));
+      await _ambientPlayer.setVolume(0.00001);
+      await _ambientPlayer.resume();
+    } catch (e) {
+      HMLogger.print("Error loading sound file: $e");
+    }
+  }
+
   Future<void> stopSound({bool stopNoise = false}) async {
     _playCanceled = true;
     await _audioPlayer.stop();
@@ -112,6 +125,7 @@ class HearingTestSoundsPlayerRepository {
   Future<void> reset() async {
     await _audioPlayer.release();
     await _maskingPlayer.release();
+    await _ambientPlayer.release();
   }
 
   bool isPlaying() {
