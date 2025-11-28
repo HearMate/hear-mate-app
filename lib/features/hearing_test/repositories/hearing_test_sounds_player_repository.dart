@@ -12,7 +12,8 @@ class HearingTestSoundsPlayerRepository {
   HearingTestSoundsPlayerRepository() {
     initialize();
   }
-
+  // Reference pressure in Pa
+  final double referencePressure = 20.0e-6;
   final AudioPlayer _audioPlayer = AudioPlayer();
   final AudioPlayer _maskingPlayer = AudioPlayer();
   final AudioPlayer _ambientPlayer = AudioPlayer();
@@ -173,8 +174,6 @@ class HearingTestSoundsPlayerRepository {
   }
 
   double _SPLToSoundPressure(double dBSPL) {
-    // Reference pressure in Pa
-    const double referencePressure = 20.0e-6;
     double soundPressure =
         referencePressure *
         pow(10.0, dBSPL / 20.0).toDouble(); // Convert SPL to sound pressure
@@ -184,7 +183,9 @@ class HearingTestSoundsPlayerRepository {
   double _normalizeSoundPressure(double soundPressure) {
     double maxDeviceDBSPL = 100; // it aint perfect but there is no other way
     double normalizedSoundPressure =
-        soundPressure / _SPLToSoundPressure(maxDeviceDBSPL);
+        //soundPressure / _SPLToSoundPressure(maxDeviceDBSPL);
+        (soundPressure - referencePressure) /
+        (_SPLToSoundPressure(maxDeviceDBSPL) - referencePressure);
     return normalizedSoundPressure;
   }
 
