@@ -618,7 +618,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     // Left ear full values
     final leftResults = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => 0,
+      (i) => (i + 5) * 5,
     );
     final leftResultsMasked = List<double?>.filled(
       HearingTestConstants.TEST_FREQUENCIES.length,
@@ -628,7 +628,7 @@ class HearingTestBloc extends Bloc<HearingTestEvent, HearingTestState> {
     // Right ear full values
     final rightResults = List<double?>.generate(
       HearingTestConstants.TEST_FREQUENCIES.length,
-      (i) => 0,
+      (i) => i * 5,
     );
     final rightResultsMasked = List<double?>.filled(
       HearingTestConstants.TEST_FREQUENCIES.length,

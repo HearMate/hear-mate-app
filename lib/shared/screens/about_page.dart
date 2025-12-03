@@ -49,30 +49,6 @@ class AboutPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
 
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40.0),
-                    child: Lottie.asset(
-                      "assets/lotties/echoparse_welcome.json",
-                      height:
-                          MediaQuery.of(context).size.width > 500 ? 150 : 100,
-                    ),
-                  ),
-                  Text(
-                    "EchoParse",
-                    style: Theme.of(context).textTheme.headlineLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      loc.about_echoparse,
-                      textAlign: TextAlign.justify,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-
                   Text(
                     loc.about_projectTeam,
                     style: Theme.of(context).textTheme.headlineSmall,
@@ -88,10 +64,6 @@ class AboutPage extends StatelessWidget {
                       ),
                       Text(
                         '• mgr Dominika Zagórska',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        '• mgr inż. Marina Galanina',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       Text(
